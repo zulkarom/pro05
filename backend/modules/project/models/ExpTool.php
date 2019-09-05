@@ -9,7 +9,8 @@ use Yii;
  *
  * @property int $id
  * @property int $pro_id
- * @property string $tool_name
+ * @property string $exp_name
+
  * @property int $quantity
  * @property string $amount
  *
@@ -31,10 +32,13 @@ class ExpTool extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'tool_name', 'quantity', 'amount'], 'required'],
-            [['pro_id', 'quantity'], 'integer'],
-            [['amount'], 'number'],
-            [['tool_name'], 'string', 'max' => 200],
+            [['amount', 'exp_name', 'quantity'], 'required'],
+			
+            [['pro_id', 'quantity', 'exp_order'], 'integer'],
+			
+			[['amount'], 'number'],
+			
+            [['exp_name'], 'string', 'max' => 200],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
     }
@@ -47,16 +51,16 @@ class ExpTool extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'tool_name' => 'Tool Name',
-            'quantity' => 'Quantity',
-            'amount' => 'Amount',
+            'exp_name' => 'Peralatan',
+            'quantity' => 'Kuantiti',
+            'amount' => 'Jumlah',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPro()
+    public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
     }

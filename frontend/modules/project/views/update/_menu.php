@@ -29,8 +29,8 @@ $menu = [
 			<a class="nav-link '.$active.' dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.$m[0].' </a>
 			 <div class="dropdown-menu">
 			  <a class="dropdown-item" href="'.Url::to($m[1]).'">Asas</a>
-			  <a class="dropdown-item" href="#">Peralatan</a>
-			  <a class="dropdown-item" href="#">Sewaan</a>
+			  <a class="dropdown-item" href="'.Url::to(['update/expense-tool', 'token' => $token]).'">Peralatan</a>
+			  <a class="dropdown-item" href="'.Url::to(['update/expense-rent', 'token' => $token]).'">Sewaan</a>
 			</div>
 		  </li>';
 		}else{

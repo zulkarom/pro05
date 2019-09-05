@@ -30,7 +30,7 @@ class ExpBasic extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'exp_name', 'quantity'], 'required'],
+            [['amount', 'exp_name', 'quantity'], 'required'],
 			
             [['pro_id', 'quantity', 'exp_order'], 'integer'],
 			
@@ -49,15 +49,16 @@ class ExpBasic extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'exp_name' => 'Exp Name',
-            'quantity' => 'Quantity',
+            'exp_name' => 'Perbelanjaan',
+            'quantity' => 'Kuantiti',
+			'amount' => 'Jumlah',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPro()
+    public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
     }

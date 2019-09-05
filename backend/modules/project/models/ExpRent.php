@@ -9,7 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $pro_id
- * @property string $rent_name
+ * @property string $exp_name
  * @property int $quantity
  * @property string $amount
  *
@@ -31,10 +31,12 @@ class ExpRent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'rent_name', 'quantity', 'amount'], 'required'],
-            [['pro_id', 'quantity'], 'integer'],
-            [['amount'], 'number'],
-            [['rent_name'], 'string', 'max' => 200],
+            [['amount', 'exp_name', 'quantity'], 'required'],
+			
+            [['pro_id', 'quantity', 'exp_order'], 'integer'],
+			
+			[['amount'], 'number'],
+            [['exp_name'], 'string', 'max' => 200],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
     }
@@ -47,16 +49,16 @@ class ExpRent extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'rent_name' => 'Rent Name',
-            'quantity' => 'Quantity',
-            'amount' => 'Amount',
+            'exp_name' => 'Sewaan',
+            'quantity' => 'Kuantiti',
+            'amount' => 'Jumlah',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPro()
+    public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
     }

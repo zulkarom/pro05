@@ -27,7 +27,7 @@ use kartik\date\DatePicker;
 <?=$this->render('_menu', ['token' => $model->pro_token, 'page' => 'belanja'])?>
 
 
-<h4>ASAS</h4>
+<h4>PERALATAN</h4>
 <div class="site-index">
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>

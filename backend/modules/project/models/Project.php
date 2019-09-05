@@ -107,25 +107,25 @@ class Project extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProExpBasics()
+    public function getExpenseBasics()
     {
-        return $this->hasMany(ProExpBasic::className(), ['pro_id' => 'id']);
+        return $this->hasMany(ExpBasic::className(), ['pro_id' => 'id'])->orderBy('exp_order ASC');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProExpRents()
+    public function getExpenseRents()
     {
-        return $this->hasMany(ProExpRent::className(), ['pro_id' => 'id']);
+        return $this->hasMany(ExpRent::className(), ['pro_id' => 'id'])->orderBy('exp_order ASC');
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProExpTools()
+    public function getExpenseTools()
     {
-        return $this->hasMany(ProExpTool::className(), ['pro_id' => 'id']);
+        return $this->hasMany(ExpTool::className(), ['pro_id' => 'id'])->orderBy('exp_order ASC');
     }
 
     /**
