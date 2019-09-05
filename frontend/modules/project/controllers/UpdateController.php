@@ -80,7 +80,6 @@ class UpdateController extends Controller
 	public function actionTentative($token)
     {
 		$model = $this->findModel($token);
-		$model->scenario = 'update';
 		
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
@@ -105,31 +104,42 @@ class UpdateController extends Controller
 
             $oldDayIDs = ArrayHelper::map($days, 'id', 'id');
             $days = Model::createMultiple(TentativeDay::classname(), $days);
-			//print_r($days);
             Model::loadMultiple($days, Yii::$app->request->post());
-			
-			//$days = ArrayHelper::map($days, 'id', 'pro_date');
-			
-			print_r($days);
-			
-			foreach($days as $day){
-				echo 'xx';print_r($day);die();
-			}
+            $deletedDayIDs = array_diff($oldDayIDs, array_filter(ArrayHelper::map($days, 'id', 'id')));
 
             // validate person and houses models
             $valid = $model->validate();
-			
             $valid = Model::validateMultiple($days) && $valid;
-			//echo $valid;die();
-   
+
+            $timesIDs = [];
+            if (isset($_POST['Time'][0][0])) {
+                foreach ($_POST['Time'] as $indexDay => $times) {
+                    $timesIDs = ArrayHelper::merge($timesIDs, array_filter(ArrayHelper::getColumn($times, 'id')));
+                    foreach ($times as $indexTime => $time) {
+                        $data['Time'] = $time;
+                        $time = (isset($time['id']) && isset($oldTimes[$time['id']])) ? $oldTimes[$time['id']] : new TentativeTime;
+                        $time->load($data);
+                        $times[$indexDay][$indexTime] = $time;
+                        $valid = $time->validate();
+                    }
+                }
+            }
+
+            $oldTimesIDs = ArrayHelper::getColumn($oldTimes, 'id');
+            $deletedTimesIDs = array_diff($oldTimesIDs, $timesIDs);
 
             if ($valid) {
-				
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
                     if ($flag = $model->save(false)) {
 
-                 
+                        if (! empty($deletedTimesIDs)) {
+                            TentativeTime::deleteAll(['id' => $deletedTimesIDs]);
+                        }
+
+                        if (! empty($deletedDayIDs)) {
+                            TentativeDay::deleteAll(['id' => $deletedDayIDs]);
+                        }
 
                         foreach ($days as $indexDay => $day) {
 
@@ -140,23 +150,24 @@ class UpdateController extends Controller
                             $day->pro_id = $model->id;
 
                             if (!($flag = $day->save(false))) {
-								
                                 break;
-                            }else{
-								
-							}
+                            }
 
-    
+                            if (isset($times[$indexDay]) && is_array($times[$indexDay])) {
+                                foreach ($times[$indexDay] as $indexTime => $time) {
+                                    $time->day_id = $day->id;
+                                    if (!($flag = $time->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
                         }
                     }
-					
-					print_r($model->getErrors());die();
 
                     if ($flag) {
                         $transaction->commit();
                         return $this->redirect(['tentative', 'token' => $token]);
                     } else {
-						
                         $transaction->rollBack();
                     }
                 } catch (Exception $e) {

@@ -89,11 +89,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 					
 					
 					
-					<?= $this->render('_form-times', [
-                        'form' => $form,
-                        'indexDay' => $indexDay,
-                        'times' => $times[$indexDay],
-                    ]) ?>
+				
 					
                 </td>
       
