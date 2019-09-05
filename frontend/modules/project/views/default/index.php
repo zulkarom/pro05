@@ -1,7 +1,7 @@
 <?php 
 
 use yii\helpers\Url;
-
+$invalid = Yii::$app->getRequest()->getQueryParam('token');
 ?>
 
 <section class="ftco-services ftco-no-pb">
@@ -20,7 +20,12 @@ use yii\helpers\Url;
 <div class="form-group">
 
 <div align="center" style="font-size:25px;font-weight:bold">KATA KUNCI</div>
-<input id="token" class="form-control" name="token" style="text-align:center;font-family:courier;font-weight:bold;text-transform:uppercase" />
+<input id="token" class="form-control" name="token" value="<?=$invalid?>" style="text-align:center;font-family:courier;font-weight:bold;text-transform:uppercase" />
+<?php if($invalid) { ?>
+
+<div align="center" style="color:red">Kata Kunci Tidak Sah</div>
+
+<?php } ?>
 
 
 </div>
@@ -48,7 +53,7 @@ $js = "
 function submit(){
 	var token = $('#token').val();
 	if(token){
-		window.location.href = '" . Url::to(['/project/update','token' => '']) . "' + token;
+		window.location.href = '" . Url::to(['/project']) . "/' + token;
 	}else{
 		alert('Sila Isi Kata Kunci');
 	}

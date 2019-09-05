@@ -343,6 +343,8 @@ class Application extends \yii\db\ActiveRecord
         $model = new Project();
 		$model->scenario = 'fasi-create';
 		$model->created_at = new Expression('NOW()');
+		$model->date_start = date('Y-m-d');
+		$model->date_end = date('Y-m-d');
 		$model->application_id = $this->id;
 		$model->pro_token = Token::projectKey();
 		if($model->save()){

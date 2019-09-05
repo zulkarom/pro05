@@ -7989,7 +7989,7 @@ body {
   font-size: 16px;
   line-height: 1.8;
   font-weight: 400;
-  color: rgba(0, 0, 0, 0.5); }
+  color: rgba(0, 0, 0); }
   body.menu-show {
     overflow: hidden;
     position: fixed;
@@ -9553,7 +9553,17 @@ textarea.form-control {
     border-radius: 0; }
     .subscribe-form .form-group .submit:hover {
       cursor: pointer; }
-
+	  
+	  
+.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
+    color: #a94442;
+}
+.help-block {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+    color: #737373;
+}
 .subscribe-form .icon {
   position: absolute;
   top: 50%;

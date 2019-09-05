@@ -197,11 +197,15 @@ $claims = $application->submittedClaims;
 
     <tbody>
       <tr>
-        <td>KATA KUNCI: <b style="font-family:courier"><?=$application->project->pro_token?></b></td>
+	  <?php 
+$token = $application->project->pro_token;
+	  
+	  ?>
+        <td>KATA KUNCI: <b style="font-family:courier"><?=$token?></b></td>
       </tr>
 
       <tr>
-        <td><a href="" class="btn btn-default btn-sm">Kemaskini</a> <a href="<?=Url::to(['project/fasi/index'])?>" class="btn btn-default btn-sm">Tukar Kata Kunci</a></td>
+        <td><a href="<?=Url::to(['project/update/index', 'token' => $token])?>" class="btn btn-default btn-sm" target="_blank">Kemaskini</a> <a href="<?=Url::to(['project/fasi/index'])?>" class="btn btn-default btn-sm">Tukar Kata Kunci</a></td>
       </tr>
     </tbody>
   </table>

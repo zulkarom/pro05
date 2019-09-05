@@ -45,7 +45,9 @@
 		"yiisoft/yii2-bootstrap4": "^2.0",
 		"luyadev/luya-bootstrap4": "1.0",
 		"djabiev/yii2-autosize-textarea": "dev-master",
-		"kartik-v/yii2-sortable": "@dev"
+		"kartik-v/yii2-sortable": "@dev",
+		"kartik-v/yii2-widget-datepicker": "@dev",
+		"2amigos/yii2-date-picker-widget": "~1.0"
 		
 	},
 	"require-dev" : {

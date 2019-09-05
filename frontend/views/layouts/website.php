@@ -1,6 +1,7 @@
 <?php
 use yii\helpers\Html;
 use yii\helpers\Url;
+use common\widgets\MyAlert as Alert;
 
 /* @var $this \yii\web\View */
 /* @var $content string */
@@ -51,8 +52,12 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/weba
 	      </div>
 	    </div>
 	  </nav>
-    <!-- END nav -->
-    
+    <!-- END navx -->
+	
+
+    <?=Alert::show() ?>
+	
+	
     <?=$content?>
 
     

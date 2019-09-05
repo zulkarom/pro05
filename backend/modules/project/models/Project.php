@@ -3,6 +3,7 @@
 namespace backend\modules\project\models;
 
 use Yii;
+use common\models\Application;
 
 /**
  * This is the model class for table "project".
@@ -55,6 +56,10 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
 			
+			[['pro_name', 'pro_token', 'application_id', 'date_start', 'date_end', 'location', 'collaboration', 'purpose', 'background', 'pro_time', 'pro_target', 'agency_involved', 'updated_at'], 'required', 'on' => 'update-main'],
+			
+
+			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
             [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
@@ -73,20 +78,17 @@ class Project extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
 			'pro_token' => 'Token',
-            'pro_name' => 'Nama Projek',
-            'date_start' => 'Date Start',
-            'date_end' => 'Date End',
-            'location' => 'Location',
-            'course_id' => 'Course ID',
-            'semester_id' => 'Semester ID',
-            'collaboration' => 'Collaboration',
-            'purpose' => 'Purpose',
-            'background' => 'Background',
-            'pro_time' => 'Pro Time',
-            'pro_target' => 'Pro Target',
-            'agency_involved' => 'Agency Involved',
+            'pro_name' => 'Tajuk Kertas Cadangan',
+            'date_start' => 'Tarikh Mula',
+            'date_end' => 'Tarikh Akhir',
+            'location' => 'Lokasi Program',
+            'collaboration' => 'Dengan Kerjasama',
+            'purpose' => 'Tujuan',
+            'background' => 'Pengenalan / Latar Belakang',
+            'pro_time' => 'Masa',
+            'pro_target' => 'Kumpulan Sasaran',
+            'agency_involved' => 'Agensi yang terlibat',
             'prepared_by' => 'Prepared By',
-            'fasi_id' => 'Fasi ID',
             'supported_by' => 'Supported By',
             'approved_by' => 'Approved By',
             'approval_note' => 'Approval Note',
@@ -95,6 +97,11 @@ class Project extends \yii\db\ActiveRecord
             'supported_at' => 'Supported At',
             'updated_at' => 'Updated At',
         ];
+    }
+	
+	public function getApplication()
+    {
+        return $this->hasOne(Application::className(), ['id' => 'application_id']);
     }
 
     /**
