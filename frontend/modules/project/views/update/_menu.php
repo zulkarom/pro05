@@ -16,7 +16,7 @@ $menu = [
 	'tentatif' => ['TENTATIF', ['update/tentative', 'token' => $token]],
 	'pendapatan'=> ['PENDAPATAN',['update/income', 'token' => $token]],
 	'belanja' => ['PERBELANJAAN',['update/expense', 'token' => $token]],
-	'hantar' => ['RINGKASAN DAN HANTAR',['update/preview', 'token' => $token]],
+	'hantar' => ['DOKUMEN DAN HANTAR',['update/preview', 'token' => $token]],
 
 	];
 	

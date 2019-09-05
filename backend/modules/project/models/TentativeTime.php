@@ -32,11 +32,11 @@ class TentativeTime extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['day_id', 'ttf_time', 'ttf_item', 'ttf_location', 'ttf_order'], 'required'],
+            [['ttf_time', 'ttf_item', 'ttf_location'], 'required'],
             [['day_id', 'ttf_order'], 'integer'],
             [['ttf_time'], 'safe'],
             [['ttf_item', 'ttf_location'], 'string', 'max' => 200],
-            [['day_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProTtfDay::className(), 'targetAttribute' => ['day_id' => 'id']],
+            [['day_id'], 'exist', 'skipOnError' => true, 'targetClass' => TentativeDay::className(), 'targetAttribute' => ['day_id' => 'id']],
         ];
     }
 
@@ -48,9 +48,9 @@ class TentativeTime extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'day_id' => 'Day ID',
-            'ttf_time' => 'Ttf Time',
-            'ttf_item' => 'Ttf Item',
-            'ttf_location' => 'Ttf Location',
+            'ttf_time' => 'Masa',
+            'ttf_item' => 'Aturcara',
+            'ttf_location' => 'Lokasi',
             'ttf_order' => 'Ttf Order',
         ];
     }

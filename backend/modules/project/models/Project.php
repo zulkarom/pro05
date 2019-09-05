@@ -58,7 +58,7 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['pro_name', 'pro_token', 'application_id', 'date_start', 'date_end', 'location', 'collaboration', 'purpose', 'background', 'pro_time', 'pro_target', 'agency_involved', 'updated_at'], 'required', 'on' => 'update-main'],
 			
-
+			[['updated_at'], 'required', 'on' => 'update'],
 			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
@@ -147,8 +147,8 @@ class Project extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProTtfDays()
+    public function getTentativeDays()
     {
-        return $this->hasMany(ProTtfDay::className(), ['pro_id' => 'id']);
+        return $this->hasMany(TentativeDay::className(), ['pro_id' => 'id']);
     }
 }
