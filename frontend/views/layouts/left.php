@@ -108,7 +108,7 @@ use backend\modules\esiap\models\Course;
 			
 			$menu_coor = [
                         'label' => 'Penyelaras Kursus',
-                        'icon' => 'user',
+                        'icon' => 'book',
                         'url' => '#',
                         'items' => $arr,
                     ]
@@ -133,7 +133,7 @@ use backend\modules\esiap\models\Course;
 					$course_focus,
 					
 					
-                    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site/dashboard']],
+                    ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/dashboard/index']],
 					
 					
 					[
@@ -161,6 +161,8 @@ use backend\modules\esiap\models\Course;
 					['label' => 'Permohonan Fasilitator', 'icon' => 'mouse-pointer', 'url' => ['/application/index']],
 					
 					['label' => 'Senarai Tuntutan', 'icon' => 'usd', 'url' => ['/claim/index']],
+					
+					['label' => 'Kertas Kerja', 'icon' => 'files-o', 'url' => ['/project/fasi/index']],
 					
 					$penyelaras ,
 					

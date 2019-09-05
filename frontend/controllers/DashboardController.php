@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\ForbiddenHttpException;
+use backend\models\Semester;
+use common\models\Application;
 
 /**
  * Site controller
@@ -39,7 +41,12 @@ class DashboardController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+		$semester = Semester::getCurrentSemester();
+		$application = Application::getMyAcceptApplication();
+        return $this->render('index', [
+			'semester' => $semester,
+			'application' => $application
+		]);
     }
 	
 	

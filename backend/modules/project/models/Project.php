@@ -53,10 +53,14 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_name', 'date_start', 'date_end', 'location', 'course_id', 'semester_id', 'collaboration', 'purpose', 'background', 'pro_time', 'pro_target', 'agency_involved', 'prepared_by', 'fasi_id', 'supported_by', 'approved_by', 'approval_note', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'required'],
+            [['pro_name', 'application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
+			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
-            [['course_id', 'semester_id', 'prepared_by', 'fasi_id', 'supported_by', 'approved_by'], 'integer'],
+			
+            [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
+			
             [['purpose', 'background', 'approval_note'], 'string'],
+			
             [['pro_name', 'location', 'collaboration', 'pro_time', 'pro_target', 'agency_involved'], 'string', 'max' => 200],
         ];
     }
@@ -68,7 +72,8 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'pro_name' => 'Pro Name',
+			'pro_token' => 'Token',
+            'pro_name' => 'Nama Projek',
             'date_start' => 'Date Start',
             'date_end' => 'Date End',
             'location' => 'Location',

@@ -41,9 +41,10 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/weba
 			  </button>
 	      <div class="collapse navbar-collapse" id="ftco-nav">
 	        <ul class="navbar-nav ml-auto">
-	        	<li class="nav-item"><a href="<?=Url::to(['site/index'])?>" class="nav-link pl-0">Home</a></li>
-	        	<li class="nav-item"><a href="<?=Url::to(['site/course'])?>" class="nav-link">Senarai Kursus</a></li>
-	        	<li class="nav-item"><a href="<?=Url::to(['user/login'])?>" class="nav-link">Login e-Fasi</a></li>
+	        	<li class="nav-item"><a href="<?=Url::to(['/site/index'])?>" class="nav-link pl-0">Home</a></li>
+	        	<li class="nav-item"><a href="<?=Url::to(['/site/course'])?>" class="nav-link">Senarai Kursus</a></li>
+	        	<li class="nav-item"><a href="<?=Url::to(['/user/login'])?>" class="nav-link">e-Fasi</a></li>
+				<li class="nav-item"><a href="<?=Url::to(['/project'])?>" class="nav-link">Kertas Kerja</a></li>
 				<li class="nav-item"><a href="#hubungi" class="nav-link">Hubungi</a></li>
 
 	        </ul>

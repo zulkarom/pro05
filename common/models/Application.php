@@ -160,6 +160,11 @@ class Application extends \yii\db\ActiveRecord
         return $this->hasMany(Claim::className(), ['application_id' => 'id']);
     }
 	
+	public function getSubmittedClaims()
+    {
+        return $this->hasMany(Claim::className(), ['application_id' => 'id'])->where(['status' => 'ClaimWorkflow/bb-submit']);
+    }
+	
 	public function getAcceptedCourse(){
 		$course = ApplicationCourse::findOne(['application_id' => $this->id, 'is_accepted' => 1]);
 		return $course;
