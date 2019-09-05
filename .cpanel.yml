@@ -1,0 +1,5 @@
+---
+deployment:
+ tasks:
+ - export DEPLOYPATH=/home/pusatkoumkedu/efasi/
+ - /bin/cp -R /home/pusatkoumkedu/repositories/pro05 $DEPLOYPATH
