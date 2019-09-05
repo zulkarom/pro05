@@ -17,6 +17,9 @@ use common\models\Common;
 use backend\models\Semester;
 use raoul2000\workflow\validation\WorkflowValidator;
 use raoul2000\workflow\validation\WorkflowScenario;
+use common\models\Token;
+use backend\modules\project\models\Project;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "application".
@@ -334,6 +337,31 @@ class Application extends \yii\db\ActiveRecord
 		return Claim::find()->where(['application_id' => $this->id, 'status' => 'ClaimWorkflow/bb-submit'])->sum('total_hour * rate_amount');
 
 	}
+	
+	public function createProject()
+    {
+        $model = new Project();
+		$model->scenario = 'fasi-create';
+		$model->created_at = new Expression('NOW()');
+		$model->application_id = $this->id;
+		$model->pro_token = Token::projectKey();
+		if($model->save()){
+			return $model;
+		}
+            
+    }
+
+
+    public function getProject()
+    {
+		$model = Project::findOne(['application_id' => $this->id]);
+		if($model){
+			return $model;
+		}else{
+			return $this->createProject();
+		}
+		
+    }
 	
 
 

@@ -8,7 +8,8 @@ use yii\filters\AccessControl;
 use yii\web\ForbiddenHttpException;
 use backend\models\Semester;
 use common\models\Application;
-
+use common\models\Token;
+use backend\modules\project\models\Project;
 /**
  * Site controller
  */
@@ -48,6 +49,13 @@ class DashboardController extends Controller
 			'application' => $application
 		]);
     }
+	
+	/**
+     * Creates a new Project model.
+     * If creation is successful, the browser will be redirected to the 'view' page.
+     * @return mixed
+     */
+   
 	
 	
 }

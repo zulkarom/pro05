@@ -197,13 +197,11 @@ $claims = $application->submittedClaims;
 
     <tbody>
       <tr>
-        <td>KATA KUNCI: DHE323</td>
+        <td>KATA KUNCI: <b style="font-family:courier"><?=$application->project->pro_token?></b></td>
       </tr>
+
       <tr>
-        <td>STATUS : DERAF</td>
-      </tr>
-      <tr>
-        <td><a href="" class="btn btn-default btn-sm">Kemaskini</a> <a href="" class="btn btn-default btn-sm">Tukar Kata Kunci</a></td>
+        <td><a href="" class="btn btn-default btn-sm">Kemaskini</a> <a href="<?=Url::to(['project/fasi/index'])?>" class="btn btn-default btn-sm">Tukar Kata Kunci</a></td>
       </tr>
     </tbody>
   </table>

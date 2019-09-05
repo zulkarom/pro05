@@ -53,7 +53,7 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_name', 'application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
+            [['application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
 			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
