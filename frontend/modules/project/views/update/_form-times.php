@@ -11,7 +11,7 @@ use kartik\time\TimePicker;
     'widgetContainer' => 'dynamicform_inner',
     'widgetBody' => '.container-times',
     'widgetItem' => '.time-item',
-    'limit' => 4,
+    'limit' => 100,
     'min' => 1,
     'insertButton' => '.add-time',
     'deleteButton' => '.remove-time',
