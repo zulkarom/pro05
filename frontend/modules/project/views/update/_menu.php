@@ -23,9 +23,24 @@ $menu = [
 	
 	foreach($menu as $key => $m){
 		$active = $key == $page ? 'active' : '';
-		echo '<li class="nav-item">
+		
+		if($key == 'belanja'){
+			echo '<li class="nav-item dropdown">
+			<a class="nav-link '.$active.' dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.$m[0].' </a>
+			 <div class="dropdown-menu">
+			  <a class="dropdown-item" href="'.Url::to($m[1]).'">Asas</a>
+			  <a class="dropdown-item" href="#">Peralatan</a>
+			  <a class="dropdown-item" href="#">Sewaan</a>
+			</div>
+		  </li>';
+		}else{
+			echo '<li class="nav-item">
 			<a class="nav-link '.$active.'" href="'.Url::to($m[1]).'">'.$m[0].'</a>
-		</li>';
+			</li>';
+		}
+		
+		
+		
 	}
 
 

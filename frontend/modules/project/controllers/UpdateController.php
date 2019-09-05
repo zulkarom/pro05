@@ -5,8 +5,12 @@ namespace frontend\modules\project\controllers;
 use Yii;
 use yii\web\Controller;
 use backend\modules\project\models\Project;
+use backend\modules\project\models\Resource;
 use backend\models\Semester;
 use yii\db\Expression;
+use common\models\Model;
+use yii\helpers\ArrayHelper;
+
 
 /**
  * Default controller for the `project` module
@@ -20,6 +24,7 @@ class UpdateController extends Controller
      */
     public function actionIndex($token)
     {
+		$token = strtoupper($token);
 		$model = $this->findModel($token);
 		if($model){
 			$model->scenario = 'update-main';
@@ -89,7 +94,133 @@ class UpdateController extends Controller
 		]);
     }
 	
+	public function actionIncome($token)
+    {
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+        $resources = $model->resources;
+       
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->updated_at = new Expression('NOW()');    
+            
+            $oldIDs = ArrayHelper::map($resources, 'id', 'id');
+            
+            
+            $resources = Model::createMultiple(Resource::classname(), $resources);
+            
+            Model::loadMultiple($resources, Yii::$app->request->post());
+            
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($resources, 'id', 'id')));
+            
+            foreach ($resources as $i => $resource) {
+                $resource->rs_order = $i;
+            }
+            
+            
+            $valid = $model->validate();
+            
+            $valid = Model::validateMultiple($resources) && $valid;
+            
+            if ($valid) {
+
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (! empty($deletedIDs)) {
+                            Resource::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($resources as $i => $resource) {
+                            if ($flag === false) {
+                                break;
+                            }
+                            //do not validate this in model
+                            $resource->pro_id = $model->id;
+
+                            if (!($flag = $resource->save(false))) {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                            Yii::$app->session->addFlash('success', "Pendapatan telah dikemaskini");
+                            return $this->redirect(['income','token' => $token]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    
+                }
+            }
+
+        
+        
+       
+
+		}
+
+		
+		
+        return $this->render('income', [
+			'model' => $model,
+			'resources' => (empty($resources)) ? [new Resource] : $resources
+		
+		]);
+    }
 	
+	public function actionExpense($token)
+    {
+		$model = $this->findModel($token);
+		$model->scenario = 'update-income';
+		
+		if ($model->load(Yii::$app->request->post())) {
+			$model->updated_at = new Expression('NOW()');
+			
+			if($model->save()){
+				Yii::$app->session->addFlash('success', "Data Updated");
+				return $this->redirect(['index', 'token' => $token]);
+			}
+            
+        }
+		
+		
+        return $this->render('expense', [
+			'model' => $model
+		
+		]);
+    }
+	
+	public function actionPreview($token)
+    {
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		$model->scenario = 'update-income';
+		
+		if ($model->load(Yii::$app->request->post())) {
+			$model->updated_at = new Expression('NOW()');
+			
+			if($model->save()){
+				Yii::$app->session->addFlash('success', "Data Updated");
+				return $this->redirect(['index', 'token' => $token]);
+			}
+            
+        }
+		
+		
+        return $this->render('preview', [
+			'model' => $model
+		
+		]);
+    }
+
 	
 	protected function findModel($token)
     {

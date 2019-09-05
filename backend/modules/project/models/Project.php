@@ -139,9 +139,9 @@ class Project extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProResources()
+    public function getResources()
     {
-        return $this->hasMany(ProResource::className(), ['pro_id' => 'id']);
+        return $this->hasMany(Resource::className(), ['pro_id' => 'id'])->orderBy('rs_order ASC');
     }
 
     /**
