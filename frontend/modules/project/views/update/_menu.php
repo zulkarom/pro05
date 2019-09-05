@@ -12,10 +12,10 @@ use yii\helpers\Url;
 $menu = [
 
 	'utama' => ['UTAMA', ['update/index', 'token' => $token]],
-	'student' => ['JAWATANKUASA',['update/committee', 'token' => $token]],
-	'tentatif' => ['TENTATIF', ['update/tentative', 'token' => $token]],
 	'pendapatan'=> ['PENDAPATAN',['update/income', 'token' => $token]],
 	'belanja' => ['PERBELANJAAN',['update/expense', 'token' => $token]],
+	'tentatif' => ['TENTATIF', ['update/tentative', 'token' => $token]],
+	'student' => ['JAWATANKUASA',['update/committee', 'token' => $token]],
 	'hantar' => ['DOKUMEN DAN HANTAR',['update/preview', 'token' => $token]],
 
 	];
