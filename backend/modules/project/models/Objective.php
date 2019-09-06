@@ -30,8 +30,10 @@ class Objective extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'obj_text', 'obj_order'], 'required'],
+            [['obj_text'], 'required'],
+			
             [['pro_id', 'obj_order'], 'integer'],
+			
             [['obj_text'], 'string'],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
@@ -45,7 +47,7 @@ class Objective extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'obj_text' => 'Obj Text',
+            'obj_text' => 'Objektif',
             'obj_order' => 'Obj Order',
         ];
     }
@@ -53,7 +55,7 @@ class Objective extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPro()
+    public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
     }

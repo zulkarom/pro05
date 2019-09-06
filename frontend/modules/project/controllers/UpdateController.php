@@ -11,6 +11,7 @@ use backend\modules\project\models\ExpTool;
 use backend\modules\project\models\ExpRent;
 use backend\modules\project\models\TentativeDay;
 use backend\modules\project\models\TentativeTime;
+use backend\modules\project\models\Objective;
 use backend\models\Semester;
 use yii\db\Expression;
 use common\models\Model;
@@ -32,21 +33,78 @@ class UpdateController extends Controller
 		$token = strtoupper($token);
 		$model = $this->findModel($token);
 		if($model){
+			
 			$model->scenario = 'update-main';
 		
-			if ($model->load(Yii::$app->request->post())) {
-				$model->updated_at = new Expression('NOW()');
-				
-				if($model->save()){
-					Yii::$app->session->addFlash('success', "Data Updated");
-					return $this->redirect(['index', 'token' => $token]);
-				}
-				
-			}
+			$objectives = $model->objectives;
+       
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->updated_at = new Expression('NOW()');    
+            
+            $oldIDs = ArrayHelper::map($objectives, 'id', 'id');
+            
+            
+            $objectives = Model::createMultiple(Objective::classname(), $objectives);
+            
+            Model::loadMultiple($objectives, Yii::$app->request->post());
+            
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($objectives, 'id', 'id')));
+            
+            foreach ($objectives as $i => $objective) {
+                $objective->obj_order = $i;
+            }
+            
+            
+            $valid = $model->validate();
+            
+            $valid = Model::validateMultiple($objectives) && $valid;
+            
+            if ($valid) {
+
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (! empty($deletedIDs)) {
+                            Objective::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($objectives as $i => $objective) {
+                            if ($flag === false) {
+                                break;
+                            }
+                            //do not validate this in model
+                            $objective->pro_id = $model->id;
+
+                            if (!($flag = $objective->save(false))) {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                            Yii::$app->session->addFlash('success', "Maklumat telah dikemaskini");
+                            return $this->redirect(['index','token' => $token]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    
+                }
+            }
+
+        
+        
+       
+
+		}
 			
 			
 			return $this->render('index', [
-				'model' => $model
+				'model' => $model,
+				'objectives' => (empty($objectives)) ? [new Objective] : $objectives
 			
 			]);
 		}else{

@@ -2,7 +2,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use kartik\date\DatePicker;
+use wbraganca\dynamicform\DynamicFormWidget;
+use yii\jui\JuiAsset;
 
 
 /* @var $this yii\web\View */
@@ -27,51 +28,10 @@ use kartik\date\DatePicker;
 
 <div class="site-index">
 
-    <?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
         <?= $form->field($model, 'pro_name')->textarea(['rows' =>2]) ?>
-		<div class="row">
-<div class="col-md-3">
- <?=$form->field($model, 'date_start')->widget(DatePicker::classname(), [
-    'removeButton' => false,
-    'pluginOptions' => [
-        'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
-        'todayHighlight' => true,
-        
-    ],
-    
-    
-]);
-?>
-
-
-</div>
-
-<div class="col-md-3">
-
-
-
- <?=$form->field($model, 'date_end')->widget(DatePicker::classname(), [
-    'removeButton' => false,
-    'pluginOptions' => [
-        'autoclose'=>true,
-        'format' => 'yyyy-mm-dd',
-        'todayHighlight' => true,
-        
-    ],
-    
-    
-]);
-?>
-
-
-</div>
-
-<div class="col-md-4"> <?= $form->field($model, 'pro_time') ?>
-</div>
-
-</div>
+		
 
 
         <?= $form->field($model, 'location') ?>
@@ -79,10 +39,79 @@ use kartik\date\DatePicker;
 		
 		
         <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'purpose')->textarea(['rows' =>5]) ?></div>
+<div class="col-md-6"><?= $form->field($model, 'purpose')->textarea(['rows' =>10]) ?></div>
 
-<div class="col-md-6"> <?= $form->field($model, 'background')->textarea(['rows' =>5]) ?>
+<div class="col-md-6"> <?= $form->field($model, 'background')->textarea(['rows' =>10]) ?>
 </div>
+
+</div>
+
+<div class="row">
+<div class="col-md-10">
+
+
+<?php DynamicFormWidget::begin([
+        'widgetContainer' => 'dynamicform_wrapper',
+        'widgetBody' => '.container-items',
+        'widgetItem' => '.objective-item',
+        'limit' => 20,
+        'min' => 1,
+        'insertButton' => '.add-objective',
+        'deleteButton' => '.remove-objective',
+        'model' => $objectives[0],
+        'formId' => 'dynamic-form',
+        'formFields' => [
+            'id',
+
+        ],
+    ]); ?>
+
+    <label>Objektif Kertas Kerja</label>
+    <div class="table-responsive"><table class="table">
+        <tbody class="container-items">
+        <?php foreach ($objectives as $i => $objective): ?>
+            <tr class="objective-item">
+                <td class="sortable-handle text-center vcenter" style="cursor: move;width: 10px;">
+                        <i class="icon icon-arrows-alt"></i>
+                    </td>
+            
+                <td class="vcenter">
+                    <?php
+                        // necessary for upobjective action.
+                        if (! $objective->isNewRecord) {
+                            echo Html::activeHiddenInput($objective, "[{$i}]id");
+                        }
+                    ?>
+                    <?= $form->field($objective, "[{$i}]obj_text")->textarea(['rows' => 2])->label(false) ?>
+                </td>
+				
+
+                <td class="text-center vcenter" style="width: 10px;">
+                    <button type="button" class="remove-objective btn btn-default btn-sm"><span class="icon icon-remove"></span></button>
+                </td>
+            </tr>
+         <?php endforeach; ?>
+        </tbody>
+        
+        <tfoot>
+            <tr>
+            <td></td>
+                <td colspan="1">
+                <button type="button" class="add-objective btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Objective</button>
+                
+                </td>
+                <td>
+                
+                
+                </td>
+            </tr>
+        </tfoot>
+        
+    </table></div>
+    <?php DynamicFormWidget::end(); ?>
+
+</div>
+
 
 </div>
 		
@@ -98,7 +127,7 @@ use kartik\date\DatePicker;
         
     <br />
         <div class="form-group">
-            <?= Html::submitButton('SIMPAN', ['class' => 'mybtn btn-primary']) ?>
+            <?= Html::submitButton('SIMPAN', ['class' => 'btn btn-primary']) ?>
         </div>
     <?php ActiveForm::end(); ?>
 
@@ -110,8 +139,38 @@ use kartik\date\DatePicker;
 </div>
 
 </section>
-<br /><br /><br /><br /><br /><br />
 
 
+
+
+
+<?php
+
+$js = <<<'EOD'
+
+var fixHelperSortable = function(e, ui) {
+    ui.children().each(function() {
+        $(this).width($(this).width());
+    });
+    return ui;
+};
+
+$(".container-items").sortable({
+    items: "tr",
+    cursor: "move",
+    opacity: 0.6,
+    axis: "y",
+    handle: ".sortable-handle",
+    helper: fixHelperSortable,
+    update: function(ev){
+        $(".dynamicform_wrapper").yiiDynamicForm("updateContainer");
+    }
+}).disableSelection();
+
+EOD;
+
+JuiAsset::register($this);
+$this->registerJs($js);
+?>
 
 

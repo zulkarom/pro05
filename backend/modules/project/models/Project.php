@@ -131,9 +131,9 @@ class Project extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProObjectives()
+    public function getObjectives()
     {
-        return $this->hasMany(ProObjective::className(), ['pro_id' => 'id']);
+        return $this->hasMany(Objective::className(), ['pro_id' => 'id'])->orderBy('obj_order ASC');
     }
 
     /**
