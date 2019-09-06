@@ -47,7 +47,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             'description',
         ],
     ]); ?>
-   <div class="table-responsive"> <table class="table">
+   <div > <table class="table">
 
         <tbody class="container-items">
         <?php foreach ($days as $indexDay => $day): ?>
@@ -64,7 +64,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 <div class="col-md-2">
 
 
-<?=$form->field($day, 'pro_date')->widget(DatePicker::classname(), [
+<?=$form->field($day, "[{$indexDay}]pro_date")->widget(DatePicker::classname(), [
 						'removeButton' => false,
 						'pluginOptions' => [
 							'autoclose'=>true,

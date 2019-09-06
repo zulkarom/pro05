@@ -156,6 +156,8 @@ class UpdateController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
+			
+			print_r(Yii::$app->request->post());die();
 
             // reset
             $times = [];

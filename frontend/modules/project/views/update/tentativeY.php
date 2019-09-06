@@ -2,8 +2,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
-use yii\jui\JuiAsset;
-use kartik\date\DatePicker;
 
 
 
@@ -73,17 +71,7 @@ use kartik\date\DatePicker;
                             echo Html::activeHiddenInput($expense, "[{$i}]id");
                         }
                     ?>
-					<?=$form->field($expense, 'pro_date')->widget(DatePicker::classname(), [
-						'removeButton' => false,
-						'pluginOptions' => [
-							'autoclose'=>true,
-							'format' => 'yyyy-mm-dd',
-							'todayHighlight' => true,
-							
-						],
-						
-						
-					]);
+					<?=$form->field($expense, 'exp_name');
 					?>
                 
                 </td>
@@ -100,7 +88,7 @@ use kartik\date\DatePicker;
             <tr>
             <td></td>
                 <td colspan="3">
-                <button type="button" class="add-expense btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Perbelanjaan</button>
+                <button type="button" class="add-expense btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Hari</button>
                 
                 </td>
                 <td>
@@ -134,32 +122,4 @@ use kartik\date\DatePicker;
 
 
 
-<?php
-
-$js = <<<'EOD'
-
-var fixHelperSortable = function(e, ui) {
-    ui.children().each(function() {
-        $(this).width($(this).width());
-    });
-    return ui;
-};
-
-$(".container-items").sortable({
-    items: "tr",
-    cursor: "move",
-    opacity: 0.6,
-    axis: "y",
-    handle: ".sortable-handle",
-    helper: fixHelperSortable,
-    update: function(ev){
-        $(".dynamicform_wrapper").yiiDynamicForm("updateContainer");
-    }
-}).disableSelection();
-
-EOD;
-
-JuiAsset::register($this);
-$this->registerJs($js);
-?>
 

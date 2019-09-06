@@ -37,6 +37,7 @@ class ExpBasic extends \yii\db\ActiveRecord
 			[['amount'], 'number'],
 			
             [['exp_name'], 'string', 'max' => 200],
+			
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
     }

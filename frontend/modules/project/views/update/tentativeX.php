@@ -66,17 +66,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
                     ?>
 					
 					<div class="row">
-<div class="col-md-2"><?=$form->field($day, 'pro_date')->widget(DatePicker::classname(), [
-						'removeButton' => false,
-						'pluginOptions' => [
-							'autoclose'=>true,
-							'format' => 'yyyy-mm-dd',
-							'todayHighlight' => true,
-							
-						],
-						
-						
-					]);
+<div class="col-md-2"><?=$form->field($day, 'pro_date');
 					?></div>
 					<div class="col-md-4">
 					<div class="form-group">&nbsp;</div>
@@ -148,7 +138,7 @@ jQuery(".dynamicform_inner").on("afterInsert", function(e, item) {
 
 EOD;
 
-$this->registerJs($js);
+//$this->registerJs($js);
 ?>
 
 

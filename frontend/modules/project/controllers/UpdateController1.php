@@ -11,6 +11,7 @@ use backend\modules\project\models\ExpTool;
 use backend\modules\project\models\ExpRent;
 use backend\modules\project\models\TentativeDay;
 use backend\modules\project\models\TentativeTime;
+use backend\modules\project\models\Objective;
 use backend\models\Semester;
 use yii\db\Expression;
 use common\models\Model;
@@ -32,21 +33,78 @@ class UpdateController extends Controller
 		$token = strtoupper($token);
 		$model = $this->findModel($token);
 		if($model){
+			
 			$model->scenario = 'update-main';
 		
-			if ($model->load(Yii::$app->request->post())) {
-				$model->updated_at = new Expression('NOW()');
-				
-				if($model->save()){
-					Yii::$app->session->addFlash('success', "Data Updated");
-					return $this->redirect(['index', 'token' => $token]);
-				}
-				
-			}
+			$objectives = $model->objectives;
+       
+        if ($model->load(Yii::$app->request->post())) {
+            
+            $model->updated_at = new Expression('NOW()');    
+            
+            $oldIDs = ArrayHelper::map($objectives, 'id', 'id');
+            
+            
+            $objectives = Model::createMultiple(Objective::classname(), $objectives);
+            
+            Model::loadMultiple($objectives, Yii::$app->request->post());
+            
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($objectives, 'id', 'id')));
+            
+            foreach ($objectives as $i => $objective) {
+                $objective->obj_order = $i;
+            }
+            
+            
+            $valid = $model->validate();
+            
+            $valid = Model::validateMultiple($objectives) && $valid;
+            
+            if ($valid) {
+
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (! empty($deletedIDs)) {
+                            Objective::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($objectives as $i => $objective) {
+                            if ($flag === false) {
+                                break;
+                            }
+                            //do not validate this in model
+                            $objective->pro_id = $model->id;
+
+                            if (!($flag = $objective->save(false))) {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                            Yii::$app->session->addFlash('success', "Maklumat telah dikemaskini");
+                            return $this->redirect(['index','token' => $token]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    
+                }
+            }
+
+        
+        
+       
+
+		}
 			
 			
 			return $this->render('index', [
-				'model' => $model
+				'model' => $model,
+				'objectives' => (empty($objectives)) ? [new Objective] : $objectives
 			
 			]);
 		}else{
@@ -77,92 +135,112 @@ class UpdateController extends Controller
 		]);
     }
 	
-	public function actionTentativeX($token)
-    {
-		$model = $this->findModel($token);
-		$model->scenario = 'update';
-		
-		if(!$model){
-			return $this->redirect(['/project/default/index', 'token' => $token]);
-		}
-		
-        $modelDays = $model->expenseBasics;
-
-        if ($model->load(Yii::$app->request->post())) {
-			
-			$model->updated_at = new Expression('NOW()');  
-
-            $oldDayIDs = ArrayHelper::map($modelDays, 'id', 'id');
-			
-            $modelDays = Model::createMultiple(ExpBasic::classname(), $modelDays);
-			
-			//print_r($modelDays);
-            Model::loadMultiple($modelDays, Yii::$app->request->post());
-			
-			echo '<pre>';
-			print_r(Yii::$app->request->post());
-			
-			$modelDays = ArrayHelper::map($modelDays, 'id', 'exp_name');
-			
-			print_r($modelDays);  die();
-           
-        }
-		
-		return $this->render('tentativeY', [
-            'model' => $model,
-            'expenses' => (empty($modelDays)) ? [new ExpBasic] : $modelDays
-        ]);
-		
-
-    }
-	
 	public function actionTentative($token)
     {
 		$model = $this->findModel($token);
+		
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
-        $expenses = $model->expenseBasics;
-       
-        if ($model->load(Yii::$app->request->post())) {
-            
-            $model->updated_at = new Expression('NOW()');    
-            
-            $oldIDs = ArrayHelper::map($expenses, 'id', 'id');
-            
-            
-            $expenses = Model::createMultiple(ExpBasic::classname(), $expenses);
-            
-            Model::loadMultiple($expenses, Yii::$app->request->post());
-			
-			echo '<pre>';
-			print_r(Yii::$app->request->post());
-			
-			$days = ArrayHelper::map($expenses, 'id', 'exp_name');
-			
-			print_r($days);  die();
-            
-            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($expenses, 'id', 'id')));
-            
-            foreach ($expenses as $i => $expense) {
-                $expense->exp_order = $i;
+		
+        $days = $model->tentativeDays;
+        $times = [];
+        $oldTimes = [];
+
+        if (!empty($days)) {
+            foreach ($days as $indexDay => $day) {
+                $times = $day->tentativeTimes;
+                $times[$indexDay] = $times;
+                $oldTimes = ArrayHelper::merge(ArrayHelper::index($times, 'id'), $oldTimes);
             }
-            
-            
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+
+            // reset
+            $times = [];
+
+            $oldDayIDs = ArrayHelper::map($days, 'id', 'id');
+            $days = Model::createMultiple(TentativeDay::classname(), $days);
+            Model::loadMultiple($days, Yii::$app->request->post());
+            $deletedDayIDs = array_diff($oldDayIDs, array_filter(ArrayHelper::map($days, 'id', 'id')));
+
+            // validate person and houses models
             $valid = $model->validate();
-            
-            $valid = Model::validateMultiple($expenses) && $valid;
-            
+            $valid = Model::validateMultiple($days) && $valid;
 
-		}
+            $timesIDs = [];
+            if (isset($_POST['Time'][0][0])) {
+                foreach ($_POST['Time'] as $indexDay => $times) {
+                    $timesIDs = ArrayHelper::merge($timesIDs, array_filter(ArrayHelper::getColumn($times, 'id')));
+                    foreach ($times as $indexTime => $time) {
+                        $data['Time'] = $time;
+                        $time = (isset($time['id']) && isset($oldTimes[$time['id']])) ? $oldTimes[$time['id']] : new TentativeTime;
+                        $time->load($data);
+                        $times[$indexDay][$indexTime] = $time;
+                        $valid = $time->validate();
+                    }
+                }
+            }
 
+            $oldTimesIDs = ArrayHelper::getColumn($oldTimes, 'id');
+            $deletedTimesIDs = array_diff($oldTimesIDs, $timesIDs);
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+
+                        if (! empty($deletedTimesIDs)) {
+                            TentativeTime::deleteAll(['id' => $deletedTimesIDs]);
+                        }
+
+                        if (! empty($deletedDayIDs)) {
+                            TentativeDay::deleteAll(['id' => $deletedDayIDs]);
+                        }
+
+                        foreach ($days as $indexDay => $day) {
+
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $day->pro_id = $model->id;
+
+                            if (!($flag = $day->save(false))) {
+                                break;
+                            }
+
+                            if (isset($times[$indexDay]) && is_array($times[$indexDay])) {
+                                foreach ($times[$indexDay] as $indexTime => $time) {
+                                    $time->day_id = $day->id;
+                                    if (!($flag = $time->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                        return $this->redirect(['tentative', 'token' => $token]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
 		
+		return $this->render('tentative', [
+            'model' => $model,
+            'days' => (empty($days)) ? [new TentativeDay] : $days,
+            'times' => (empty($times)) ? [[new TentativeTime]] : $times
+        ]);
 		
-        return $this->render('tentativeY', [
-			'model' => $model,
-			'expenses' => (empty($expenses)) ? [new ExpBasic] : $expenses
-		
-		]);
+
     }
 	
 	
@@ -265,13 +343,6 @@ class UpdateController extends Controller
             $expenses = Model::createMultiple(ExpBasic::classname(), $expenses);
             
             Model::loadMultiple($expenses, Yii::$app->request->post());
-			
-			echo '<pre>';
-			print_r(Yii::$app->request->post());
-			
-			$days = ArrayHelper::map($expenses, 'id', 'exp_name');
-			
-			print_r($days);  die();
             
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($expenses, 'id', 'id')));
             

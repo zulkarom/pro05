@@ -49,7 +49,7 @@ class TentativeDay extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'pro_date' => 'Hari',
+            'proj_date' => 'Hari',
             'day_order' => 'Day Order',
         ];
     }

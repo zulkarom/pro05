@@ -35,6 +35,7 @@ class Objective extends \yii\db\ActiveRecord
             [['pro_id', 'obj_order'], 'integer'],
 			
             [['obj_text'], 'string'],
+			
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
     }
