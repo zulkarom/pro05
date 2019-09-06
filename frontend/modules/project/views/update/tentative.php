@@ -132,7 +132,6 @@ use wbraganca\dynamicform\DynamicFormWidget;
 $js = <<<'EOD'
 
 jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
-	alert('hai');
     $( ".krajee-datepicker" ).each(function() {
        $(this).removeData().kvDatepicker('destroy');
         $(this).kvDatepicker(eval($(this).attr('data-krajee-kvdatepicker')));
