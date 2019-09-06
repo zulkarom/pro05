@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
    <?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 
    <div class="row">
-<div class="col-md-8"> <div class="form-group"><label>KATA LALUAN SEMASA:</label>
+<div class="col-md-8"> <div class="form-group"><label>KATA KUNCI SEMASA:</label>
 <h3 style="font-family:courier; font-size:40px;font-weight:bold"><?=$model->pro_token?></h3>
 
 </div><br /></div>

@@ -56,7 +56,7 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
 			
-			[['pro_name', 'pro_token', 'application_id', 'date_start', 'date_end', 'location', 'collaboration', 'purpose', 'background', 'pro_time', 'pro_target', 'agency_involved', 'updated_at'], 'required', 'on' => 'update-main'],
+			[['pro_name', 'pro_token', 'application_id', 'location', 'collaboration', 'purpose', 'background', 'pro_target', 'agency_involved', 'updated_at'], 'required', 'on' => 'update-main'],
 			
 			[['updated_at'], 'required', 'on' => 'update'],
 			

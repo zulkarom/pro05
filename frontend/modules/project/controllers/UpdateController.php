@@ -156,7 +156,7 @@ class UpdateController extends Controller
         }
 
         if ($model->load(Yii::$app->request->post())) {
-			
+			echo '<pre>';
 			print_r(Yii::$app->request->post());die();
 
             // reset
@@ -172,11 +172,11 @@ class UpdateController extends Controller
             $valid = Model::validateMultiple($days) && $valid;
 
             $timesIDs = [];
-            if (isset($_POST['Time'][0][0])) {
-                foreach ($_POST['Time'] as $indexDay => $times) {
+            if (isset($_POST['TentativeTime'][0][0])) {
+                foreach ($_POST['TentativeTime'] as $indexDay => $times) {
                     $timesIDs = ArrayHelper::merge($timesIDs, array_filter(ArrayHelper::getColumn($times, 'id')));
                     foreach ($times as $indexTime => $time) {
-                        $data['Time'] = $time;
+                        $data['TentativeTime'] = $time;
                         $time = (isset($time['id']) && isset($oldTimes[$time['id']])) ? $oldTimes[$time['id']] : new TentativeTime;
                         $time->load($data);
                         $times[$indexDay][$indexTime] = $time;
@@ -612,4 +612,8 @@ class UpdateController extends Controller
 		
 		
     }
+	
+	public function actionTest(){
+		
+	}
 }
