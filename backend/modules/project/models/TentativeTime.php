@@ -33,7 +33,9 @@ class TentativeTime extends \yii\db\ActiveRecord
     {
         return [
             [['ttf_time', 'ttf_item', 'ttf_location'], 'required'],
+			
             [['day_id', 'ttf_order'], 'integer'],
+			
             [['ttf_time'], 'safe'],
             [['ttf_item', 'ttf_location'], 'string', 'max' => 200],
             [['day_id'], 'exist', 'skipOnError' => true, 'targetClass' => TentativeDay::className(), 'targetAttribute' => ['day_id' => 'id']],

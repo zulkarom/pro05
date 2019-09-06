@@ -17,6 +17,10 @@ use yii\db\Expression;
 use common\models\Model;
 use yii\helpers\ArrayHelper;
 
+//test
+use backend\modules\project\models\Person;
+use backend\modules\project\models\House;
+use backend\modules\project\models\Room;
 
 /**
  * Default controller for the `project` module
@@ -143,44 +147,51 @@ class UpdateController extends Controller
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
 		
-        $days = $model->tentativeDays;
-        $times = [];
+        $modelsDay = $model->tentativeDays;
+        $modelsTime = [];
         $oldTimes = [];
 
-        if (!empty($days)) {
-            foreach ($days as $indexDay => $day) {
-                $times = $day->tentativeTimes;
-                $times[$indexDay] = $times;
+        if (!empty($modelsDay)) {
+            foreach ($modelsDay as $indexDay => $modelDay) {
+                $times = $modelDay->tentativeTimes;
+                $modelsTime[$indexDay] = $times;
                 $oldTimes = ArrayHelper::merge(ArrayHelper::index($times, 'id'), $oldTimes);
             }
         }
 
         if ($model->load(Yii::$app->request->post())) {
-			echo '<pre>';
-			print_r(Yii::$app->request->post());die();
+			
+			//echo '<pre>';
+			//print_r(Yii::$app->request->post());die();
 
             // reset
-            $times = [];
+            $modelsTime = [];
 
-            $oldDayIDs = ArrayHelper::map($days, 'id', 'id');
-            $days = Model::createMultiple(TentativeDay::classname(), $days);
-            Model::loadMultiple($days, Yii::$app->request->post());
-            $deletedDayIDs = array_diff($oldDayIDs, array_filter(ArrayHelper::map($days, 'id', 'id')));
+            $oldDayIDs = ArrayHelper::map($modelsDay, 'id', 'id');
+            $modelsDay = Model::createMultiple(TentativeDay::classname(), $modelsDay);
+            Model::loadMultiple($modelsDay, Yii::$app->request->post());
+            $deletedDayIDs = array_diff($oldDayIDs, array_filter(ArrayHelper::map($modelsDay, 'id', 'id')));
 
-            // validate person and houses models
+            // validate person and days models
             $valid = $model->validate();
-            $valid = Model::validateMultiple($days) && $valid;
+            $valid = Model::validateMultiple($modelsDay) && $valid;
 
             $timesIDs = [];
+			//print_r( $_POST['Time']);die();
             if (isset($_POST['TentativeTime'][0][0])) {
                 foreach ($_POST['TentativeTime'] as $indexDay => $times) {
+					//echo '<pre>';print_r($times);die();
                     $timesIDs = ArrayHelper::merge($timesIDs, array_filter(ArrayHelper::getColumn($times, 'id')));
+					//print_r(ArrayHelper::getColumn($times, 'id'));die();
                     foreach ($times as $indexTime => $time) {
+						//echo '<pre>';print_r($time);die();
                         $data['TentativeTime'] = $time;
-                        $time = (isset($time['id']) && isset($oldTimes[$time['id']])) ? $oldTimes[$time['id']] : new TentativeTime;
-                        $time->load($data);
-                        $times[$indexDay][$indexTime] = $time;
-                        $valid = $time->validate();
+                        $modelTime = (isset($time['id']) && isset($oldTimes[$time['id']])) ? $oldTimes[$time['id']] : new TentativeTime;
+						//echo '<pre>';print_r($modelTime);echo '<br /><br /><br /><br />';
+                        $modelTime->load($data);
+						//echo '<pre>';print_r($modelTime);die();
+                        $modelsTime[$indexDay][$indexTime] = $modelTime;
+                        $valid = $modelTime->validate();
                     }
                 }
             }
@@ -201,22 +212,25 @@ class UpdateController extends Controller
                             TentativeDay::deleteAll(['id' => $deletedDayIDs]);
                         }
 
-                        foreach ($days as $indexDay => $day) {
+                        foreach ($modelsDay as $indexDay => $modelDay) {
 
                             if ($flag === false) {
                                 break;
                             }
 
-                            $day->pro_id = $model->id;
+                            $modelDay->pro_id = $model->id;
 
-                            if (!($flag = $day->save(false))) {
+                            if (!($flag = $modelDay->save(false))) {
                                 break;
                             }
 
-                            if (isset($times[$indexDay]) && is_array($times[$indexDay])) {
-                                foreach ($times[$indexDay] as $indexTime => $time) {
-                                    $time->day_id = $day->id;
-                                    if (!($flag = $time->save(false))) {
+                            if (isset($modelsTime[$indexDay]) && is_array($modelsTime[$indexDay])) {
+								
+                                foreach ($modelsTime[$indexDay] as $indexTime => $modelTime) {
+									//echo '<pre>';print_r($modelTime);die();
+                                    $modelTime->day_id = 
+									$modelDay->id;
+                                    if (!($flag = $modelTime->save(false))) {
                                         break;
                                     }
                                 }
@@ -226,6 +240,7 @@ class UpdateController extends Controller
 
                     if ($flag) {
                         $transaction->commit();
+						Yii::$app->session->addFlash('success', "Data Updated");
                         return $this->redirect(['tentative', 'token' => $token]);
                     } else {
                         $transaction->rollBack();
@@ -236,10 +251,12 @@ class UpdateController extends Controller
             }
         }
 		
-		return $this->render('tentative', [
+		
+
+        return $this->render('tentative', [
             'model' => $model,
-            'days' => (empty($days)) ? [new TentativeDay] : $days,
-            'times' => (empty($times)) ? [[new TentativeTime]] : $times
+            'days' => (empty($modelsDay)) ? [new TentativeDay] : $modelsDay,
+            'times' => (empty($modelsTime)) ? [[new TentativeTime]] : $modelsTime
         ]);
 		
 
@@ -613,7 +630,127 @@ class UpdateController extends Controller
 		
     }
 	
-	public function actionTest(){
+	protected function findPerson($id)
+    {
+        if (($model = Person::findOne($id)) !== null) {
+            return $model;
+        } else {
+            throw new NotFoundHttpException('The requested page does not exist.');
+        }
+    }
+	
+	public function actionTest($id){
+		 $modelPerson = $this->findPerson($id);
+        $modelsHouse = $modelPerson->houses;
+        $modelsRoom = [];
+        $oldRooms = [];
+
+        if (!empty($modelsHouse)) {
+            foreach ($modelsHouse as $indexHouse => $modelHouse) {
+                $rooms = $modelHouse->rooms;
+                $modelsRoom[$indexHouse] = $rooms;
+                $oldRooms = ArrayHelper::merge(ArrayHelper::index($rooms, 'id'), $oldRooms);
+            }
+        }
+
+        if ($modelPerson->load(Yii::$app->request->post())) {
+			
+			//echo '<pre>';
+			//print_r(Yii::$app->request->post());die();
+
+            // reset
+            $modelsRoom = [];
+
+            $oldHouseIDs = ArrayHelper::map($modelsHouse, 'id', 'id');
+            $modelsHouse = Model::createMultiple(House::classname(), $modelsHouse);
+            Model::loadMultiple($modelsHouse, Yii::$app->request->post());
+            $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsHouse, 'id', 'id')));
+
+            // validate person and houses models
+            $valid = $modelPerson->validate();
+            $valid = Model::validateMultiple($modelsHouse) && $valid;
+
+            $roomsIDs = [];
+			//print_r( $_POST['Room']);die();
+            if (isset($_POST['Room'][0][0])) {
+                foreach ($_POST['Room'] as $indexHouse => $rooms) {
+					
+                    $roomsIDs = ArrayHelper::merge($roomsIDs, array_filter(ArrayHelper::getColumn($rooms, 'id')));
+					//print_r(ArrayHelper::getColumn($rooms, 'id'));die();
+                    foreach ($rooms as $indexRoom => $room) {
+						
+                        $data['Room'] = $room;
+                        $modelRoom = (isset($room['id']) && isset($oldRooms[$room['id']])) ? $oldRooms[$room['id']] : new Room;
+						echo '<pre>';print_r($modelRoom);echo '<br /><br /><br /><br />';
+                        $modelRoom->load($data);
+						//print_r($modelRoom);die();
+                        $modelsRoom[$indexHouse][$indexRoom] = $modelRoom;
+                        $valid = $modelRoom->validate();
+                    }
+                }
+            }
+
+            $oldRoomsIDs = ArrayHelper::getColumn($oldRooms, 'id');
+            $deletedRoomsIDs = array_diff($oldRoomsIDs, $roomsIDs);
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $modelPerson->save(false)) {
+
+                        if (! empty($deletedRoomsIDs)) {
+                            Room::deleteAll(['id' => $deletedRoomsIDs]);
+                        }
+
+                        if (! empty($deletedHouseIDs)) {
+                            House::deleteAll(['id' => $deletedHouseIDs]);
+                        }
+
+                        foreach ($modelsHouse as $indexHouse => $modelHouse) {
+
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $modelHouse->person_id = $modelPerson->id;
+
+                            if (!($flag = $modelHouse->save(false))) {
+                                break;
+                            }
+
+                            if (isset($modelsRoom[$indexHouse]) && is_array($modelsRoom[$indexHouse])) {
+								
+                                foreach ($modelsRoom[$indexHouse] as $indexRoom => $modelRoom) {
+									//echo '<pre>';print_r($modelRoom);die();
+                                    $modelRoom->house_id = 
+									$modelHouse->id;
+                                    if (!($flag = $modelRoom->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+						Yii::$app->session->addFlash('success', "Data Updated");
+                        return $this->redirect(['test', 'id' => $modelPerson->id]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
 		
+		
+
+        return $this->render('test', [
+            'modelPerson' => $modelPerson,
+            'modelsHouse' => (empty($modelsHouse)) ? [new House] : $modelsHouse,
+            'modelsRoom' => (empty($modelsRoom)) ? [[new Room]] : $modelsRoom
+        ]);
 	}
 }

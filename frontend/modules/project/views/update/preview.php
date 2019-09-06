@@ -33,7 +33,8 @@ use kartik\date\DatePicker;
         
     <br />
         <div class="form-group">
-            <?= Html::submitButton('SIMPAN', ['class' => 'btn btn-primary']) ?>
+		<?= Html::a('<i class="icon icon-download"></i> LIHAT PDF', ['download', 'token' => $model->pro_token], ['class' => 'btn btn-danger']) ?>  
+            <?= Html::submitButton('HANTAR', ['class' => 'btn btn-warning']) ?>
         </div>
     <?php ActiveForm::end(); ?>
 

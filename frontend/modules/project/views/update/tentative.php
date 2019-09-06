@@ -112,7 +112,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     <?php DynamicFormWidget::end(); ?>
     
     <div class="form-group">
-        <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => 'btn btn-primary', 'style' => 'font-size:19px']) ?>
+        <?= Html::submitButton('SIMPAN', ['class' => 'btn btn-primary', 'style' => 'font-size:19px']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
