@@ -49,7 +49,7 @@ use kartik\time\TimePicker;
 		'minuteStep' => 5
     ]
 				
-				]);?>
+				])->label(false);?>
 				
             </td>
 			<td class="vcenter">

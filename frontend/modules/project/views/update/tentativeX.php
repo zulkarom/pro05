@@ -30,7 +30,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 
     <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
-     <?=$form->field($model, 'updated_at')->hiddenInput(['value' => 1])->label(false)?>
+     <?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 
 
     <?php DynamicFormWidget::begin([

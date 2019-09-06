@@ -87,34 +87,28 @@ class UpdateController extends Controller
 		}
 		
         $days = $model->tentativeDays;
-        $times = [];
-        $oldTimes = [];
-
-        if (!empty($days)) {
-            foreach ($days as $indexDay => $day) {
-                $times = $day->tentativeTimes;
-                $times[$indexDay] = $times;
-                $oldTimes = ArrayHelper::merge(ArrayHelper::index($times, 'id'), $oldTimes);
-            }
-        }
 
         if ($model->load(Yii::$app->request->post())) {
-
-            // reset
-            $times = [];
+			
+			$model->updated_at = new Expression('NOW()');  
 
             $oldDayIDs = ArrayHelper::map($days, 'id', 'id');
+			
             $days = Model::createMultiple(TentativeDay::classname(), $days);
+			
 			//print_r($days);
             Model::loadMultiple($days, Yii::$app->request->post());
 			
-			//$days = ArrayHelper::map($days, 'id', 'pro_date');
+			/* echo '<pre>';
+			print_r(Yii::$app->request->post());
 			
-			print_r($days);
+			$days = ArrayHelper::map($days, 'id', 'pro_date');
 			
-			foreach($days as $day){
+			print_r($days); */
+			
+			/* foreach($days as $day){
 				echo 'xx';print_r($day);die();
-			}
+			} */
 
             // validate person and houses models
             $valid = $model->validate();
@@ -129,8 +123,6 @@ class UpdateController extends Controller
                 try {
                     if ($flag = $model->save(false)) {
 
-                 
-
                         foreach ($days as $indexDay => $day) {
 
                             if ($flag === false) {
@@ -142,15 +134,13 @@ class UpdateController extends Controller
                             if (!($flag = $day->save(false))) {
 								
                                 break;
-                            }else{
-								
-							}
+                            }
 
     
                         }
                     }
 					
-					print_r($model->getErrors());die();
+					//print_r($model->getErrors());die();
 
                     if ($flag) {
                         $transaction->commit();
@@ -167,8 +157,7 @@ class UpdateController extends Controller
 		
 		return $this->render('tentative', [
             'model' => $model,
-            'days' => (empty($days)) ? [new TentativeDay] : $days,
-            'times' => (empty($times)) ? [[new TentativeTime]] : $times
+            'expenses' => (empty($days)) ? [new TentativeDay] : $days
         ]);
 		
 
