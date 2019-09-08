@@ -12,15 +12,11 @@ use backend\modules\project\models\ExpRent;
 use backend\modules\project\models\TentativeDay;
 use backend\modules\project\models\TentativeTime;
 use backend\modules\project\models\Objective;
+use backend\modules\project\models\ProjectPrint;
 use backend\models\Semester;
 use yii\db\Expression;
 use common\models\Model;
 use yii\helpers\ArrayHelper;
-
-//test
-use backend\modules\project\models\Person;
-use backend\modules\project\models\House;
-use backend\modules\project\models\Room;
 
 /**
  * Default controller for the `project` module
@@ -626,131 +622,30 @@ class UpdateController extends Controller
 			return false;
 			
 		}
-		
-		
     }
 	
-	protected function findPerson($id)
-    {
-        if (($model = Person::findOne($id)) !== null) {
-            return $model;
-        } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
-        }
-    }
 	
-	public function actionTest($id){
-		 $modelPerson = $this->findPerson($id);
-        $modelsHouse = $modelPerson->houses;
-        $modelsRoom = [];
-        $oldRooms = [];
-
-        if (!empty($modelsHouse)) {
-            foreach ($modelsHouse as $indexHouse => $modelHouse) {
-                $rooms = $modelHouse->rooms;
-                $modelsRoom[$indexHouse] = $rooms;
-                $oldRooms = ArrayHelper::merge(ArrayHelper::index($rooms, 'id'), $oldRooms);
-            }
-        }
-
-        if ($modelPerson->load(Yii::$app->request->post())) {
-			
-			//echo '<pre>';
-			//print_r(Yii::$app->request->post());die();
-
-            // reset
-            $modelsRoom = [];
-
-            $oldHouseIDs = ArrayHelper::map($modelsHouse, 'id', 'id');
-            $modelsHouse = Model::createMultiple(House::classname(), $modelsHouse);
-            Model::loadMultiple($modelsHouse, Yii::$app->request->post());
-            $deletedHouseIDs = array_diff($oldHouseIDs, array_filter(ArrayHelper::map($modelsHouse, 'id', 'id')));
-
-            // validate person and houses models
-            $valid = $modelPerson->validate();
-            $valid = Model::validateMultiple($modelsHouse) && $valid;
-
-            $roomsIDs = [];
-			//print_r( $_POST['Room']);die();
-            if (isset($_POST['Room'][0][0])) {
-                foreach ($_POST['Room'] as $indexHouse => $rooms) {
-					
-                    $roomsIDs = ArrayHelper::merge($roomsIDs, array_filter(ArrayHelper::getColumn($rooms, 'id')));
-					//print_r(ArrayHelper::getColumn($rooms, 'id'));die();
-                    foreach ($rooms as $indexRoom => $room) {
-						
-                        $data['Room'] = $room;
-                        $modelRoom = (isset($room['id']) && isset($oldRooms[$room['id']])) ? $oldRooms[$room['id']] : new Room;
-						echo '<pre>';print_r($modelRoom);echo '<br /><br /><br /><br />';
-                        $modelRoom->load($data);
-						//print_r($modelRoom);die();
-                        $modelsRoom[$indexHouse][$indexRoom] = $modelRoom;
-                        $valid = $modelRoom->validate();
-                    }
-                }
-            }
-
-            $oldRoomsIDs = ArrayHelper::getColumn($oldRooms, 'id');
-            $deletedRoomsIDs = array_diff($oldRoomsIDs, $roomsIDs);
-
-            if ($valid) {
-                $transaction = Yii::$app->db->beginTransaction();
-                try {
-                    if ($flag = $modelPerson->save(false)) {
-
-                        if (! empty($deletedRoomsIDs)) {
-                            Room::deleteAll(['id' => $deletedRoomsIDs]);
-                        }
-
-                        if (! empty($deletedHouseIDs)) {
-                            House::deleteAll(['id' => $deletedHouseIDs]);
-                        }
-
-                        foreach ($modelsHouse as $indexHouse => $modelHouse) {
-
-                            if ($flag === false) {
-                                break;
-                            }
-
-                            $modelHouse->person_id = $modelPerson->id;
-
-                            if (!($flag = $modelHouse->save(false))) {
-                                break;
-                            }
-
-                            if (isset($modelsRoom[$indexHouse]) && is_array($modelsRoom[$indexHouse])) {
-								
-                                foreach ($modelsRoom[$indexHouse] as $indexRoom => $modelRoom) {
-									//echo '<pre>';print_r($modelRoom);die();
-                                    $modelRoom->house_id = 
-									$modelHouse->id;
-                                    if (!($flag = $modelRoom->save(false))) {
-                                        break;
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    if ($flag) {
-                        $transaction->commit();
-						Yii::$app->session->addFlash('success', "Data Updated");
-                        return $this->redirect(['test', 'id' => $modelPerson->id]);
-                    } else {
-                        $transaction->rollBack();
-                    }
-                } catch (Exception $e) {
-                    $transaction->rollBack();
-                }
-            }
-        }
+	
+	public function actionDownload($token){
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
 		
-		
+		$pdf = new ProjectPrint;
+		$pdf->model = $model;
+		$pdf->generatePdf();
 
-        return $this->render('test', [
-            'modelPerson' => $modelPerson,
-            'modelsHouse' => (empty($modelsHouse)) ? [new House] : $modelsHouse,
-            'modelsRoom' => (empty($modelsRoom)) ? [[new Room]] : $modelsRoom
-        ]);
 	}
+	
+	public function actionAssign($token){
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		
+		
+	}
+	
+	
 }

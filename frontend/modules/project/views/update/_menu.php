@@ -33,6 +33,17 @@ $menu = [
 			  <a class="dropdown-item" href="'.Url::to(['update/expense-rent', 'token' => $token]).'">Sewaan</a>
 			</div>
 		  </li>';
+		}else if($key == 'student'){
+			echo '<li class="nav-item dropdown">
+			<a class="nav-link '.$active.' dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.$m[0].' </a>
+			 <div class="dropdown-menu">
+			 
+			 <a class="dropdown-item" href="'.Url::to(['update/assign', 'token' => $token]).'">Pelajar Terlibat</a>
+			 
+			  <a class="dropdown-item" href="'.Url::to($m[1]).'">Lantikan Jawatankuasa</a>
+			  
+			</div>
+		  </li>';
 		}else{
 			echo '<li class="nav-item">
 			<a class="nav-link '.$active.'" href="'.Url::to($m[1]).'">'.$m[0].'</a>
