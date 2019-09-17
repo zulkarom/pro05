@@ -402,20 +402,27 @@ class CourseController extends Controller
         if (Yii::$app->request->post()) {
 			if(Yii::$app->request->validateCsrfToken()){
 				
+				$flag = true;
                 $post_clo = Yii::$app->request->post('CourseClo');
-				if($post_clo){
-					foreach($post_clo as $key => $pclo){
-						$clo = CourseClo::findOne($key);
-						if($clo){
-							$clo->clo_text = $pclo['clo_text'];
-							$clo->clo_text_bi = $pclo['clo_text_bi'];
-							$clo->save();
+				foreach($post_clo as $key => $pclo){
+					if(!$flag){
+						break;
+					}
+					$clo = CourseClo::findOne($key);
+					if($clo){
+						$clo->clo_text = $pclo['clo_text'];
+						$clo->clo_text_bi = $pclo['clo_text_bi'];
+						if(!$clo->save()){
+							$flag = false;
 						}
 					}
 				}
-				
             }
-			return $this->redirect(['course-clo','course'=>$course]);
+			if($flag){
+				Yii::$app->session->addFlash('success', "Data Updated");
+				return $this->redirect(['course-clo','course'=>$course]);
+			}
+			
 		}
 	
 		return $this->render('clo', [
@@ -674,7 +681,7 @@ class CourseController extends Controller
 	
 		return $this->render('assessment', [
 				'model' => $model,
-				'items' => (empty($items)) ? [new CourseAssessment] : $items,
+				'items' => (empty($items)) ? [] : $items,
 			]);
 	}
 	

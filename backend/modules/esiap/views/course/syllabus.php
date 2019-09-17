@@ -166,7 +166,7 @@ Modal::begin([
     'toggleButton' => ['label' => '<i class="glyphicon glyphicon-move"></i> Re-order Weeks', 'class' => 'btn btn-warning btn-sm'],
 	'size' => 'modal-sm',
     'footer' => '<div class="form-group">
-                            <a id="btn-reorder" href="'.Url::to(['course/course-syllabus-reorder', 'id' => 24]) .'" class="btn btn-success">Re-order</a> 
+                            <a id="btn-reorder" href="'.Url::to(['course/course-syllabus-reorder', 'id' => $model->course->id]) .'" class="btn btn-success">Re-order</a> 
                          </div>
 
                          <?php ActiveForm::end(); ?>'
