@@ -127,6 +127,9 @@ class CourseController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 			
 			if($model->save()){
+				if($model->is_active == 1){
+					CourseVersion::updateAll(['is_active' => 0], ['course_id' => $model->course_id]);
+				}
 				Yii::$app->session->addFlash('success', "Data Updated");
 				return $this->redirect(['course-version', 'course' => $model->course->id]);
 			}
