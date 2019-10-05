@@ -6,6 +6,7 @@ use Yii;
 use yii\filters\AccessControl;
 use common\models\ChangePasswordForm;
 use common\models\User;
+use yii\web\NotFoundHttpException;
 
 
 class UserSettingController extends \yii\web\Controller
