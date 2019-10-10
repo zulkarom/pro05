@@ -13,7 +13,7 @@ use kartik\time\TimePicker;
     'widgetItem' => '.time-item',
     'limit' => 100,
     'min' => 1,
-    'insertButton' => '.add-time',
+    'insertButton' => '.add-time-'.$indexDay,
     'deleteButton' => '.remove-time',
     'model' => $times[0],
     'formId' => 'dynamic-form',
@@ -68,7 +68,7 @@ use kartik\time\TimePicker;
 	<tfoot>
             <tr>
                 <td colspan="4">
-                <button style="font-size:15px" type="button" class="add-time btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Atucara</button>
+                <button style="font-size:15px" type="button" class="add-time-<?=$indexDay?> btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Atucara</button>
                 
                 </td>
              

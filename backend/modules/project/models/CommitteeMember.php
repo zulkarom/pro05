@@ -46,8 +46,8 @@ class CommitteeMember extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'position_id' => 'Position ID',
-            'student_id' => 'Student ID',
+            'position_id' => 'Jawatankuasa',
+            'student_id' => 'Pelajar',
             'mem_order' => 'Mem Order',
         ];
     }

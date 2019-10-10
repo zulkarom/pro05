@@ -46,8 +46,8 @@ class CommitteeMain extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'position' => 'Position',
-            'student_id' => 'Student ID',
+            'position' => 'Jawatankuasa',
+            'student_id' => 'Pelajar',
             'com_order' => 'Com Order',
         ];
     }

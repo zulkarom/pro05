@@ -177,4 +177,30 @@ class Project extends \yii\db\ActiveRecord
 		}
 		return $array;
 	}
+	
+	public function putDefaultCommittee($student){
+		$arr = ['Pengarah', 'Timbalan Pengarah', 'Setiausaha', 'Penolong Setiausaha', 'Bendahari'];
+		foreach($arr as $i){
+			$post = new CommitteeMain;
+			$post->pro_id = $this->id;
+			$post->position = $i;
+			$post->student_id = $student;
+			$post->save();
+		}
+	}
+	
+	public function putDefaultPosition($student){
+		$arr = ['Teknikal', 'Logistik', 'Kesihatan dan Keselamatan', 'Hadiah dan Cenderamata', 'Publisiti dan Media', 'Penajaan', 'Kebersihan', 'Makanan', 'Tugas-tugas Khas'];
+		foreach($arr as $i){
+			$post = new CommitteePosition;
+			$post->pro_id = $this->id;
+			$post->position = $i;
+			if($post->save()){
+				$member = new CommitteeMember;
+				$member->position_id = $post->id;
+				$member->student_id = $student;
+				$member->save();
+			}
+		}
+	}
 }

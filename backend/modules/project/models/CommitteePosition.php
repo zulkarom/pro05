@@ -45,7 +45,7 @@ class CommitteePosition extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'pro_id' => 'Pro ID',
-            'position' => 'Position',
+            'position' => 'Jawantankuasa',
             'post_order' => 'Pro Com',
         ];
     }

@@ -37,7 +37,21 @@ use yii\grid\GridView;
             'student.student_name',
             'student.program',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            ['class' => 'yii\grid\ActionColumn',
+                 'contentOptions' => ['style' => 'width: 5%'],
+                'template' => '{delete}',
+                //'visible' => false,
+                'buttons'=>[
+                    
+					'delete'=>function ($url, $model) {
+                        return Html::a('<span class="icon icon-remove"></span>',['update/delete-student/', 'token' => $model->project->pro_token,  'id' => $model->student->id],['class'=>'btn btn-danger btn-sm', 'data' => [
+                'confirm' => 'Are you sure to delete this student?'
+            ],
+]);
+                    }
+                ],
+            
+            ],
         ],
     ]); ?>
 

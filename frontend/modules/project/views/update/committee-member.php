@@ -40,7 +40,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
         'min' => 1,
         'insertButton' => '.add-position',
         'deleteButton' => '.remove-position',
-        'model' => $positions[0],
+        'model' => $modelsPosition[0],
         'formId' => 'dynamic-form',
         'formFields' => [
             'position',
@@ -58,18 +58,18 @@ use wbraganca\dynamicform\DynamicFormWidget;
    </thead>
 
         <tbody class="container-items">
-        <?php foreach ($positions as $indexPosition => $position): ?>
+        <?php foreach ($modelsPosition as $indexPosition => $modelPosition): ?>
             <tr class="position-item">
                 <td class="vcenter">
                     <?php
                         // necessary for update action.
-                        if (! $position->isNewRecord) {
-                            echo Html::activeHiddenInput($position, "[{$indexPosition}]id");
+                        if (! $modelPosition->isNewRecord) {
+                            echo Html::activeHiddenInput($modelPosition, "[{$indexPosition}]id");
                         }
                     ?>
 					
 
-<?=$form->field($position, "[{$indexPosition}]position")->label(false);
+<?=$form->field($modelPosition, "[{$indexPosition}]position")->label(false);
 					?>
 <button style="font-size:15px" type="button" class="remove-position btn btn-default btn-sm"><span class="icon icon-remove"></span> Buang Jawatankuasa</button>
 					
@@ -85,7 +85,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 					echo  $this->render('_form-members', [
                         'form' => $form,
                         'indexPosition' => $indexPosition,
-                        'members' => $members[$indexPosition],
+                        'modelsMember' => $modelsMember[$indexPosition],
 						'model' => $model
 						
                     ])?>
