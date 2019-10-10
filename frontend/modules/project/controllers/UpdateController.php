@@ -13,10 +13,13 @@ use backend\modules\project\models\TentativeDay;
 use backend\modules\project\models\TentativeTime;
 use backend\modules\project\models\Objective;
 use backend\modules\project\models\ProjectPrint;
+use backend\modules\project\models\ProjectStudent;
 use backend\models\Semester;
+use backend\models\Student;
 use yii\db\Expression;
 use common\models\Model;
 use yii\helpers\ArrayHelper;
+use yii\data\ActiveDataProvider;
 
 /**
  * Default controller for the `project` module
@@ -638,14 +641,101 @@ class UpdateController extends Controller
 
 	}
 	
+	public function actionStudent($token){
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		$query = ProjectStudent::find()->where(['pro_token' => $token]);
+		$query->joinWith(['project','student']);
+		
+		$dataProvider = new ActiveDataProvider([
+            'query' => $query,
+        ]);
+
+        return $this->render('student', [
+            'dataProvider' => $dataProvider,
+			'model' => $model
+        ]);
+	}
+	
 	public function actionAssign($token){
 		$model = $this->findModel($token);
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
 		
+		$student = new Student;
+		$student->scenario = 'check';
 		
+		if ($student->load(Yii::$app->request->post())) {
+			$matric = $student->student_matric;
+			$search = Student::findOne(['student_matric' => $matric]);
+			
+			if(!$search){
+				if($student->save()){
+					return $this->redirect(['add-student', 'token' => $token, 'student' => $student->id]);
+				}
+			}else{
+				return $this->redirect(['add-student', 'token' => $token, 'student' => $search->id]);
+			}
+			
+			
+        }
+		
+		return $this->render('assign-matric', [
+			'model' => $model,
+			'student' => $student
+		
+		]);
 	}
+	
+	public function actionAddStudent($token, $student){
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		
+		$student = $this->findStudent($student);
+		$student->scenario = 'update';
+		
+		if ($student->load(Yii::$app->request->post())) {
+			$student->save();
+			$search = ProjectStudent::findOne(['student_id' => $student->id, 'project_id' => $model->id]);
+			if(!$search){
+				$add = new ProjectStudent;
+				$add->project_id = $model->id;
+				$add->student_id = $student->id;
+				if($add->save()){
+					Yii::$app->session->addFlash('success', "Pelajar telah ditambah");
+					
+				}
+			}else{
+				Yii::$app->session->addFlash('error', "Pelajar telah disenaraikan");
+			}
+			
+			return $this->redirect(['student', 'token' => $token]);
+			
+			
+		}
+		
+		return $this->render('add-student', [
+			'model' => $model,
+			'student' => $student
+		
+		]);
+	}
+	
+	protected function findStudent($id)
+    {
+        if (($model = Student::findOne($id)) !== null) {
+            return $model;
+        }
+
+        throw new NotFoundHttpException('The requested page does not exist.');
+    }
+	
+	
 	
 	
 }

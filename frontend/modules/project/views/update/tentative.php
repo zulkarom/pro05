@@ -74,7 +74,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 						],
 						
 						
-					]);
+					])->label('Tarikh');
 					?></div>
 					<div class="col-md-4">
 					<div class="form-group">&nbsp;</div>

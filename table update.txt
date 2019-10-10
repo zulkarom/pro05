@@ -1,0 +1,1 @@
+ALTER TABLE `student` ADD `program` VARCHAR(100) NOT NULL AFTER `student_name`, ADD `email` VARCHAR(200) NOT NULL AFTER `program`;

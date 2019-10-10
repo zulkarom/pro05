@@ -97,7 +97,7 @@ use yii\jui\JuiAsset;
             <tr>
             <td></td>
                 <td colspan="1">
-                <button type="button" class="add-objective btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Objective</button>
+                <button type="button" class="add-objective btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Objektif</button>
                 
                 </td>
                 <td>

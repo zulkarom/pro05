@@ -155,9 +155,9 @@ $claims = $application->submittedClaims;
     </thead>
     <tbody>
 	<?php 
-	
+	$sum = 0;
 	if($claims){
-		$sum = 0;
+		
 		foreach($claims as $claim){
 			$sub = $claim->total_hour * $claim->rate_amount;
 			$sum +=$sub;
