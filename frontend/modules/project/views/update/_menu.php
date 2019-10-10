@@ -40,7 +40,9 @@ $menu = [
 			 
 			 <a class="dropdown-item" href="'.Url::to(['update/student', 'token' => $token]).'">Pelajar Terlibat</a>
 			 
-			  <a class="dropdown-item" href="'.Url::to($m[1]).'">Lantikan Jawatankuasa</a>
+			  <a class="dropdown-item" href="'.Url::to($m[1]).'">Jawatankuasa Utama</a>
+			  
+			  <a class="dropdown-item" href="'.Url::to(['update/committee-member', 'token' => $token]).'">Ahli Jawatankuasa</a>
 			  
 			</div>
 		  </li>';

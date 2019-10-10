@@ -143,6 +143,11 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Resource::className(), ['pro_id' => 'id'])->orderBy('rs_order ASC');
     }
+	
+	public function getMainCommittees()
+    {
+        return $this->hasMany(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -151,4 +156,20 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasMany(TentativeDay::className(), ['pro_id' => 'id']);
     }
+	
+	 public function getProjectStudents()
+    {
+        return $this->hasMany(ProjectStudent::className(), ['project_id' => 'id']);
+    }
+	
+	public function studentInvolved(){
+		$list = $this->projectStudents;
+		$array = [];
+		if($list){
+			foreach($list as $row){
+				$array[$row->student_id] = $row->student->student_name;
+			}
+		}
+		return $array;
+	}
 }

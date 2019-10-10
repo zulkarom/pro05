@@ -3,25 +3,26 @@
 namespace backend\modules\project\models;
 
 use Yii;
-use backend\models\Student;
+
 /**
- * This is the model class for table "project_student".
+ * This is the model class for table "pro_com_member".
  *
  * @property int $id
- * @property int $project_id
+ * @property int $position_id
  * @property int $student_id
+ * @property int $mem_order
  *
- * @property Project $project
+ * @property ProComPost $position
  * @property Student $student
  */
-class ProjectStudent extends \yii\db\ActiveRecord
+class CommitteeMember extends \yii\db\ActiveRecord
 {
     /**
      * @inheritdoc
      */
     public static function tableName()
     {
-        return 'pro_student';
+        return 'pro_com_member';
     }
 
     /**
@@ -30,9 +31,9 @@ class ProjectStudent extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['project_id', 'student_id'], 'required'],
-            [['project_id', 'student_id'], 'integer'],
-            [['project_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['project_id' => 'id']],
+            [['position_id', 'student_id', 'mem_order'], 'required'],
+            [['position_id', 'student_id', 'mem_order'], 'integer'],
+            [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProComPost::className(), 'targetAttribute' => ['position_id' => 'id']],
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['student_id' => 'id']],
         ];
     }
@@ -44,17 +45,18 @@ class ProjectStudent extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'project_id' => 'Project ID',
+            'position_id' => 'Position ID',
             'student_id' => 'Student ID',
+            'mem_order' => 'Mem Order',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getProject()
+    public function getPosition()
     {
-        return $this->hasOne(Project::className(), ['id' => 'project_id']);
+        return $this->hasOne(ProComPost::className(), ['id' => 'position_id']);
     }
 
     /**

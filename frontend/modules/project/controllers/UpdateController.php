@@ -14,6 +14,7 @@ use backend\modules\project\models\TentativeTime;
 use backend\modules\project\models\Objective;
 use backend\modules\project\models\ProjectPrint;
 use backend\modules\project\models\ProjectStudent;
+use backend\modules\project\models\CommitteeMain;
 use backend\models\Semester;
 use backend\models\Student;
 use yii\db\Expression;
@@ -119,21 +120,77 @@ class UpdateController extends Controller
 	public function actionCommittee($token)
     {
 		$model = $this->findModel($token);
-		$model->scenario = 'update-student';
-		
-		if ($model->load(Yii::$app->request->post())) {
-			$model->updated_at = new Expression('NOW()');
-			
-			if($model->save()){
-				Yii::$app->session->addFlash('success', "Data Updated");
-				return $this->redirect(['index', 'token' => $token]);
-			}
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+	
+		$committees = $model->mainCommittees;
+       
+        if ($model->load(Yii::$app->request->post())) {
             
-        }
+            $model->updated_at = new Expression('NOW()');    
+            
+            $oldIDs = ArrayHelper::map($committees, 'id', 'id');
+            
+            $committees = Model::createMultiple(CommitteeMain::classname(), $committees);
+            
+            Model::loadMultiple($committees, Yii::$app->request->post());
+            
+            $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($committees, 'id', 'id')));
+            
+            foreach ($committees as $i => $committee) {
+                $committee->com_order = $i;
+            }
+            
+            $valid = $model->validate();
+            
+            $valid = Model::validateMultiple($committees) && $valid;
+            
+            if ($valid) {
+
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+                        if (! empty($deletedIDs)) {
+                            CommitteeMain::deleteAll(['id' => $deletedIDs]);
+                        }
+                        foreach ($committees as $i => $committee) {
+                            if ($flag === false) {
+                                break;
+                            }
+                            //do not validate this in model
+                            $committee->pro_id = $model->id;
+
+                            if (!($flag = $committee->save(false))) {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+                            Yii::$app->session->addFlash('success', "Jawatankuasa telah dikemaskini");
+                            return $this->redirect(['committee','token' => $token]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                    
+                }
+            }
+
+        
+        
+       
+
+		}
 		
 		
         return $this->render('committee', [
-			'model' => $model
+			'model' => $model,
+			'committees' => (empty($committees)) ? [new CommitteeMain] : $committees
 		
 		]);
     }
@@ -269,6 +326,7 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		
         $resources = $model->resources;
        
         if ($model->load(Yii::$app->request->post())) {
