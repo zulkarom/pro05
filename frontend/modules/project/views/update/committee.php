@@ -3,7 +3,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
 use yii\jui\JuiAsset;
-use backend\modules\project\models\ProjectStudent;
 
 
 

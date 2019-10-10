@@ -5,12 +5,12 @@ namespace backend\modules\project\models;
 use Yii;
 
 /**
- * This is the model class for table "pro_com_post".
+ * This is the model class for table "post_order_post".
  *
  * @property int $id
  * @property int $pro_id
  * @property string $position
- * @property int $pro_com
+ * @property int $post_order
  *
  * @property Project $pro
  */
@@ -30,8 +30,8 @@ class CommitteePosition extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['pro_id', 'position', 'pro_com'], 'required'],
-            [['pro_id', 'pro_com'], 'integer'],
+            [[ 'position'], 'required'],
+            [['pro_id', 'post_order'], 'integer'],
             [['position'], 'string', 'max' => 200],
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
@@ -46,7 +46,7 @@ class CommitteePosition extends \yii\db\ActiveRecord
             'id' => 'ID',
             'pro_id' => 'Pro ID',
             'position' => 'Position',
-            'pro_com' => 'Pro Com',
+            'post_order' => 'Pro Com',
         ];
     }
 
@@ -56,5 +56,10 @@ class CommitteePosition extends \yii\db\ActiveRecord
     public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
+    }
+	
+	public function getCommitteeMembers()
+    {
+        return $this->hasMany(CommitteeMember::className(), ['position_id' => 'id']);
     }
 }

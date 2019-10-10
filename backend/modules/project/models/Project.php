@@ -148,6 +148,11 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
     }
+	
+	public function getCommitteePositions()
+    {
+        return $this->hasMany(CommitteePosition::className(), ['pro_id' => 'id'])->orderBy('post_order ASC');
+    }
 
     /**
      * @return \yii\db\ActiveQuery

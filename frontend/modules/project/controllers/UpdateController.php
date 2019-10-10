@@ -15,6 +15,8 @@ use backend\modules\project\models\Objective;
 use backend\modules\project\models\ProjectPrint;
 use backend\modules\project\models\ProjectStudent;
 use backend\modules\project\models\CommitteeMain;
+use backend\modules\project\models\CommitteePosition;
+use backend\modules\project\models\CommitteeMember;
 use backend\models\Semester;
 use backend\models\Student;
 use yii\db\Expression;
@@ -116,6 +118,127 @@ class UpdateController extends Controller
 		}
 		
     }
+	
+	public function actionCommitteeMember($token){
+		
+		$model = $this->findModel($token);
+		
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		
+        $modelsPosition = $model->committeePositions;
+        $modelsMember = [];
+        $oldMembers = [];
+
+        if (!empty($modelsPosition)) {
+            foreach ($modelsPosition as $indexPosition => $modelPosition) {
+                $members = $modelPosition->committeeMembers;
+                $modelsMember[$indexPosition] = $members;
+                $oldMembers = ArrayHelper::merge(ArrayHelper::index($members, 'id'), $oldMembers);
+            }
+        }
+
+        if ($model->load(Yii::$app->request->post())) {
+			
+			//echo '<pre>';
+			//print_r(Yii::$app->request->post());die();
+
+            // reset
+            $modelsMember = [];
+
+            $oldPositionIDs = ArrayHelper::map($modelsPosition, 'id', 'id');
+            $modelsPosition = Model::createMultiple(CommitteePosition::classname(), $modelsPosition);
+            Model::loadMultiple($modelsPosition, Yii::$app->request->post());
+            $deletedPositionIDs = array_diff($oldPositionIDs, array_filter(ArrayHelper::map($modelsPosition, 'id', 'id')));
+
+            // validate person and days models
+            $valid = $model->validate();
+            $valid = Model::validateMultiple($modelsPosition) && $valid;
+
+            $membersIDs = [];
+			//print_r( $_POST['Time']);die();
+            if (isset($_POST['CommitteeMember'][0][0])) {
+                foreach ($_POST['CommitteeMember'] as $indexPosition => $members) {
+					//echo '<pre>';print_r($members);die();
+                    $membersIDs = ArrayHelper::merge($membersIDs, array_filter(ArrayHelper::getColumn($members, 'id')));
+					//print_r(ArrayHelper::getColumn($members, 'id'));die();
+                    foreach ($members as $indexMember => $member) {
+						//echo '<pre>';print_r($member);die();
+                        $data['CommitteeMember'] = $member;
+                        $modelMember = (isset($member['id']) && isset($oldMembers[$member['id']])) ? $oldMembers[$member['id']] : new CommitteeMember;
+						//echo '<pre>';print_r($modelMember);echo '<br /><br /><br /><br />';
+                        $modelMember->load($data);
+						//echo '<pre>';print_r($modelMember);die();
+                        $modelsMember[$indexPosition][$indexMember] = $modelMember;
+                        $valid = $modelMember->validate();
+                    }
+                }
+            }
+
+            $oldMembersIDs = ArrayHelper::getColumn($oldMembers, 'id');
+            $deletedMemberIDs = array_diff($oldMembersIDs, $membersIDs);
+
+            if ($valid) {
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+
+                        if (! empty($deletedMemberIDs)) {
+                            CommitteeMember::deleteAll(['id' => $deletedMemberIDs]);
+                        }
+
+                        if (! empty($deletedPositionIDs)) {
+                            CommitteePosition::deleteAll(['id' => $deletedPositionIDs]);
+                        }
+
+                        foreach ($modelsPosition as $indexPosition => $modelPosition) {
+
+                            if ($flag === false) {
+                                break;
+                            }
+
+                            $modelPosition->pro_id = $model->id;
+
+                            if (!($flag = $modelPosition->save(false))) {
+                                break;
+                            }
+
+                            if (isset($modelsMember[$indexPosition]) && is_array($modelsMember[$indexPosition])) {
+								
+                                foreach ($modelsMember[$indexPosition] as $indexMember => $modelMember) {
+									//echo '<pre>';print_r($modelMember);die();
+                                    $modelMember->position_id = 
+									$modelPosition->id;
+                                    if (!($flag = $modelMember->save(false))) {
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    if ($flag) {
+                        $transaction->commit();
+						Yii::$app->session->addFlash('success', "Data Updated");
+                        return $this->redirect(['committee-member', 'token' => $token]);
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+                }
+            }
+        }
+		
+		
+
+        return $this->render('committee-member', [
+            'model' => $model,
+            'positions' => (empty($modelsPosition)) ? [new CommitteePosition] : $modelsPosition,
+            'members' => (empty($modelsMember)) ? [[new CommitteeMember]] : $modelsMember
+        ]);
+	}
 	
 	public function actionCommittee($token)
     {

@@ -3,6 +3,7 @@
 namespace backend\modules\project\models;
 
 use Yii;
+use backend\models\Student;
 
 /**
  * This is the model class for table "pro_com_member".
@@ -31,9 +32,9 @@ class CommitteeMember extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['position_id', 'student_id', 'mem_order'], 'required'],
+            [['student_id'], 'required'],
             [['position_id', 'student_id', 'mem_order'], 'integer'],
-            [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => ProComPost::className(), 'targetAttribute' => ['position_id' => 'id']],
+            [['position_id'], 'exist', 'skipOnError' => true, 'targetClass' => CommitteePosition::className(), 'targetAttribute' => ['position_id' => 'id']],
             [['student_id'], 'exist', 'skipOnError' => true, 'targetClass' => Student::className(), 'targetAttribute' => ['student_id' => 'id']],
         ];
     }
@@ -56,7 +57,7 @@ class CommitteeMember extends \yii\db\ActiveRecord
      */
     public function getPosition()
     {
-        return $this->hasOne(ProComPost::className(), ['id' => 'position_id']);
+        return $this->hasOne(CommitteePosition::className(), ['id' => 'position_id']);
     }
 
     /**
