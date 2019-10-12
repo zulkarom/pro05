@@ -29,38 +29,15 @@ class Tcpdf extends \TCPDF {
 		$page = $this->getPage();
 		
 		$proceed = false;
-		if($this->header_first_page_only){
 			if($page == 1){
-				$proceed = true;
+				$this->SetTopMargin(12);
+			}else{
+				$this->SetTopMargin(20);
 			}
-		}else{
-			$proceed = true;
-		}
+		//$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
 		
-		
-        $this->SetFont('times', '', 10);
-		$html = $this->header_html;
-		if($html and $proceed){
-			$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
-			
-			$this->SetTopMargin($this->GetY() + $this->top_margin_first_page);
-			
-			
-			
-		}else{
-	
-			$this->SetTopMargin(30);
-			//$this->setY(10);
-		}
-		
-	 
-		//$this->setX($this->myX);
-		//$this->setY($this->myY);
-		
-		//$this->SetY($savedY);
-		//$this->SetX($savedX);
+		$this->SetTopMargin(20);
 
-	    
     }
 
     // Page footer

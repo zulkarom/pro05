@@ -57,7 +57,7 @@ use kartik\date\DatePicker;
                 <th width="5%"></th>
                 <th>PENDAPATAN</th>
                 <th width="25%">KUANTITI</th>
-				<th width="25%">JUMLAH</th>
+				<th width="25%">JUMLAH (RM)</th>
                 <th class="text-center" style="width: 90px;">
                     
                 </th>

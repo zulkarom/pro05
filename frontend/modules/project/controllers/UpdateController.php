@@ -495,6 +495,11 @@ class UpdateController extends Controller
 		}
 		
         $resources = $model->resources;
+		if(count($resources) == 0){
+			$model->putDefaultIncome();
+			$model = $this->findModel($token);
+			$resources = $model->resources;
+		}
        
         if ($model->load(Yii::$app->request->post())) {
             
@@ -574,7 +579,14 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		
         $expenses = $model->expenseBasics;
+		if(count($expenses) == 0){
+			$model->putDefaultExpense();
+			$model = $this->findModel($token);
+			$expenses = $model->expenseBasics;
+		}
+		
        
         if ($model->load(Yii::$app->request->post())) {
             

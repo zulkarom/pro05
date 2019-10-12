@@ -3,6 +3,7 @@
 namespace backend\modules\project\models;
 
 use Yii;
+use backend\models\Student;
 
 /**
  * This is the model class for table "pro_committee_main".
@@ -55,8 +56,13 @@ class CommitteeMain extends \yii\db\ActiveRecord
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getPro()
+    public function getProject()
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
+    }
+	
+	public function getStudent()
+    {
+        return $this->hasOne(Student::className(), ['id' => 'student_id']);
     }
 }

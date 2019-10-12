@@ -56,7 +56,7 @@ class Project extends \yii\db\ActiveRecord
         return [
             [['application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
 			
-			[['pro_name', 'pro_token', 'application_id', 'location', 'collaboration', 'purpose', 'background', 'pro_target', 'agency_involved', 'updated_at'], 'required', 'on' => 'update-main'],
+			[['pro_name', 'pro_token', 'application_id', 'location',  'purpose', 'background', 'pro_target', 'updated_at'], 'required', 'on' => 'update-main'],
 			
 			[['updated_at'], 'required', 'on' => 'update'],
 			
@@ -144,10 +144,7 @@ class Project extends \yii\db\ActiveRecord
         return $this->hasMany(Resource::className(), ['pro_id' => 'id'])->orderBy('rs_order ASC');
     }
 	
-	public function getMainCommittees()
-    {
-        return $this->hasMany(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
-    }
+	
 	
 	public function getCommitteePositions()
     {
@@ -202,5 +199,54 @@ class Project extends \yii\db\ActiveRecord
 				$member->save();
 			}
 		}
+	}
+	
+	public function putDefaultIncome(){
+		$arr = ['Peruntukan daripada PKPP', 'Kutipan Pelajar', 'Yuran Penyertaan', 'Derma Tunai dan Tajaan Luar'];
+		foreach($arr as $i){
+			$res = new Resource;
+			$res->pro_id = $this->id;
+			$res->rs_name = $i;
+			$res->rs_quantity = 1;
+			
+			if($i == 'Peruntukan daripada PKPP'){
+				$res->rs_amount = 500;
+			}else{
+				$res->rs_amount = 0;
+			}
+			
+			if(!$res->save()){
+				$res->flashError();
+			}
+		}
+	}
+	
+	public function putDefaultExpense(){
+		$arr = ['Makanan dan minuman', 'Bayaran penceramah/ pengadil', 'Hadiah Pemenang'];
+		foreach($arr as $i){
+			$res = new ExpBasic;
+			$res->pro_id = $this->id;
+			$res->exp_name = $i;
+			$res->quantity = 1;
+			
+			if($i == 'Peruntukan daripada PKPP'){
+				$res->amount = 500;
+			}else{
+				$res->amount = 0;
+			}
+			
+			if(!$res->save()){
+				$res->flashError();
+			}
+		}
+	}
+	
+	public function getMainCommittees()
+    {
+        return $this->hasMany(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
+    }
+	
+	public function getTopPosition(){
+		return $this->hasOne(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
 	}
 }

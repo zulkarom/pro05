@@ -38,6 +38,7 @@ class Resource extends \yii\db\ActiveRecord
             [['rs_quantity', 'rs_amount', 'rs_order'], 'number'],
 			
             [['rs_name'], 'string', 'max' => 200],
+			
             [['pro_id'], 'exist', 'skipOnError' => true, 'targetClass' => Project::className(), 'targetAttribute' => ['pro_id' => 'id']],
         ];
     }
@@ -63,4 +64,18 @@ class Resource extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
     }
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
 }
