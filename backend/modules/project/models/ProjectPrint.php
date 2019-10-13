@@ -399,7 +399,7 @@ EOD;
 				foreach($times as $time){
 					$html .= '<tr>
 					<td>'.$this->model->convertTime($time->ttf_time) .'</td>
-					<td>'.$time->ttf_item .'</td>
+					<td>'.nl2br($time->ttf_item) .'</td>
 					<td>'.$time->ttf_location .'</td>
 				</tr>';
 				}
