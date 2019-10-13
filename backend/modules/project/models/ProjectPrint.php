@@ -317,7 +317,7 @@ $course = $application->acceptedCourse->course;
 		<tr>
 		<td style="height:900px">
 		<br /><br /><br />
-		<div align="center"><img src="images/logo3.png" width="110" /></div>
+		<div align="center"><img src="images/logo4.png" width="110" /></div>
 		<br /><br /><br />
 <b>KERTAS KERJA UNTUK PERTIMBANGAN</b>
 <br /><br /><br />
