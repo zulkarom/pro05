@@ -4,6 +4,7 @@ namespace backend\modules\project\models;
 
 use Yii;
 use common\models\Application;
+use common\models\Common;
 
 /**
  * This is the model class for table "project".
@@ -249,4 +250,170 @@ class Project extends \yii\db\ActiveRecord
 	public function getTopPosition(){
 		return $this->hasOne(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
 	}
+	
+	public function getProjectStartEndDate(){
+		$days = $this->tentativeDays;
+		if($days){
+			$last =count($days);
+			$i = 1;
+			$start = false;
+			$end = false;
+			foreach($days as $d){
+				if($i == 1){
+					$start = $d->pro_date;
+				}
+				if($i == $last){
+					$end = $d->pro_date;
+				}
+			$i++;
+			}
+			return [$start, $end];
+		}else{
+			return false;
+		}
+	}
+	
+	public function getProjectTime(){
+		$arr = $this->timeStartEnd;
+		if($arr){
+			$start = $arr[0];
+			$end = $arr[1];
+			if($start && $end){
+				return $this->convertTime($start) . ' - ' . $this->convertTime($end);
+			}
+		}
+	}
+	
+	
+	public function convertTime($str_time){
+		$str_masa = '';
+		$search_space = $this->hasChar(" ", $str_time);
+		if($search_space){
+			$arr = explode(" ", $str_time);
+			$num = $arr[0];
+			$ampm = $arr[1];
+			$str_hour = $this->hasChar(":", $num);
+			if($str_hour){
+				$hour = $str_hour[0] + 0;
+				$minute = $str_hour[1];
+				if(strtoupper($ampm) == 'PM'){
+					if($hour == 12){
+						$str_masa = 'tengahari';
+					}else if (in_array($hour, [7,8,9,10,11])){
+						$str_masa = 'malam';
+					}else{
+						$str_masa = 'petang';
+					}
+				}else{
+					$str_masa = 'pagi';
+				}
+				return str_replace(":", ".", $num) . ' ' . $str_masa;
+			}
+			
+		}
+		
+		return 'non-formated time';
+	}
+	
+	private function hasChar($searchString, $search){
+		if(strpos($search, $searchString) !== false ) {
+			 return true;
+		}
+		return false;
+	}
+	
+	public function getTimeStartEnd(){
+		$days = $this->tentativeDays;
+		$start = false;
+		$end = false;
+		$i = 1;
+		$last = count($days);
+		if($days){
+			foreach($days as $day){
+				$times = $day->tentativeTimes;
+				if($times){
+					if($i == 1){
+						foreach($times as $time){
+							$start = $time->ttf_time;
+							break;
+						}
+					}
+					if($i == $last){
+						$last_time = count($times);
+						$l = 1;
+						foreach($times as $time){
+							if($l == $last_time){
+								$end = $time->ttf_time;
+							}
+						$l++;
+						}
+					}
+					
+				}
+				
+			$i++;
+			}
+			
+		}
+		
+		return [$start, $end];
+	}
+	
+	public function getProjectDate(){
+		$arr = $this->projectStartEndDate;
+		if($arr){
+			$start = $arr[0];
+			$end = $arr[1];
+			//echo $start . $end; die();
+			if($start && $end){
+				if($start == $end){
+					return $this->dateFormat($start);
+				}else{
+					return $this->dateFormatTwo($start, $end);
+				}
+			}
+		}
+		
+		
+	}
+	
+	private function dateFormatTwo($date1, $date2){
+		$day1 = date('j', strtotime($date1));
+		$month_num1 = date('n', strtotime($date1));
+		$month_bm = Common::months();
+		$month_str1 = $month_bm[$month_num1];
+		$year1 = date('Y', strtotime($date1));
+		
+		$day2 = date('j', strtotime($date2));
+		$month_num2 = date('n', strtotime($date2));
+		$month_str2 = $month_bm[$month_num2];
+		$year2 = date('Y', strtotime($date2));
+		
+		if($month_num1 == $month_num2){
+			if($year1 == $year2){
+				return $day1 . ' - '.$day2.' ' . $month_str1 . ' ' . $year1;
+			}else{
+				return $day1 . ' ' . $month_str1 . ' ' . $year1 . ' - '. $day2 . ' ' . $month_str2 . ' ' . $year2 ;
+			}
+			
+		}else{
+			if($year1 == $year2){
+				return $day1 . ' ' . $month_str1 . ' - '.$day2.' ' . $month_str2 . ' ' . $year1;
+			}else{
+				return $day1 . ' ' . $month_str1 . ' ' . $year1 . ' - '. $day2 . ' ' . $month_str2 . ' ' . $year2 ;
+			}
+		}
+	}
+	
+	private function dateFormat($date){
+		$day = date('j', strtotime($date));
+		$month_num = date('n', strtotime($date));
+		$month_bm = Common::months();
+		$month_str = $month_bm[$month_num];
+		$year = date('Y', strtotime($date));
+		return $day . ' ' . $month_str . ' ' . $year;
+	}
+	
+	
+	
 }

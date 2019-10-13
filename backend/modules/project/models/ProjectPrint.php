@@ -139,21 +139,21 @@ EOD;
 		<tr>
 		<td width="10%"></td>
 		<td width="24%">Tarikh</td>
-		<td width="1%">:</td>
-		<td width="65%"></td>
+		<td width="3%">:</td>
+		<td width="65%">'.$this->model->getProjectDate().'</td>
 		</tr>
 		<tr>
 		<td></td>
 		<td>Tempat</td>
 		<td>:</td>
-		<td></td>
+		<td>'.$this->model->location.'</td>
 		</tr>
 		
 		<tr>
 		<td></td>
 		<td>Masa</td>
 		<td>:</td>
-		<td></td>
+		<td>'.$this->model->getProjectTime().'</td>
 		</tr>
 		
 		<tr>
@@ -235,7 +235,7 @@ EOD;
 		<b>'.strtoupper($this->model->topPosition->student->student_name) .'</b><br />
 		'.$this->model->topPosition->position .'<br />
 		'.$this->model->pro_name .' <br />
-		Tarikh:
+		Tarikh: '.date('d/m/Y').'
 		
 		</td><td width="15%"></td> 
 		<td width="35%">Disemak oleh:
@@ -244,7 +244,7 @@ EOD;
 		<b>'.strtoupper($application->fasi->user->fullname) .'</b><br />
 		Kumpulan '.$application->applicationGroup->group_name.'<br />
 		Kursus '.$course->course_code.'<br />
-		Tarikh: 
+		Tarikh: '.date('d/m/Y').'
 		
 		
 		</td>
@@ -331,6 +331,10 @@ $course = $application->acceptedCourse->course;
 <br /><br />
 <b>PADA:</b>
 <br /><br />
+
+'.strtoupper($this->model->getProjectDate()).'
+
+<br /><br />
 '. strtoupper($this->model->location) .'
 
 <br /><br /><br />
@@ -371,7 +375,7 @@ EOD;
 		<br /><br />
 		<div align="center"><b>TENTATIF<br />
 		'.strtoupper($this->model->pro_name) .'<br />
-		TARIKH
+		'.strtoupper($this->model->getProjectDate()) .'
 		</b></div>
 		<br /><br />';
 		
@@ -379,7 +383,7 @@ EOD;
 		
 		if($days){
 			foreach($days as $day){
-				$html .= '<b>'.date('d/m/Y', strtotime($day->pro_date)) .' (Hari)</b>
+				$html .= '<b>'.Common::getTarikhHari($day->pro_date) .'</b>
 		
 			<br /><br />';
 			$times = $day->tentativeTimes;
@@ -393,13 +397,14 @@ EOD;
 				</tr>';
 				foreach($times as $time){
 					$html .= '<tr>
-					<td>'.$time->ttf_time .'</td>
+					<td>'.$this->model->convertTime($time->ttf_time) .'</td>
 					<td>'.$time->ttf_item .'</td>
 					<td>'.$time->ttf_location .'</td>
 				</tr>';
 				}
 				
 				$html .=' </table>
+				<br /><br />
 				';
 			}
 			
@@ -427,7 +432,7 @@ EOD;
 		<br /><br />
 		<div align="center"><b>PERINCIAN IMPLIKASI KEWANGAN<br />
 		'.strtoupper($this->model->pro_name) .'<br />
-		TARIKH
+		'.strtoupper($this->model->getProjectDate()) .'
 		</b></div>
 		<br /><br />
 		<b>A) SUMBER PENDAPATAN</b>

@@ -61,6 +61,7 @@ class TentativeDay extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Project::className(), ['id' => 'pro_id']);
     }
+	
 
     /**
      * @return \yii\db\ActiveQuery

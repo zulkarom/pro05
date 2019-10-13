@@ -42,6 +42,40 @@ class Common {
 		];
     }
 	
+	public function getHari($number){
+		$arr = self::hari_list();
+		return $arr[$number];
+	}
+	
+	public static function getTarikhHari($date){
+		$tarikh = self::dateFormat($date);
+		$num_hari = date('N', strtotime($date));
+		$str_hari = self::getHari($num_hari);
+		return $tarikh . ' ('.$str_hari.')';
+	}
+	
+	private function dateFormat($date){
+		$day = date('j', strtotime($date));
+		$month_num = date('n', strtotime($date));
+		$month_bm = self::months();
+		$month_str = $month_bm[$month_num];
+		$year = date('Y', strtotime($date));
+		return $day . ' ' . $month_str . ' ' . $year;
+	}
+	
+	public static function hari_list()
+    {
+        return [
+			7 => 'Ahad',
+			1 => 'Isnin',
+			2 => 'Selasa',
+			3 => 'Rabu',
+			4 => 'Khamis',
+			5 => 'Jumaat',
+			6 => 'Sabtu',
+		];
+    }
+	
 	public static function getMonth($str){
 		$list = self::months_short();
 		foreach($list as $key=>$val){
