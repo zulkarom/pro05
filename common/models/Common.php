@@ -42,7 +42,7 @@ class Common {
 		];
     }
 	
-	public function getHari($number){
+	public static function getHari($number){
 		$arr = self::hari_list();
 		return $arr[$number];
 	}
@@ -54,7 +54,7 @@ class Common {
 		return $tarikh . ' ('.$str_hari.')';
 	}
 	
-	private function dateFormat($date){
+	private static function dateFormat($date){
 		$day = date('j', strtotime($date));
 		$month_num = date('n', strtotime($date));
 		$month_bm = self::months();
