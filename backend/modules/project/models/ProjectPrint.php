@@ -225,6 +225,7 @@ EOD;
 	}
 	
 	public function writeSigniture(){
+		$this->pdf->SetMargins(24, 10, 24);
 		$application = $this->model->application;
 		$course = $application->acceptedCourse->course;
 		$html = '<table border="0">
