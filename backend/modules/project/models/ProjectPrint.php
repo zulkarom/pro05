@@ -22,17 +22,17 @@ class ProjectPrint
 		$this->writeHeaderFooter();
 		$this->startPage();
 		
-		/* $this->writeCoverPage();
+		$this->writeCoverPage();
 		 
 		 $this->writeHeadContent();
-		$this->writeContent(); */
+		$this->writeContent();
 		
-		
-		//$this->pdf->AddPage("P");
-		//$this->pdf->SetFont('helvetica', '', 10);
-		//$this->writeSigniture();
-		//$this->writeTentative();
+
+		$this->writeSigniture();
+		$this->writeTentative();
 		$this->writeFinance();
+		
+		$this->writeCommittee();
 	
 
 		$this->pdf->Output('kertas-kerja.pdf', 'I');
@@ -186,7 +186,7 @@ EOD;
 		<table>
 		<tr>
 		<td width="10%">5.1</td>
-		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebannyak [jumlah]. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Kokurikulum UMK</b></td>
+		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak [jumlah]. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Kokurikulum UMK</b></td>
 		</tr>
 		</table>
 		<br />
@@ -473,31 +473,102 @@ EOD;
 				';
 				
 				$expenses = $this->model->expenseBasics;
+				
+				$wbil = 'width="8%"';
+				$wperkara = 'width="52%"';
+				$wkuantiti = 'width="15%"';
+				$wjumlah = 'width="25%"';
+				$cellpadding_main = 'cellpadding="5"';
+				$cellpadding_item = 'cellpadding="5"';
 			
 			if($expenses){
 				$total = 0;
-				$html .= '<table border="1" cellpadding="4">
+				$borders = 'style="border-top: 1px solid #000000;border-left: 1px solid #000000; border-right: 1px solid #000000;padding:50"';
+				$html .= '
+				
+				
+				<table '.$cellpadding_main.'>
 				<tr>
-					<td width="8%"><b>BIL</b></td>
-					<td width="52%"><b>PERKARA</b></td>
-					<td width="15%" align="center"><b>KUANTITI</b></td>
-					<td width="25%" align="center"><b>JUMLAH (RM)</b></td>
-				</tr>';
+					<td '.$wbil.' border="1"><b>BIL</b></td>
+					<td '.$wperkara.' border="1"><b>PERKARA</b></td>
+					<td '.$wkuantiti.' align="center" border="1"><b>KUANTITI</b></td>
+					<td '.$wjumlah.' align="center" border="1"><b>JUMLAH (RM)</b></td>
+				</tr>
+				</table>
+				';
 				$i = 1;
 				foreach($expenses as $r){
-					$html .= '<tr>
-					<td>'.$i.'. </td>
-					<td>'.$r->exp_name .'</td>
-					<td align="center">'.$r->quantity .'</td>
-					<td align="center">RM'.$r->amount .'</td>
-				</tr>';
+					$html .= '<table '.$cellpadding_main.'><tr>
+					<td '.$wbil.' '.$borders.'>'.$i.'. </td>
+					<td '.$wperkara.' '.$borders.'>'.$r->exp_name .'</td>
+					<td '.$wkuantiti.' align="center" '.$borders.'>'.$r->quantity .'</td>
+					<td '.$wjumlah.' align="center" '.$borders.'>RM'.$r->amount .'</td>
+				</tr>
+				</table>
+				';
 				$total += $r->amount;
 				$i++;
 				}
-				$html .= '
+				
+				$tools = $this->model->expenseTools;
+				$border_side = 'style="border-left: 1px solid #000000; border-right: 1px solid #000000"';
+				
+				if($tools){
+					$html .= '<table '.$cellpadding_main.'><tr>
+							<td '.$wbil.' '.$borders.'>'.$i.'.</td>
+							<td '.$wperkara.' '.$borders.'>Alatan Aktiviti</td>
+							<td '.$wkuantiti.' align="center" '.$borders.'></td>
+							<td '.$wjumlah.' align="center" '.$borders.'></td>
+						</tr>
+						</table>
+						';
+					$kirat = count($tools);
+					$x = 1;
+					foreach($tools as $t){
+						$style_pad = $x == $kirat ? '<span style="font-size:18px">&nbsp;</span>' : '';
+						$html .= '<table ><tr>
+							<td '.$wbil.' '.$border_side.'>'.$style_pad.'</td>
+							<td '.$wperkara.' '.$border_side.'><span>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;'.$t->exp_name .'</span></td>
+							<td '.$wkuantiti.' align="center" '.$border_side.'>'.$t->quantity .'</td>
+							<td '.$wjumlah.' align="center" '.$border_side.'>RM'.$t->amount .'</td>
+						</tr></table>';
+						$total += $t->amount;
+					$x++;
+					}
+				$i++;
+				}
+				
+				$rents = $this->model->expenseRents;
+				if($rents){
+					$html .= '<table '.$cellpadding_main.'><tr>
+							<td '.$wbil.' '.$borders.'>'.$i.'.</td>
+							<td '.$wperkara.' '.$borders.'>Sewaan</td>
+							<td '.$wkuantiti.' align="center" '.$borders.'></td>
+							<td '.$wjumlah.' align="center" '.$borders.'></td>
+						</tr>
+						</table>
+						';
+					$kirat = count($rents);
+					$x = 1;
+					foreach($rents as $t){
+						$style_pad = $x == $kirat ? '<span style="font-size:18px">&nbsp;</span>' : '';
+						$html .= '<table ><tr>
+							<td '.$wbil.' '.$border_side.'>'.$style_pad.'</td>
+							<td '.$wperkara.' '.$border_side.'><span>&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;&nbsp;'.$t->exp_name .'</span></td>
+							<td '.$wkuantiti.' align="center" '.$border_side.'>'.$t->quantity .'</td>
+							<td '.$wjumlah.' align="center" '.$border_side.'>RM'.$t->amount .'</td>
+						</tr></table>';
+						$total += $t->amount;
+					$x++;
+					}
+				$i++;
+				}
+				
+				
+				$html .= '<table '.$cellpadding_main.'>
 				<tr>
-					<td colspan="3" align="right"> <b>JUMLAH PERBELANJAAN</b></td>
-					<td align="center"><b>RM'.number_format($total,2) .'</b></td>
+					<td border="1" colspan="3" align="right"> <b>JUMLAH PERBELANJAAN</b></td>
+					<td border="1" align="center"><b>RM'.number_format($total,2) .'</b></td>
 				</tr>
 				';
 				
@@ -508,6 +579,66 @@ EOD;
 		$html
 EOD;
 		$this->pdf->SetFont('helvetica', '', 10.5);
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	public function writeCommittee(){
+		$this->pdf->SetMargins(24, 10, 24);
+		$this->pdf->AddPage("P");
+		
+		$html = '<br /><div align="center"><b>SENARAI JAWATANKUASA PROGRAM</b></div>
+		<br />
+		<table border="0" cellpadding="10">';
+		
+		$main = $this->model->mainCommittees;
+		if($main){
+			foreach($main as $m){
+				$html .= '<tr>
+			<td width="30%"><b>'.$m->position .'</b></td>
+			<td width="5%">:</td>
+			<td width="68%">'.$m->student->student_name .'</td>
+		</tr>
+		
+		';
+			}
+		}
+		
+		
+		
+		$html .= '</table>
+		
+		<br /><br />
+		
+		<b>AHLI JAWATANKUASA</b>
+		<br /><br />
+		<table border="0" cellpadding="10">';
+		
+		$main = $this->model->committeePositions;
+		if($main){
+			foreach($main as $m){
+				$html .= '<tr>
+			<td width="38%"><b>'.$m->position .'</b></td>
+			<td width="5%">:</td>
+			<td width="50%">';
+			$members = $m->committeeMembers;
+			if($members){
+				foreach($members as $mem){
+					$html .= $mem->student->student_name . '<br />';
+				}
+			}
+			
+			$html .= '</td>
+		</tr>
+		
+		';
+			}
+		}
+		$html .= '</table>';
+		
+		$tbl = <<<EOD
+		$html
+EOD;
+		$this->pdf->SetFont('helvetica', '', 11);
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
