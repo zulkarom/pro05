@@ -160,14 +160,14 @@ EOD;
 		<td></td>
 		<td>Kumpulan Sasaran</td>
 		<td>:</td>
-		<td></td>
+		<td>'.$this->model->pro_target .'</td>
 		</tr>
 		
 		<tr>
 		<td></td>
 		<td>Agensi yang terlibat</td>
 		<td>:</td>
-		<td></td>
+		<td>'.$this->model->agency_involved .'</td>
 		</tr>
 		
 		</table>
@@ -186,7 +186,7 @@ EOD;
 		<table>
 		<tr>
 		<td width="10%">5.1</td>
-		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak [jumlah]. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Kokurikulum UMK</b></td>
+		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak RM'.number_format($this->model->totalExpenses, 2) .'. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Kokurikulum UMK</b></td>
 		</tr>
 		</table>
 		<br />
@@ -225,11 +225,12 @@ EOD;
 	}
 	
 	public function writeSigniture(){
-		$this->pdf->SetMargins(24, 10, 24);
+		
 		$application = $this->model->application;
 		$course = $application->acceptedCourse->course;
-		$html = '<table border="0">
-		<tr nobr="true">
+		
+		$html = '<br /><table border="0">
+		<tr>
 		<td width="45%">Disediakan oleh:
 		<br /><br /><br />
 		.......................................................<br />
@@ -238,7 +239,7 @@ EOD;
 		'.$this->model->pro_name .' <br />
 		Tarikh: '.date('d/m/Y').'
 		
-		</td><td width="15%"></td> 
+		</td><td width="10%"></td> 
 		<td width="35%">Disemak oleh:
 		<br /><br /><br />
 		.......................................................<br />
@@ -247,12 +248,11 @@ EOD;
 		Kursus '.$course->course_code.'<br />
 		Tarikh: '.date('d/m/Y').'
 		
-		
 		</td>
 		</tr>
-		</table>
+		</table>';
 		
-		<br /><br /><br />
+		$html .= '<br /><br /><br />
 		Disokong oleh:
 		<br /><br /><br />
 		.......................................................<br />
@@ -286,7 +286,7 @@ EOD;
 		$tbl = <<<EOD
 		$html
 EOD;
-		
+		$this->pdf->SetMargins(24, 10, 24);
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	

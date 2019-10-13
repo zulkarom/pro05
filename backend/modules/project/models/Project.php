@@ -128,6 +128,29 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ExpTool::className(), ['pro_id' => 'id'])->orderBy('exp_order ASC');
     }
+	
+	public function getTotalExpenses(){
+		$basic = $this->expenseBasics;
+		$total = 0;
+		if($basic){
+			foreach($basic as $b){
+				$total += $b->amount;
+			}
+		}
+		$rent = $this->expenseRents;
+		if($rent){
+			foreach($rent as $b){
+				$total += $b->amount;
+			}
+		}
+		$tools = $this->expenseTools;
+		if($tools){
+			foreach($tools as $b){
+				$total += $b->amount;
+			}
+		}
+		return $total;
+	}
 
     /**
      * @return \yii\db\ActiveQuery
