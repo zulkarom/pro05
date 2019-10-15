@@ -110,7 +110,7 @@ EOD;
 		$html = '
 		Tuan,<br /><br />
 		
-		<b>TAWARAN PERLANTIKAN SEBAGAI '.strtoupper($this->fasiType()).' SAMBILAN KURSUS KO-KURIKULUM BERKREDIT BAGI '. strtoupper($this->getSemester()) .' DI UNIVERSITI MALAYSIA KELANTAN</b>
+		<b>TAWARAN PERLANTIKAN SEBAGAI '.strtoupper($this->fasiType()).' SAMBILAN KURSUS KOKURIKULUM BERKREDIT BAGI '. strtoupper($this->getSemester()) .' DI UNIVERSITI MALAYSIA KELANTAN</b>
 		<br /><br />
 		
 		Dengan hormatnya, saya diarah merujuk kepada perkara di atas.
