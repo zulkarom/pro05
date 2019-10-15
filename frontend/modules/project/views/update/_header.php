@@ -20,7 +20,7 @@ $course = $application->acceptedCourse->course;
 <div class="col-md-3">
 <div class="form-group">
 <b>SEMESTER</b> : <?=$semester->niceFormat()?>
-
+<div><b>STATUS</b> : <?=$model->statusName ?></div>
 </div>
 </div>
 

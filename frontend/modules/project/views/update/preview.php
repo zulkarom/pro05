@@ -2,8 +2,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
-use kartik\date\DatePicker;
-
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\project\models\Project */
@@ -22,19 +20,34 @@ use kartik\date\DatePicker;
 <?=$this->render('_header', ['model' => $model])?> 	  
 
 
-<?=$this->render('_menu', ['token' => $model->pro_token, 'page' => 'hantar'])?>
+<?php 
+if ($model->status == 0){
+	echo $this->render('_menu', ['token' => $model->pro_token, 'page' => 'hantar']);
+}
+?>
 
 
 <div class="site-index">
 
     <?php $form = ActiveForm::begin(); ?>
-
-       
+<?=$form->field($model, 'status')->hiddenInput(['value' => 10])->label(false)?>
+     <?php
+	 if ($model->status > 0){
+		 echo 'KERTAS KERJA TELAH DIHANTAR<br />';
+	 }
+	 ?>
         
     <br />
         <div class="form-group">
 		<?= Html::a('<i class="icon icon-download"></i> LIHAT PDF', ['download', 'token' => $model->pro_token], ['class' => 'btn btn-danger', 'target' => '_blank']) ?>  
-            <?= Html::submitButton('HANTAR', ['class' => 'btn btn-warning']) ?>
+            <?php 
+			if($model->status == 0){
+				echo Html::submitButton('HANTAR KE FASILITATOR', ['class' => 'btn btn-warning']);
+			}
+			 
+			
+			
+			?>
         </div>
     <?php ActiveForm::end(); ?>
 

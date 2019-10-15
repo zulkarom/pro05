@@ -163,7 +163,21 @@ use backend\modules\esiap\models\Course;
 					
 					['label' => 'Senarai Tuntutan', 'icon' => 'usd', 'url' => ['/claim/index']],
 					
-					['label' => 'Kertas Kerja', 'icon' => 'files-o', 'url' => ['/project/fasi/index']],
+					
+					[
+                        'label' => 'Kertas Kerja',
+                        'icon' => 'files-o',
+                        'url' => '#',
+                        'items' => [
+						
+                            ['label' => 'Lihat & Hantar', 'icon' => 'search', 'url' => ['/project/fasi/index']],
+							
+							['label' => 'Tukar Kata Kunci', 'icon' => 'lock', 'url' => ['/project/fasi/change-key']],
+							
+							
+
+                        ],
+                    ],
 					
 					$penyelaras ,
 					

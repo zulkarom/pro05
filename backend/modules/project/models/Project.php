@@ -100,6 +100,16 @@ class Project extends \yii\db\ActiveRecord
         ];
     }
 	
+	public function statusList(){
+		return [0 => 'DERAFT', 10 => 'SEMAKAN', 20 => 'HANTAR'];
+	}
+	
+	public function getStatusName(){
+		$arr = $this->statusList();
+		return $arr[$this->status];
+	}
+	
+	
 	public function getApplication()
     {
         return $this->hasOne(Application::className(), ['id' => 'application_id']);

@@ -41,7 +41,7 @@ class FasiController extends Controller
      * Lists all Project models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionChangeKey()
     {
 		//kena cari application
 		$application = Application::getMyAcceptApplication();
@@ -58,6 +58,42 @@ class FasiController extends Controller
 			}
 
 			return $this->render('update', [
+				'model' => $model,
+			]);
+		}else{
+			Yii::$app->session->addFlash('error', "Sila pastikan terdapat permohonan fasilitator yang dilulus dan diterima pada semester ini.");
+			return $this->redirect('page');
+		}
+        
+    }
+	
+	 /**
+     * Lists all Project models.
+     * @return mixed
+     */
+    public function actionIndex()
+    {
+		//kena cari application
+		$application = Application::getMyAcceptApplication();
+		if($application){
+			$model = $application->project;
+			if ($model->load(Yii::$app->request->post())) {
+				$action = Yii::$app->request->post('wfaction');
+				if($action == 'return'){
+					$model->status = 0;
+				}else if($action == 'submit'){
+					$model->status = 20;
+				}
+				Yii::$app->session->addFlash('success', $action);
+				$model->updated_at = new Expression('NOW()');
+				if($model->save()){
+					Yii::$app->session->addFlash('success', "Data Updated");
+					return $this->redirect(['index']);
+				}
+				
+			}
+
+			return $this->render('preview', [
 				'model' => $model,
 			]);
 		}else{

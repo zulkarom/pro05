@@ -42,7 +42,14 @@ class UpdateController extends Controller
     {
 		$token = strtoupper($token);
 		$model = $this->findModel($token);
+		
+		
+		
 		if($model){
+			
+			if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
 			
 			$model->scenario = 'update-main';
 		
@@ -123,12 +130,18 @@ class UpdateController extends Controller
 		
     }
 	
+	
+	
 	public function actionCommitteeMember($token){
 		
 		$model = $this->findModel($token);
 		
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		
+		if($model->status > 0){
+			return $this->redirect(['/project/default/preview', 'token' => $token]);
 		}
 		
         $modelsPosition = $model->committeePositions;
@@ -258,6 +271,10 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
 
 		$main = CommitteeMain::find()->where(['pro_id' => $model->id, 'student_id' => $id])->count();
 		$member = CommitteePosition::find()->joinWith(['committeeMembers'])
@@ -280,6 +297,10 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
 	
 		$committees = $model->mainCommittees;
 		if(count($committees) == 0){
@@ -369,6 +390,10 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
 		
         $modelsDay = $model->tentativeDays;
         $modelsTime = [];
@@ -494,6 +519,10 @@ class UpdateController extends Controller
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
 		
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
+		
         $resources = $model->resources;
 		if(count($resources) == 0){
 			$model->putDefaultIncome();
@@ -579,6 +608,9 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
 		
         $expenses = $model->expenseBasics;
 		if(count($expenses) == 0){
@@ -666,6 +698,9 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
         $expenses = $model->expenseTools;
        
         if ($model->load(Yii::$app->request->post())) {
@@ -746,6 +781,11 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
+			
         $expenses = $model->expenseRents;
        
         if ($model->load(Yii::$app->request->post())) {
@@ -826,14 +866,18 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
-		$model->scenario = 'update-income';
+		
+		//$model->scenario = 'update-income';
 		
 		if ($model->load(Yii::$app->request->post())) {
+			if($model->status == 0){
+				$model->status = 10;
+			}
 			$model->updated_at = new Expression('NOW()');
 			
 			if($model->save()){
 				Yii::$app->session->addFlash('success', "Data Updated");
-				return $this->redirect(['index', 'token' => $token]);
+				return $this->redirect(['preview', 'token' => $token]);
 			}
             
         }
@@ -883,6 +927,9 @@ class UpdateController extends Controller
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}
+		if($model->status > 0){
+				return $this->redirect(['/project/update/preview', 'token' => $token]);
+			}
 		$query = ProjectStudent::find()->where(['pro_token' => $token]);
 		$query->joinWith(['project','student']);
 		
