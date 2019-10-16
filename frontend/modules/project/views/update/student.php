@@ -25,7 +25,7 @@ use yii\grid\GridView;
 
 
  <p>
-        <?= Html::a('TAMBAH PELAJAR', ['update/assign', 'token' => $model->pro_token], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('TAMBAH / KEMASKINI PELAJAR', ['update/assign', 'token' => $model->pro_token], ['class' => 'btn btn-primary']) ?>
     </p>
 
     <?= GridView::widget([

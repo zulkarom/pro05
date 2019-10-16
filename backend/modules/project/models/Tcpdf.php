@@ -6,6 +6,8 @@ class Tcpdf extends \TCPDF {
 	
 	public $header_html;
 	
+	public $status;
+	
 	public $header_first_page_only = false;
 	
 	public $footer_html;
@@ -21,20 +23,24 @@ class Tcpdf extends \TCPDF {
 
     //Page header
     public function Header() {
-		//$this->myX = $this->getX();
-		//$this->myY = $this->getY();
-		//$savedX = $this->x;
-		//savedY = $this->y;
 		
-		$page = $this->getPage();
+		if($this->status == 0 or $this->status == 10){
+			
+			// get the current page break margin
+        $bMargin = $this->getBreakMargin();
+        // get current auto-page-break mode
+        $auto_page_break = $this->AutoPageBreak;
+        // disable auto-page-break
+        $this->SetAutoPageBreak(false, 0);
+        // set bacground image
+        $img_file = 'images/deraf.jpg';
+        $this->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+        // restore auto-page-break status
+        $this->SetAutoPageBreak($auto_page_break, $bMargin);
+        // set the starting point for the page content
+        $this->setPageMark();
+		}
 		
-		$proceed = false;
-			if($page == 1){
-				$this->SetTopMargin(12);
-			}else{
-				$this->SetTopMargin(20);
-			}
-		//$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
 		
 		$this->SetTopMargin(20);
 
@@ -43,34 +49,21 @@ class Tcpdf extends \TCPDF {
     // Page footer
     public function Footer() {
         // Position at 15 mm from bottom
-		 $this->SetY(-15);
+		 $this->SetY(-22);
 		 
 		 
 		$page = $this->getPage();
 		
-		$proceed = false;
-		if($this->footer_first_page_only){
-			if($page == 1){
-				$proceed = true;
-			}
-		}else{
-			$proceed = true;
-		}
-		
-		
-        $this->SetFont($this->font_header, '', $this->font_header_size);
-		$html = $this->footer_html;
-		if($html and $proceed){
-			//$this->SetMargins(0, 0, 0);
-			$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
+		if($page > 1){
+			 // Set font
+        $this->SetFont('helvetica', '', 10);
+		$num = $page - 1;
+        $this->Cell(0, 10, $num, 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		}
 			
 			
 		 
-        // Set font
-        //$this->SetFont('helvetica', 'I', 8);
-        // Page number
-        //$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+       
 		
     }
 }

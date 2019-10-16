@@ -301,7 +301,7 @@ EOD;
 	
 	public function writeHeaderFooter(){
 	
-		$this->pdf->footer_html ='';
+		$this->pdf->status = $this->model->status;
 	}
 	
 	public function writeCoverPage(){

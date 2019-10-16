@@ -30,7 +30,12 @@ use kartik\date\DatePicker;
     <?php $form = ActiveForm::begin(); ?>
 	
 	<div class="row">
-<div class="col-md-9"><?= $form->field($student, 'student_name')?>
+<div class="col-md-9">
+
+
+
+<?= $form->field($student, 'student_name', ['template' => '{label}{input}<i>Gunakan huruf besar permulaan perkataan. e.g Abdul Somad Bin Karim</i>{error}'])->textInput() ?>
+
 
 
 <div class="row">

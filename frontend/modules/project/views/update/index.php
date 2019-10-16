@@ -30,7 +30,9 @@ use yii\jui\JuiAsset;
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
-        <?= $form->field($model, 'pro_name')->textarea(['rows' =>2]) ?>
+		
+		<?= $form->field($model, 'pro_name', ['template' => '{label}{input}<i>Gunakan huruf besar permulaan perkataan. e.g Latihan Simulasi Kecemasan</i>{error}'])->textarea(['rows' =>2]) ?>
+
 		
 
 
