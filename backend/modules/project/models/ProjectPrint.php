@@ -326,7 +326,7 @@ $course = $application->acceptedCourse->course;
 
 		// add a page
 		$this->pdf->AddPage("P");
-		$html = '<table border="3" align="center" >
+		$html = '<table border="3" align="center" cellpadding="30">
 		<tr>
 		<td style="height:900px">
 		<br /><br /><br />
