@@ -84,7 +84,7 @@ class FasiController extends Controller
 				}else if($action == 'submit'){
 					$model->status = 20;
 				}
-				Yii::$app->session->addFlash('success', $action);
+
 				$model->updated_at = new Expression('NOW()');
 				if($model->save()){
 					Yii::$app->session->addFlash('success', "Data Updated");

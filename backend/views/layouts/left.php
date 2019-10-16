@@ -61,6 +61,9 @@
 					
 					['label' => 'Analisis Tuntutan', 'icon' => 'pie-chart', 'url' => ['/claim/analysis']],
 					
+					['label' => 'Kertas Kerja', 'icon' => 'files-o', 'url' => ['/project-admin']],
+							
+					
 					['label' => 'Urus Semester', 'icon' => 'calendar-plus-o', 'url' => ['/semester/index'],],
 					
 		
@@ -77,6 +80,8 @@
 
                         ],
                     ],
+					
+					
 
 					
 					//courses

@@ -573,6 +573,10 @@ class UpdateController extends Controller
                         }
 
                     }
+					
+					$total_income = $model->totalResources;
+					$model->pro_fund = $total_income;
+					$flag = $model->save(false);
 
                     if ($flag) {
                         $transaction->commit();
@@ -663,6 +667,10 @@ class UpdateController extends Controller
                         }
 
                     }
+					
+					$total_expense = $model->totalExpenses;
+					$model->pro_expense = $total_expense;
+					$flag = $model->save(false);
 
                     if ($flag) {
                         $transaction->commit();

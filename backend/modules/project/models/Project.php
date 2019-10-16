@@ -78,7 +78,7 @@ class Project extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-			'pro_token' => 'Token',
+			'pro_token' => 'Kata Kunci',
             'pro_name' => 'Tajuk Kertas Cadangan',
             'date_start' => 'Tarikh Mula',
             'date_end' => 'Tarikh Akhir',
@@ -97,16 +97,31 @@ class Project extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
             'supported_at' => 'Supported At',
             'updated_at' => 'Updated At',
+			'statusLabel' => 'Status', 
+			'pro_fund' => 'Sumber',
+			'pro_expense' => 'Belanja'
         ];
     }
 	
 	public function statusList(){
-		return [0 => 'DERAFT', 10 => 'SEMAKAN', 20 => 'HANTAR'];
+		$arr_name =  [0 => 'DERAF', 10 => 'SEMAKAN', 20 => 'HANTAR'];
+		$arr_color =  [0 => 'default', 10 => 'warning', 20 => 'primary'];
+		return [$arr_name, $arr_color];
+	}
+	
+	public function getStatusLabel(){
+		$arr = $this->statusList();
+		$arr_label = $arr[0];
+		$arr_color = $arr[1];
+		$label = $arr_label[$this->status];
+		$color = $arr_color[$this->status];
+		return '<span class="label label-'.$color.'">' . $label . '</span>';
 	}
 	
 	public function getStatusName(){
 		$arr = $this->statusList();
-		return $arr[$this->status];
+		$status_arr = $arr[0];
+		return $status_arr[$this->status];
 	}
 	
 	
@@ -157,6 +172,17 @@ class Project extends \yii\db\ActiveRecord
 		if($tools){
 			foreach($tools as $b){
 				$total += $b->amount;
+			}
+		}
+		return $total;
+	}
+	
+	public function getTotalResources(){
+		$basic = $this->resources;
+		$total = 0;
+		if($basic){
+			foreach($basic as $b){
+				$total += $b->rs_amount;
 			}
 		}
 		return $total;

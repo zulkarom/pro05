@@ -229,13 +229,22 @@ EOD;
 		$application = $this->model->application;
 		$course = $application->acceptedCourse->course;
 		
-		$html = '<br /><table border="0">
+		$html = '<br /><table border="0" nobr="true">
 		<tr>
 		<td width="45%">Disediakan oleh:
 		<br /><br /><br />
 		.......................................................<br />
-		<b>'.strtoupper($this->model->topPosition->student->student_name) .'</b><br />
-		'.$this->model->topPosition->position .'<br />
+		';
+		
+		
+		
+		if( $this->model->topPosition){
+			$html .= '<b>' . strtoupper($this->model->topPosition->student->student_name) .'</b><br />';
+			$html .= $this->model->topPosition->position;
+		}
+		
+		
+		$html .= '<br />
 		'.$this->model->pro_name .' <br />
 		Tarikh: '.date('d/m/Y').'
 		
