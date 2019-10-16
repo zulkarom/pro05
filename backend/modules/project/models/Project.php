@@ -262,7 +262,7 @@ class Project extends \yii\db\ActiveRecord
 	}
 	
 	public function putDefaultIncome(){
-		$arr = ['Peruntukan daripada PKPP', 'Kutipan Pelajar', 'Yuran Penyertaan', 'Derma Tunai dan Tajaan Luar'];
+		$arr = ['Peruntukan daripada Pusat Kokurikulum', 'Kutipan Pelajar', 'Yuran Penyertaan', 'Derma Tunai dan Tajaan Luar'];
 		foreach($arr as $i){
 			$res = new Resource;
 			$res->pro_id = $this->id;

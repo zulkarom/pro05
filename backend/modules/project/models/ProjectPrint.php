@@ -52,7 +52,7 @@ class ProjectPrint
 		
 		<b>UNIVERSITI MALAYSIA KELANTAN<br /><br />
 		KERTAS KERJA UNTUK KELULUSAN<br />
-		PUSAT KOKURIKULUM DAN PEMBANGUNAN PELAJAR<br />PEJABAT TIMBALAN NAIB CANSELOR (HAL EHWAL PELAJAR DAN ALUMNI)<br />
+		PUSAT KOKURIKULUM<br />PEJABAT TIMBALAN NAIB CANSELOR (HAL EHWAL PELAJAR DAN ALUMNI)<br />
 		UNIVERSITI MALAYSIA KELANTAN
 		<br /><br />
 		'. strtoupper($this->model->pro_name) .'
@@ -186,7 +186,7 @@ EOD;
 		<table>
 		<tr>
 		<td width="10%">5.1</td>
-		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak RM'.number_format($this->model->totalExpenses, 2) .'. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Kokurikulum UMK</b></td>
+		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak RM'.number_format($this->model->totalExpenses, 2) .'. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Sukan, Kebudayaan dan Kokurikulum UMK</b></td>
 		</tr>
 		</table>
 		<br />
@@ -203,7 +203,7 @@ EOD;
 		<table>
 		<tr>
 		<td width="10%">6.1</td>
-		<td width="90%">Dengan segala hormatnya Pengarah, Pusat Kokurikulum dan Pembangunan Pelajar dipohon untuk menimbang dan meluluskan permohonan bagi cadangan mengadakan program tersebut.</td>
+		<td width="90%">Dengan segala hormatnya Pengarah, Pusat Kokurikulum dipohon untuk menimbang dan meluluskan permohonan bagi cadangan mengadakan program tersebut.</td>
 		</tr>
 		</table>
 		<br />
@@ -332,7 +332,7 @@ $course = $application->acceptedCourse->course;
 <b>KERTAS KERJA UNTUK PERTIMBANGAN</b>
 <br /><br /><br />
 
-<b>PUSAT KOKURIKULUM DAN PEMBANGUNAN PELAJAR<br />PEJABAT TIMBALAN NAIB CANSELOR (HAL EHWAL PELAJAR DAN ALUMNI)</b>
+<b>PUSAT KOKURIKULUM<br />PEJABAT TIMBALAN NAIB CANSELOR (HAL EHWAL PELAJAR DAN ALUMNI)</b>
 
 <br /><br /><br />
 
