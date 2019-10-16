@@ -161,18 +161,21 @@ EOD;
 		<td>Kumpulan Sasaran</td>
 		<td>:</td>
 		<td>'.$this->model->pro_target .'</td>
-		</tr>
+		</tr>';
 		
-		<tr>
+		if($this->model->agency_involved){
+			$html .= '<tr>
 		<td></td>
 		<td>Agensi yang terlibat</td>
 		<td>:</td>
 		<td>'.$this->model->agency_involved .'</td>
-		</tr>
+		</tr>';
+		}
 		
-		</table>
+		
+		$html .= '</table>
 		<br /><br />
-		Tentatif program adalah sebagaimana lampiran 1<br />
+		Tentatif program adalah sebagaimana Lampiran 1<br />
 		</td>
 		
 		
@@ -186,7 +189,7 @@ EOD;
 		<table>
 		<tr>
 		<td width="10%">5.1</td>
-		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak RM'.number_format($this->model->totalExpenses, 2) .'. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Sukan, Kebudayaan dan Kokurikulum UMK</b></td>
+		<td width="90%">Anggaran Perbelanjaan untuk mengadakan program ' .$this->model->pro_name .' adalah sebanyak RM'.number_format($this->model->totalExpenses, 2) .'. Perincian berbelanjaan adalah sebagaimana <b>Lampiran</b>. Segala perbelanjaan peruntukan akan menggunakan <b>Tabung Sukan, Kebudayaan dan Kokurikulum UMK</b>.</td>
 		</tr>
 		</table>
 		<br />
