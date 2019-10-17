@@ -265,6 +265,7 @@ EOD;
 		</table>';
 		
 		$html .= '<br /><br /><br />
+		<table nobr="true"><tr><td>
 		Disokong oleh:
 		<br /><br /><br />
 		.......................................................<br />
@@ -272,8 +273,9 @@ EOD;
 		Penolong Pendaftar<br />
 		Pusat Kokurikulum<br />
 		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)
+		</td></tr></table>
 		<br /><br />
-		
+		<table nobr="true"><tr><td>
 		Diluluskan / Tidak Diluluskan:<br /><br /><br />
 		.......................................................<br />
 		<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
@@ -293,7 +295,7 @@ EOD;
 		</tr>
 		</table>
 		
-		
+		</td></tr></table>
 		';
 		$tbl = <<<EOD
 		$html
