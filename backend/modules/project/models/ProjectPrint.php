@@ -256,6 +256,7 @@ EOD;
 		<br /><br /><br />
 		.......................................................<br />
 		<b>'.strtoupper($application->fasi->user->fullname) .'</b><br />
+		Fasilitator<br />
 		Kumpulan '.$application->applicationGroup->group_name.'<br />
 		Kursus '.$course->course_code.'<br />
 		Tarikh: '.date('d/m/Y').'
