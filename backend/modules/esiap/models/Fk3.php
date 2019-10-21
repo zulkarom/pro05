@@ -355,7 +355,13 @@ $gtotal += $sub;
 $html .= '<td align="center">'.$sub.'</td>';
 $html .= '<td>';
 
-
+$delivers = $clo->cloDeliveries;
+if($delivers){
+	foreach($delivers as $d){
+		$html .= $d->delivery->delivery_name .'/ <i>'. $d->delivery->delivery_name_bi . '</i><br />';
+	}
+	
+}
 $html .='</td>';
 
 

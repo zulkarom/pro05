@@ -636,7 +636,7 @@ EOD;
 		$main = $this->model->committeePositions;
 		if($main){
 			foreach($main as $m){
-				$html .= '<tr>
+				$html .= '<tr nobr="true">
 			<td width="38%"><b>'.$m->position .'</b></td>
 			<td width="5%">:</td>
 			<td width="50%">';
