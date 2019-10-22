@@ -31,7 +31,7 @@ class Student extends \yii\db\ActiveRecord
         return [
 			[['student_matric'], 'required', 'on' => 'check'],
 			
-            [['student_matric', 'student_name', 'program', 'email'], 'required', 'on' => 'update'],
+            [['student_matric', 'student_name'], 'required', 'on' => 'update'],
 			
             [['student_matric'], 'string', 'max' => 50],
 			
@@ -40,6 +40,7 @@ class Student extends \yii\db\ActiveRecord
 			 [['email'], 'email'],
 			
             [['program'], 'string', 'max' => 100],
+			
             [['student_matric'], 'unique'],
         ];
     }
