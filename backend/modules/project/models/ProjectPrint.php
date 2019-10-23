@@ -258,13 +258,13 @@ EOD;
 		Tarikh: '.date('d/m/Y').'
 		
 		</td><td width="10%"></td> 
-		<td width="35%">Disemak oleh:
+		<td width="40%">Disemak oleh:
 		<br /><br /><br />
 		.......................................................<br />
 		<b>'.strtoupper($application->fasi->user->fullname) .'</b><br />
 		'.$fasi.'<br />
 		Kumpulan '.$application->applicationGroup->group_name.'<br />
-		Kursus '.$course->course_code.'<br />
+		Kursus '.$course->course_code.' '.$course->course_name.'<br />
 		Tarikh: '.date('d/m/Y').'
 		
 		</td>
@@ -279,16 +279,18 @@ EOD;
 		<b>SITI NORHIDAYAH BINTI MAT HUSSIN</b><br />
 		Penolong Pendaftar<br />
 		Pusat Kokurikulum<br />
-		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)
+		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)<br />
+		Tarikh: ..........................
 		</td></tr></table>
-		<br /><br />
+		<br /><br /><br />
 		<table nobr="true"><tr><td>
 		Diluluskan / Tidak Diluluskan:<br /><br /><br />
 		.......................................................<br />
 		<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
 		Pengarah<br />
 		Pusat Kokurikulum<br />
-		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)
+		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)<br />
+		Tarikh: ..........................
 		<br /><br />
 		
 		Ulasan Pengarah Pusat Kokurikulum:
