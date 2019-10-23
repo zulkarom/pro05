@@ -246,6 +246,12 @@ EOD;
 			$html .= $this->model->topPosition->position;
 		}
 		
+		if($application->fasi_type_id == 1){
+			$fasi = 'Fasilitator';
+		}else{
+			$fasi = 'Pembantu Fasilitator';
+		}
+		
 		
 		$html .= '<br />
 		'.$this->model->pro_name .' <br />
@@ -256,7 +262,7 @@ EOD;
 		<br /><br /><br />
 		.......................................................<br />
 		<b>'.strtoupper($application->fasi->user->fullname) .'</b><br />
-		Fasilitator<br />
+		'.$fasi.'<br />
 		Kumpulan '.$application->applicationGroup->group_name.'<br />
 		Kursus '.$course->course_code.'<br />
 		Tarikh: '.date('d/m/Y').'
