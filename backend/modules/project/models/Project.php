@@ -348,13 +348,17 @@ class Project extends \yii\db\ActiveRecord
 		$str_masa = '';
 		$search_space = $this->hasChar(" ", $str_time);
 		if($search_space){
+			
 			$arr = explode(" ", $str_time);
+			
 			$num = $arr[0];
 			$ampm = $arr[1];
 			$str_hour = $this->hasChar(":", $num);
+			
 			if($str_hour){
-				$hour = $str_hour[0] + 0;
-				$minute = $str_hour[1];
+				$arr_hrs = explode(":", $num);
+				$hour = $arr_hrs[0] + 0;
+				//print_r($arr_hrs) ;die();
 				if(strtoupper($ampm) == 'PM'){
 					if($hour == 12){
 						$str_masa = 'tengahari';
