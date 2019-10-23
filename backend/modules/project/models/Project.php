@@ -269,7 +269,8 @@ class Project extends \yii\db\ActiveRecord
 			$res->rs_name = $i;
 			$res->rs_quantity = 1;
 			
-			if($i == 'Peruntukan daripada PKPP'){
+			if($i == 'Peruntukan daripada Pusat Kokurikulum'){
+				$res->rs_core = 1;
 				$res->rs_amount = 500;
 			}else{
 				$res->rs_amount = 0;
@@ -282,18 +283,12 @@ class Project extends \yii\db\ActiveRecord
 	}
 	
 	public function putDefaultExpense(){
-		$arr = ['Makanan dan minuman', 'Bayaran penceramah/ pengadil', 'Hadiah Pemenang'];
+		$arr = ['Makanan dan Minuman', 'Bayaran Penceramah/ Pengadil', 'Hadiah Pemenang'];
 		foreach($arr as $i){
 			$res = new ExpBasic;
 			$res->pro_id = $this->id;
 			$res->exp_name = $i;
 			$res->quantity = 1;
-			
-			if($i == 'Peruntukan daripada PKPP'){
-				$res->amount = 500;
-			}else{
-				$res->amount = 0;
-			}
 			
 			if(!$res->save()){
 				$res->flashError();

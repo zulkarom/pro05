@@ -2,8 +2,6 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use wbraganca\dynamicform\DynamicFormWidget;
-use yii\jui\JuiAsset;
-use kartik\date\DatePicker;
 
 
 
@@ -67,17 +65,31 @@ use kartik\date\DatePicker;
         <?php foreach ($resources as $i => $resource): ?>
             <tr class="resource-item">
                 <td class="sortable-handle text-center vcenter" style="cursor: move;">
-                        <i class="icon icon-arrows-alt"></i>
+                        
                     </td>
-            
-                <td class="vcenter">
+				
+            <?php 
+			$core = false;
+			$style = '';
+			if($resource->rs_core == 1){
+				$core = true;
+				$style = 'style="vertical-align:middle"';
+			}
+			?>
+                <td class="vcenter" <?=$style?>>
+				
                     <?php
                         // necessary for upresource action.
                         if (! $resource->isNewRecord) {
                             echo Html::activeHiddenInput($resource, "[{$i}]id");
                         }
+						if($core){
+							echo '&nbsp;' . $resource->rs_name ;
+						}else{
+							echo $form->field($resource, "[{$i}]rs_name")->label(false);
+						}
                     ?>
-                    <?= $form->field($resource, "[{$i}]rs_name")->label(false) ?>
+                    
                 </td>
 				
 				<td class="vcenter">
@@ -91,7 +103,13 @@ use kartik\date\DatePicker;
                 </td>
 
                 <td class="text-center vcenter" style="width: 90px; verti">
-                    <button type="button" class="remove-resource btn btn-default btn-sm"><span class="icon icon-remove"></span></button>
+				<?php 
+				if(!$core){
+					echo '<button type="button" class="remove-resource btn btn-default btn-sm"><span class="icon icon-remove"></span></button>';
+				}
+				
+				?>
+                   
                 </td>
             </tr>
          <?php endforeach; ?>
@@ -135,32 +153,4 @@ use kartik\date\DatePicker;
 
 
 
-<?php
-
-$js = <<<'EOD'
-
-var fixHelperSortable = function(e, ui) {
-    ui.children().each(function() {
-        $(this).width($(this).width());
-    });
-    return ui;
-};
-
-$(".container-items").sortable({
-    items: "tr",
-    cursor: "move",
-    opacity: 0.6,
-    axis: "y",
-    handle: ".sortable-handle",
-    helper: fixHelperSortable,
-    update: function(ev){
-        $(".dynamicform_wrapper").yiiDynamicForm("updateContainer");
-    }
-}).disableSelection();
-
-EOD;
-
-JuiAsset::register($this);
-$this->registerJs($js);
-?>
 
