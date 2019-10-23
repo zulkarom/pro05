@@ -26,7 +26,14 @@ if($model->status == 0){
 <a href="<?=Url::to(['update/index', 'token' => $model->pro_token])?>" target="_blank"><b><span class="glyphicon glyphicon-download-alt"></span> KEMASKINI KERTAS KERJA DI SINI</b></a>
 <?php
 }else{
+if($model->status == 10){
+	echo '<i>Perhatian kepada fasilitator, sila semak kertas kerja ini sebelum menghantar ke Pusat Kokurikulum. <br />Watermark/latarbelakang DERAF pada kerja kerja hanya akan hilang selepas fasilitator menghantar ke Pusat Kokurikulum.</i>
+
+	
+	<br /><br />';
+}
 ?>
+
 <a href="<?=Url::to(['update/download', 'token' => $model->pro_token])?>" target="_blank"><b><span class="glyphicon glyphicon-download-alt"></span> LIHAT KERTAS KERJA DI SINI</b></a>
 <?php
 }
@@ -42,7 +49,10 @@ if($model->status == 0){
 	 if ($model->status == 0){
 		 echo 'KERTAS KERJA DALAM STATUS DERAF DAN BELUM DIHANTAR UNTUK DISEMAK<br />';
 	 }else if($model->status == 20){
-		 echo 'KERTAS KERJA TELAH DIHANTAR KE PUSAT KOKURIKULUM<br />';
+		 echo 'KERTAS KERJA TELAH DIHANTAR KE PUSAT KOKURIKULUM<br /><br />
+		 <i>Terima kasih atas usaha untuk menyediakan kertas kerja ni.<br />Untuk tindakan selanjutnya, sila cetak, tandatangan serta hantar kertas kerja ke Pusat Kokurikulum.</i>
+		 
+		 ';
 	 }
 	 ?>
         
