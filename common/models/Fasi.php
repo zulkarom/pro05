@@ -7,6 +7,7 @@ use frontend\models\FasiExpe;
 use frontend\models\FasiEdu;
 use frontend\models\FasiFile;
 use common\models\Common;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "fasi".
@@ -157,6 +158,17 @@ class Fasi extends \yii\db\ActiveRecord
 	
 	public function getUser(){
 		return $this->hasOne(User::className(), ['id' => 'user_id']);
+	}
+	
+	public static function listFasiArray(){
+		$array = [];
+		$list = self::find()->joinWith(['user'])->orderBy('user.fullname ASC')->all();
+		if($list){
+			foreach($list as $row){
+				$array[$row->id] = strtoupper($row->user->fullname);
+			}
+		}
+		return $array;
 	}
 
 	

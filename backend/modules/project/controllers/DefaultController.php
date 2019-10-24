@@ -57,6 +57,10 @@ class DefaultController extends Controller
         ]);
     }
 	
+	public function actionCoordinator(){
+		
+	}
+	
 	public function actionReturn($id){
 		$model = $this->findModel($id);
 		$model->status = 10;

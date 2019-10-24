@@ -61,7 +61,19 @@
 					
 					['label' => 'Analisis Tuntutan', 'icon' => 'pie-chart', 'url' => ['/claim/analysis']],
 					
-					['label' => 'Kertas Kerja', 'icon' => 'files-o', 'url' => ['/project-admin']],
+					
+					[
+                        'label' => 'Kertas Kerja',
+                        'icon' => 'files-o',
+                        'url' => '#',
+                        'items' => [
+
+							['label' => 'Senarai', 'icon' => 'list', 'url' => ['/project-admin']],
+						
+                            ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
+
+                        ],
+                    ],
 							
 					
 					['label' => 'Urus Semester', 'icon' => 'calendar-plus-o', 'url' => ['/semester/index'],],
@@ -120,15 +132,6 @@
 							['label' => 'Claim Setting', 'icon' => 'cog', 'url' => ['/claim-setting/update', 'id' => 1],],
 						
                             ['label' => 'Komponen', 'icon' => 'th-large', 'url' => ['/component/index'],],
-							
-							
-							['label' => 'Lokasi', 'icon' => 'map-pin', 'url' => ['/location/index'],],
-							
-							['label' => 'Masa Kelas', 'icon' => 'clock-o', 'url' => ['/session-time/index'],],
-							
-							
-							
-
                         ],
                     ],
 					

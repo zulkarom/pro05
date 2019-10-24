@@ -72,6 +72,17 @@ class Course extends \yii\db\ActiveRecord
 		return $this->course_code . '<br />' . $this->course_name;
 	}
 	
+	public static function listCourseArray(){
+		$array = [];
+		$list = self::find()->orderBy('course_name ASC')->all();
+		if($list){
+			foreach($list as $row){
+				$array[$row->id] = $row->course_code . ' ' . strtoupper($row->course_name);
+			}
+		}
+		return $array;
+	}
+	
 	
 
 }
