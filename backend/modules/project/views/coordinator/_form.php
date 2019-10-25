@@ -32,7 +32,7 @@ use kartik\select2\Select2;
 echo $form->field($model, 'fasi_id')->widget(Select2::classname(), [
     'data' => Fasi::listFasiArray(),
     'language' => 'de',
-    'options' => ['multiple' => true,'placeholder' => 'Pilih Penyelaras ...'],
+    'options' => ['multiple' => false,'placeholder' => 'Pilih Penyelaras ...'],
     'pluginOptions' => [
         'allowClear' => true
     ],
