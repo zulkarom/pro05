@@ -148,6 +148,8 @@ $("#btn-verify").click(function(){
 	
 });
 
+
+
 $("#btn-save-verify").click(function(){
 	$("#form-choice").val("save-verify");
 	$("#form-verify").submit();

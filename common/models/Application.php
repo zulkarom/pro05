@@ -72,8 +72,6 @@ class Application extends \yii\db\ActiveRecord
 			
 			[['group_id', 'rate_amount', 'verified_at', 'selected_course',  'verified_by'], 'required', 'on' => WorkflowScenario::enterStatus('c-verified')],
 			
-			
-			
 			[['approved_at', 'approved_by'], 'required', 'on' => WorkflowScenario::enterStatus('d-approved')],
 			
 			[['released_at', 'released_by', 'status'], 'required', 'on' => WorkflowScenario::enterStatus('e-release')],
@@ -354,6 +352,20 @@ class Application extends \yii\db\ActiveRecord
 		}
             
     }
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
 
 
     public function getProject()

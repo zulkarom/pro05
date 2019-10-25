@@ -76,6 +76,20 @@ class ApplicationCourse extends \yii\db\ActiveRecord
 
 	}
 	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
+	
 	
 
 	

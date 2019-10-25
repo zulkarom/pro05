@@ -32,15 +32,19 @@ use richardfan\widget\JSRegister;
 <?php $form = ActiveForm::begin(); ?>
 
 <div class="row">
-<div class="col-md-8">
+<div class="col-md-11">
+
+<div class="row">
+<div class="col-md-7"><?= $form->field($model, 'eft_name') ?></div>
+
+<div class="col-md-5"><?= $form->field($model, 'eft_ic') ?>
+</div>
+
+</div>
 
 
-<?= $form->field($model, 'eft_name') ?>
-<?= $form->field($model, 'eft_ic') ?>
-<?= $form->field($model, 'eft_account') ?>
-
-
-<?php 
+<div class="row">
+<div class="col-md-4"><?php 
 $list = ['BIMB'=>'BIMB', 'MAYBANK'=>'MAYBANK', 'CIMB'=>'CIMB', 'BSNB'=>'BSNB', 999 => 'LAIN-LAIN (SILA NYATAKAN)'];
 
 $drop = false;
@@ -57,12 +61,20 @@ if($drop){
 }else{
 	echo $form->field($model, 'eft_bank');
 }
+?></div>
+
+<div class="col-md-6"><?= $form->field($model, 'eft_account') ?>
+</div>
+
+</div>
 
 
+<div class="row">
+<div class="col-md-7"><?= $form->field($model, 'eft_email') ?></div>
+
+</div>
 
 
-?>
-<?= $form->field($model, 'eft_email') ?>
 
 
 </div>

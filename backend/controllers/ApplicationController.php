@@ -74,11 +74,11 @@ class ApplicationController extends Controller
 			
 		switch(Yii::$app->request->post('form-choice')){
 			case 'btn-approve':
-				$this->approveApplication($model);
+				return $this->approveApplication($model);
 			break;
 			
 			case 'verify':
-				$this->verifyApplication($model);
+				return $this->verifyApplication($model);
 			break;
 			
 			case 'save-verify':
@@ -106,11 +106,16 @@ class ApplicationController extends Controller
 			$model->approved_by = Yii::$app->user->id;
 			$model->sendToStatus('d-approved');
 			if($model->save()){
+				Yii::$app->session->addFlash('success', "Permohonan telah berjaya diluluskan");
 				return $this->redirect(['application/index']);
 			}
 		}else{
 			Yii::$app->session->addFlash('error', "Permission Denied!");
 		}
+		
+		return $this->render('view', [
+            'model' => $model,
+        ]);
 	}
 	
 	private function verifyApplication($model){
@@ -121,19 +126,28 @@ class ApplicationController extends Controller
 			if ($model->load(Yii::$app->request->post())) {
 				$model->verified_at = date('Y-m-d H:i:s');
 				$model->verified_by = Yii::$app->user->id;
-				$model->sendToStatus('c-verified');
-				if($model->save()){
-					
-					ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
-					
+				
+				
+				
+				ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
+				$model->selected_course = Yii::$app->request->post('Application')['selected_course'];
+				if($model->selected_course){
 					$course = ApplicationCourse::findOne(['application_id' => $model->id, 'course_id'=> $model->selected_course] );
-					
 					$course->is_accepted = 1;
 					$course->scenario = 'verify';
 					if($course->save()){
-						return $this->redirect(['application/index']);
+						$model->sendToStatus('c-verified');
+						if($model->save()){
+							Yii::$app->session->addFlash('success', "Permohonan telah berjaya disokong");
+							return $this->redirect(['application/index']);
+						}else{
+							$model->flashError();
+						}
+					}else{
+						$course->flashError();
 					}
-					
+				}else{
+					Yii::$app->session->addFlash('error', "No selected course!");
 				}
 			}
 			
@@ -142,6 +156,10 @@ class ApplicationController extends Controller
 		}else{
 			Yii::$app->session->addFlash('error', "Permission Denied!");
 		}
+		
+		return $this->render('view', [
+            'model' => $model,
+        ]);
 	}
 	
 	private function saveVerify($model){
