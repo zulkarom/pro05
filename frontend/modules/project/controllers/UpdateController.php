@@ -910,10 +910,9 @@ class UpdateController extends Controller
     {
 		$semester = Semester::getCurrentSemester();
 		$model = Project::find()
-		->innerJoin('application', 'application.id = project.application_id')
 		->where([
 			'pro_token' => $token, 
-			'application.semester_id' => $semester->id])
+			'semester_id' => $semester->id])
 		->one();
 		if($model){
 			

@@ -5,6 +5,7 @@ namespace backend\modules\project\models;
 use Yii;
 use common\models\ApplicationGroup;
 use backend\models\Course;
+use backend\models\Semester;
 use common\models\Fasi;
 
 /**
@@ -69,5 +70,13 @@ class Coordinator extends \yii\db\ActiveRecord
     {
         return $this->hasOne(ApplicationGroup::className(), ['id' => 'group_id']);
     }
+	
+	public function getProject()
+    {
+		$semester = Semester::getCurrentSemester();
+        return $this->hasOne(Project::className(), ['coor_id' => 'id'])->where(['semester_id' => $semester->id]);
+    }
+	
+	
 
 }

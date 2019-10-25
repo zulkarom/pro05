@@ -4,6 +4,8 @@ namespace backend\modules\project\controllers;
 
 use Yii;
 use backend\modules\project\models\Coordinator;
+use backend\modules\project\models\Project;
+use common\models\Token;
 use backend\modules\project\models\CoordinatorSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -74,7 +76,24 @@ class CoordinatorController extends Controller
 			$model->semester_id = $semester->id;
 			$model->created_at = new Expression('NOW()');
 			if($model->save()){
-				return $this->redirect(['index']);
+				//need to create project
+				$project = new Project();
+				$project->scenario = 'coor-create';
+				$semester = Semester::getCurrentSemester();
+				$project->semester_id = $semester->id;
+				$project->created_at = new Expression('NOW()');
+				$project->date_start = date('Y-m-d');
+				$project->date_end = date('Y-m-d');
+				$project->application_id = 0;
+				$project->coor_id = $model->id;
+				$project->pro_token = Token::projectKey();
+				if($project->save()){
+					return $this->redirect(['index']);
+				}else{
+					$project->flashError();
+				}
+				
+				
 			}
             
         }
@@ -113,6 +132,10 @@ class CoordinatorController extends Controller
      */
     public function actionDelete($id)
     {
+		$project = Project::findOne(['coor_id' => $id]);
+		if($project){
+			$project->delete();
+		}
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);

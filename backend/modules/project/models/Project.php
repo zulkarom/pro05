@@ -5,6 +5,7 @@ namespace backend\modules\project\models;
 use Yii;
 use common\models\Application;
 use common\models\Common;
+use backend\models\Semester;
 
 /**
  * This is the model class for table "project".
@@ -55,7 +56,9 @@ class Project extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['application_id', 'created_at', 'pro_token'], 'required', 'on' => 'fasi-create'],
+            [['application_id', 'created_at', 'pro_token', 'semester_id'], 'required', 'on' => 'fasi-create'],
+			
+			[['coor_id', 'created_at', 'pro_token', 'semester_id'], 'required', 'on' => 'coor-create'],
 			
 			[['pro_name', 'pro_token', 'application_id', 'location',  'purpose', 'background', 'pro_target', 'updated_at'], 'required', 'on' => 'update-main'],
 			
@@ -129,6 +132,16 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Application::className(), ['id' => 'application_id']);
     }
+	
+	public function getSemester()
+    {
+        return $this->hasOne(Semester::className(), ['id' => 'semester_id']);
+    }
+	
+	public function getCoordinator()
+    {
+        return $this->hasOne(Coordinator::className(), ['id' => 'coor_id']);
+    }
 
     /**
      * @return \yii\db\ActiveQuery
@@ -153,6 +166,54 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ExpTool::className(), ['pro_id' => 'id'])->orderBy('exp_order ASC');
     }
+	
+	public function getFasi(){
+		$app = $this->application;
+		$coor = $this->coordinator;
+		if($app){
+			return $app->fasi;
+		}else if($coor){
+			return $coor->fasi;
+		}
+		return false;
+	}
+	
+	public function getFasiCoorPost(){
+		$app = $this->application;
+		$coor = $this->coordinator;
+		if($app){
+			if($app->fasi_type_id == 1){
+				return 'Fasilitator';
+			}else{
+				return 'Pembantu Fasilitator';
+			}
+		}else if($coor){
+			return 'Penyelaras';
+		}
+		return false;
+	}
+	
+	public function getCourse(){
+		$app = $this->application;
+		$coor = $this->coordinator;
+		if($app){
+			return $app->acceptedCourse->course;
+		}else if($coor){
+			return $coor->course;
+		}
+		return false;
+	}
+	
+	public function getGroup(){
+		$app = $this->application;
+		$coor = $this->coordinator;
+		if($app){
+			return $app->applicationGroup;
+		}else if($coor){
+			return $coor->group;
+		}
+		return false;
+	}
 	
 	public function getTotalExpenses(){
 		$basic = $this->expenseBasics;
@@ -289,6 +350,7 @@ class Project extends \yii\db\ActiveRecord
 			$res->pro_id = $this->id;
 			$res->exp_name = $i;
 			$res->quantity = 1;
+			$res->amount = 0;
 			
 			if(!$res->save()){
 				$res->flashError();
@@ -434,7 +496,18 @@ class Project extends \yii\db\ActiveRecord
 		
 		
 	}
-	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
 	private function dateFormatTwo($date1, $date2){
 		$day1 = date('j', strtotime($date1));
 		$month_num1 = date('n', strtotime($date1));

@@ -2,6 +2,8 @@
 
 namespace frontend\models\user; 
 
+use common\models\Fasi;
+
 class User extends \dektrium\user\models\User
 {
 	const STATUS_DELETED = 0;
@@ -36,6 +38,10 @@ class User extends \dektrium\user\models\User
 		$arr = parent::attributeLabels();
 		$arr['fullname'] = "Nama Penuh";
 		return $arr;
+	}
+	
+	public function getFasi(){
+		return $this->hasOne(Fasi::className(), ['user_id' => 'id']);
 	}
 	
 	public function register(){

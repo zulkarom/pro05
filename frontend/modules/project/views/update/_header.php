@@ -1,25 +1,20 @@
-<?php 
-$application = $model->application;
-$semester =$application->semester;
-$course = $application->acceptedCourse->course;
-?>
 
 <div class="row">
 <div class="col-md-4"><div class="form-group">
-<b>FASILILATOR</b> : <?=$model->application->fasi->user->fullname?>
+<b><?=strtoupper($model->fasiCoorPost)?></b> : <?=$model->fasi->user->fullname?>
 </div></div>
 
 <div class="col-md-5">
 <div class="form-group">
 
-<b>KURSUS</b> : <?=$course->course_code .' '. strtoupper($course->course_name) . ' ('.$application->applicationGroup->group_name.')'?>
+<b>KURSUS</b> : <?=$model->course->course_code .' '. strtoupper($model->course->course_name) . ' ('.$model->group->group_name.')'?>
 
 </div>
 </div>
 
 <div class="col-md-3">
 <div class="form-group">
-<b>SEMESTER</b> : <?=$semester->niceFormat()?>
+<b>SEMESTER</b> : <?=$model->semester->niceFormat()?>
 <div><b>STATUS</b> : <?=$model->statusName ?></div>
 </div>
 </div>

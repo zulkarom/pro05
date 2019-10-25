@@ -34,9 +34,15 @@ $this->params['breadcrumbs'][] = $this->title;
 				'format' => 'html',
 				'label' => 'Fasililator',
 				'value' => function($model){
-					$app = $model->application;
-					return strtoupper($app->fasi->user->fullname) . '<br />' . 
-					$app->acceptedCourse->course->course_name . ' ('. $app->applicationGroup->group_name.')';
+					if($model->fasi){
+						$coor = '';
+						if($model->coordinator){
+							$coor = '<br /><i>(Penyelaras)</i>';
+						}
+						return strtoupper($model->fasi->user->fullname) . '<br />' . 
+					$model->course->course_name . ' ('. $model->group->group_name.')' . $coor;
+					}
+					
 					;
 				}
 			],

@@ -174,6 +174,10 @@ use backend\modules\esiap\models\Course;
 							
 							['label' => 'Tukar Kata Kunci', 'icon' => 'lock', 'url' => ['/project/fasi/change-key']],
 							
+				
+							
+							['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project/fasi/coordinator']],
+							
 							
 
                         ],

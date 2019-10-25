@@ -176,6 +176,10 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return $this->getPrimaryKey();
     }
+	
+	public function getFasi(){
+		return $this->hasOne(Fasi::className(), ['user_id' => 'id']);
+	}
 
     /**
      * @inheritdoc

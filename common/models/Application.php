@@ -341,7 +341,9 @@ class Application extends \yii\db\ActiveRecord
 	public function createProject()
     {
         $model = new Project();
+		$semester = Semester::getCurrentSemester();
 		$model->scenario = 'fasi-create';
+		$model->semester_id = $semester->id;
 		$model->created_at = new Expression('NOW()');
 		$model->date_start = date('Y-m-d');
 		$model->date_end = date('Y-m-d');

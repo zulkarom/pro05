@@ -229,8 +229,7 @@ EOD;
 	
 	public function writeSigniture(){
 		
-		$application = $this->model->application;
-		$course = $application->acceptedCourse->course;
+		$course = $this->model->course;
 		
 		$html = '<br /><table border="0" nobr="true">
 		<tr>
@@ -246,11 +245,7 @@ EOD;
 			$html .= $this->model->topPosition->position;
 		}
 		
-		if($application->fasi_type_id == 1){
-			$fasi = 'Fasilitator';
-		}else{
-			$fasi = 'Pembantu Fasilitator';
-		}
+		$fasi = $this->model->fasiCoorPost;
 		
 		
 		$html .= '<br />
@@ -261,10 +256,10 @@ EOD;
 		<td width="40%">Disemak oleh:
 		<br /><br /><br />
 		.......................................................<br />
-		<b>'.strtoupper($application->fasi->user->fullname) .'</b><br />
+		<b>'.strtoupper($this->model->fasi->user->fullname) .'</b><br />
 		'.$fasi.'<br />
-		Kumpulan '.$application->applicationGroup->group_name.'<br />
-		Kursus '.$course->course_code.' '.$course->course_name.'<br />
+		Kumpulan '.$this->model->group->group_name.'<br />
+		Kursus '.$this->model->course->course_code.' '.$this->model->course->course_name.'<br />
 		Tarikh: '.date('d/m/Y').'
 		
 		</td>
@@ -331,9 +326,8 @@ EOD;
 
 		// ---------------------------------------------------------
 
-$application = $this->model->application;
-$semester =$application->semester;
-$course = $application->acceptedCourse->course;
+$semester = $this->model->semester;
+$course = $this->model->course;
 
 		// add a page
 		$this->pdf->AddPage("P");
@@ -366,7 +360,7 @@ $course = $application->acceptedCourse->course;
 <br /><br />
 '.strtoupper($course->course_name).' ('.strtoupper($course->course_code).')
 
-<br />KUMPULAN '.$application->applicationGroup->group_name .'
+<br />KUMPULAN '.$this->model->group->group_name .'
 <br />SEMESTER '.strtoupper($semester->session()) .' SESI '.$semester->years();
 if($this->model->collaboration){
 	$html .= '<br /><br /><br /><b>DENGAN KERJASAMA:</b>

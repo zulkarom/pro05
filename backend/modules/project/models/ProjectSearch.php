@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\modules\project\models\Project;
+use backend\models\Semester;
 
 /**
  * ProjectSearch represents the model behind the search form of `backend\modules\project\models\Project`.
@@ -47,8 +48,13 @@ class ProjectSearch extends Project
      */
     public function search($params)
     {
-        $query = Project::find();
-		$query->joinWith(['application.fasi.user']);
+		$semester = Semester::getCurrentSemester();
+        $query = Project::find()->where(['project.semester_id' => $semester->id]);
+		$query->joinWith(['application.fasi.user', 'coordinator'=> function($q) {
+			$q->joinWith(['fasi fasi2' => function($q) {
+			$q->joinWith('user user2');
+		}]);
+		}]);
 
         // add conditions that should always apply here
 
@@ -80,7 +86,11 @@ class ProjectSearch extends Project
             ->andFilterWhere(['like', 'pro_token', $this->pro_token])
 			->andFilterWhere(['like', 'pro_fund', $this->pro_fund])
 			->andFilterWhere(['like', 'pro_expense', $this->pro_expense])
-            ->andFilterWhere(['like', 'user.fullname', $this->fasi]);
+			->andFilterWhere(['or', 
+            ['like', 'user.fullname', $this->fasi],
+            ['like', 'user2.fullname', $this->fasi]
+        ]);
+
 			
 		$dataProvider->sort->attributes['fasi'] = [
         'asc' => ['user.fullname' => SORT_ASC],
