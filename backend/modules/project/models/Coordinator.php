@@ -52,6 +52,7 @@ class Coordinator extends \yii\db\ActiveRecord
             'semester_id' => 'Semester',
             'fasi_id' => 'Penyelaras',
             'course_id' => 'Kursus',
+			'campus_id' => 'Kampus',
             'group_id' => 'Kelas',
             'created_at' => 'Created At',
         ];
