@@ -7,6 +7,7 @@ use common\models\Fasi;
 use common\models\ApplicationGroup;
 use backend\models\Course;
 use backend\models\Campus;
+use kartik\select2\Select2;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\project\models\Coordinator */
@@ -27,7 +28,18 @@ use backend\models\Campus;
 
 <div class="row">
 
-<div class="col-md-8">  <?= $form->field($model, 'fasi_id')->dropDownList(Fasi::listFasiArray()) ?>
+<div class="col-md-8">  <?php
+echo $form->field($model, 'fasi_id')->widget(Select2::classname(), [
+    'data' => Fasi::listFasiArray(),
+    'language' => 'de',
+    'options' => ['multiple' => true,'placeholder' => 'Pilih Penyelaras ...'],
+    'pluginOptions' => [
+        'allowClear' => true
+    ],
+])->label('Penyelaras');
+
+?>
+
 </div>
 
 
