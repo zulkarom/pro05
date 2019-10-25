@@ -60,6 +60,8 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['coor_id', 'created_at', 'pro_token', 'semester_id'], 'required', 'on' => 'coor-create'],
 			
+			[['eft_name', 'eft_ic', 'eft_account','eft_bank','eft_account','eft_email'], 'required', 'on' => 'eft'],
+			
 			[['pro_name', 'pro_token', 'application_id', 'location',  'purpose', 'background', 'pro_target', 'updated_at'], 'required', 'on' => 'update-main'],
 			
 			[['updated_at'], 'required', 'on' => 'update'],
@@ -67,6 +69,8 @@ class Project extends \yii\db\ActiveRecord
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
             [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
+			
+			[['eft_email'], 'email'],
 			
             [['purpose', 'background', 'approval_note'], 'string'],
 			
@@ -102,7 +106,12 @@ class Project extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
 			'statusLabel' => 'Status', 
 			'pro_fund' => 'Sumber',
-			'pro_expense' => 'Belanja'
+			'pro_expense' => 'Belanja',
+			'eft_name' => 'Nama Penuh',
+			'eft_ic' => 'No. Kad Pengenalan',
+			'eft_account' => 'No. Akaun',
+			'eft_bank' => 'Nama Bank',
+			'eft_email' => 'Alamat Email',
         ];
     }
 	

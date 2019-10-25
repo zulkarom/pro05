@@ -18,6 +18,7 @@ $menu = [
 	'belanja' => ['PERBELANJAAN',['update/expense', 'token' => $token]],
 	'tentatif' => ['TENTATIF', ['update/tentative', 'token' => $token]],
 	'student' => ['JAWATANKUASA',['update/committee', 'token' => $token]],
+	'eft' => ['BORANG EFT',['update/eft', 'token' => $token]],
 	'hantar' => ['DOKUMEN DAN HANTAR',['update/preview', 'token' => $token]],
 
 	];

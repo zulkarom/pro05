@@ -958,6 +958,25 @@ class UpdateController extends Controller
         ]);
 	}
 	
+	public function actionEft($token){
+		$model = $this->findModel($token);
+		if(!$model){
+			return $this->redirect(['/project/default/index', 'token' => $token]);
+		}
+		if($model->status > 0){
+			return $this->redirect(['/project/update/preview', 'token' => $token]);
+		}
+		
+		$model->scenario = 'eft';
+		if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->session->addFlash('success', "Data Updated");
+		}
+		
+        return $this->render('eft', [
+			'model' => $model
+        ]);
+	}
+	
 	public function actionAssign($token){
 		$model = $this->findModel($token);
 		if(!$model){
