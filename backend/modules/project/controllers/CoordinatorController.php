@@ -88,6 +88,7 @@ class CoordinatorController extends Controller
 				$project->coor_id = $model->id;
 				$project->pro_token = Token::projectKey();
 				if($project->save()){
+					Yii::$app->session->addFlash('success', "Data Updated");
 					return $this->redirect(['index']);
 				}else{
 					$project->flashError();
@@ -115,6 +116,7 @@ class CoordinatorController extends Controller
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->session->addFlash('success', "Data Updated");
             return $this->redirect(['index']);
         }
 

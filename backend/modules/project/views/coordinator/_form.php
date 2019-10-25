@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 use common\models\Fasi;
 use common\models\ApplicationGroup;
 use backend\models\Course;
+use backend\models\Campus;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\project\models\Coordinator */
@@ -35,6 +36,11 @@ use backend\models\Course;
 
    <div class="row">
 <div class="col-md-8"><?= $form->field($model, 'course_id')->dropDownList(Course::listCourseArray()) ?></div>
+
+</div> 
+
+   <div class="row">
+<div class="col-md-8"><?= $form->field($model, 'campus_id')->dropDownList(ArrayHelper::map(Campus::find()->all(), 'id', 'campus_name')) ?></div>
 
 </div> 
 

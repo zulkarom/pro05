@@ -41,6 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
 				
 			],
 			[
+				'label' => 'Kampus',
+				'value' => function($model){
+					return $model->campus->campus_name;
+				}
+				
+			],
+			[
 				'label' => 'Kelas',
 				'value' => function($model){
 					return $model->group->group_name;

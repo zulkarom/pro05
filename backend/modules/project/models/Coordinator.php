@@ -6,6 +6,7 @@ use Yii;
 use common\models\ApplicationGroup;
 use backend\models\Course;
 use backend\models\Semester;
+use backend\models\Campus;
 use common\models\Fasi;
 
 /**
@@ -34,7 +35,7 @@ class Coordinator extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['semester_id', 'fasi_id', 'course_id', 'group_id', 'created_at'], 'required'],
+            [['semester_id', 'fasi_id', 'course_id', 'group_id', 'campus_id', 'created_at'], 'required'],
 			
             [['semester_id', 'fasi_id', 'course_id', 'group_id'], 'integer'],
             [['created_at'], 'safe'],
@@ -59,6 +60,11 @@ class Coordinator extends \yii\db\ActiveRecord
 	public function getFasi()
     {
         return $this->hasOne(Fasi::className(), ['id' => 'fasi_id']);
+    }
+	
+	public function getCampus()
+    {
+        return $this->hasOne(Campus::className(), ['id' => 'campus_id']);
     }
 	
 	public function getCourse()

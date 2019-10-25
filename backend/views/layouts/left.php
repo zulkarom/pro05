@@ -68,7 +68,7 @@
                         'url' => '#',
                         'items' => [
 
-							['label' => 'Senarai', 'icon' => 'list', 'url' => ['/project-admin']],
+							['label' => 'Senarai Kertas Kerja', 'icon' => 'list', 'url' => ['/project-admin']],
 						
                             ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
 
