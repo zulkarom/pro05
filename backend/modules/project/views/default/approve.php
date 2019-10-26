@@ -8,17 +8,18 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel backend\modules\project\models\ProjectSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'SENARAI KERTAS KERJA';
+$this->title = 'KELULUSAN KERTAS KERJA';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-index">
+<?php $form = ActiveForm::begin(); ?>
     <div class="box">
 <div class="box-body"><div class="table-responsive">
 
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'options' => [ 'style' => 'table-layout:fixed;' ],
-        'filterModel' => $searchModel,
+        //'filterModel' => $searchModel,
         'columns' => [
 			['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
@@ -27,7 +28,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'pro_name',
 				'format' => 'raw',
 				'value' => function($model){
-					return '<a href="'.Url::to(['../../project/' . $model->pro_token]).'" target="_blank">' . strtoupper($model->pro_name) . '</a><br/>(' . $model->projectDate . ')';
+					return  '<a href="'.Url::to(['/project-admin/default/pdf', 'id' => $model->id]).'" target="_blank">' . strtoupper($model->pro_name) . '</a><br/>(' . $model->projectDate . ')';
 				}
 				
 			],
@@ -49,46 +50,45 @@ $this->params['breadcrumbs'][] = $this->title;
 				}
 			],
 			
-			'pro_fund',
-			'pro_expense',
+			[
+				'attribute' => 'submitted_at',
+				'label' => 'Tarikh Hantar',
+				'format' => 'html',
+				'value' => function($model){
+					return 'Hantar: ' . date('d M Y', strtotime($model->submitted_at)) . '<br />Semak: '. date('d M Y', strtotime($model->checked_at)) ;
+				}
+				
+			],
+			
+			[
+				'attribute' => 'approved_at',
+				'format' => 'html',
+				'value' => function($model){
+					return $model->approvedDate;
+				}
+				
+			],
+	
             [
 				'attribute' => 'status_num',
 				'label' => 'Status',
 				'format' => 'html',
-				'filter' => Html::activeDropDownList($searchModel, 'status_num', $searchModel->statusList()[0],['class'=> 'form-control','prompt' => 'All']),
 				'value' => function($model){
 					return $model->statusLabel;
 				}
 				
 			],
 
-			
-			['class' => 'yii\grid\ActionColumn',
-                'contentOptions' => ['style' => 'width: 17%'],
-                'template' => '{pdf} {return}',
-                'buttons'=>[
-                    'pdf'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span> PDF',['/project-admin/default/pdf', 'id' => $model->id], ['class'=>'btn btn-danger btn-sm', 'target' => '_blank']);
-                    },
-					
-					'return'=>function ($url, $model) {
-						if($model->status >= 20){
-							return Html::a('<span class="fa fa-reply"></span> KEMBALI',['/project-admin/default/return', 'id' => $model->id],['class'=>'btn btn-warning btn-sm', 'data' => [
-                'confirm' => 'Adakah anda pasti untuk kembalikan kertas kerja kepada fasilitator untuk disemak?',
-                'method' => 'post',
-            ],
-]);
-						}
-                        
-                    },
-                ],
-            
-            ],
             
         ],
     ]); ?></div></div>
 </div>
 
+<div class="form-group">
+        
+<?= Html::submitButton('APPROVE SELECTED', ['class' => 'btn btn-primary']) ?>
+    </div>
 
+    <?php ActiveForm::end(); ?>
 
 

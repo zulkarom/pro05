@@ -889,6 +889,8 @@ class UpdateController extends Controller
 			if($model->status == 0){
 				$model->status = 10;
 			}
+			
+			$model->submitted_at = new Expression('NOW()');
 			$model->updated_at = new Expression('NOW()');
 			
 			if($model->save()){

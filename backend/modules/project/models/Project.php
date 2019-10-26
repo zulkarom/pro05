@@ -68,7 +68,7 @@ class Project extends \yii\db\ActiveRecord
 			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
-            [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
+            [['application_id', 'prepared_by', 'supported_by', 'approved_by', 'eft_ic'], 'integer'],
 			
 			[['eft_email'], 'email'],
 			
@@ -100,7 +100,9 @@ class Project extends \yii\db\ActiveRecord
             'supported_by' => 'Supported By',
             'approved_by' => 'Approved By',
             'approval_note' => 'Approval Note',
-            'approved_at' => 'Approved At',
+            'approved_at' => 'Tarikh Lulus',
+			'submitted_at' => 'Tarikh Hantar',
+			'checked_at' => 'Tarikh Semak',
             'created_at' => 'Created At',
             'supported_at' => 'Supported At',
             'updated_at' => 'Updated At',
@@ -116,8 +118,8 @@ class Project extends \yii\db\ActiveRecord
     }
 	
 	public function statusList(){
-		$arr_name =  [0 => 'DERAF', 10 => 'SEMAKAN', 20 => 'HANTAR'];
-		$arr_color =  [0 => 'default', 10 => 'warning', 20 => 'primary'];
+		$arr_name =  [0 => 'DERAF', 10 => 'SEMAKAN', 20 => 'HANTAR', 30 => 'LULUS'];
+		$arr_color =  [0 => 'default', 10 => 'warning', 20 => 'primary', 30 => 'success'];
 		return [$arr_name, $arr_color];
 	}
 	
@@ -406,6 +408,15 @@ class Project extends \yii\db\ActiveRecord
 			if($start && $end){
 				return $this->convertTime($start) . ' - ' . $this->convertTime($end);
 			}
+		}
+	}
+	
+	public function getApprovedDate(){
+		$date = $this->approved_at;
+		if($date == '0000-00-00'){
+			return '-';
+		}else{
+			return date('d M Y', strtotime($date));
 		}
 	}
 	

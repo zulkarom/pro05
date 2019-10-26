@@ -5,11 +5,13 @@ namespace backend\modules\project\controllers;
 use Yii;
 use backend\modules\project\models\Project;
 use backend\modules\project\models\ProjectSearch;
+use backend\modules\project\models\ProjectApproveSearch;
 use backend\modules\project\models\ProjectPrint;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\db\Expression;
 
 /**
  * DefaultController implements the CRUD actions for Project model.
@@ -50,8 +52,52 @@ class DefaultController extends Controller
 		}
         $dataProvider = $searchModel->search($params);
 		
+		if (Yii::$app->request->post()) {
+            $post = Yii::$app->request->post();
+
+            if(isset($post['selection'])){
+                $selection = $post['selection'];
+                foreach($selection as $select){
+                    $project = Project::findOne($select);
+					$project->approved_at = new Expression('NOW()');
+					$project->status = 30;
+					$project->save();
+
+
+				}
+			}
+		}
+		
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+	
+	public function actionApprove()
+    {
+        $searchModel = new ProjectApproveSearch();
+		$params = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($params);
+		
+		if (Yii::$app->request->post()) {
+            $post = Yii::$app->request->post();
+
+            if(isset($post['selection'])){
+                $selection = $post['selection'];
+                foreach($selection as $select){
+                    $project = Project::findOne($select);
+					$project->approved_at = new Expression('NOW()');
+					$project->status = 30;
+					$project->save();
+				}
+				Yii::$app->session->addFlash('success', "Data Updated");
+			}
+		}
+		
+
+        return $this->render('approve', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
