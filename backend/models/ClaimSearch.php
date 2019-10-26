@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Claim;
+use backend\models\Semester;
 
 /**
  * ClaimSearch represents the model behind the search form of `common\models\Claim`.
@@ -69,11 +70,13 @@ class ClaimSearch extends Claim
 		if(!$this->status){
 			$this->status = 'ClaimWorkflow/bb-submit';
 		}
-
+		
+		$semester = Semester::getCurrentSemester();
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'application_id' => $this->application_id,
+			'application.semester_id' => $semester->id,
             'month' => $this->month,
             'year' => $this->year,
             'draft_at' => $this->draft_at,
