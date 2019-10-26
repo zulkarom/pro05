@@ -11,6 +11,7 @@ use yii\data\ActiveDataProvider;
 use backend\models\Semester;
 use backend\models\OfferLetterForm;
 use backend\models\OfferLetter;
+use backend\models\OfferLetterSearch;
 use common\models\Application;
 use raoul2000\workflow\validation\WorkflowScenario;
 
@@ -44,16 +45,11 @@ class OfferLetterController extends Controller
      */
     public function actionIndex()
     {
-		$sem = Semester::getCurrentSemester()->id;
-		$query = Application::find();
-		$dataProvider = new ActiveDataProvider([
-            'query' => $query,
-			'sort'=> ['defaultOrder' => ['status'=>SORT_ASC]]
-        ]);
-		$query->andFilterWhere([
-            'semester_id' => $sem,
-            'status' => ['ApplicationWorkflow/d-approved', 'ApplicationWorkflow/e-release', 'ApplicationWorkflow/f-accept'],
-        ]);
+		
+		
+		$searchModel = new OfferLetterSearch();
+		$params = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($params);
 		
 		$model = new OfferLetterForm;
 		if ($model->load(Yii::$app->request->post())) {

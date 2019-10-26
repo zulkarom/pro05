@@ -46,32 +46,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 			 'attribute' => 'fasi_id',
 			 'label' => 'Nama Fasilitator',
-			 'value' => 'fasi.user.fullname'
+			 'format' => 'html',
+			 'value' => function($model){
+				 return strtoupper($model->fasi->user->fullname) . '<br />' . $model->acceptedCourse->course->course_code . ' - ' . $model->acceptedCourse->course->course_name . ' ('.$model->applicationGroup->group_name .')';;
+			 }
 			],
 			
-			[
-			//'attribute' => 'semester_id' ,
-			'label' => 'Komponen',
-			'value' => function($model){
-				return $model->acceptedCourse->course->component->name;
-			},
-			],
+		
 
-            [
-			//'attribute' => 'semester_id' ,
-			'label' => 'Kursus',
-			'value' => function($model){
-				return $model->acceptedCourse->course->course_code . ' - ' . $model->acceptedCourse->course->course_name;
-			},
-			],
-			
-            [
-			 'attribute' => 'campus_id',
-			// 'label' => 'Location',
-			//'with' => '10%',
-			 'value' => 'campus.campus_name'
-			],
-			
+            
 			
 			[
 				'attribute' => 'ref_letter'
