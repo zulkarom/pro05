@@ -45,7 +45,7 @@ use richardfan\widget\JSRegister;
 
 <div class="row">
 <div class="col-md-4"><?php 
-$list = ['BIMB'=>'BIMB', 'MAYBANK'=>'MAYBANK', 'CIMB'=>'CIMB', 'BSNB'=>'BSNB', 999 => 'LAIN-LAIN (SILA NYATAKAN)'];
+$list = ['BIMB'=>'BIMB', 'MAYBANK'=>'MAYBANK', 'CIMB'=>'CIMB', 'BSNB'=>'BSNB', 'AMBANK'=>'AMBANK', 'RHB'=>'RHB', 'BANK MUAMALAT'=>'BANK MUAMALAT', 'BANK RAKYAT'=>'BANK RAKYAT', 'PUBLIC BANK'=>'PUBLIC BANK'  , 999 => 'LAIN-LAIN (SILA NYATAKAN)'];
 
 $drop = false;
 if($model->eft_bank){

@@ -32,7 +32,9 @@ class ProjectPrint
 		$this->writeTentative();
 		$this->writeFinance();
 		
-		$this->writeCommittee();
+		$this->writeCommittee(); 
+		
+		$this->writeEft();
 	
 
 		$this->pdf->Output('kertas-kerja.pdf', 'I');
@@ -662,6 +664,182 @@ EOD;
 		$html
 EOD;
 		$this->pdf->SetFont('helvetica', '', 11);
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	public function writeEft(){
+		$this->pdf->SetMargins(13, 10, 13);
+		$this->pdf->AddPage("P");
+		$this->pdf->SetFont("arialnarrow", '', 11);
+		$this->pdf->hasPageNumber = false;
+		
+		$html = '<table border="1" cellpadding="2">
+		<tr><td><b style="font-size:12pt">&nbsp; UMK(B03.06)(16-15)</b></td><td></td><td> &nbsp;Tarikh Kuatkuasa :  8 MAC 2015</td></tr>
+		
+		<tr><td colspan="3" align="center">
+		
+		
+		<table cellpadding="5">
+		<tr>
+		<td width="10%"><img src="images/logo5.jpg" /></td>
+		<td width="90%" align="center"><b><br />BORANG MAKLUMAT AKAUN BANK BAGI TUJUAN BAYARAN SECARA EFT<br /><br />
+		Honorarium/Tuntutan Perjalanan/Tuntutan Pelbagai Bagi Tetamu Jemputan Dan Pensyarah Sambilan<br /><br />
+		PTJ: <u>PUSAT KOKURIKULUM</u><br /></b></td>
+		</tr>
+		</table>
+		
+		
+		
+		</td></tr>
+		
+		</table>
+<br /><br />
+		';
+		
+		$tbl = <<<EOD
+		$html
+EOD;
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+		
+		$this->pdf->SetMargins(20, 10, 13);
+		
+		$html = '&nbsp;&nbsp;<table border="1" cellpadding="8">
+		
+		<tr>
+		<td width="27%"><b>*NAMA PENUH:</b>
+		<br />
+		</td>
+		<td width="73%">&nbsp; ';
+		$html .= '<b>' . strtoupper($this->model->eft_name) . '</b>';
+		$html .= '</td>
+		</tr>
+		
+		<tr>
+		<td><b>*NO. KAD PENGENALAN:</b>
+		<br />
+		</td>
+		<td>
+		
+		
+		
+		
+		
+		&nbsp;
+		
+		<table border="1" cellpadding="6">
+		<tr>';
+		$ic = $this->model->eft_ic;
+		$aic = str_split($ic, 1);
+		$lg = count($aic) - 1;
+		for($i=0;$i<=$lg;$i++){
+			if($i== 6 or $i == 8){
+				$html .= '<td width="31px" height="35" align="center"><b style="font-size:12pt">-</b></td>';
+			}
+			$html .= '<td width="31px" height="35" align="center"><b style="font-size:12pt">'.$aic[$i].'</b></td>';
+		}
+		
+		$html .= '</tr>
+		</table>
+		
+		</td>
+		</tr>
+		
+		<tr>
+		<td><b>*NO. AKAUN:</b>
+		<br />
+		</td>
+		<td>
+		
+		&nbsp;
+		
+		<table border="1" cellpadding="6">
+		<tr>';
+		$acc = $this->model->eft_account;
+		
+		$aacc = str_split($acc, 1);
+		$lg = count($aacc) - 1;
+		$x_str = '';
+		for($i=0;$i<=$lg;$i++){
+			
+			if($i <= 13){
+				$html .= '<td width="31px" height="35" align="center"><b style="font-size:12pt">'.$aacc[$i].'</b></td>';
+			}else{
+				$x_str .= $aacc[$i];
+			}
+		}
+		
+		$html .= '</tr>
+		</table>';
+		
+		if($x_str){
+		$html .= '<table border="1" cellpadding="6">
+		<tr>';
+		$acc = $x_str;
+		$aacc = str_split($acc, 1);
+		$lg = count($aacc) - 1;
+		for($i=0;$i<=$lg;$i++){
+			if($i <= 13){
+				$html .= '<td width="31px" height="35" align="center"><b style="font-size:12pt">'.$aacc[$i].'</b></td>';
+			}
+		}
+		
+		$html .= '</tr>
+		</table>';
+		}
+		
+		
+		$html .= '</td>
+		</tr>
+		
+		<tr>
+		<td><b>*NAMA BANK:</b>
+		<br />
+		</td>
+		<td>&nbsp; ';
+		
+		$html .= '<b>' . strtoupper($this->model->eft_bank) . '</b>';
+		$html .= '</td>
+		</tr>
+		
+		<tr>
+		<td><b>ALAMAT  EMAIL:</b><br />
+	(bagi tujuan makluman<br />
+	pembayaran)
+		
+		</td>
+		<td>&nbsp; ';
+		
+		$html .= '<span style="font-size:12pt">' . $this->model->eft_email . '</span>';
+		$html .= '</td>
+		</tr>
+		
+		<tr>
+		<td><b>TANDATANGAN:</b><br />
+		<br />
+		</td>
+		<td></td>
+		</tr>
+
+		
+		
+		</table>
+		
+<br />
+
+<table>
+<tr>
+<td>*Wajib diisi. Sila pastikan maklumat lengkap dimasukkan.<br /><br />
+* PTJ berkaitan diminta membuat satu simpanan borang untuk tujuan rekod Jabatan.</td>
+</tr>
+</table>
+
+		
+		
+		';
+		
+		$tbl = <<<EOD
+		$html
+EOD;
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	

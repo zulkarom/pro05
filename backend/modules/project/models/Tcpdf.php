@@ -20,6 +20,8 @@ class Tcpdf extends \TCPDF {
 	
 	public $font_header_size = 10;
 	
+	public $hasPageNumber = true;
+	
 
     //Page header
     public function Header() {
@@ -58,7 +60,10 @@ class Tcpdf extends \TCPDF {
 			 // Set font
         $this->SetFont('helvetica', '', 10);
 		$num = $page - 1;
-        $this->Cell(0, 10, $num, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		if($this->hasPageNumber){
+			$this->Cell(0, 10, $num, 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		}
+        
 		}
 			
 			
