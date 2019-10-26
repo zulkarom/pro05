@@ -114,14 +114,18 @@ class DefaultController extends Controller
             $post = Yii::$app->request->post();
 
             if(isset($post['selection'])){
-                $selection = $post['selection'];
-                foreach($selection as $select){
-                    $project = Project::findOne($select);
-					$project->approved_at = new Expression('NOW()');
-					$project->status = 30;
-					$project->save();
+				$selection = $post['selection'];
+				$form = $post['ApproveLetterForm'];
+				$start = $form['start_number'] + 0;
+				foreach($selection as $select){
+					$pro = Project::findOne($select);
+					$ref = $form['ref_letter'];
+					$pro->letter_ref = $ref . '('.$start.')';
+					$pro->save();
+					
+				$start++;
+					
 				}
-				Yii::$app->session->addFlash('success', "Data Updated");
 			}
 		}
 		
