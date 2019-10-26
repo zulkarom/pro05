@@ -114,6 +114,7 @@ class Project extends \yii\db\ActiveRecord
 			'eft_account' => 'No. Akaun',
 			'eft_bank' => 'Nama Bank',
 			'eft_email' => 'Alamat Email',
+			'letter_ref' => 'Rujukan'
         ];
     }
 	
@@ -276,6 +277,9 @@ class Project extends \yii\db\ActiveRecord
         return $this->hasMany(Resource::className(), ['pro_id' => 'id'])->orderBy('rs_order ASC');
     }
 	
+	public function getResourceCenterAmount(){
+		return $this->hasOne(Resource::className(), ['pro_id' => 'id'])->where(['rs_core' => 1]);
+	}
 	
 	
 	public function getCommitteePositions()

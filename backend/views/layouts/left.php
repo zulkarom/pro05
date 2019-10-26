@@ -81,8 +81,8 @@
 
 							['label' => 'Senarai Kertas Kerja', 'icon' => 'list-alt', 'url' => ['/project-admin']],
 							['label' => 'Lulus Kertas Kerja', 'icon' => 'check', 'url' => ['/project-admin/default/approve']],
-							['label' => 'Surat Kelulusan', 'icon' => 'file', 'url' => ['/project-admin/letter']],
-							['label' => 'Jumlah Peruntukan', 'icon' => 'money', 'url' => ['/project-admin/allocation']],
+							['label' => 'Surat Kelulusan', 'icon' => 'file', 'url' => ['/project-admin/default/letter']],
+							['label' => 'Senarai Peruntukan', 'icon' => 'money', 'url' => ['/project-admin/default/allocation']],
                             ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
 
                         ],

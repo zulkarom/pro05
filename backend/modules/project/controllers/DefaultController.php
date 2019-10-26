@@ -4,6 +4,7 @@ namespace backend\modules\project\controllers;
 
 use Yii;
 use backend\modules\project\models\Project;
+use backend\modules\project\models\ApproveLetterForm;
 use backend\modules\project\models\ProjectSearch;
 use backend\modules\project\models\ProjectApproveSearch;
 use backend\modules\project\models\ProjectPrint;
@@ -100,6 +101,35 @@ class DefaultController extends Controller
         return $this->render('approve', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+        ]);
+    }
+	
+	public function actionLetter()
+    {
+        $searchModel = new ProjectApproveSearch();
+		$params = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($params);
+		$model = new ApproveLetterForm;
+		if (Yii::$app->request->post()) {
+            $post = Yii::$app->request->post();
+
+            if(isset($post['selection'])){
+                $selection = $post['selection'];
+                foreach($selection as $select){
+                    $project = Project::findOne($select);
+					$project->approved_at = new Expression('NOW()');
+					$project->status = 30;
+					$project->save();
+				}
+				Yii::$app->session->addFlash('success', "Data Updated");
+			}
+		}
+		
+
+        return $this->render('letter', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+			'model' => $model
         ]);
     }
 	
