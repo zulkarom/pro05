@@ -102,11 +102,14 @@ class OfferLetterController extends Controller
 		$query = Application::find();
 		$dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['status'=>SORT_ASC]]
+			'sort'=> ['defaultOrder' => ['status'=>SORT_ASC]],
+			'pagination' => [
+				'pageSize' => 150,
+			],
         ]);
 		$query->andFilterWhere([
             'semester_id' => $sem,
-            'status' => ['ApplicationWorkflow/d-approved', 'ApplicationWorkflow/e-release', 'ApplicationWorkflow/f-accept'],
+            'status' => ['ApplicationWorkflow/d-approved'],
         ]);
 		
 		$model = new OfferLetterForm;

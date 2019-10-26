@@ -187,8 +187,22 @@ class Application extends \yii\db\ActiveRecord
 		}
 		return $array;
 	}
-
 	
+	public function listAppliedCoursesString(){
+		$string = '';
+		$i = 1;
+		foreach($this->applicationCourses as $c){
+			$br = $i == 1 ? '' : '<br />';
+			if($c->course){
+				$string .= $br.$c->course->course_code . ' ' . $c->course->course_name;
+			}
+			
+		$i++;
+		}
+		return $string;
+		
+	}
+
 	public function getDayName(){
 		$days = [1 => "Ahad", 2 => "Isnin", 3 => "Selasa", 4 => "Rabu", 5 =>"Khamis", 6 => "Jumaat", 7 => "Sabtu", 0 => ''];
 		return $days[$this->day];

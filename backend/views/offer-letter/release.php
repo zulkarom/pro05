@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel backend\models\ApplicationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'SURAT TAWARAN';
+$this->title = 'RELEASE LETTER';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
   
@@ -46,31 +46,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 			 'attribute' => 'fasi_id',
 			 'label' => 'Nama Fasilitator',
-			 'value' => 'fasi.user.fullname'
+			 'format' => 'html',
+			 'value' => function($model){
+				 return strtoupper($model->fasi->user->fullname) . '<br />' . $model->acceptedCourse->course->course_code . ' - ('.$model->applicationGroup->group_name .')';
+			 }
 			],
 			
-			[
-			//'attribute' => 'semester_id' ,
-			'label' => 'Komponen',
-			'value' => function($model){
-				return $model->acceptedCourse->course->component->name;
-			},
-			],
-
-            [
-			//'attribute' => 'semester_id' ,
-			'label' => 'Kursus',
-			'value' => function($model){
-				return $model->acceptedCourse->course->course_code . ' - ' . $model->acceptedCourse->course->course_name;
-			},
-			],
-			
-            [
-			 'attribute' => 'campus_id',
-			// 'label' => 'Location',
-			//'with' => '10%',
-			 'value' => 'campus.campus_name'
-			],
+	
 			
 			
 			[
@@ -80,16 +62,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn',
 				 'contentOptions' => ['style' => 'width: 8.7%'],
-				'template' => '{view} {surat}',
+				'template' => '{surat}',
 				//'visible' => false,
 				'buttons'=>[
-					'view'=>function ($url, $model) {
-
-						return '<a href="'.Url::to(['/application/view/', 'id' => $model->id]).'"><span class="glyphicon glyphicon-search"></span></a>';
-					},
+	
 					'surat'=>function ($url, $model) {
 
-						return '<a href="'.Url::to(['/offer-letter/pdf/', 'id' => $model->id]).'" target="_blank"><span class="glyphicon glyphicon-file"></span></a>';
+						return '<a href="'.Url::to(['/offer-letter/pdf/', 'id' => $model->id]).'" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span></a>';
 					},
 				],
 			
@@ -105,14 +84,11 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 </div>
 
-
-<div class="col-md-6"><div class="form-group">
+<div class="form-group">
 
 <?=$form->field($model, 'released_at')->hiddenInput(['value' => time()])->label(false)?>
 <?= Html::submitButton('RELEASE ALL SELECTED', ['class' => 'btn btn-primary', 'name'=> 'actiontype', 'value' => 'release']) ?>
 
-
-</div>
 
 </div>
 

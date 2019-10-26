@@ -25,15 +25,18 @@ $curr_sem = Semester::getCurrentSemester();
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
+		'options' => [ 'style' => 'table-layout:fixed;' ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			
 			[
 			 'attribute' => 'fasi_name',
 			 'label' => 'Nama Fasilitator',
+			 'contentOptions' => [ 'style' => 'width: 35%;' ],
+			 'format' => 'html',
 			 'filter' => Html::activeInput('text', $searchModel, 'fasi_name', ['class' => 'form-control', 'placeholder' => 'Cari Fasilitator...']),
 			 'value' => function($model){
-				return strtoupper($model->fasi->user->fullname);
+				return strtoupper($model->fasi->user->fullname) . '<br />' . $model->listAppliedCoursesString();
 			 }
 			],
 			[
@@ -70,13 +73,19 @@ $curr_sem = Semester::getCurrentSemester();
 			],
 
             ['class' => 'yii\grid\ActionColumn',
-				 'contentOptions' => ['style' => 'width: 8.7%'],
-				'template' => '{view}',
+				 'contentOptions' => ['style' => 'width: 15%'],
+				'template' => '{view} {letter}',
 				//'visible' => false,
 				'buttons'=>[
 					'view'=>function ($url, $model) {
 
 						return '<a href="'.Url::to(['/application/view/', 'id' => $model->id]).'" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-search"></span> VIEW</a>';
+					},
+					'letter'=>function ($url, $model) {
+						if($model->status == 'ApplicationWorkflow/e-release' or $model->status == 'ApplicationWorkflow/f-accept'){
+							return '<a href="'.Url::to(['/offer-letter/pdf/', 'id' => $model->id]).'" class="btn btn-danger btn-sm" target="_blank"><span class="glyphicon glyphicon-download-alt"></span> PDF</a>';
+						}
+						
 					}
 				],
 			

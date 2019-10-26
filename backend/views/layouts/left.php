@@ -34,18 +34,17 @@
 					['label' => 'Main Menu', 'options' => ['class' => 'header']],
                     ['label' => 'Dashboard', 'icon' => 'dashboard', 'url' => ['/site']],
 					
-					['label' => 'Senarai Permohonan', 'icon' => 'mouse-pointer', 'url' => ['/application/index']],
-					
-					['label' => 'Analisis Permohonan', 'icon' => 'pie-chart', 'url' => ['/application/analysis']],
-
-					
 					[
-                        'label' => 'Surat Tawaran',
-                        'icon' => 'file',
+                        'label' => 'Permohonan Fasilitator',
+                        'icon' => 'user',
                         'url' => '#',
                         'items' => [
+							
+							['label' => 'Senarai Permohonan', 'icon' => 'list-alt', 'url' => ['/application/index']],
+							
+							['label' => 'Analisis Permohonan', 'icon' => 'pie-chart', 'url' => ['/application/analysis']],
 
-							['label' => 'Generate Reference', 'icon' => 'file', 'url' => ['/offer-letter/index'],],
+							['label' => 'Rujukan Surat Tawaran', 'icon' => 'file', 'url' => ['/offer-letter/index'],],
 						
                             ['label' => 'Release Letter', 'icon' => 'truck', 'url' => ['/offer-letter/release'],],
 							
@@ -57,9 +56,21 @@
                         ],
                     ],
 					
-					['label' => 'Senarai Tuntutan', 'icon' => 'usd', 'url' => ['/claim/index']],
+					[
+                        'label' => 'Tuntutan Fasilitator',
+                        'icon' => 'money',
+                        'url' => '#',
+                        'items' => [
+
+							['label' => 'Senarai Tuntutan', 'icon' => 'list-alt', 'url' => ['/claim/index']],
 					
 					['label' => 'Analisis Tuntutan', 'icon' => 'pie-chart', 'url' => ['/claim/analysis']],
+
+                        ],
+                    ],
+		
+					
+					
 					
 					
 					[
@@ -68,8 +79,10 @@
                         'url' => '#',
                         'items' => [
 
-							['label' => 'Senarai Kertas Kerja', 'icon' => 'list', 'url' => ['/project-admin']],
-						
+							['label' => 'Senarai Kertas Kerja', 'icon' => 'list-alt', 'url' => ['/project-admin']],
+							['label' => 'Lulus Kertas Kerja', 'icon' => 'check', 'url' => ['/project-admin/default/approve']],
+							['label' => 'Surat Kelulusan', 'icon' => 'file', 'url' => ['/project-admin/letter']],
+							['label' => 'Jumlah Peruntukan', 'icon' => 'money', 'url' => ['/project-admin/allocation']],
                             ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
 
                         ],

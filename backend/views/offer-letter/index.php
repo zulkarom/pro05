@@ -10,7 +10,7 @@ use yii\widgets\ActiveForm;
 /* @var $searchModel backend\models\ApplicationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'SURAT TAWARAN';
+$this->title = 'RUJUKAN SURAT TAWARAN';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
   
@@ -48,7 +48,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			 'label' => 'Nama Fasilitator',
 			 'format' => 'html',
 			 'value' => function($model){
-				 return strtoupper($model->fasi->user->fullname) . '<br />' . $model->acceptedCourse->course->course_code . ' - ' . $model->acceptedCourse->course->course_name . ' ('.$model->applicationGroup->group_name .')';;
+				 return strtoupper($model->fasi->user->fullname) . '<br />' . $model->acceptedCourse->course->course_code . ' - ' . $model->acceptedCourse->course->course_name . ' ('.$model->applicationGroup->group_name .')';
 			 }
 			],
 			
@@ -63,16 +63,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn',
 				 'contentOptions' => ['style' => 'width: 8.7%'],
-				'template' => '{view} {surat}',
+				'template' => '{surat}',
 				//'visible' => false,
 				'buttons'=>[
-					'view'=>function ($url, $model) {
-
-						return '<a href="'.Url::to(['/application/view/', 'id' => $model->id]).'"><span class="glyphicon glyphicon-search"></span></a>';
-					},
+	
 					'surat'=>function ($url, $model) {
 
-						return '<a href="'.Url::to(['/offer-letter/pdf/', 'id' => $model->id]).'" target="_blank"><span class="glyphicon glyphicon-file"></span></a>';
+						return '<a href="'.Url::to(['/offer-letter/pdf/', 'id' => $model->id]).'" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span></a>';
 					},
 				],
 			
