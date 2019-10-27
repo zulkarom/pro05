@@ -4,6 +4,7 @@ namespace backend\modules\project\models;
 
 use Yii;
 use common\models\Common;
+use common\models\ConvertNumberMalay;
 use frontend\models\LoginAsset;
 
 
@@ -27,8 +28,10 @@ class ApproveLetterPrint
 		$this->writeRef();
 		$this->writeTitle();
 		//$this->writeSignitureImg();
+		
+		
 
-		$this->pdf->Output('surat-kelulusan.pdf', 'I');
+		$this->pdf->Output('Surat_Kelulusan_'.$this->model->course->course_code  .'_'.$this->model->course->course_name .'_'.$this->model->group->group_name . '.pdf', 'I');
 	}
 	
 	public function writeHeaderFooter(){
@@ -84,38 +87,49 @@ EOD;
 	}
 	
 	public function writeTitle(){
-		
-		
-		$html = '
-		Tuan,<br /><br />
+		$amt = $this->model->resourceCenterAmount->rs_amount;
+		$ic_string = '';
+		$ic = $this->model->eft_ic;
+		$aic = str_split($ic, 1);
+		$lg = count($aic) - 1;
+		for($i=0;$i<=$lg;$i++){
+			if($i== 6 or $i == 8){
+				$ic_string .='-';
+			}
+			$ic_string .= $aic[$i];
+		}
+		$jan = $this->model->fasi->gender;
+		$saudara = $jan == 1 ? 'saudara' : 'saudari' ;
+		$html = ucfirst($saudara) . ',<br /><br />
 		
 		<b>KELULUSAN BAGI MENGADAKAN '.strtoupper($this->model->pro_name .' BAGI KURSUS KOKURIKULUM BERKREDIT '.$this->model->course->course_code  .' '.$this->model->course->course_name .' ('.$this->model->group->group_name . ') SEMESTER '. $this->model->semester->niceFormat()) .'</b>
 		<br /><br />
 		
 		Dengan hormatnya, saya diarah merujuk kepada perkara di atas.
+		<br />
+		<div style="text-align:justify">
+		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Pusat Kokurikulum, Pejabat Timbalan Naib Cancelor (Hal Ehwal Pelajar & Alumni) bersetuju meluluskan program sepertimana yang dinyatakan diatas yang akan diadakan pada <b>'. $this->model->projectDate .'</b> bertempat di <b>'.$this->model->location.'</b> dengan kadar peruntukan <b>RM'. number_format($amt, 2) .' (Ringgit Malaysia: '. ucwords(ConvertNumberMalay::convertNumber($amt)).' Sahaja)</b>. Bayaran peruntukan akan disalurkan kepada wakil yang dilantik oleh pihak '.$saudara.' iaitu <b>'.$this->model->eft_name .' (No. K/P: '.$ic_string.')</b>
 		<br /><br />
-		
-		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Pusat Kokurikulum, Pejabat Timbalan Naib Cancelor (Hal Ehwal Pelajar & Alumni) bersetuju meluluskan program sepertimana yang dinyatakan diatas yang akan diadakan pada {} bertempat di dengan kadar peruntukan {}. Bayaran peruntukan akan disalurkan kepada wakil yang dilantik oleh pihak saudara iaitu Saudata Abdul Aziz bin Omar (No. K/P: )
-		<br /><br />
-		3. &nbsp;&nbsp;&nbsp;Sepanjang tempoh program berlangsung, mohon pihak saudara dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.
-		
-		<br /><br />
-		4. &nbsp;&nbsp;&nbsp;Sehubungan dengan itu, pihak saudara adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sam ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak saudara.
+		3. &nbsp;&nbsp;&nbsp;Sepanjang tempoh program berlangsung, mohon pihak '.$saudara.' dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.
 		
 		<br /><br />
-		5. &nbsp;&nbsp;&nbsp;Sekiranya terdapat sebarang pertanyaan, pihak saudara boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.
+		4. &nbsp;&nbsp;&nbsp;Sehubungan dengan itu, pihak '.$saudara.' adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sam ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak '.$saudara.'.
+		
+		<br /><br />
+		5. &nbsp;&nbsp;&nbsp;Sekiranya terdapat sebarang pertanyaan, pihak '.$saudara.' boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.
+		</div>
 
 		<br /><br />
-		Segala kerjasama dan komitmen daripada pihak saudara amatlah dihargai
+		Segala kerjasama dan komitmen daripada pihak '.$saudara.' amatlah dihargai.
 <br /><br />
-Sekian terima kasih
+Sekian terima kasih.
 <br /><br />
 <b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
 "BERKHIDMAT UNTUK NEGARA"</b>
 <br /><br />
 Saya yang menjalankan amanah,<br />
 <br /><br /><br />
-DR. MOHD NAZRI BIN MUHAYIDDIN<br />
+<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
 Pengarah<br />
 Pusat Kokurikulum<br />
 

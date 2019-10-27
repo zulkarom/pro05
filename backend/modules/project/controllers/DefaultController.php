@@ -47,30 +47,14 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+		
         $searchModel = new ProjectSearch();
 		$params = Yii::$app->request->queryParams;
 		if(!isset($params['ProjectSearch'])){
-			$params['ProjectSearch']['status_num'] = 20;	
+			$searchModel->default_status = 1;	
 		}
         $dataProvider = $searchModel->search($params);
 		
-		if (Yii::$app->request->post()) {
-            $post = Yii::$app->request->post();
-
-            if(isset($post['selection'])){
-                $selection = $post['selection'];
-                foreach($selection as $select){
-                    $project = Project::findOne($select);
-					$project->approved_at = new Expression('NOW()');
-					$project->status = 30;
-					$project->save();
-
-
-				}
-			}
-		}
-		
-
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -107,9 +91,14 @@ class DefaultController extends Controller
 	
 	public function actionLetterPrint($id){
 		$model = $this->findModel($id);
-		$pdf = new ApproveLetterPrint;
+		if($model->status == 30){
+			$pdf = new ApproveLetterPrint;
 		$pdf->model = $model;
 		$pdf->generatePdf();
+		}else{
+			echo 'not yet approved';
+		}
+		
 	}
 	
 	public function actionLetter()
@@ -139,6 +128,39 @@ class DefaultController extends Controller
 		
 
         return $this->render('letter', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+			'model' => $model
+        ]);
+    }
+	
+	public function actionAllocation()
+    {
+        $searchModel = new ProjectApproveSearch();
+		$params = Yii::$app->request->queryParams;
+        $dataProvider = $searchModel->search($params);
+		$model = new ApproveLetterForm;
+		if (Yii::$app->request->post()) {
+            $post = Yii::$app->request->post();
+
+            if(isset($post['selection'])){
+				$selection = $post['selection'];
+				$form = $post['ApproveLetterForm'];
+				$start = $form['start_number'] + 0;
+				foreach($selection as $select){
+					$pro = Project::findOne($select);
+					$ref = $form['ref_letter'];
+					$pro->letter_ref = $ref . '('.$start.')';
+					$pro->save();
+					
+				$start++;
+					
+				}
+			}
+		}
+		
+
+        return $this->render('allocation', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
 			'model' => $model

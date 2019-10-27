@@ -37,7 +37,7 @@ class ProjectPrint
 		$this->writeEft();
 	
 
-		$this->pdf->Output('kertas-kerja.pdf', 'I');
+		$this->pdf->Output('kertas-kerja-'.$this->model->course->course_code .'.pdf', 'I');
 	}
 	
 	public function writeHeadContent(){

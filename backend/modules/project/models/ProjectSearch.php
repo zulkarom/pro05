@@ -15,6 +15,7 @@ class ProjectSearch extends Project
 {
 	public $fasi;
 	public $status_num;
+	public $default_status = 0;
     /**
      * @inheritdoc
      */
@@ -75,12 +76,18 @@ class ProjectSearch extends Project
             return $dataProvider;
         }
 		
-	
+		if($this->default_status == 1){
+			$query->andFilterWhere([
+				'project.status' => [20,30],
+			]);
+		}else{
+			$query->andFilterWhere([
+				'project.status' => $this->status_num
+			]);
+		}
 
         // grid filtering conditions
-        $query->andFilterWhere([
-            'project.status' => $this->status_num,
-        ]);
+        
 
         $query->andFilterWhere(['like', 'pro_name', $this->pro_name])
             ->andFilterWhere(['like', 'pro_token', $this->pro_token])

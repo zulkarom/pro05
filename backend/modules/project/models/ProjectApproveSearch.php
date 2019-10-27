@@ -71,7 +71,7 @@ class ProjectApproveSearch extends Project
         }
 		
 		$query->andFilterWhere([
-            'project.status' => [20,30],
+            'project.status' => 30,
         ]);
 
 
