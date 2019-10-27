@@ -88,16 +88,7 @@ EOD;
 	
 	public function writeTitle(){
 		$amt = $this->model->resourceCenterAmount->rs_amount;
-		$ic_string = '';
-		$ic = $this->model->eft_ic;
-		$aic = str_split($ic, 1);
-		$lg = count($aic) - 1;
-		for($i=0;$i<=$lg;$i++){
-			if($i== 6 or $i == 8){
-				$ic_string .='-';
-			}
-			$ic_string .= $aic[$i];
-		}
+		
 		$jan = $this->model->fasi->gender;
 		$saudara = $jan == 1 ? 'saudara' : 'saudari' ;
 		$html = ucfirst($saudara) . ',<br /><br />
@@ -108,7 +99,7 @@ EOD;
 		Dengan hormatnya, saya diarah merujuk kepada perkara di atas.
 		<br />
 		<div style="text-align:justify">
-		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Pusat Kokurikulum, Pejabat Timbalan Naib Cancelor (Hal Ehwal Pelajar & Alumni) bersetuju meluluskan program sepertimana yang dinyatakan diatas yang akan diadakan pada <b>'. $this->model->projectDate .'</b> bertempat di <b>'.$this->model->location.'</b> dengan kadar peruntukan <b>RM'. number_format($amt, 2) .' (Ringgit Malaysia: '. ucwords(ConvertNumberMalay::convertNumber($amt)).' Sahaja)</b>. Bayaran peruntukan akan disalurkan kepada wakil yang dilantik oleh pihak '.$saudara.' iaitu <b>'.$this->model->eft_name .' (No. K/P: '.$ic_string.')</b>
+		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Pusat Kokurikulum, Pejabat Timbalan Naib Cancelor (Hal Ehwal Pelajar & Alumni) bersetuju meluluskan program sepertimana yang dinyatakan diatas yang akan diadakan pada <b>'. $this->model->projectDate .'</b> bertempat di <b>'.$this->model->location.'</b> dengan kadar peruntukan <b>RM'. number_format($amt, 2) .' (Ringgit Malaysia: '. ucwords(ConvertNumberMalay::convertNumber($amt)).' Sahaja)</b>. Bayaran peruntukan akan disalurkan kepada wakil yang dilantik oleh pihak '.$saudara.' iaitu <b>'.$this->model->eft_name .' (No. K/P: '.$this->model->eftIcString .')</b>
 		<br /><br />
 		3. &nbsp;&nbsp;&nbsp;Sepanjang tempoh program berlangsung, mohon pihak '.$saudara.' dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.
 		

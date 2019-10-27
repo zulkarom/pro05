@@ -190,6 +190,20 @@ class Project extends \yii\db\ActiveRecord
 		return false;
 	}
 	
+	public function getEftIcString(){
+		$ic_string = '';
+		$ic = $this->eft_ic;
+		$aic = str_split($ic, 1);
+		$lg = count($aic) - 1;
+		for($i=0;$i<=$lg;$i++){
+			if($i== 6 or $i == 8){
+				$ic_string .='-';
+			}
+			$ic_string .= $aic[$i];
+		}
+		return $ic_string;
+	}
+	
 	public function getFasiCoorPost(){
 		$app = $this->application;
 		$coor = $this->coordinator;
@@ -212,6 +226,17 @@ class Project extends \yii\db\ActiveRecord
 			return $app->acceptedCourse->course;
 		}else if($coor){
 			return $coor->course;
+		}
+		return false;
+	}
+	
+	public function getCampus(){
+		$app = $this->application;
+		$coor = $this->coordinator;
+		if($app){
+			return $app->campus;
+		}else if($coor){
+			return $coor->campus;
 		}
 		return false;
 	}

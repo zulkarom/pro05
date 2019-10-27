@@ -23,53 +23,82 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 			['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
-            
             [
-				'attribute' => 'pro_name',
-				'format' => 'raw',
-				'value' => function($model){
-					return  '<a href="'.Url::to(['/project-admin/default/pdf', 'id' => $model->id]).'" target="_blank">' . strtoupper($model->pro_name) . '</a><br/>(' . $model->projectDate . ')';
-				}
-				
-			],
-			[
-				'attribute' => 'fasi',
-				'format' => 'html',
-				'label' => 'Fasililator',
+				'label' => 'Nama',
 				'value' => function($model){
 					if($model->fasi){
-						$coor = '';
-						if($model->coordinator){
-							$coor = '<br /><i>(Penyelaras)</i>';
-						}
-						return strtoupper($model->fasi->user->fullname) . '<br />' . 
-					$model->course->course_name . ' ('. $model->group->group_name.')' . $coor;
+						return strtoupper($model->eft_name);
 					}
 					
 					;
 				}
 			],
 			[
-				'label' => 'Peruntukan',
+				'label' => 'No. Kad Pengenalan',
+				'value' => function($model){
+					if($model->fasi){
+						return strtoupper($model->eftIcString);
+					}
+					
+					;
+				}
+			],
+			[
+				'label' => 'No. Akaun',
+				'value' => function($model){
+					if($model->fasi){
+						return strtoupper($model->eft_account);
+					}
+					
+					;
+				}
+			],
+			[
+				'label' => 'Bank',
+				'value' => function($model){
+					if($model->fasi){
+						return strtoupper($model->eft_bank);
+					}
+					
+					;
+				}
+			],
+            
+			[
+				'label' => 'Kod Kursus / Nama Kursus',
+				'value' => function($model){
+					if($model->fasi){
+						return	strtoupper($model->course->course_name . ' ('. $model->group->group_name.')');
+					}
+					
+					;
+				}
+			],
+			[
+				'label' => 'Nama Program',
+				'value' => function($model){
+					return  strtoupper($model->pro_name);
+				}
+				
+			],
+			[
+				'label' => 'Jumlah (RM)',
 				'value' => function($model){
 					return $model->resourceCenterAmount->rs_amount;
 				}
 				
 			],	
-            'letter_ref',
 			
-			['class' => 'yii\grid\ActionColumn',
-                 'contentOptions' => ['style' => 'width: 10%'],
-                'template' => '{update}',
-                //'visible' => false,
-                'buttons'=>[
-                    'update'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span> PDF',['/project-admin/default/letter-print', 'id' => $model->id],['class'=>'btn btn-danger btn-sm', 'target' => '_blank']);
-                    },
-					
-                ],
+			[
+				'label' => 'Kampus',
+				'value' => function($model){
+					return $model->campus->campus_name;
+				}
+				
+			],
+			
+			'approved_at:date'
             
-            ],
 
             
         ],
