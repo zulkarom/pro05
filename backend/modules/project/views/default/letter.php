@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'visible' => false,
                 'buttons'=>[
                     'update'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span> PDF',['', 'id' => $model->id],['class'=>'btn btn-danger btn-sm', 'target' => '_blank']);
+                        return Html::a('<span class="glyphicon glyphicon-download-alt"></span> PDF',['/project-admin/default/letter-print', 'id' => $model->id],['class'=>'btn btn-danger btn-sm', 'target' => '_blank']);
                     },
 					
                 ],

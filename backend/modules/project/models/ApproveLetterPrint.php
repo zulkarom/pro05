@@ -1,0 +1,249 @@
+<?php
+
+namespace backend\modules\project\models;
+
+use Yii;
+use common\models\Common;
+use frontend\models\LoginAsset;
+
+
+class ApproveLetterPrint
+{
+	public $model;
+	public $pdf;
+	public $directoryAsset;
+	
+	public function generatePdf(){
+		
+		//LoginAsset::register($this);
+
+		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
+		
+		$this->pdf = new ApproveLetterStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		
+		$this->writeHeaderFooter();
+		$this->startPage();
+		
+		$this->writeRef();
+		$this->writeTitle();
+		//$this->writeSignitureImg();
+
+		$this->pdf->Output('surat-kelulusan.pdf', 'I');
+	}
+	
+	public function writeHeaderFooter(){
+		$this->pdf->header_first_page_only = true;
+		$this->pdf->header_html ='<img src="images/letterhead.jpg" />';
+		
+		$this->pdf->footer_first_page_only = true;
+		$this->pdf->footer_html ='<img src="images/letterfoot.jpg" />';
+	}
+	public function writeRef(){
+			$release = $this->model->approved_at;
+			$date = strtoupper(Common::date_malay($release));
+
+		
+		
+		$html = '<br /><br /><br />
+		<table cellpadding="1">
+		<tr>
+			<td width="280"></td>
+			<td width="300" align="right">'.$this->model->letter_ref . '</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td align="right">'. $date .'</td>
+		</tr>
+		</table>
+		<br /><br /><br /><br />
+		'. strtoupper($this->model->fasi->user->fullname) .'<br />
+		<table>
+		<tr>
+			<td width="220">'. $this->model->course->course_code  .' '.$this->model->course->course_name .' ('.$this->model->group->group_name . ')<br />
+			Kursus Kokurikulum Berkredit
+			<br />Semester '. $this->model->semester->niceFormat() .'</td>
+		</tr>
+		</table>
+		
+		<br /><br /><br />
+		';
+		
+		$this->pdf->SetMargins(20, 10, 20);
+		$this->pdf->SetFont('helvetica', '', 9.5);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	public function getSemester(){
+		$session = $this->model->semester->session() ;
+		$years = $this->model->semester->years();
+		return $session . ' Sesi ' . $years;
+	}
+	
+	public function writeTitle(){
+		
+		
+		$html = '
+		Tuan,<br /><br />
+		
+		<b>KELULUSAN BAGI MENGADAKAN '.strtoupper($this->model->pro_name .' BAGI KURSUS KOKURIKULUM BERKREDIT '.$this->model->course->course_code  .' '.$this->model->course->course_name .' ('.$this->model->group->group_name . ') SEMESTER '. $this->model->semester->niceFormat()) .'</b>
+		<br /><br />
+		
+		Dengan hormatnya, saya diarah merujuk kepada perkara di atas.
+		<br /><br />
+		
+		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Pusat Kokurikulum, Pejabat Timbalan Naib Cancelor (Hal Ehwal Pelajar & Alumni) bersetuju meluluskan program sepertimana yang dinyatakan diatas yang akan diadakan pada {} bertempat di dengan kadar peruntukan {}. Bayaran peruntukan akan disalurkan kepada wakil yang dilantik oleh pihak saudara iaitu Saudata Abdul Aziz bin Omar (No. K/P: )
+		<br /><br />
+		3. &nbsp;&nbsp;&nbsp;Sepanjang tempoh program berlangsung, mohon pihak saudara dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.
+		
+		<br /><br />
+		4. &nbsp;&nbsp;&nbsp;Sehubungan dengan itu, pihak saudara adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sam ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak saudara.
+		
+		<br /><br />
+		5. &nbsp;&nbsp;&nbsp;Sekiranya terdapat sebarang pertanyaan, pihak saudara boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.
+
+		<br /><br />
+		Segala kerjasama dan komitmen daripada pihak saudara amatlah dihargai
+<br /><br />
+Sekian terima kasih
+<br /><br />
+<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
+"BERKHIDMAT UNTUK NEGARA"</b>
+<br /><br />
+Saya yang menjalankan amanah,<br />
+<br /><br /><br />
+DR. MOHD NAZRI BIN MUHAYIDDIN<br />
+Pengarah<br />
+Pusat Kokurikulum<br />
+
+		';
+		
+		
+		$this->pdf->SetFont('helvetica', '', 9.5);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	
+	
+	
+	public function writeSlogan(){
+		$html = '<b><i>"ISLAM DIJULANG, RAJA DIJUNJUNG, RAKYAT DISANJUNG"</i></b>
+		<br /><br />
+		<b>"BERKHIDMAT UNTUK NEGARA"</b>
+		<br /><br /><br />
+		';
+		$this->pdf->SetFont('helvetica', '', 10);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	public function writeSignitureImg(){
+		$html = '<img src="images/signiture.jpg" />';
+		$this->pdf->SetFont('helvetica', '', 9.5);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	public function writeSigniture(){
+		$html = 'Saya yang menurut perintah,
+		<br /><br /><br />
+		
+		';
+		$this->pdf->SetFont('helvetica', '', 9.5);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+		
+		$html = '<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b>
+		
+		';
+		$this->pdf->SetFont('helvetica', '', 10);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+		
+		$html = 'Pengarah
+		<br />Pusat Kokurikulum
+		<br /><br />
+		
+		
+		';
+		$this->pdf->SetFont('helvetica', '', 10);
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	
+	
+	
+	
+	
+	public function startPage(){
+		// set document information
+		$this->pdf->SetCreator(PDF_CREATOR);
+		$this->pdf->SetAuthor('Pusat Kokurikulum');
+		$this->pdf->SetTitle('SURAT KELULUSAN');
+		$this->pdf->SetSubject('SURAT KELULUSAN');
+		$this->pdf->SetKeywords('');
+
+		// set default header data
+		$this->pdf->SetHeaderData(PDF_HEADER_LOGO, PDF_HEADER_LOGO_WIDTH, PDF_HEADER_TITLE, PDF_HEADER_STRING);
+		//$this->pdf->writeHTML("<strong>hai</strong>", true, 0, true, true);
+		// set header and footer fonts
+		$this->pdf->setHeaderFont(Array(PDF_FONT_NAME_MAIN, '', PDF_FONT_SIZE_MAIN));
+		$this->pdf->setFooterFont(Array(PDF_FONT_NAME_DATA, '', PDF_FONT_SIZE_DATA));
+
+		// set default monospaced font
+		$this->pdf->SetDefaultMonospacedFont(PDF_FONT_MONOSPACED);
+
+		// set margins
+		//$this->pdf->SetMargins(25, 10, PDF_MARGIN_RIGHT);
+		$this->pdf->SetMargins(0, 0, 0);
+		//$this->pdf->SetHeaderMargin(PDF_MARGIN_HEADER);
+		$this->pdf->SetHeaderMargin(0);
+
+		 //$this->pdf->SetHeaderMargin(0, 0, 0);
+		$this->pdf->SetFooterMargin(0);
+
+		// set auto page breaks
+		$this->pdf->SetAutoPageBreak(TRUE, -30); //margin bottom
+
+		// set image scale factor
+		$this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);
+
+		// set some language-dependent strings (optional)
+		if (@file_exists(dirname(__FILE__).'/lang/eng.php')) {
+			require_once(dirname(__FILE__).'/lang/eng.php');
+			$this->pdf->setLanguageArray($l);
+		}
+
+		// ---------------------------------------------------------
+
+
+
+		// add a page
+		$this->pdf->AddPage("P");
+	}
+	
+	
+}

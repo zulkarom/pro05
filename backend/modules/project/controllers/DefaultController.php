@@ -5,6 +5,7 @@ namespace backend\modules\project\controllers;
 use Yii;
 use backend\modules\project\models\Project;
 use backend\modules\project\models\ApproveLetterForm;
+use backend\modules\project\models\ApproveLetterPrint;
 use backend\modules\project\models\ProjectSearch;
 use backend\modules\project\models\ProjectApproveSearch;
 use backend\modules\project\models\ProjectPrint;
@@ -103,6 +104,13 @@ class DefaultController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+	
+	public function actionLetterPrint($id){
+		$model = $this->findModel($id);
+		$pdf = new ApproveLetterPrint;
+		$pdf->model = $model;
+		$pdf->generatePdf();
+	}
 	
 	public function actionLetter()
     {
