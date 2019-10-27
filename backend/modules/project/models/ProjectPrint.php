@@ -828,7 +828,9 @@ EOD;
 
 <table>
 <tr>
-<td>*Wajib diisi. Sila pastikan maklumat lengkap dimasukkan.<br /><br />
+<td>
+<br /><br />
+*Wajib diisi. Sila pastikan maklumat lengkap dimasukkan.<br />
 * PTJ berkaitan diminta membuat satu simpanan borang untuk tujuan rekod Jabatan.</td>
 </tr>
 </table>
