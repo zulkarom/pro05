@@ -86,7 +86,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <div class="form-group">
         
-<?= Html::submitButton('APPROVE SELECTED', ['class' => 'btn btn-primary']) ?>
+<?= Html::submitButton('<span class="glyphicon glyphicon-ok"></span> APPROVE SELECTED', ['name' => 'btn-action', 'value' => 'approve', 'class' => 'btn btn-primary']) ?>
+
+
+
+ &nbsp;
+ 
+ 
+ <?= Html::submitButton('<span class="glyphicon glyphicon-remove"></span> DISAPPROVE SELECTED', ['name' => 'btn-action', 'value' => 'disapprove', 'class' => 'btn btn-warning']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>

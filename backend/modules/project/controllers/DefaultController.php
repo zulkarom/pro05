@@ -8,6 +8,7 @@ use backend\modules\project\models\ApproveLetterForm;
 use backend\modules\project\models\ApproveLetterPrint;
 use backend\modules\project\models\ProjectSearch;
 use backend\modules\project\models\ProjectApproveSearch;
+use backend\modules\project\models\ProjectLetterSearch;
 use backend\modules\project\models\ProjectPrint;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -75,7 +76,13 @@ class DefaultController extends Controller
                 foreach($selection as $select){
                     $project = Project::findOne($select);
 					$project->approved_at = new Expression('NOW()');
-					$project->status = 30;
+					$action = $post['btn-action'];
+					if($action =='approve'){
+						$project->status = 30;
+					}else{
+						$project->status = 20;
+					}
+					
 					$project->save();
 				}
 				Yii::$app->session->addFlash('success', "Data Updated");
@@ -103,7 +110,7 @@ class DefaultController extends Controller
 	
 	public function actionLetter()
     {
-        $searchModel = new ProjectApproveSearch();
+        $searchModel = new ProjectLetterSearch();
 		$params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
 		$model = new ApproveLetterForm;

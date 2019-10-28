@@ -11,7 +11,7 @@ use backend\models\Semester;
 /**
  * ProjectSearch represents the model behind the search form of `backend\modules\project\models\Project`.
  */
-class ProjectApproveSearch extends Project
+class ProjectLetterSearch extends Project
 {
 	public $fasi;
     /**
@@ -55,7 +55,7 @@ class ProjectApproveSearch extends Project
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-			'sort'=> ['defaultOrder' => ['status'=>SORT_ASC, 'submitted_at' => SORT_DESC]],
+			'sort'=> ['defaultOrder' => ['status'=>SORT_ASC]],
 			'pagination' => [
                 'pageSize' => 150,
             ],
@@ -71,7 +71,7 @@ class ProjectApproveSearch extends Project
         }
 		
 		$query->andFilterWhere([
-            'project.status' => [20,30],
+            'project.status' => 30,
         ]);
 
 
