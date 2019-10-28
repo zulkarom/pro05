@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="project-index">
 <?php $form = ActiveForm::begin(); ?>
+<i>* senarai adalah yang telah dilulus sahaja</i>
     <div class="box">
 <div class="box-body"><div class="table-responsive">
 

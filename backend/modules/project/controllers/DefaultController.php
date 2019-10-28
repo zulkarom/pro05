@@ -143,7 +143,7 @@ class DefaultController extends Controller
 	
 	public function actionAllocation()
     {
-        $searchModel = new ProjectApproveSearch();
+        $searchModel = new ProjectLetterSearch();
 		$params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
 		$model = new ApproveLetterForm;
