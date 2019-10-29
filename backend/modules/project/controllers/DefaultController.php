@@ -8,6 +8,7 @@ use backend\modules\project\models\ApproveLetterForm;
 use backend\modules\project\models\ApproveLetterPrint;
 use backend\modules\project\models\ProjectSearch;
 use backend\modules\project\models\ProjectApproveSearch;
+use backend\modules\project\models\ProjectAllocationSearch;
 use backend\modules\project\models\ProjectLetterSearch;
 use backend\modules\project\models\ProjectPrint;
 use yii\web\Controller;
@@ -143,7 +144,7 @@ class DefaultController extends Controller
 	
 	public function actionAllocation()
     {
-        $searchModel = new ProjectLetterSearch();
+        $searchModel = new ProjectAllocationSearch();
 		$params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
 		$model = new ApproveLetterForm;

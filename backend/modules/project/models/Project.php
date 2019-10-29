@@ -223,7 +223,10 @@ class Project extends \yii\db\ActiveRecord
 		$app = $this->application;
 		$coor = $this->coordinator;
 		if($app){
-			return $app->acceptedCourse->course;
+			if($app->acceptedCourse){
+				return $app->acceptedCourse->course;
+			}
+			
 		}else if($coor){
 			return $coor->course;
 		}

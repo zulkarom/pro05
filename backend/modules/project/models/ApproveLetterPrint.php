@@ -90,7 +90,7 @@ EOD;
 		$amt = $this->model->resourceCenterAmount->rs_amount;
 		
 		$jan = $this->model->fasi->gender;
-		$saudara = $jan == 1 ? 'saudara' : 'saudari' ;
+		$saudara = $jan == 1 ? 'tuan' : 'puan' ;
 		$html = ucfirst($saudara) . ',<br /><br />
 		
 		<b>KELULUSAN BAGI MENGADAKAN '.strtoupper($this->model->pro_name .' BAGI KURSUS KOKURIKULUM BERKREDIT '.$this->model->course->course_code  .' '.$this->model->course->course_name .' ('.$this->model->group->group_name . ') SEMESTER '. $this->model->semester->niceFormat()) .'</b>
@@ -104,7 +104,7 @@ EOD;
 		3. &nbsp;&nbsp;&nbsp;Sepanjang tempoh program berlangsung, mohon pihak '.$saudara.' dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.
 		
 		<br /><br />
-		4. &nbsp;&nbsp;&nbsp;Sehubungan dengan itu, pihak '.$saudara.' adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sam ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak '.$saudara.'.
+		4. &nbsp;&nbsp;&nbsp;Sehubungan dengan itu, pihak '.$saudara.' adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sama ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak '.$saudara.'.
 		
 		<br /><br />
 		5. &nbsp;&nbsp;&nbsp;Sekiranya terdapat sebarang pertanyaan, pihak '.$saudara.' boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.
@@ -114,8 +114,9 @@ EOD;
 		Segala kerjasama dan komitmen daripada pihak '.$saudara.' amatlah dihargai.
 <br /><br />
 Sekian terima kasih.
-<br /><br />
-<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
+<br /><br />';
+
+$sign ='<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
 "BERKHIDMAT UNTUK NEGARA"</b>
 <br /><br />
 Saya yang menjalankan amanah,<br />
@@ -125,6 +126,8 @@ Pengarah<br />
 Pusat Kokurikulum<br />
 
 		';
+		
+		$html .= '<img src="images/signiture.jpg" />';
 		
 		
 		$this->pdf->SetFont('helvetica', '', 9.5);

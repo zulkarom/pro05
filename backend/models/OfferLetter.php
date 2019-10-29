@@ -110,7 +110,7 @@ EOD;
 		$html = '
 		Tuan,<br /><br />
 		
-		<b>TAWARAN PERLANTIKAN SEBAGAI '.strtoupper($this->fasiType()).' SAMBILAN KURSUS KOKURIKULUM BERKREDIT BAGI '. strtoupper($this->getSemester()) .' DI UNIVERSITI MALAYSIA KELANTAN</b>
+		<b>TAWARAN PERLANTIKAN SEBAGAI '.strtoupper($this->fasiType()).' SAMBILAN KURSUS KOKURIKULUM BERKREDIT BAGI SEMESTER '. strtoupper($this->getSemester()) .' DI UNIVERSITI MALAYSIA KELANTAN</b>
 		<br /><br />
 		
 		Dengan hormatnya, saya diarah merujuk kepada perkara di atas.
@@ -200,7 +200,7 @@ EOD;
 
 		$html = '<br />
 		<table width="600"><tr><td><span style="text-align:justify;">3. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		Bersama-sama ini juga disertakan senarai tugas '.$this->fasiType().' sambilan Kursus Ko-Kurikulum Berkredit Pusat Kokurikulum. (Rujuk Lampiran 1)
+		Bersama-sama ini juga disertakan senarai tugas '.$this->fasiType().' sambilan Kursus Kokurikulum Berkredit Pusat Kokurikulum. (Rujuk Lampiran 1)
 		<br /><br />
 		4. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		Sekiranya bersetuju dengan tawaran ini sila penuhi borang penerimaan sebagai '.$this->fasiType().' sambilan dan kembalikan borang berkenaan sama datang sendiri atau fakskan melalui talian 09-771262 ke Pusat Kokurikulum dengan kadar segera.
@@ -314,7 +314,7 @@ EOD;
 			<td>SENARAI TUGAS '.strtoupper($this->fasiType()).' SAMBILAN</td>
 		</tr>
 		<tr>
-			<td>KURSUS KO-KURIKULUM BERKREDIT</td>
+			<td>KURSUS KOKURIKULUM BERKREDIT</td>
 		</tr>
 		</table>
 
