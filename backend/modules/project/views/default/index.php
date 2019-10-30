@@ -64,9 +64,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
 			
 			['class' => 'yii\grid\ActionColumn',
-                'contentOptions' => ['style' => 'width: 17%'],
-                'template' => '{pdf} {return}',
+                'contentOptions' => ['style' => 'width: 24%'],
+                'template' => '{edit} {pdf} {return}',
                 'buttons'=>[
+					'edit'=>function ($url, $model) {
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span> EDIT',['/project-admin/default/update', 'id' => $model->id], ['class'=>'btn btn-default btn-sm']);
+                    },
+					
                     'pdf'=>function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-download-alt"></span> PDF',['/project-admin/default/pdf', 'id' => $model->id], ['class'=>'btn btn-danger btn-sm', 'target' => '_blank']);
                     },

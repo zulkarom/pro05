@@ -16,6 +16,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\db\Expression;
+use common\models\Model;
 
 /**
  * DefaultController implements the CRUD actions for Project model.
@@ -41,6 +42,40 @@ class DefaultController extends Controller
             ],
         ];
     }
+	
+	public function actionUpdate($id){
+		$model = $this->findModel($id);
+		$model->scenario = 'project-admin-edit';
+		$days = $model->tentativeDays;
+		
+		if ($model->load(Yii::$app->request->post())) {
+			$model->updated_at = new Expression('NOW()');    
+			Model::loadMultiple($days, Yii::$app->request->post());
+			
+			if($flag = $model->save()){
+				
+				foreach ($days as $i => $day) {
+					if ($flag === false) {
+						break;
+					}
+
+					if (!($flag = $day->save(false))) {
+						break;
+					}
+				}
+
+				
+			}
+			Yii::$app->session->addFlash('success', "Data Updated");
+			return $this->redirect(['index']);
+		}
+		
+		
+		return $this->render('update', [
+            'model' => $model,
+			'days' => $days
+        ]);
+	}
 
 
     /**

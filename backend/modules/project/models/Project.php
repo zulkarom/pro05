@@ -60,6 +60,8 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['coor_id', 'created_at', 'pro_token', 'semester_id'], 'required', 'on' => 'coor-create'],
 			
+			[['pro_name', 'location', 'background', 'purpose'], 'required', 'on' => 'project-admin-edit'],
+			
 			[['eft_name', 'eft_ic', 'eft_account','eft_bank','eft_account','eft_email'], 'required', 'on' => 'eft'],
 			
 			[['pro_name', 'pro_token', 'application_id', 'location',  'purpose', 'background', 'pro_target', 'updated_at'], 'required', 'on' => 'update-main'],
