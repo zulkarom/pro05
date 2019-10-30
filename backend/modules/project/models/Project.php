@@ -74,7 +74,7 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['eft_email'], 'email'],
 			
-            [['purpose', 'background', 'approval_note'], 'string'],
+            [['purpose', 'background', 'approval_note', 'eft_name', 'eft_bank', 'eft_account'], 'string'],
 			
             [['pro_name', 'location', 'collaboration', 'pro_time', 'pro_target', 'agency_involved'], 'string', 'max' => 200],
         ];

@@ -72,7 +72,16 @@ if($kira == 1){
 
 <?= $form->field($model, 'background')->textarea(['rows' => 2]) ?>
 
+<h3>EFT</h3>
+<hr />
+
 <?= $form->field($model, 'eft_name')->textInput() ?>
+
+<?= $form->field($model, 'eft_ic')->textInput() ?>
+
+<?= $form->field($model, 'eft_bank')->textInput() ?>
+
+<?= $form->field($model, 'eft_account')->textInput() ?>
 
 </div>
 
