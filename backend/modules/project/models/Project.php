@@ -608,7 +608,7 @@ class Project extends \yii\db\ActiveRecord
 		$semester = Semester::getCurrentSemester();
 		return self::find()
 		->select('DISTINCT(batch_no) as batch')
-		->where(['semester_id' => $semester->id])
+		->where(['semester_id' => $semester->id, 'status' => 30])
 		->orderBy('batch ASC')
 		->all();
 	}
@@ -621,6 +621,7 @@ class Project extends \yii\db\ActiveRecord
 		->where([
 			'project.semester_id' => $semester->id, 
 			'project.batch_no' => $batch, 
+			'project.status' => 30,
 			'r.rs_core' => 1])
 		->one()->jum;
 
