@@ -16,21 +16,39 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="form-group">
 
 <div class="row">
-<div class="col-md-2">
-<a class="btn btn-primary btn-block btn-flat"><span class="glyphicon glyphicon-download-alt"></span> Batch 01<br />
-RM300.00
-</a>
-</div>
+
+
+<?php 
+$batches = $searchModel->batches;
+$jum = 0;
+if($batches){
+	foreach($batches as $bat){
+		$name = $bat->batch;
+		if($name){
+			if($name == '-'){
+				$color = 'warning';
+				$icon = 'fa fa-circle-thin';
+			}else{
+				$color = 'primary';
+				$icon = 'glyphicon glyphicon-download-alt';
+			}
+			$amount = $searchModel::getAllocationByBatch($name);
+			echo '<div class="col-md-2">
+			<a href="'. Url::to(['batch-pdf', 'batch' => $name]) .'" target="_blank" class="btn btn-'.$color.' btn-block btn-flat"><span class="'.$icon.'"></span> Batch '.$name .'<br />
+			RM'.number_format($amount, 2).'
+			</a>
+			</div>';
+		$jum += $amount;
+		}
+		
+	}
+}
+
+?>
 
 <div class="col-md-2">
-<a class="btn btn-primary btn-block btn-flat"><span class="glyphicon glyphicon-download-alt"></span> Batch 02<br />
-RM350.00
-</a>
-</div>
-
-<div class="col-md-2">
-<span class="btn btn-block btn-flat bg-purple">JUMLAH<br />
-RM650.00
+<span class="btn btn-block btn-flat bg-purple"><b><span class="fa fa-money"></span> JUMLAH</b><br />
+<b>RM<?=number_format($jum, 2)?></b>
 </span>
 </div>
 
@@ -42,11 +60,11 @@ RM650.00
 <?=$this->render('_search', ['model' => $searchModel])?>
 
 
-<?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(['id'=>'form-allocation']); ?>
 <i>* senarai adalah yang telah dilulus sahaja</i>
     <div class="box">
 <div class="box-body"><div class="table-responsive">
-
+<input type="hidden" id="batch_name" name="batch_name" value="" />
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'options' => [ 'style' => 'table-layout:fixed;' ],

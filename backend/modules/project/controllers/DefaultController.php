@@ -11,12 +11,14 @@ use backend\modules\project\models\ProjectApproveSearch;
 use backend\modules\project\models\ProjectAllocationSearch;
 use backend\modules\project\models\ProjectLetterSearch;
 use backend\modules\project\models\ProjectPrint;
+use backend\modules\project\models\BatchPrint;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\db\Expression;
 use common\models\Model;
+use backend\models\Semester;
 
 /**
  * DefaultController implements the CRUD actions for Project model.
@@ -177,29 +179,50 @@ class DefaultController extends Controller
         ]);
     }
 	
+	public function actionBatchPdf($batch){
+		
+		$semester = Semester::getCurrentSemester();
+		
+		$model = Project::find()
+		->where([
+			'semester_id' => $semester->id, 
+			'batch_no' => $batch])
+		->all();
+		
+		$pdf = new BatchPrint;
+		$pdf->model = $model;
+		$pdf->batchno = $batch;
+		$pdf->semester = $semester;
+		$pdf->generatePdf();
+	}
+	
 	public function actionAllocation()
     {
         $searchModel = new ProjectAllocationSearch();
+		$post = Yii::$app->request->post();
+		if(isset($post['batch_name'])){
+			$searchModel->batchno = Yii::$app->request->post('batch_name');
+			if(empty(Yii::$app->request->post('batch_name'))){
+				 Yii::$app->session->addFlash('error', "Batch No. cannot be empty!");
+				return $this->redirect(['allocation']);
+			}
+		}
 		$params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
 		$model = new ApproveLetterForm;
 		if (Yii::$app->request->post()) {
-            $post = Yii::$app->request->post();
+           
 
             if(isset($post['selection'])){
 				$selection = $post['selection'];
-				$form = $post['ApproveLetterForm'];
-				$start = $form['start_number'] + 0;
+				$batch = $post['batch_name'];
 				foreach($selection as $select){
 					$pro = Project::findOne($select);
-					$ref = $form['ref_letter'];
-					$pro->letter_ref = $ref . '('.$start.')';
+					$pro->batch_no =$batch;
 					$pro->save();
-					
-				$start++;
-					
 				}
 			}
+			return $this->redirect(['allocation']);
 		}
 		
 

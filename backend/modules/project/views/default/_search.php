@@ -61,7 +61,7 @@ use backend\models\Campus;
 </div>
 
 <div class="col-md-3">
-<?= $form->field($model, 'batchno')->textInput()->label('Batch No.') ?>
+<?= $form->field($model, 'batchno')->dropDownList($model->listBatch())->label('Batch No.') ?>
 </div>
 </div>
 
@@ -90,7 +90,7 @@ use backend\models\Campus;
 
 </div>
 
- <?= Html::button('<span class="fa fa-cubes"></span> Assign Selected', ['name' => 'btn-action', 'value' => 'disapprove', 'class' => 'btn btn-default']) ?>
+ <?= Html::button('<span class="fa fa-cubes"></span> Assign Selected', ['id' =>'btn-assign-selected' ,'class' => 'btn btn-default']) ?>
 
 
 </div>
@@ -100,7 +100,17 @@ use backend\models\Campus;
 </div>
 
 
+<?php 
 
+$this->registerJs('
+	$("#btn-assign-selected").click(function(){
+		var val = $("#batch-no-set").val();
+		$("#batch_name").val(val);
+		$("#form-allocation").submit();
+	});
+');
+
+?>
 
 
 

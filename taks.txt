@@ -1,0 +1,21 @@
+
+auto add kertas kerja kat admin - senarai
+------------------pastikan smua project created----------------------------
+$subQuery = Follower::find()->select('foreignKey_Leader');
+$query = Leader::find()->where(['not in', 'leaderID', $subQuery]);
+$models = $query->all();
+-----------------------------------------
+
+batch number - pdf list
+
+kena ada validation before submit kertas kerja
+
+mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
+
+masa edit penyelaras, edit text button tambah->kemaskini
+
+edit manual application - overwrite
+block tarikh kena bekki claim klu lebih tahun - kes hari tu
+buat menu untuk admin only list with its role - ability to add admin
+admin boleh edit details kursus
+penyelaras nak lebih dari satu

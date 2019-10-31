@@ -76,6 +76,7 @@ class ProjectAllocationSearch extends Project
 		
 		$query->andFilterWhere([
             'project.status' => 30,
+			'batch_no' => $this->batchno
         ]);
 		
 		if($this->campus_cari){

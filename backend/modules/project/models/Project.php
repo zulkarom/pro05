@@ -3,6 +3,7 @@
 namespace backend\modules\project\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 use common\models\Application;
 use common\models\Common;
 use backend\models\Semester;
@@ -42,6 +43,8 @@ use backend\models\Semester;
  */
 class Project extends \yii\db\ActiveRecord
 {
+	public $batch;
+	public $jum;
     /**
      * @inheritdoc
      */
@@ -70,11 +73,13 @@ class Project extends \yii\db\ActiveRecord
 			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
-            [['application_id', 'prepared_by', 'supported_by', 'approved_by', 'eft_ic'], 'integer'],
+            [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
 			
+			[['eft_account', 'eft_ic'], 'number'],
+
 			[['eft_email'], 'email'],
 			
-            [['purpose', 'background', 'approval_note', 'eft_name', 'eft_bank', 'eft_account'], 'string'],
+            [['purpose', 'background', 'approval_note', 'eft_name', 'eft_bank'], 'string'],
 			
             [['pro_name', 'location', 'collaboration', 'pro_time', 'pro_target', 'agency_involved'], 'string', 'max' => 200],
         ];
@@ -597,6 +602,34 @@ class Project extends \yii\db\ActiveRecord
 		$month_str = $month_bm[$month_num];
 		$year = date('Y', strtotime($date));
 		return $day . ' ' . $month_str . ' ' . $year;
+	}
+	
+	public function getBatches(){
+		$semester = Semester::getCurrentSemester();
+		return self::find()
+		->select('DISTINCT(batch_no) as batch')
+		->where(['semester_id' => $semester->id])
+		->orderBy('batch ASC')
+		->all();
+	}
+	
+	public static function getAllocationByBatch($batch){
+		$semester = Semester::getCurrentSemester();
+		return self::find()
+		->select('SUM(rs_amount) as jum')
+		->leftJoin('pro_resource as r', 'r.pro_id = project.id')
+		->where([
+			'project.semester_id' => $semester->id, 
+			'project.batch_no' => $batch, 
+			'r.rs_core' => 1])
+		->one()->jum;
+
+	}
+	
+	public function listBatch(){
+		$list = $this->batches;
+		return ArrayHelper::map($list, 'batch','batch');
+		
 	}
 	
 	
