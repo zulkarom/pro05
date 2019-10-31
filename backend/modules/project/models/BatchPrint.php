@@ -52,7 +52,7 @@ class BatchPrint
 		$html = '
 		<div align="right"><b>LAMPIRAN</b></div>
 		<div align="center"><b>SENARAI PROGRAM KURSUS KOKURIKULUM BERKREDIT<br />
-SEMESTER '. strtoupper($this->semester->niceFormat()) .'</b></div><br />
+SEMESTER '. strtoupper($this->semester->niceFormat()) .' BIL. '.$this->batchno .'</b></div><br />
 		<table border="1" cellpadding="5">
 			<tr nobr="true" style="font-weight:bold">
 				<td width="'. $col_bil .'%">BIL.</td>
