@@ -48,7 +48,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			 'label' => 'Nama Fasilitator',
 			 'format' => 'html',
 			 'value' => function($model){
-				 return strtoupper($model->fasi->user->fullname) . '<br />' . $model->acceptedCourse->course->course_code . ' - ' . $model->acceptedCourse->course->course_name . ' ('.$model->applicationGroup->group_name .')';
+				if($model->acceptedCourse){
+					$course = $model->acceptedCourse->course->course_name;
+				}else{
+					$course = '??';
+				}
+				 return strtoupper($model->fasi->user->fullname) . 
+				 '<br />' . $course . ' ('.$model->applicationGroup->group_name .')';
 			 }
 			],
 			

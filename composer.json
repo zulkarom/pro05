@@ -48,7 +48,9 @@
 		"kartik-v/yii2-sortable": "@dev",
 		"kartik-v/yii2-widget-datepicker": "@dev",
 		"2amigos/yii2-date-picker-widget": "~1.0",
-		"kartik-v/yii2-widget-timepicker": "*"
+		"kartik-v/yii2-widget-timepicker": "*",
+		"kartik-v/yii2-export": "@dev",
+		"kartik-v/yii2-krajee-base": "dev-master"
 		
 	},
 	"require-dev" : {
@@ -59,7 +61,10 @@
 		"codeception/verify" : "~0.3.1"
 	},
 	"config" : {
-		"process-timeout" : 1800
+		"process-timeout" : 1800,
+		"platform": {
+        "php": "5.6.23"
+    }
 	},
 	"repositories" : [{
 			"type" : "composer",

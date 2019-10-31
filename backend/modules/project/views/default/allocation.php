@@ -1,8 +1,9 @@
 <?php 
 use yii\helpers\Html;
 use yii\helpers\Url;
-use yii\grid\GridView;
 use yii\widgets\ActiveForm;
+use kartik\grid\GridView;
+//use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\project\models\ProjectSearch */
@@ -19,57 +20,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
 <?php 
-$batches = $searchModel->batches;
-$jum = 0;
-if($batches){
-	foreach($batches as $bat){
-		$name = $bat->batch;
-		if($name){
-			if($name == '-'){
-				$color = 'warning';
-				$icon = 'fa fa-circle-thin';
-			}else{
-				$color = 'primary';
-				$icon = 'glyphicon glyphicon-download-alt';
-			}
-			$amount = $searchModel::getAllocationByBatch($name);
-			echo '<div class="col-md-2">
-			<a href="'. Url::to(['batch-pdf', 'batch' => $name]) .'" target="_blank" class="btn btn-'.$color.' btn-block btn-flat"><span class="'.$icon.'"></span> Batch '.$name .'<br />
-			RM'.number_format($amount, 2).'
-			</a>
-			</div>';
-		$jum += $amount;
-		}
-		
-	}
-}
 
-?>
-
-<div class="col-md-2">
-<span class="btn btn-block btn-flat bg-purple"><b><span class="fa fa-money"></span> JUMLAH</b><br />
-<b>RM<?=number_format($jum, 2)?></b>
-</span>
-</div>
-
-</div>
-
-</div>
-
-
-<?=$this->render('_search', ['model' => $searchModel])?>
-
-
-<?php $form = ActiveForm::begin(['id'=>'form-allocation']); ?>
-<i>* senarai adalah yang telah dilulus sahaja</i>
-    <div class="box">
-<div class="box-body"><div class="table-responsive">
-<input type="hidden" id="batch_name" name="batch_name" value="" />
-<?= GridView::widget([
-        'dataProvider' => $dataProvider,
-		'options' => [ 'style' => 'table-layout:fixed;' ],
-        //'filterModel' => $searchModel,
-        'columns' => [
+$columns = [
 			['class' => 'yii\grid\CheckboxColumn',
 				 'checkboxOptions' => function($model, $key, $index, $column) {
 						 return ['checked' => true];
@@ -158,7 +110,63 @@ if($batches){
             
 
             
-        ],
+        ];
+
+
+$batches = $searchModel->batches;
+$jum = 0;
+if($batches){
+	foreach($batches as $bat){
+		$name = $bat->batch;
+		if($name){
+			if($name == '-'){
+				$color = 'warning';
+				$icon = 'fa fa-circle-thin';
+			}else{
+				$color = 'primary';
+				$icon = 'glyphicon glyphicon-download-alt';
+			}
+			$amount = $searchModel::getAllocationByBatch($name);
+			echo '<div class="col-md-2">
+			<a href="'. Url::to(['batch-pdf', 'batch' => $name]) .'" target="_blank" class="btn btn-'.$color.' btn-block btn-flat"><span class="'.$icon.'"></span> Batch '.$name .'<br />
+			RM'.number_format($amount, 2).'
+			</a>
+			</div>';
+		$jum += $amount;
+		}
+		
+	}
+}
+
+?>
+
+<div class="col-md-2">
+<span class="btn btn-block btn-flat bg-purple"><b><span class="fa fa-money"></span> JUMLAH</b><br />
+<b>RM<?=number_format($jum, 2)?></b>
+</span>
+</div>
+
+</div>
+
+</div>
+
+
+<?=$this->render('_search', ['model' => $searchModel])?>
+
+
+
+<?php $form = ActiveForm::begin(['id'=>'form-allocation']); ?>
+<i>* senarai adalah yang telah dilulus sahaja</i>
+    <div class="box">
+<div class="box-body"><div class="table-responsive">
+<input type="hidden" id="batch_name" name="batch_name" value="" />
+
+<?= GridView::widget([
+        'dataProvider' => $dataProvider,
+		'options' => [ 'style' => 'table-layout:fixed;' ],
+		'export' => false,
+        //'filterModel' => $searchModel,
+        'columns' => $columns,
     ]); ?></div></div>
 </div>
 

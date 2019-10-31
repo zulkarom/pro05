@@ -41,8 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
 						if($model->coordinator){
 							$coor = '<br /><i>(Penyelaras)</i>';
 						}
-						return strtoupper($model->fasi->user->fullname) . '<br />' . 
-					$model->course->course_name . ' ('. $model->group->group_name.')' . $coor;
+						if($model->course){
+							$course = $model->course->course_name;
+						}else{
+							$course = '';
+						}
+						return strtoupper($model->fasi->user->fullname) . '<br />' . $course
+					 . ' ('. $model->group->group_name.')' . $coor;
 					}
 					
 					;
