@@ -79,9 +79,7 @@ if($batches){
             [
 				'label' => 'Nama',
 				'value' => function($model){
-					if($model->fasi){
 						return strtoupper($model->eft_name);
-					}
 					
 					;
 				}
@@ -89,45 +87,29 @@ if($batches){
 			[
 				'label' => 'No. Kad Pengenalan',
 				'value' => function($model){
-					if($model->fasi){
-						return strtoupper($model->eftIcString);
-					}
-					
-					;
+						return $model->eftIcString;
 				}
 			],
 			[
 				'label' => 'No. Akaun',
 				'value' => function($model){
-					if($model->fasi){
-						return strtoupper($model->eft_account);
-					}
-					
-					;
+						return $model->eft_account;
 				}
 			],
 			[
 				'label' => 'Bank',
 				'value' => function($model){
-					if($model->fasi){
 						return strtoupper($model->eft_bank);
-					}
-					
-					;
+	
 				}
 			],
             
 			[
 				'label' => 'Kod Kursus / Nama Kursus',
 				'value' => function($model){
-					if($model->fasi){
 						if($model->course){
 							return	strtoupper($model->course->course_name . ' ('. $model->group->group_name.')');
 						}
-						
-					}
-					
-					;
 				}
 			],
 			[
