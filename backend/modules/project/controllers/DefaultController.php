@@ -186,6 +186,7 @@ class DefaultController extends Controller
 		$model = Project::find()
 		->where([
 			'semester_id' => $semester->id, 
+			'status' => 30,
 			'batch_no' => $batch])
 		->all();
 		
