@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
-//use kartik\export\ExportMenu;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\project\models\ProjectSearch */
@@ -153,7 +153,20 @@ if($batches){
 
 <?=$this->render('_search', ['model' => $searchModel])?>
 
-
+<div class="form-group"><?=ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $columns,
+	'filename' => 'SENARAI_PERUNTUKAN_' . date('Y-m-d'),
+	'onRenderSheet'=>function($sheet, $grid){
+		$sheet->getStyle('A2:'.$sheet->getHighestColumn().$sheet->getHighestRow())
+		->getAlignment()->setWrapText(true);
+		
+	},
+	'exportConfig' => [
+        ExportMenu::FORMAT_PDF => false,
+		ExportMenu::FORMAT_EXCEL_X => false,
+    ],
+]);?></div>
 
 <?php $form = ActiveForm::begin(['id'=>'form-allocation']); ?>
 <i>* senarai adalah yang telah dilulus sahaja</i>
