@@ -39,7 +39,7 @@ $export_columns = [
 			],
 			[
 				'label' => 'No. Akaun',
-				'format' => 'text',
+				'xlFormat' => 'text',
 				'value' => function($model){
 						return $model->eft_account;
 				}
