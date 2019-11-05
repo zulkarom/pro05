@@ -188,11 +188,11 @@ class Application extends \yii\db\ActiveRecord
 		return $array;
 	}
 	
-	public function listAppliedCoursesString(){
+	public function listAppliedCoursesString($break = "<br />"){
 		$string = '';
 		$i = 1;
 		foreach($this->applicationCourses as $c){
-			$br = $i == 1 ? '' : '<br />';
+			$br = $i == 1 ? '' : $break;
 			if($c->course){
 				$string .= $br.$c->course->course_code . ' ' . $c->course->course_name;
 			}

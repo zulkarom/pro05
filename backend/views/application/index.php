@@ -7,6 +7,57 @@ use yii\grid\GridView;
 use backend\models\Semester;
 use backend\models\FasiType;
 use backend\models\Campus;
+use kartik\export\ExportMenu;
+
+$exportColumns = [
+['class' => 'yii\grid\SerialColumn'],
+			
+			[
+			 'attribute' => 'fasi_name',
+			 'label' => 'Nama Fasilitator',
+			 'contentOptions' => [ 'style' => 'width: 35%;' ],
+			 'format' => 'html',
+			
+			 'value' => function($model){
+				return strtoupper($model->fasi->user->fullname);
+			 }
+			],
+			[
+			 'label' => 'Kursus',
+			 'value' => function($model){
+				return $model->listAppliedCoursesString("\n");
+			 }
+			],
+			[
+			 'attribute' => 'fasi_type_id',
+			 'value' => 'fasiType.type_name',
+			],
+
+            /* [
+			'attribute' => 'semester_id' ,
+			'value' => function($model){
+				return $model->semester->niceFormat();
+			}], */
+			
+            [
+			 'attribute' => 'campus_id',
+			// 'label' => 'Location',
+			 'value' => 'campus.campus_name',
+			
+			],
+			
+			[
+			 'attribute' => 'status',
+			 'label' => 'Status',
+			
+			 // getAllStatusesArray()
+			 'value' => function($model){
+				 return strtoupper($model->getWorkflowStatus()->getLabel()); 
+				 }
+
+
+			],
+];
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ApplicationSearch */
@@ -17,6 +68,19 @@ $this->params['breadcrumbs'][] = $this->title;
 $curr_sem = Semester::getCurrentSemester();
 ?>
 <h4>Semester <?=$curr_sem->niceFormat()?></h4>
+<div class="form-group"><?=ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $exportColumns,
+	'filename' => 'PERMOHONAN_DATA_' . date('Y-m-d'),
+	'onRenderSheet'=>function($sheet, $grid){
+		$sheet->getStyle('A2:'.$sheet->getHighestColumn().$sheet->getHighestRow())
+		->getAlignment()->setWrapText(true);
+	},
+	'exportConfig' => [
+        ExportMenu::FORMAT_PDF => false,
+		ExportMenu::FORMAT_EXCEL_X => false,
+    ],
+]);?></div>
 <div class="box">
 <div class="box-header"></div>
 <div class="box-body"><div class="application-index">

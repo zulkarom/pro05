@@ -210,11 +210,8 @@ class DefaultController extends Controller
 		}
 		$params = Yii::$app->request->queryParams;
         $dataProvider = $searchModel->search($params);
-		$model = new ApproveLetterForm;
-		if (Yii::$app->request->post()) {
-           
-
-            if(isset($post['selection'])){
+		 $model = new ApproveLetterForm;
+		if (Yii::$app->request->post()&& isset($post['selection'])) {
 				$selection = $post['selection'];
 				$batch = $post['batch_name'];
 				foreach($selection as $select){
@@ -222,9 +219,8 @@ class DefaultController extends Controller
 					$pro->batch_no =$batch;
 					$pro->save();
 				}
-			}
 			return $this->redirect(['allocation']);
-		}
+		} 
 		
 
         return $this->render('allocation', [

@@ -7,8 +7,6 @@ $query = Leader::find()->where(['not in', 'leaderID', $subQuery]);
 $models = $query->all();
 -----------------------------------------
 
-batch number - pdf list
-
 kena ada validation before submit kertas kerja
 
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
@@ -20,3 +18,6 @@ block tarikh kena bekki claim klu lebih tahun - kes hari tu
 buat menu untuk admin only list with its role - ability to add admin
 admin boleh edit details kursus
 penyelaras nak lebih dari satu
+
+		//"kartik-v/yii2-sortable": "@dev",
+		//"kartik-v/yii2-widget-datepicker": "@dev",

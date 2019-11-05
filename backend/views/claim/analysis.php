@@ -8,6 +8,12 @@ use yii\widgets\ActiveForm;
 use backend\models\Campus;
 use backend\models\Semester;
 use common\models\Common;
+use kartik\export\ExportMenu;
+
+$colums = [
+
+
+];
 
 
 /* @var $this yii\web\View */
@@ -19,19 +25,7 @@ $sem = Semester::getCurrentSemester();
 
 $this->title = 'ANALISIS TUNTUTAN SEMESTER ' . strtoupper($sem->niceFormat());
 $this->params['breadcrumbs'][] = $this->title;
-?>
-  
- 
-  <?php $form = ActiveForm::begin(); ?>
-  
-<div class="box">
-<div class="box-header"></div>
-<div class="box-body"><div class="application-index">
 
-<?=$this->render('_search', ['model' => $searchModel])?>
-
-
-<?php 
 $colums_array = [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -48,7 +42,10 @@ $colums_array = [
 			'label' => 'KURSUS',
 			'format' => 'html',
 			'value' => function($model){
-				return strtoupper($model->acceptedCourse->course->course_code . '<br />' . $model->acceptedCourse->course->course_name) . '<br /><b>(' . $model->groupName . ')</b>';
+				if($model->acceptedCourse){
+					return strtoupper($model->acceptedCourse->course->course_code . '<br />' . $model->acceptedCourse->course->course_name) . ' <br /><b>(' . $model->groupName . ')</b>';
+				}
+				
 			},
 			],
 			
@@ -138,6 +135,31 @@ $colums_array[] = [
 	 }
 	];
 ?>
+  
+ <div class="form-group"><?=ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $colums_array,
+	'target'=>ExportMenu::TARGET_SELF,
+	'filename' => 'JADUAL_TUNTUTAN_' . date('Y-m-d'),
+	'onRenderSheet'=>function($sheet, $grid){
+		$sheet->getStyle('A2:'.$sheet->getHighestColumn().$sheet->getHighestRow())
+		->getAlignment()->setWrapText(true);
+	},
+	'exportConfig' => [
+        ExportMenu::FORMAT_PDF => false,
+		ExportMenu::FORMAT_EXCEL_X => false,
+    ],
+]);?></div>
+  <?php $form = ActiveForm::begin(); ?>
+  
+<div class="box">
+<div class="box-header"></div>
+<div class="box-body"><div class="application-index">
+
+<?=$this->render('_search', ['model' => $searchModel])?>
+
+
+
 <div class="table-responsive">
    <?= GridView::widget([
         'dataProvider' => $dataProvider,

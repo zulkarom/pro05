@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\grid\GridView;
-//use kartik\export\ExportMenu;
+use kartik\export\ExportMenu;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\project\models\ProjectSearch */
@@ -21,12 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 <?php 
 
-$columns = [
-			['class' => 'yii\grid\CheckboxColumn',
-				 'checkboxOptions' => function($model, $key, $index, $column) {
-						 return ['checked' => true];
-				}
-			],
+$export_columns = [
             ['class' => 'yii\grid\SerialColumn'],
             [
 				'label' => 'Nama',
@@ -154,6 +149,21 @@ if($batches){
 <?=$this->render('_search', ['model' => $searchModel])?>
 
 
+<div class="form-group"><?=ExportMenu::widget([
+    'dataProvider' => $dataProvider,
+    'columns' => $export_columns,
+	'target'=>ExportMenu::TARGET_SELF,
+	'filename' => 'SENARAI_PERUNTUKAN_' . date('Y-m-d'),
+	'onRenderSheet'=>function($sheet, $grid){
+		$sheet->getStyle('A2:'.$sheet->getHighestColumn().$sheet->getHighestRow())
+		->getAlignment()->setWrapText(true);
+	},
+	'exportConfig' => [
+        ExportMenu::FORMAT_PDF => false,
+		ExportMenu::FORMAT_EXCEL_X => false,
+    ],
+]);?></div>
+
 
 <?php $form = ActiveForm::begin(['id'=>'form-allocation']); ?>
 <i>* senarai adalah yang telah dilulus sahaja</i>
@@ -166,7 +176,96 @@ if($batches){
 		'options' => [ 'style' => 'table-layout:fixed;' ],
 		'export' => false,
         //'filterModel' => $searchModel,
-        'columns' => $columns,
+        'columns' => [
+			['class' => 'yii\grid\CheckboxColumn',
+				 'checkboxOptions' => function($model, $key, $index, $column) {
+						 return ['checked' => true];
+				}
+			],
+            ['class' => 'yii\grid\SerialColumn'],
+            [
+				'label' => 'Nama',
+				'value' => function($model){
+						return strtoupper($model->eft_name);
+					
+					;
+				}
+			],
+			[
+				'label' => 'No. Kad Pengenalan',
+				'value' => function($model){
+						return $model->eftIcString;
+				}
+			],
+			[
+				'label' => 'No. Akaun',
+				'value' => function($model){
+						return $model->eft_account;
+				}
+			],
+			[
+				'label' => 'Bank',
+				'value' => function($model){
+						return strtoupper($model->eft_bank);
+	
+				}
+			],
+            
+			[
+				'label' => 'Kod Kursus / Nama Kursus',
+				'value' => function($model){
+						if($model->course){
+							return	strtoupper($model->course->course_name . ' ('. $model->group->group_name.')');
+						}
+				}
+			],
+			[
+				'label' => 'Nama Program',
+				'value' => function($model){
+					return  strtoupper($model->pro_name);
+				}
+				
+			],
+			[
+				'label' => 'Jumlah (RM)',
+				'value' => function($model){
+					if($model->resourceCenterAmount){
+						return $model->resourceCenterAmount->rs_amount;
+					}
+					
+				}
+				
+			],	
+			
+			[
+				'label' => 'Kampus',
+				'value' => function($model){
+					return $model->campus->campus_name;
+				}
+				
+			],
+			
+			[
+				'label' => 'Tarikh Lulus',
+				'value' => function($model){
+					return date('d M Y', strtotime($model->approved_at));
+				}
+				
+			],
+			
+			[
+				'label' => 'Batch No.',
+				'value' => function($model){
+					return $model->batch_no;
+				}
+				
+			],
+			
+			
+            
+
+            
+        ],
     ]); ?></div></div>
 </div>
 
