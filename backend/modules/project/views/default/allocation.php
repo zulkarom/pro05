@@ -34,7 +34,7 @@ $export_columns = [
 			[
 				'label' => 'No. Kad Pengenalan',
 				'value' => function($model){
-						return $model->eftIcString;
+						return "'" . $model->eftIcString;
 				}
 			],
 			[
@@ -62,7 +62,7 @@ $export_columns = [
 			[
 				'label' => 'Nama Program',
 				'value' => function($model){
-					return  strtoupper($model->pro_name);
+					return  strtoupper(trim($model->pro_name));
 				}
 				
 			],
