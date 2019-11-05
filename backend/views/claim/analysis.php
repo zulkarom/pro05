@@ -106,7 +106,7 @@ foreach($arr_month as $m){
 	 'value' => function($model,$c, $v,$r){
 		 $amt = $model->getAmountMonth($r->label);
 		 if($amt > 0){
-			 return 'RM' . $amt;
+			 return $amt;
 		 }else{
 			 return '';
 		 }
