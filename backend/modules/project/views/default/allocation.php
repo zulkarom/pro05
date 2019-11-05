@@ -152,9 +152,7 @@ if($batches){
 
 <div class="form-group"><?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
-	'autoXlFormat'=>true,
     'columns' => $export_columns,
-	'target'=>ExportMenu::TARGET_SELF,
 	'filename' => 'SENARAI_PERUNTUKAN_' . date('Y-m-d'),
 	'onRenderSheet'=>function($sheet, $grid){
 		$sheet->getStyle('A2:'.$sheet->getHighestColumn().$sheet->getHighestRow())
@@ -176,7 +174,11 @@ if($batches){
 <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'options' => [ 'style' => 'table-layout:fixed;' ],
-		'export' => false,
+		'autoXlFormat'=>true,
+		'export'=>[
+			'showConfirmAlert'=>false,
+			'target'=>GridView::TARGET_BLANK
+		],
         //'filterModel' => $searchModel,
         'columns' => [
 			['class' => 'yii\grid\CheckboxColumn',
