@@ -34,13 +34,13 @@ $export_columns = [
 			[
 				'label' => 'No. Kad Pengenalan',
 				'value' => function($model){
-						return "'" . $model->eftIcString;
+						return $model->eftIcString;
 				}
 			],
 			[
 				'label' => 'No. Akaun',
 				'value' => function($model){
-						return $model->eft_account;
+						return "'" . $model->eft_account;
 				}
 			],
 			[
