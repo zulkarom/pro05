@@ -26,6 +26,109 @@ $sem = Semester::getCurrentSemester();
 $this->title = 'ANALISIS TUNTUTAN SEMESTER ' . strtoupper($sem->niceFormat());
 $this->params['breadcrumbs'][] = $this->title;
 
+$colums_export = [
+            ['class' => 'yii\grid\SerialColumn'],
+
+			[
+			 'attribute' => 'fasi_name',
+			 'label' => 'FASILITATOR',
+			 'contentOptions' => [ 'style' => 'width: 15%;' ],
+			 'value' => function($model){
+				 return strtoupper($model->fasi->user->fullname);
+			 }
+			],
+            [
+			//'attribute' => 'semester_id' ,
+			'label' => 'KURSUS',
+			'value' => function($model){
+				if($model->acceptedCourse){
+					return strtoupper($model->acceptedCourse->course->course_code . "\n" . $model->acceptedCourse->course->course_name) . "\n" . '(' . $model->groupName . ')';
+				}
+				
+			},
+			],
+			
+            [
+			 'attribute' => 'campus_id',
+			'label' => 'Kampus',
+			//'with' => '10%',
+			 'value' => function($model){
+				 return strtoupper($model->campus->campus_name);
+			 },
+			
+			], 
+			[
+				//'attribute' => 'rate_amount',
+				'label' => 'KADAR',
+				'headerOptions' => ['style'=>'text-align:center'],
+				'contentOptions' => ['style'=>'text-align:center'],
+				'value' => function($model){
+					return $model->rate_amount;
+				}
+			]
+			
+        ];
+		
+		
+$arr_month = $sem->getListMonthSem();
+$months = Common::months_short();
+foreach($arr_month as $m){
+	$colums_export[] = [
+	 'label' => strtoupper($months[$m]) ,
+	 'format' => 'html',
+	 
+	 'value' => function($model,$c, $v,$r){
+		 $hour = $model->getHourMonth($r->label);
+		 if($hour > 0){
+			 return $hour;
+		 }else{
+			 return '';
+		 }
+	 },
+	 
+	 
+
+	];
+}
+$total_style = ['style'=>'text-align:center;background-color:#f9f9f9'];
+$colums_export[] = [
+	 'label' => 'JUMLAH JAM' ,
+	 'headerOptions' => $total_style,
+	 'contentOptions' => $total_style,
+	 'value' => function($model){
+		 return $model->getHourTotal();
+	 }
+	];
+foreach($arr_month as $m){
+	$colums_export[] = [
+	 'label' => strtoupper($months[$m]) ,
+	 'headerOptions' => ['style'=>'text-align:center'],
+	 'value' => function($model,$c, $v,$r){
+		 $amt = $model->getAmountMonth($r->label);
+		 if($amt > 0){
+			 return 'RM' . $amt;
+		 }else{
+			 return '';
+		 }
+	 }
+	];
+}
+
+$colums_export[] = [
+	 'label' => "JUMLAH \n(RM)" ,
+	 'format' => 'html',
+	 'value' => function($model){
+		 $total = $model->getAmountTotal();
+		 if($total > 0){
+			 return $total ;
+		 }else{
+			 return '';
+		 }
+		 
+	 }
+	];
+	
+
 $colums_array = [
             ['class' => 'yii\grid\SerialColumn'],
 
@@ -138,7 +241,7 @@ $colums_array[] = [
   
  <div class="form-group"><?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
-    'columns' => $colums_array,
+    'columns' => $colums_export,
 	'target'=>ExportMenu::TARGET_SELF,
 	'filename' => 'JADUAL_TUNTUTAN_' . date('Y-m-d'),
 	'onRenderSheet'=>function($sheet, $grid){
