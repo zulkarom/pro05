@@ -152,6 +152,11 @@ if($batches){
 
 <div class="form-group"><?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
+	'autoXlFormat'=>true,
+		'export'=>[
+			'showConfirmAlert'=>false,
+			'target'=>GridView::TARGET_BLANK
+		],
     'columns' => $export_columns,
 	'filename' => 'SENARAI_PERUNTUKAN_' . date('Y-m-d'),
 	'onRenderSheet'=>function($sheet, $grid){
