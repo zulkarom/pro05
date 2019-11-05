@@ -152,6 +152,7 @@ if($batches){
 
 <div class="form-group"><?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
+	'autoXlFormat'=>true,
     'columns' => $export_columns,
 	'target'=>ExportMenu::TARGET_SELF,
 	'filename' => 'SENARAI_PERUNTUKAN_' . date('Y-m-d'),
