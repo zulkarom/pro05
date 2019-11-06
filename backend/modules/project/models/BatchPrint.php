@@ -84,6 +84,7 @@ if($this->model){
 		<td>'.  date('d/m/Y', strtotime($row->approved_at)) .'</td>
 		<td>'. $amount .'</td>
 	</tr>';
+	$total += $amount;
 $i++;
 	}
 }
