@@ -62,9 +62,9 @@ SEMESTER '. strtoupper($this->semester->niceFormat()) .' BIL. '.$this->batchno .
 				<td width="'. $col_bank .'%">BANK</td>
 				<td width="'. $col_course .'%">KOD KURSUS / NAMA KURSUS</td>
 				<td width="'. $col_program .'%">NAMA PROGRAM</td>
-				<td width="'. $col_jumlah .'%">JUMLAH (RM)</td>
-				<td width="'. $col_kampus .'%">KAMPUS</td>
-				<td width="'. $col_tarikh .'%">TARIKH LULUS</td>
+				<td width="'. $col_jumlah .'%">KAMPUS</td>
+				<td width="'. $col_kampus .'%">TARIKH LULUS</td>
+				<td width="'. $col_tarikh .'%">JUMLAH (RM)</td>
 			</tr>
 <tbody>';
 $total = 0;
