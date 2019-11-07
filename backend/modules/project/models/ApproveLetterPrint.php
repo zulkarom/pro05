@@ -110,7 +110,7 @@ EOD;
 		5. &nbsp;&nbsp;&nbsp;Sekiranya terdapat sebarang pertanyaan, pihak '.$saudara.' boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.
 		</div>
 
-		<br /><br />
+		<br />
 		Segala kerjasama dan komitmen daripada pihak '.$saudara.' amatlah dihargai.
 <br /><br />
 Sekian terima kasih.
