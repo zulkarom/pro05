@@ -138,7 +138,7 @@ EOD;
 	
 	public function writeSigniture(){
 		$html = '
-		<img src="images/sig-trans.png" />
+		<img src="images/sig-trans-832HI36FGSOV83.png" />
 		';
 		$tbl = <<<EOD
 		$html
