@@ -72,7 +72,7 @@ class ApproveLetterPrint
 		';
 		
 		$this->pdf->SetMargins(20, 10, 20);
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$this->pdf->SetFont('helvetica', '', 10);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -126,11 +126,7 @@ Pengarah<br />
 Pusat Kokurikulum<br />
 
 		';
-		
-
-		
-		
-		$this->pdf->SetFont('helvetica', '', 9.5);
+	
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -144,12 +140,11 @@ EOD;
 		$html = '
 		<img src="images/sig-trans.png" />
 		';
-		$this->pdf->SetFont('helvetica', '', 10);
 		$tbl = <<<EOD
 		$html
 EOD;
-
-		$this->pdf->setY(210);
+		$this->pdf->setX(2);
+		$this->pdf->setY(225);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
