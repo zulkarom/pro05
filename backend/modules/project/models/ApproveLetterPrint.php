@@ -144,7 +144,7 @@ EOD;
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->setY($y - 50);
+		$this->pdf->setY($y - 48);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
