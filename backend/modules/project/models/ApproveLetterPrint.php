@@ -27,7 +27,7 @@ class ApproveLetterPrint
 		
 		$this->writeRef();
 		$this->writeTitle();
-		//$this->writeSignitureImg();
+		$this->writeSigniture();
 		
 		
 
@@ -116,7 +116,7 @@ EOD;
 Sekian terima kasih.
 <br /><br />';
 
-$sign ='<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
+$html .='<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
 "BERKHIDMAT UNTUK NEGARA"</b>
 <br /><br />
 Saya yang menjalankan amanah,<br />
@@ -127,7 +127,7 @@ Pusat Kokurikulum<br />
 
 		';
 		
-		$html .= '<img src="images/signiture.jpg" />';
+
 		
 		
 		$this->pdf->SetFont('helvetica', '', 9.5);
@@ -139,64 +139,17 @@ EOD;
 	}
 	
 	
-	
-	
-	public function writeSlogan(){
-		$html = '<b><i>"ISLAM DIJULANG, RAJA DIJUNJUNG, RAKYAT DISANJUNG"</i></b>
-		<br /><br />
-		<b>"BERKHIDMAT UNTUK NEGARA"</b>
-		<br /><br /><br />
-		';
-		$this->pdf->SetFont('helvetica', '', 10);
-		$tbl = <<<EOD
-		$html
-EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-	}
-	
-	public function writeSignitureImg(){
-		$html = '<img src="images/signiture.jpg" />';
-		$this->pdf->SetFont('helvetica', '', 9.5);
-		$tbl = <<<EOD
-		$html
-EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-	}
 	
 	public function writeSigniture(){
-		$html = 'Saya yang menurut perintah,
-		<br /><br /><br />
-		
-		';
-		$this->pdf->SetFont('helvetica', '', 9.5);
-		$tbl = <<<EOD
-		$html
-EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-		
-		$html = '<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b>
-		
+		$html = '
+		<img src="images/sig-trans.png" />
 		';
 		$this->pdf->SetFont('helvetica', '', 10);
 		$tbl = <<<EOD
 		$html
 EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-		
-		$html = 'Pengarah
-		<br />Pusat Kokurikulum
-		<br /><br />
-		
-		
-		';
-		$this->pdf->SetFont('helvetica', '', 10);
-		$tbl = <<<EOD
-		$html
-EOD;
+
+		$this->pdf->setY(210);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
