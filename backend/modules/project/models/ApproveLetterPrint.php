@@ -137,14 +137,14 @@ EOD;
 	
 	
 	public function writeSigniture(){
+		$y = $this->pdf->getY();
 		$html = '
 		<img src="images/sig-trans-832HI36FGSOV83.png" />
 		';
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->setX(2);
-		$this->pdf->setY(225);
+		$this->pdf->setY($y - 50);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
