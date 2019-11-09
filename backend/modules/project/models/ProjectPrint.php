@@ -234,7 +234,7 @@ EOD;
 		$course = $this->model->course;
 		
 		
-		$student_name = '';
+		$student_name = '[BELUM HANTAR]';
 		$position = '';
 		if( $this->model->topPosition){
 			$student_name = $this->model->topPosition->student->student_name;
