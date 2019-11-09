@@ -78,7 +78,13 @@ echo $form->field($model, 'fasi_id')->widget(Select2::classname(), [
 </div>
 	
 	    <div class="form-group">
-        <?= Html::submitButton('Tambah', ['class' => 'btn btn-success']) ?>
+        <?php 
+		
+		$button = $model->isNewRecord ? 'Tambah' : 'Kemaskini' ;
+		
+		echo Html::submitButton($button, ['class' => 'btn btn-success']) 
+		
+		?>
     </div>
 
     <?php ActiveForm::end(); ?>

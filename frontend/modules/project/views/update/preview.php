@@ -29,6 +29,15 @@ if ($model->status == 0){
 
 <div class="site-index">
 
+ <b>ALIRAN KERJA PENGHANTARAN KERTAS KERJA:</b>
+		 <ol>
+			<li>Pastikan semua maklumat kertas kerja diisi</li>
+			<li>Hantar ke Fasilitator (Klik Butang Hantar di Bawah)</li>
+			<li>Fasilitator akan semak dan hantar ke Pusat Kokurikulum (online)</li>
+			<li>Pelajar/Fasilitator cetak kertas kerja serta hantar ke Pusat Kokurikulum (hardcopy)</li>
+		 </ol>
+		 
+
     <?php $form = ActiveForm::begin(); ?>
 <?=$form->field($model, 'status')->hiddenInput(['value' => 10])->label(false)?>
      <?php

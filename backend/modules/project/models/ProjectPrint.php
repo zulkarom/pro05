@@ -230,24 +230,50 @@ EOD;
 	}
 	
 	public function writeSigniture(){
-		
+		$topY = $this->pdf->getY();
 		$course = $this->model->course;
+		
+		
+		$student_name = '';
+		$position = '';
+		if( $this->model->topPosition){
+			$student_name = $this->model->topPosition->student->student_name;
+			
+			$position = $this->model->topPosition->position;
+		}
+		
+		$status = $this->model->status;
+		$fasi_name = $this->model->fasi->user->fullname;
+		
+		if($status == 0){
+			$student_name = '[BELUM HANTAR]';
+			$fasi_name = '[BELUM SEMAK]';
+		}else if($status == 10){
+			$fasi_name = '[BELUM SEMAK]';
+		}
+		
+		
+		
+		
+		
 		
 		$html = '<br /><table border="0" nobr="true">
 		<tr>
 		<td width="45%">Disediakan oleh:
-		<br /><br /><br />
+		<br /><br /><span style="font-size:14pt;"><b>'.$student_name.'</b></span><br />
 		.......................................................<br />
+		'.$position.'
 		';
-		
-		
-		
-		if( $this->model->topPosition){
-			$html .= '<b>' . strtoupper($this->model->topPosition->student->student_name) .'</b><br />';
-			$html .= $this->model->topPosition->position;
-		}
-		
+
+		//$html .= '<b>' . strtoupper($student_name) .'</b><br />';
 		$fasi = $this->model->fasiCoorPost;
+		
+		
+		
+		//------------buang lastname ----------------
+		
+		
+		
 		
 		
 		$html .= '<br />
@@ -256,9 +282,11 @@ EOD;
 		
 		</td><td width="10%"></td> 
 		<td width="40%">Disemak oleh:
-		<br /><br /><br />
+		<br /><br />
+		<b style="font-size:14pt">'.strtoupper($fasi_name) .'</b>
+		<br />
 		.......................................................<br />
-		<b>'.strtoupper($this->model->fasi->user->fullname) .'</b><br />
+	
 		'.$fasi.'<br />
 		Kumpulan '.$this->model->group->group_name.'<br />
 		Kursus '.$this->model->course->course_code.' '.$this->model->course->course_name.'<br />
@@ -268,7 +296,44 @@ EOD;
 		</tr>
 		</table>';
 		
-		$html .= '<br /><br /><br />
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->SetMargins(24, 10, 24);
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+		$storeY = $this->pdf->getY();
+		
+		//---------------------signiture overlap---------------
+		
+		
+		/* $html ='<span style="font-family:autografpersonaluseonlyi; font-size:37pt"><b>'.$sign_student.'</b></span>';
+		
+		$tbl = <<<EOD
+		$html
+EOD;
+		
+		$this->pdf->SetY($topY + 5);
+		$this->pdf->writeHTML($tbl, true, false, false, false, ''); */
+		
+		//-----------------verified-----------
+		
+		/* $html ='<table><tr><td width="55%">&nbsp;</td><td><img src="images/verified.png" /></td></tr></table>';
+		
+		$tbl = <<<EOD
+		<br />
+		$html
+EOD;
+		
+		//$this->pdf->Ln();
+		$this->pdf->SetY($topY - 5);
+		$this->pdf->writeHTML($tbl, true, false, false, false, ''); */
+		
+		///--------------------back to normal --------------
+		//$this->pdf->setY($storeY);
+		
+		
+		$html = '<br /><br /><br />
 		<table nobr="true"><tr><td>
 		Disokong oleh:
 		<br /><br /><br />
@@ -306,8 +371,31 @@ EOD;
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->SetMargins(24, 10, 24);
+		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+	}
+	
+	public function autograph($student_name){
+		$sign_student = $student_name;
+		$delimiter_arr = ['Bin', 'Binti', 'B.', 'Bt.', 'b.', 'bt.', 'A/P', 'A/L'];
+		$delimiter = null;
+		foreach($delimiter_arr as $d){
+			if (strpos(strtolower($student_name), strtolower($d)) !== false) {
+				$delimiter = $d;
+				break;
+			}
+		}
+		if($delimiter){
+			$sign_student = explode(strtolower($delimiter), strtolower($sign_student));
+			$sign_student = $sign_student[0];
+		}
+		
+		$sign_student = ucwords(strtolower($sign_student));
+		
+		if (strpos($sign_student, ' ') !== false) {
+			$arr_sign = explode(' ', $sign_student);
+			$sign_student = max($arr_sign);
+		}
 	}
 	
 	public function writeHeaderFooter(){

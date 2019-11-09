@@ -17,6 +17,14 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <h3><?=$model->pro_name?></h3>
 
+ <b>ALIRAN KERJA PENGHANTARAN KERTAS KERJA:</b>
+		 <ol>
+			<li>Pelajar mengisi semua maklumat kertas kerja</li>
+			<li>Pelajar menghantar ke Fasilitator (online)</li>
+			<li>Fasilitator akan semak dan hantar ke Pusat Kokurikulum (Klik hantar di bawah)</li>
+			<li>Pelajar/Fasilitator cetak kertas kerja serta hantar ke Pusat Kokurikulum (hardcopy)</li>
+		 </ol>
+
 <br />
 
 <?php 
@@ -27,7 +35,9 @@ if($model->status == 0){
 <?php
 }else{
 if($model->status == 10){
-	echo '<i>Perhatian kepada fasilitator, sila semak kertas kerja ini sebelum menghantar ke Pusat Kokurikulum. <br />Watermark/latarbelakang DERAF pada kerja kerja hanya akan hilang selepas fasilitator menghantar ke Pusat Kokurikulum.</i>
+	echo '<i>Perhatian kepada fasilitator, sila semak kertas kerja ini sebelum menghantar ke Pusat Kokurikulum. <br />Watermark/latarbelakang SEMAK pada kerja kerja hanya akan hilang selepas fasilitator menghantar ke Pusat Kokurikulum.<br />
+	Klik butang HANTAR setelah semakan selesai atau klik KEMBALI KEMASKINI untuk pelajar kembali mengemaskini kertas kerja.
+	</i>
 
 	
 	<br /><br />';
@@ -53,6 +63,9 @@ if($model->status == 10){
 		 <i>Terima kasih atas usaha untuk menyediakan kertas kerja ni.<br />Untuk tindakan selanjutnya, sila cetak, tandatangan serta hantar kertas kerja ke Pusat Kokurikulum.</i>
 		 
 		 ';
+	 }else if($model->status == 30){
+		 echo 'KERTAS KERJA TELAH DILULUS<br /><br />
+		 <i>Terima kasih atas usaha untuk menyediakan kertas kerja ni.</i>';
 	 }
 	 ?>
         
