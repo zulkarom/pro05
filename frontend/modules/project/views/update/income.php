@@ -42,9 +42,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
         'formId' => 'dynamic-form',
         'formFields' => [
             'id',
-            'rs_name',
-            'rs_quantity',
-			'rs_amount'
+     
         ],
     ]); ?>
 
@@ -62,20 +60,20 @@ use wbraganca\dynamicform\DynamicFormWidget;
             </tr>
         </thead>
         <tbody class="container-items">
-        <?php foreach ($resources as $i => $resource): ?>
+        <?php foreach ($resources as $i => $resource): 
+		$core = false;
+		$style = '';
+		$class = 'resource-item';
+		if($resource->rs_core == 1){
+				$core = true;
+				$style = 'style="vertical-align:middle"';
+				$class = 'resource-item';
+			}
+		?>
             <tr class="resource-item">
                 <td class="sortable-handle text-center vcenter" style="cursor: move;">
                         
                     </td>
-				
-            <?php 
-			$core = false;
-			$style = '';
-			if($resource->rs_core == 1){
-				$core = true;
-				$style = 'style="vertical-align:middle"';
-			}
-			?>
                 <td class="vcenter" <?=$style?>>
 				
                     <?php
@@ -84,7 +82,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
                             echo Html::activeHiddenInput($resource, "[{$i}]id");
                         }
 						if($core){
-							echo '&nbsp;' . $resource->rs_name ;
+							echo '<div style="display:none">' . $form->field($resource, "[{$i}]rs_name")->label(false) . '</div>';
+							echo '<span>&nbsp;' . $resource->rs_name . '</span>' ;
 						}else{
 							echo $form->field($resource, "[{$i}]rs_name")->label(false);
 						}
@@ -106,6 +105,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
 				<?php 
 				if(!$core){
 					echo '<button type="button" class="remove-resource btn btn-default btn-sm"><span class="icon icon-remove"></span></button>';
+				}else{
+					echo '<button type="button" style="display:none" class="remove-resource btn btn-default btn-sm"><span class="icon icon-remove"></span></button>';
 				}
 				
 				?>
@@ -151,6 +152,24 @@ use wbraganca\dynamicform\DynamicFormWidget;
 </section>
 <br /><br /><br /><br /><br /><br />
 
+<?php 
+
+$this->registerJs('
+
+$(".dynamicform_wrapper").on("afterInsert", function (e, item) {
+  var input = item.getElementsByTagName("td")[1].children[0];
+  var str_id = input.getAttribute("id");
+  var arr_id = str_id.split("-");
+  var id = arr_id[1];
+  var td = $("#resource-" + id + "-id").parent()
+  td.find("div").show();
+  td.find("span").hide();
+  td.parent().find("td button").show();
+
+});
 
 
+');
+
+?>
 
