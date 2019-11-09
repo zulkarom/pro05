@@ -260,7 +260,7 @@ EOD;
 		$html = '<br /><table border="0" nobr="true">
 		<tr>
 		<td width="45%">Disediakan oleh:
-		<br /><br /><span style="font-size:14pt;"><b>'.$student_name.'</b></span><br />
+		<br /><br /><span style="font-size:14pt;"><b>'.strtoupper($student_name).'</b></span><br />
 		.......................................................<br />
 		'.$position.'
 		';
