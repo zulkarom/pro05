@@ -1,7 +1,6 @@
-kertas kerja deraf watermark kena terang sikit with further instruction
-tiada nama utk yg tak hantar
-verified stamp
-tandatangan auto pelajar
+kena ada validation before submit kertas kerja
+VALIDATION UTK NAMA YG HURUF BESAR SEMUA NI
+BSNB ACCOUNT NO 16 DIGIT  !!!
 
 add progress puloooooooooooooop.............
 auto add kertas kerja kat admin - senarai
@@ -11,7 +10,7 @@ $query = Leader::find()->where(['not in', 'leaderID', $subQuery]);
 $models = $query->all();
 -----------------------------------------
 
-kena ada validation before submit kertas kerja
+
 
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
 

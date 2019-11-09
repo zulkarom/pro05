@@ -42,6 +42,7 @@ class UpdateController extends Controller
     {
 		$token = strtoupper($token);
 		$model = $this->findModel($token);
+
 		
 		
 		
@@ -542,6 +543,8 @@ class UpdateController extends Controller
             Model::loadMultiple($resources, Yii::$app->request->post());
             
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($resources, 'id', 'id')));
+			
+			
             
             foreach ($resources as $i => $resource) {
                 $resource->rs_order = $i;

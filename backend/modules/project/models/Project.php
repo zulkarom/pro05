@@ -52,6 +52,8 @@ class Project extends \yii\db\ActiveRecord
     {
         return 'project';
     }
+	
+
 
     /**
      * @inheritdoc
@@ -65,6 +67,8 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['pro_name', 'location', 'background', 'purpose'], 'required', 'on' => 'project-admin-edit'],
 			
+			
+			
 			[['eft_name', 'eft_ic', 'eft_account','eft_bank','eft_account','eft_email'], 'required', 'on' => 'eft'],
 			
 			[['pro_name', 'pro_token', 'application_id', 'location',  'purpose', 'background', 'pro_target', 'updated_at'], 'required', 'on' => 'update-main'],
@@ -76,14 +80,27 @@ class Project extends \yii\db\ActiveRecord
             [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
 			
 			[['eft_account', 'eft_ic'], 'number'],
+			
+			['pro_name', 'validateAllCaps'],
 
 			[['eft_email'], 'email'],
 			
             [['purpose', 'background', 'approval_note', 'eft_name', 'eft_bank'], 'string'],
 			
-            [['pro_name', 'location', 'collaboration', 'pro_time', 'pro_target', 'agency_involved'], 'string', 'max' => 200],
+            [['location', 'collaboration', 'pro_time', 'pro_target', 'agency_involved'], 'string', 'max' => 200],
         ];
     }
+	
+	public function validateAllCaps($attribute, $params, $validator)
+    {
+        if (strtoupper($this->$attribute) == $this->$attribute) {
+			$msg = 'Gunakan huruf besar pada huruf pertama perkataan sahaja!';
+			Yii::$app->session->addFlash('error', 'Tajuk Kertas Cadangan: ' . $msg);
+            $this->addError($attribute, $msg);
+			
+        }
+    }
+
 
     /**
      * @inheritdoc
