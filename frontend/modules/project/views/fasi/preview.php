@@ -7,7 +7,7 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\project\models\Project */
 
-$this->title = 'Lihat & Hantar Kertas Kerja';
+$this->title = 'Semak & Hantar Kertas Kerja';
 $this->params['breadcrumbs'][] = ['label' => 'Projects', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Update';
 ?>
@@ -76,7 +76,7 @@ if($model->status == 10){
 				echo Html::submitButton('<span class="glyphicon glyphicon-arrow-left"></span> KEMBALI KEMASKINI', ['class' => 'btn btn-warning', 'name' => 'wfaction', 'value' => 'return']);
 				echo ' ';
 				
-				echo Html::submitButton('HANTAR KE PUSAT KOKURIKULUM', ['class' => 'btn btn-primary', 'name' => 'wfaction', 'value' => 'submit']);
+				echo Html::submitButton('<span class="glyphicon glyphicon-send"></span> SEMAK & HANTAR', ['class' => 'btn btn-success', 'name' => 'wfaction', 'value' => 'submit']);
 			}
 			 
 			

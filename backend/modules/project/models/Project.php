@@ -641,7 +641,6 @@ class Project extends \yii\db\ActiveRecord
 			'project.status' => 30,
 			'r.rs_core' => 1])
 		->one()->jum;
-
 	}
 	
 	public function listBatch(){
@@ -650,6 +649,31 @@ class Project extends \yii\db\ActiveRecord
 		
 	}
 	
+	public function validateTabUtama(){
+		//if(){}
+	}
 	
+	public function validateTabPendapatan(){
+		
+	}
 	
+	public function validateTabBelanja(){
+		
+	}
+	
+	public function validateTabTentatif(){
+		
+	}
+	
+	public function validateTabJawatankuasa(){
+		
+	}
+	
+	public function validateTabEft(){
+		
+	}
+	
+	public function validateAll(){
+		$arr = ['Utama', 'Pendapatan', 'Belanja', 'Tentatif', 'Jawatankuasa', 'Eft'];
+	}
 }

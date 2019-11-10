@@ -170,7 +170,7 @@ use backend\modules\esiap\models\Course;
                         'url' => '#',
                         'items' => [
 						
-                            ['label' => 'Lihat & Hantar', 'icon' => 'search', 'url' => ['/project/fasi/index']],
+                            ['label' => 'Semak & Hantar', 'icon' => 'search', 'url' => ['/project/fasi/index']],
 							
 							['label' => 'Tukar Kata Kunci', 'icon' => 'lock', 'url' => ['/project/fasi/change-key']],
 							
