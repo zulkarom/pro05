@@ -116,8 +116,10 @@ EOD;
 		$obj = $this->model->objectives;
 		if($obj){
 			$html .= '<table>';
+			$i = 1;
 			foreach($obj as $ob){
-				$html .= '<tr><td width="5%"> - </td><td width="90%">'.$ob->obj_text .'</td></tr>';
+				$html .= '<tr><td width="5%"> '.$i.'. </td><td width="90%">'.$ob->obj_text .'</td></tr>';
+			$i++;
 			}
 			$html .= '</table>';
 		}
