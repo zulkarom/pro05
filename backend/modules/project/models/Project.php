@@ -697,11 +697,11 @@ class Project extends \yii\db\ActiveRecord
 		}
 	}
 	
-	public function validateAll(){
+	public function validateAllTabs(){
 		$arr = ['Utama', 'Pendapatan', 'Belanja', 'Tentatif', 'Jawatankuasa', 'Eft'];
 		foreach($arr as $tab){
-			$str = 'validateTab' . $tab . '()';
-			if(!$this->$str){
+			$str = 'validateTab' . $tab ;
+			if(!$this->$str()){
 				return false;
 				break;
 			}

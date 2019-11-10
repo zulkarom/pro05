@@ -896,10 +896,17 @@ class UpdateController extends Controller
 			$model->submitted_at = new Expression('NOW()');
 			$model->updated_at = new Expression('NOW()');
 			
-			if($model->save()){
-				Yii::$app->session->addFlash('success', "Data Updated");
+			if($model->validateAllTabs()){
+				if($model->save()){
+					Yii::$app->session->addFlash('success', "Data Updated");
+					return $this->redirect(['preview', 'token' => $token]);
+				}
+			}else{
+				Yii::$app->session->addFlash('error', "Sila pastikan semua maklumat lengkap!");
 				return $this->redirect(['preview', 'token' => $token]);
 			}
+			
+			
             
         }
 		
