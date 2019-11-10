@@ -31,6 +31,7 @@ class OfferLetter
 		$this->pdf->AddPage("P");
 		$this->writeEnding();
 		//$this->writeSlogan();
+		$this->writeSigniture();
 		$this->writeSignitureImg();
 		$this->writeSk();
 		
@@ -208,7 +209,7 @@ EOD;
 		Segala kerjasama dan komitmen tuan adalah amatlah dihargai.
 		<br /><br />
 		Sekian, terima kasih.
-		<br /><br />
+		<br />
 		</td></tr></table>';
 
 		$this->pdf->SetFont('helvetica', '', 9.5);
@@ -219,34 +220,30 @@ EOD;
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
-	public function writeSlogan(){
-		$html = '<b><i>"ISLAM DIJULANG, RAJA DIJUNJUNG, RAKYAT DISANJUNG"</i></b>
-		<br /><br />
-		<b>"BERKHIDMAT UNTUK NEGARA"</b>
-		<br /><br /><br />
-		';
-		$this->pdf->SetFont('helvetica', '', 10);
-		$tbl = <<<EOD
-		$html
-EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-	}
+
 	
 	public function writeSignitureImg(){
-		$html = '<img src="images/signiture.jpg" />';
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$y = $this->pdf->getY();
+		$html = '
+		<img src="images/sig-trans-832HI36FGSOV83.png" />
+		';
 		$tbl = <<<EOD
 		$html
 EOD;
+		$this->pdf->setY($y - 48);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
 	public function writeSigniture(){
-		$html = 'Saya yang menurut perintah,
-		<br /><br /><br />
-		
+		$html = '<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
+"BERKHIDMAT UNTUK NEGARA"</b>
+<br /><br />
+Saya yang menjalankan amanah,<br />
+<br /><br /><br />
+<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
+Pengarah<br />
+Pusat Kokurikulum<br />
 		';
 		$this->pdf->SetFont('helvetica', '', 9.5);
 		$tbl = <<<EOD
@@ -255,28 +252,7 @@ EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
-		$html = '<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b>
 		
-		';
-		$this->pdf->SetFont('helvetica', '', 10);
-		$tbl = <<<EOD
-		$html
-EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-		
-		$html = 'Pengarah
-		<br />Pusat Kokurikulum
-		<br /><br />
-		
-		
-		';
-		$this->pdf->SetFont('helvetica', '', 10);
-		$tbl = <<<EOD
-		$html
-EOD;
-		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
 	
