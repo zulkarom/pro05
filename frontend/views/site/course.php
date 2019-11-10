@@ -59,6 +59,13 @@ table.padded-table td { padding:10px; font-size:18px; color:#000000; }
 				'label' => 'Nama Kursus',
 				'format' => 'raw',
 				'value' => function($model){
+				if($model->defaultVersion){
+					$syp_bm = $model->defaultVersion->profile->synopsis;
+					$syp_bi = $model->defaultVersion->profile->synopsis_bi;
+				}else{
+					$syp_bm = '';
+					$syp_bi = '';
+				}
 					return '
 				
   <a href="#" data-toggle="modal" data-target="#modal-'.$model->id.'">
@@ -91,8 +98,8 @@ table.padded-table td { padding:10px; font-size:18px; color:#000000; }
 		
 		
 		<div style="font-size:16px">
-		<div class="con-bm">'.$model->defaultVersion->profile->synopsis .'</div>
-		<div class="con-en" style="display:none">'.$model->defaultVersion->profile->synopsis_bi .'</div>
+		<div class="con-bm">'.$syp_bm .'</div>
+		<div class="con-en" style="display:none">'.$syp_bi.'</div>
 
 </div>
         </div>
