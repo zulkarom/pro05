@@ -236,20 +236,36 @@ EOD;
 		
 		$student_name = '[TIADA NAMA]';
 		$position = '';
-		if( $this->model->topPosition){
-			$student_name = $this->model->topPosition->student->student_name;
-			
-			$position = $this->model->topPosition->position;
+		
+		if($this->model->prepared_by == 0){
+			if($this->model->topPosition){
+				$student_name = $this->model->topPosition->student->student_name;
+				
+				$position = $this->model->topPosition->position;
+			}
+		}else{
+			$prepared = $this->model->preparedBy;
+			if($prepared){
+				$student_name = $prepared->student->student_name;
+				$position = $prepared->position;
+			}
 		}
+		
 		
 		$status = $this->model->status;
 		$fasi_name = $this->model->fasi->user->fullname;
+		$date_submit = date('d/m/Y', strtotime($this->model->submitted_at));
+		$date_checked = date('d/m/Y', strtotime($this->model->checked_at));
 		
 		if($status == 0){
 			$student_name = '[BELUM HANTAR]';
 			$fasi_name = '[BELUM SEMAK]';
+			$date_submit = '';
+			$date_checked = '';
+			
 		}else if($status == 10){
 			$fasi_name = '[BELUM SEMAK]';
+			$date_checked = '';
 		}
 		
 		
@@ -278,7 +294,7 @@ EOD;
 		
 		$html .= '<br />
 		'.$this->model->pro_name .' <br />
-		Tarikh: '.date('d/m/Y').'
+		Tarikh: '. $date_submit .'
 		
 		</td><td width="10%"></td> 
 		<td width="40%">Disemak oleh:
@@ -290,7 +306,7 @@ EOD;
 		'.$fasi.'<br />
 		Kumpulan '.$this->model->group->group_name.'<br />
 		Kursus '.$this->model->course->course_code.' '.$this->model->course->course_name.'<br />
-		Tarikh: '.date('d/m/Y').'
+		Tarikh: '. $date_checked .'
 		
 		</td>
 		</tr>

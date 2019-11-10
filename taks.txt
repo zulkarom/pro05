@@ -1,17 +1,5 @@
 
 
-add progress puloooooooooooooop.............
-
-
-auto add kertas kerja kat admin - senarai
-------------------pastikan smua project created----------------------------
-$subQuery = Follower::find()->select('foreignKey_Leader');
-$query = Leader::find()->where(['not in', 'leaderID', $subQuery]);
-$models = $query->all();
------------------------------------------
-
-
-
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
 
 edit manual application - overwrite

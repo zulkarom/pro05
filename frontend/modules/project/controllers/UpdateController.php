@@ -882,6 +882,7 @@ class UpdateController extends Controller
 	public function actionPreview($token)
     {
 		$model = $this->findModel($token);
+		$model->scenario = 'student_submit';
 		if(!$model){
 			return $this->redirect(['/project/default/index', 'token' => $token]);
 		}

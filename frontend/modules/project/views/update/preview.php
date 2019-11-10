@@ -43,13 +43,13 @@ if ($model->status == 0){
      <?php
 	 if ($model->status == 10){
 		 echo 'KERTAS KERJA TELAH DIHANTAR KE FASILITATOR<br /><br />
-		 <i>Terima kasih atas usaha untuk menyediakan kertas kerja ni.
+		 <i>Terima kasih atas usaha anda untuk menyediakan kertas kerja ini.
 <br />Untuk tindakan selanjutnya, sila maklumkan kepada fasilitator untuk semakan <br />dan penghantaran ke Pusat Kokurikulum secara online dan hardcopy. <br /> Watermark/latarbelakang DERAF pada kerja kerja hanya akan hilang selepas fasilitator menghantar ke Pusat Kokurikulum.</i>
 		 <br />';
 		 
 	 }else if($model->status == 20){
 		 echo 'KERTAS KERJA TELAH DIHANTAR SECARA ONLINE KE PUSAT KOKURIKULUM<br /><br />
-		  <i>Terima kasih atas usaha untuk menyediakan kertas kerja ni.<br />Untuk tindakan selanjutnya, sila cetak, tandatangan serta hantar kertas kerja ke Pusat Kokurikulum.</i>
+		  <i>Terima kasih atas usaha anda untuk menyediakan kertas kerja ini.<br />Untuk tindakan selanjutnya, sila cetak dan hantar kertas kerja ke Pusat Kokurikulum.</i>
 		 <br />';
 	 }else if($model->status == 0){
 		 $arr = ['Utama' => 'Utama', 'Pendapatan' => 'Pendapatan', 'Belanja' => 'Perbelanjaan', 'Tentatif' => 'Tentatif', 'Jawatankuasa' => 'Jawatankuasa', 'Eft' => 'Borang EFT'];
@@ -74,6 +74,22 @@ if ($model->status == 0){
 		echo '</table><br /><br />';
 	 }
 	 ?>
+	 
+	 
+	 <?php 
+	 
+	if($model->status == 0){
+		?><div class="row">
+<div class="col-md-7"> <?= $form->field($model, 'prepared_by')->dropDownList($model->mainCommitteesArray, ['prompt' => 'Please Select' ]) ?></div>
+</div><?php
+	} 
+
+	 
+	 
+	 ?>
+	 
+	 
+	
         
     <br />
         <div class="form-group">

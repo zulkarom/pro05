@@ -75,6 +75,8 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['updated_at'], 'required', 'on' => 'update'],
 			
+			[['prepared_by', 'submitted_at'], 'required', 'on' => 'student_submit'],
+			
             [['date_start', 'date_end', 'approved_at', 'created_at', 'supported_at', 'updated_at'], 'safe'],
 			
             [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
@@ -120,7 +122,7 @@ class Project extends \yii\db\ActiveRecord
             'pro_time' => 'Masa',
             'pro_target' => 'Kumpulan Sasaran',
             'agency_involved' => 'Agensi yang terlibat',
-            'prepared_by' => 'Prepared By',
+            'prepared_by' => 'Disediakan oleh',
             'supported_by' => 'Supported By',
             'approved_by' => 'Approved By',
             'approval_note' => 'Approval Note',
@@ -429,6 +431,24 @@ class Project extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
     }
+	
+	public function getMainCommitteesArray(){
+		$array = array();
+		$comm = $this->mainCommittees;
+		if($comm){
+			foreach($comm as $com){
+				$array[$com->id] = $com->student->student_name . ' (' . $com->position . ')' ;
+			}
+		}
+		return $array;
+	}
+	
+	public function getPreparedBy(){
+		$com = CommitteeMain::findOne($this->prepared_by);
+		if($com){
+			return $com;
+		}
+	}
 	
 	public function getTopPosition(){
 		return $this->hasOne(CommitteeMain::className(), ['pro_id' => 'id'])->orderBy('com_order ASC');
