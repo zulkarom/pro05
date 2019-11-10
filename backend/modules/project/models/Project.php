@@ -650,30 +650,62 @@ class Project extends \yii\db\ActiveRecord
 	}
 	
 	public function validateTabUtama(){
-		//if(){}
+		if($this->pro_name){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public function validateTabPendapatan(){
-		
+		if(count($this->resources) > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public function validateTabBelanja(){
-		
+		if(count($this->expenseBasics) > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public function validateTabTentatif(){
-		
+		if(count($this->tentativeDays) > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public function validateTabJawatankuasa(){
-		
+		if(count($this->mainCommittees) > 0){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public function validateTabEft(){
-		
+		if($this->eft_name){
+			return true;
+		}else{
+			return false;
+		}
 	}
 	
 	public function validateAll(){
 		$arr = ['Utama', 'Pendapatan', 'Belanja', 'Tentatif', 'Jawatankuasa', 'Eft'];
+		foreach($arr as $tab){
+			$str = 'validateTab' . $tab . '()';
+			if(!$this->$str){
+				return false;
+				break;
+			}
+		}
+		return true;
 	}
 }

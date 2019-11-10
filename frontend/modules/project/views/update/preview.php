@@ -51,6 +51,27 @@ if ($model->status == 0){
 		 echo 'KERTAS KERJA TELAH DIHANTAR SECARA ONLINE KE PUSAT KOKURIKULUM<br /><br />
 		  <i>Terima kasih atas usaha untuk menyediakan kertas kerja ni.<br />Untuk tindakan selanjutnya, sila cetak, tandatangan serta hantar kertas kerja ke Pusat Kokurikulum.</i>
 		 <br />';
+	 }else if($model->status == 0){
+		 $arr = ['Utama' => 'Utama', 'Pendapatan' => 'Pendapatan', 'Belanja' => 'Perbelanjaan', 'Tentatif' => 'Tentatif', 'Jawatankuasa' => 'Jawatankuasa', 'Eft' => 'Borang EFT'];
+		 echo '<b>SENARAI SEMAK</b>
+		 <br /><i>*Sila pastikan semua telah diisi sebelum hantar.</i>
+		 <br />
+		 <table width="45%">';
+			foreach($arr as $key => $tab){
+				$str = 'validateTab' . $key ;
+				if($model->$str()){
+					$icon = 'check';
+					$color = 'green';
+				}else{
+					$icon = 'remove';
+					$color = 'red';
+				}
+				echo '<tr>
+			<td width="40%">'.$tab.'</td><td><span style="color:'.$color.'" class="icon icon-'.$icon.'"></span> </td>
+			</tr>';
+			}
+			
+		echo '</table><br /><br />';
 	 }
 	 ?>
         

@@ -76,7 +76,7 @@ if($model->status == 10){
 				echo Html::submitButton('<span class="glyphicon glyphicon-arrow-left"></span> KEMBALI KEMASKINI', ['class' => 'btn btn-warning', 'name' => 'wfaction', 'value' => 'return']);
 				echo ' ';
 				
-				echo Html::submitButton('<span class="glyphicon glyphicon-send"></span> SEMAK & HANTAR', ['class' => 'btn btn-success', 'name' => 'wfaction', 'value' => 'submit']);
+				echo Html::submitButton('<span class="glyphicon glyphicon-send"></span> DISEMAK & HANTAR', ['class' => 'btn btn-success', 'name' => 'wfaction', 'value' => 'submit']);
 			}
 			 
 			
