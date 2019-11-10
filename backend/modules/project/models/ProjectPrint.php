@@ -798,7 +798,7 @@ EOD;
 		<br />
 		</td>
 		<td width="73%">&nbsp; ';
-		$html .= '<b>' . strtoupper($this->model->eft_name) . '</b>';
+		$html .= '<b style="font-size:13pt">' . strtoupper($this->model->eft_name) . '</b>';
 		$html .= '</td>
 		</tr>
 		
@@ -849,8 +849,8 @@ EOD;
 		$x_str = '';
 		for($i=0;$i<=$lg;$i++){
 			
-			if($i <= 13){
-				$html .= '<td width="31px" height="35" align="center"><b style="font-size:12pt">'.$aacc[$i].'</b></td>';
+			if($i <= 16){
+				$html .= '<td width="27px" height="30" align="center"><b style="font-size:12pt">'.$aacc[$i].'</b></td>';
 			}else{
 				$x_str .= $aacc[$i];
 			}
@@ -885,7 +885,7 @@ EOD;
 		</td>
 		<td>&nbsp; ';
 		
-		$html .= '<b>' . strtoupper($this->model->eft_bank) . '</b>';
+		$html .= '<b style="font-size:13pt">' . strtoupper($this->model->eft_bank) . '</b>';
 		$html .= '</td>
 		</tr>
 		
@@ -897,7 +897,7 @@ EOD;
 		</td>
 		<td>&nbsp; ';
 		
-		$html .= '<span style="font-size:12pt">' . $this->model->eft_email . '</span>';
+		$html .= '<span style="font-size:13pt">' . $this->model->eft_email . '</span>';
 		$html .= '</td>
 		</tr>
 		
