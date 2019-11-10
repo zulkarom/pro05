@@ -35,7 +35,7 @@ if($model->status == 0){
 <?php
 }else{
 if($model->status == 10){
-	echo '<i>Perhatian kepada fasilitator, sila semak kertas kerja ini sebelum menghantar ke Pusat Kokurikulum. <br />Watermark/latarbelakang SEMAK pada kerja kerja hanya akan hilang selepas fasilitator menghantar ke Pusat Kokurikulum.<br />
+	echo '<i>Perhatian kepada fasilitator, sila semak kertas kerja ini sebelum menghantar ke Pusat Kokurikulum. <br />Watermark/latarbelakang DERAF pada kerja kerja hanya akan hilang selepas fasilitator menghantar ke Pusat Kokurikulum.<br />
 	Klik butang HANTAR setelah semakan selesai atau klik KEMBALI KEMASKINI untuk pelajar kembali mengemaskini kertas kerja.
 	</i>
 
