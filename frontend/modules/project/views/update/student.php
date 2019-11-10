@@ -38,14 +38,19 @@ use yii\grid\GridView;
             'student.program',
 
             ['class' => 'yii\grid\ActionColumn',
-                 'contentOptions' => ['style' => 'width: 5%'],
-                'template' => '{delete}',
+                 'contentOptions' => ['style' => 'width: 9%'],
+                'template' => '{edit} {delete}',
                 //'visible' => false,
                 'buttons'=>[
-                    
+				
+					'edit'=>function ($url, $model) {
+                        return Html::a('<span class="icon icon-pencil"></span>',['update/add-student/', 'token' => $model->project->pro_token,  'student' => $model->student->id],['class'=>'btn btn-warning btn-sm', 
+					]);
+                    }
+					,
 					'delete'=>function ($url, $model) {
                         return Html::a('<span class="icon icon-remove"></span>',['update/delete-student/', 'token' => $model->project->pro_token,  'id' => $model->student->id],['class'=>'btn btn-danger btn-sm', 'data' => [
-                'confirm' => 'Are you sure to delete this student?'
+                'confirm' => 'Are you sure to exclude this student from the committee?'
             ],
 ]);
                     }

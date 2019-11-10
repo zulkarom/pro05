@@ -58,7 +58,7 @@ use kartik\date\DatePicker;
   <br />
 
 <div class="form-group">
-            <?= Html::submitButton('TAMBAH PELAJAR', ['class' => 'btn btn-primary']) ?>
+            <?= Html::submitButton('TAMBAH/EDIT PELAJAR', ['class' => 'btn btn-primary']) ?>
         </div>
         
     <?php ActiveForm::end(); ?>

@@ -1023,23 +1023,22 @@ class UpdateController extends Controller
 		$student->scenario = 'update';
 		
 		if ($student->load(Yii::$app->request->post())) {
-			$student->save();
-			$search = ProjectStudent::findOne(['student_id' => $student->id, 'project_id' => $model->id]);
-			if(!$search){
-				$add = new ProjectStudent;
-				$add->project_id = $model->id;
-				$add->student_id = $student->id;
-				if($add->save()){
-					Yii::$app->session->addFlash('success', "Pelajar telah ditambah");
-					
+			
+			if($student->save()){
+				$search = ProjectStudent::findOne(['student_id' => $student->id, 'project_id' => $model->id]);
+				if(!$search){
+					$add = new ProjectStudent;
+					$add->project_id = $model->id;
+					$add->student_id = $student->id;
+					if($add->save()){
+						Yii::$app->session->addFlash('success', "Pelajar telah ditambah");
+					}
+				}else{
+					Yii::$app->session->addFlash('success', "Pelajar telah disenaraikan");
 				}
-			}else{
-				Yii::$app->session->addFlash('error', "Pelajar telah disenaraikan");
+				
+				return $this->redirect(['student', 'token' => $token]);
 			}
-			
-			return $this->redirect(['student', 'token' => $token]);
-			
-			
 		}
 		
 		return $this->render('add-student', [

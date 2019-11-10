@@ -38,11 +38,23 @@ class Student extends \yii\db\ActiveRecord
             [['student_name'], 'string', 'max' => 200],
 			
 			 [['email'], 'email'],
+			 
+			 ['student_name', 'validateAllCaps'],
 			
             [['program'], 'string', 'max' => 100],
 			
             [['student_matric'], 'unique'],
         ];
+    }
+	
+	public function validateAllCaps($attribute, $params, $validator)
+    {
+        if (strtoupper($this->$attribute) == $this->$attribute) {
+			$msg = 'Gunakan huruf besar pada huruf pertama perkataan sahaja!';
+			Yii::$app->session->addFlash('error', 'Nama Pelajar: ' . $msg);
+            $this->addError($attribute, $msg);
+			
+        }
     }
 
     /**
