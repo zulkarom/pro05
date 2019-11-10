@@ -682,7 +682,7 @@ class Project extends \yii\db\ActiveRecord
 	}
 	
 	public function validateTabJawatankuasa(){
-		if(count($this->mainCommittees) > 0){
+		if(count($this->mainCommittees) > 3){
 			return true;
 		}else{
 			return false;
@@ -707,5 +707,20 @@ class Project extends \yii\db\ActiveRecord
 			}
 		}
 		return true;
+	}
+	
+	public function getProjectMilestone(){
+		$arr = ['Utama', 'Pendapatan', 'Belanja', 'Tentatif', 'Jawatankuasa', 'Eft'];
+		$progress = 0;
+		foreach($arr as $tab){
+			$str = 'validateTab' . $tab ;
+			
+			if($this->$str()){
+				$progress++;
+			}
+		}
+		
+		$total = count($arr);
+		return number_format($progress / $total * 100, 2);
 	}
 }

@@ -3,22 +3,26 @@
 namespace backend\modules\project\controllers;
 
 use Yii;
-use backend\modules\project\models\Project;
-use backend\modules\project\models\ApproveLetterForm;
-use backend\modules\project\models\ApproveLetterPrint;
-use backend\modules\project\models\ProjectSearch;
-use backend\modules\project\models\ProjectApproveSearch;
-use backend\modules\project\models\ProjectAllocationSearch;
-use backend\modules\project\models\ProjectLetterSearch;
-use backend\modules\project\models\ProjectPrint;
-use backend\modules\project\models\BatchPrint;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\db\Expression;
 use common\models\Model;
+use common\models\Application;
+use common\models\Token;
 use backend\models\Semester;
+use backend\modules\project\models\Project;
+use backend\modules\project\models\ApproveLetterForm;
+use backend\modules\project\models\ApproveLetterPrint;
+use backend\modules\project\models\ProjectSearch;
+use backend\modules\project\models\MilestoneSearch;
+use backend\modules\project\models\ProjectApproveSearch;
+use backend\modules\project\models\ProjectAllocationSearch;
+use backend\modules\project\models\ProjectLetterSearch;
+use backend\modules\project\models\ProjectPrint;
+use backend\modules\project\models\BatchPrint;
+
 
 /**
  * DefaultController implements the CRUD actions for Project model.
@@ -230,8 +234,41 @@ class DefaultController extends Controller
         ]);
     }
 	
-	public function actionCoordinator(){
+	public function actionMilestone(){
+		$semester = Semester::getCurrentSemester();
+		$subQuery = Project::find()->where(['semester_id' => $semester->id])->andWhere(['<>', 'application_id', 0])->select('application_id');
+		$query = Application::find()->where(['not in', 'id', $subQuery])->andWhere(['semester_id' => $semester->id, 'status' => 'ApplicationWorkflow/f-accept']);
+		$models = $query->all();
 		
+		if($models){
+			foreach($models as $app){
+				$project = new Project();
+				$project->scenario = 'fasi-create';
+				$project->semester_id = $semester->id;
+				$project->created_at = new Expression('NOW()');
+				$project->date_start = date('Y-m-d');
+				$project->date_end = date('Y-m-d');
+				$project->application_id = $app->id;
+				$project->pro_token = Token::projectKey();
+				$project->save();
+			}
+		}
+		
+		/* echo count($models);
+		print_r(\yii\helpers\ArrayHelper::map($models, 'id','id'));
+		die(); */
+		
+		$searchModel = new MilestoneSearch();
+		$params = Yii::$app->request->queryParams;
+		if(!isset($params['MilestoneSearch'])){
+			$searchModel->default_status = 1;	
+		}
+        $dataProvider = $searchModel->search($params);
+		
+        return $this->render('milestone', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
 	}
 	
 	public function actionReturn($id){

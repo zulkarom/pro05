@@ -84,6 +84,7 @@
 							['label' => 'Surat Kelulusan', 'icon' => 'file', 'url' => ['/project-admin/default/letter']],
 							['label' => 'Senarai Peruntukan', 'icon' => 'money', 'url' => ['/project-admin/default/allocation']],
                             ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
+							['label' => 'Milestone', 'icon' => 'truck', 'url' => ['/project-admin/default/milestone']],
 
                         ],
                     ],
