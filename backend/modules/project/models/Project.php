@@ -83,11 +83,11 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['eft_account', 'eft_ic'], 'number'],
 			
-			['pro_name', 'validateAllCaps'],
+			//['pro_name', 'validateAllCaps'],
 
 			[['eft_email'], 'email'],
 			
-            [['purpose', 'background', 'approval_note', 'eft_name', 'eft_bank'], 'string'],
+            [['purpose', 'background', 'approval_note', 'eft_name', 'eft_bank', 'pro_name'], 'string'],
 			
             [['location', 'collaboration', 'pro_time', 'pro_target', 'agency_involved'], 'string', 'max' => 200],
         ];
