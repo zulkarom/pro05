@@ -11,6 +11,7 @@ class OfferLetter
 {
 	public $model;
 	public $pdf;
+	public $tuan = 'tuan';
 	public $directoryAsset;
 	
 	public function generatePdf(){
@@ -107,9 +108,14 @@ EOD;
 	
 	public function writeTitle(){
 		
+		$gender = $this->model->fasi->gender;
+		if($gender == 0){
+			$this->tuan = 'puan';
+		}
+		
 		
 		$html = '
-		Tuan,<br /><br />
+		'.ucfirst($this->tuan) .',<br /><br />
 		
 		<b>TAWARAN PERLANTIKAN SEBAGAI '.strtoupper($this->fasiType()).' SAMBILAN KURSUS KOKURIKULUM BERKREDIT BAGI SEMESTER '. strtoupper($this->getSemester()) .' DI UNIVERSITI MALAYSIA KELANTAN</b>
 		<br /><br />
@@ -117,7 +123,7 @@ EOD;
 		Dengan hormatnya, saya diarah merujuk kepada perkara di atas.
 		<br /><br />
 		
-		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Universiti Malaysia Kelantan bersetuju melantik tuan sebagai '.ucwords($this->fasiType()).' Sambilan seperti butir-butir berikut:
+		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Universiti Malaysia Kelantan bersetuju melantik '.$this->tuan .' sebagai '.ucwords($this->fasiType()).' Sambilan seperti butir-butir berikut:
 		<br /><br />
 		';
 		$this->pdf->SetFont('helvetica', '', 9.5);
@@ -206,7 +212,7 @@ EOD;
 		4. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		Sekiranya bersetuju dengan tawaran ini sila penuhi borang penerimaan sebagai '.$this->fasiType().' sambilan dan kembalikan borang berkenaan sama datang sendiri atau fakskan melalui talian 09-771262 ke Pusat Kokurikulum dengan kadar segera.
 		<br /><br /></span>
-		Segala kerjasama dan komitmen tuan adalah amatlah dihargai.
+		Segala kerjasama dan komitmen '.$this->tuan.' adalah amatlah dihargai.
 		<br /><br />
 		Sekian, terima kasih.
 		<br />
@@ -259,6 +265,7 @@ EOD;
 	
 	public function writeSk(){
 		$html = '
+		<br /><br /><br /><br /><br />
 		<table cellpadding="5">
 		<tr>
 			<td width="60">s.k</td><td width="500">Fail Peribadi</td>
