@@ -14,13 +14,14 @@ use backend\models\Todo;
 class ApplicationSearch extends Application
 {
 	public $fasi_name;
+	public $selected_sem;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['campus_id', 'fasi_type_id'], 'integer'],
+            [['campus_id', 'fasi_type_id', 'selected_sem'], 'integer'],
 			
 			[['fasi_name'], 'string'],
 			
@@ -85,12 +86,10 @@ class ApplicationSearch extends Application
 			$statuses = $arr;
 		}
 		
-		//print_r($arr);
-		
-		$curr_sem = Semester::getCurrentSemester();
+
 		
         $query->andFilterWhere([
-            'semester_id' => $curr_sem->id,
+            'semester_id' => $this->selected_sem,
 			'campus_id' => $this->campus_id,
 			'fasi_type_id' => $this->fasi_type_id,
 			'application.status' => $statuses

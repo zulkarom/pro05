@@ -16,7 +16,10 @@ $sem = Semester::getCurrentSemester();
 $this->title = 'SENARAI TUNTUTAN';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="form-group"><b>SEMESTER <?=strtoupper($sem->niceFormat())?></b></div>
+<?= $this->render('../semester/_semester_select', [
+        'model' => $semester,
+    ]) ?>
+	
 <div class="box">
 <div class="box-header"></div>
 <div class="box-body"><div class="claim-index">

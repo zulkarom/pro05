@@ -20,11 +20,13 @@ $colums = [
 /* @var $searchModel backend\models\ApplicationSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$sem = Semester::getCurrentSemester();
 
 
-$this->title = 'ANALISIS TUNTUTAN SEMESTER ' . strtoupper($sem->niceFormat());
+$this->title = 'ANALISIS TUNTUTAN';
 $this->params['breadcrumbs'][] = $this->title;
+
+$sem = $semester->semester;
+
 
 $colums_export = [
             ['class' => 'yii\grid\SerialColumn'],
@@ -238,6 +240,10 @@ $colums_array[] = [
 	 }
 	];
 ?>
+
+<?= $this->render('../semester/_semester_select', [
+        'model' => $semester,
+    ]) ?>
   
  <div class="form-group"><?=ExportMenu::widget([
     'dataProvider' => $dataProvider,

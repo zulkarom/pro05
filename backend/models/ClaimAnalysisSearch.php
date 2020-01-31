@@ -13,6 +13,7 @@ use common\models\Application;
 class ClaimAnalysisSearch extends Application
 {
 	public $fasi_name;
+	public $selected_sem;
 	
     /**
      * @inheritdoc
@@ -20,7 +21,7 @@ class ClaimAnalysisSearch extends Application
     public function rules()
     {
         return [
-            [['campus_id'], 'integer'],
+            [['campus_id', 'selected_sem'], 'integer'],
 			
 			[['fasi_name'], 'string'],
 			
@@ -70,10 +71,9 @@ class ClaimAnalysisSearch extends Application
 		
 		//print_r($arr);
 		
-		$curr_sem = Semester::getCurrentSemester();
 		
         $query->andFilterWhere([
-            'semester_id' => $curr_sem->id,
+            'semester_id' => $this->selected_sem,
 			'campus_id' => $this->campus_id,
 			'application.status' => 'ApplicationWorkflow/f-accept'
         ]);

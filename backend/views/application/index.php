@@ -65,9 +65,10 @@ $exportColumns = [
 $curr_sem = Semester::getCurrentSemester();
 $this->title = 'PERMOHONAN FASILITATOR';
 $this->params['breadcrumbs'][] = $this->title;
-$curr_sem = Semester::getCurrentSemester();
 ?>
-<h4>Semester <?=$curr_sem->niceFormat()?></h4>
+<?= $this->render('../semester/_semester_select', [
+        'model' => $semester,
+    ]) ?>
 <div class="form-group"><?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
     'columns' => $exportColumns,

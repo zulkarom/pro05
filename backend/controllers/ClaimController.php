@@ -17,6 +17,8 @@ use backend\models\ClaimPrint;
 use backend\models\ClaimAnalysisSearch;
 use common\models\Application;
 use yii\data\ActiveDataProvider;
+use backend\models\SemesterForm;
+use backend\models\Semester;
 
 /**
  * ClaimController implements the CRUD actions for Claim model.
@@ -48,12 +50,25 @@ class ClaimController extends Controller
      */
     public function actionIndex()
     {
+		$semester = new SemesterForm;
+		$semester->action = ['claim/index'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+			$sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+			$semester->semester_id = $sem['semester_id'];
+		}else{
+			$semester->semester_id = Semester::getCurrentSemester()->id;
+		}
+		
+		
         $searchModel = new ClaimSearch();
+		$searchModel->selected_sem = $semester->semester_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'semester' => $semester
         ]);
     }
 	
@@ -63,8 +78,18 @@ class ClaimController extends Controller
      */
     public function actionAnalysis()
     {
+		$semester = new SemesterForm;
+		$semester->action = ['claim/analysis'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+			$sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+			$semester->semester_id = $sem['semester_id'];
+		}else{
+			$semester->semester_id = Semester::getCurrentSemester()->id;
+		}
 
 		$searchModel = new ClaimAnalysisSearch();
+		$searchModel->selected_sem = $semester->semester_id;
         $dataProvider = $searchModel->search(Yii::$app->request->post());
 		
 		/* print_r(Yii::$app->request->post());
@@ -74,6 +99,7 @@ class ClaimController extends Controller
         return $this->render('analysis', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'semester' => $semester
         ]);
     }
 

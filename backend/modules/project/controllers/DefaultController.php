@@ -22,6 +22,7 @@ use backend\modules\project\models\ProjectAllocationSearch;
 use backend\modules\project\models\ProjectLetterSearch;
 use backend\modules\project\models\ProjectPrint;
 use backend\modules\project\models\BatchPrint;
+use backend\models\SemesterForm;
 
 
 /**
@@ -90,8 +91,18 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
+		$semester = new SemesterForm;
+		$semester->action = ['default/index'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+			$sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+			$semester->semester_id = $sem['semester_id'];
+		}else{
+			$semester->semester_id = Semester::getCurrentSemester()->id;
+		}
 		
         $searchModel = new ProjectSearch();
+		$searchModel->selected_sem = $semester->semester_id;
 		$params = Yii::$app->request->queryParams;
 		if(!isset($params['ProjectSearch'])){
 			$searchModel->default_status = 1;	
@@ -101,6 +112,7 @@ class DefaultController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'semester' => $semester
         ]);
     }
 	

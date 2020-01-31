@@ -11,6 +11,12 @@ use yii\widgets\ActiveForm;
 $this->title = 'SENARAI KERTAS KERJA';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<?= $this->render('../../../../views/semester/_semester_select', [
+        'model' => $semester,
+    ]) ?>
+	
+	
 <div class="project-index">
     <div class="box">
 <div class="box-body"><div class="table-responsive">

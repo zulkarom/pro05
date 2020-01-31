@@ -11,22 +11,27 @@ use common\models\ApplicationCourse;
 $this->title = 'ANALISIS PERMOHONAN';
 $this->params['breadcrumbs'][] = $this->title;
 $curr_sem = Semester::getCurrentSemester();
-echo $curr_sem->id;
 ?>
-<h4>Semester <?=$curr_sem->niceFormat()?></h4>
-<div class="box">
-<div class="box-header"></div>
-<div class="box-body"><?php
+<?= $this->render('../semester/_semester_select', [
+        'model' => $semester,
+    ]) ?>
+<?php
 $campus = Campus::find()->all();
 if($campus ){
 	foreach($campus  as $cam){
-		echo '<br /><h3>' . $cam->campus_name . '</h3>';
+		echo '
+		<h3>' . $cam->campus_name . '</h3>
+		
+		<div class="box box-primary">
+<div class="box-body">
+
+';
 		$courses = Course::find()->where(['campus_' . $cam->id => 1])->all();
 		if($courses){
 			echo '<table class="table table-striped">
 			<thead>
 			<tr>
-				<th width="20%">Courses</th>
+				<th width="25%">Courses</th>
 				<th>Application</th>
 			
 			
@@ -37,12 +42,12 @@ if($campus ){
 				$app = Application::find()
 				->select(['application.*'])
 				->innerJoin('application_course', 'application_course.application_id = application.id')
-				->where(['semester_id' => $curr_sem->id, 'campus_id' => $cam->id, 'course_id' => $c->id])
+				->where(['semester_id' => $semester->semester_id, 'campus_id' => $cam->id, 'course_id' => $c->id])
 				->all();
 				$fasi = '';
 				
 				if($app){
-					$fasi = '<table class="table table-striped">';
+					$fasi = '<table>';
 					foreach($app as $f){
 						$fasi .='<tr>';
 							$fasi .= '<td width="50%">' . strtoupper($f->fasi->user->fullname) . '</td>';
@@ -62,7 +67,7 @@ if($campus ){
 						}
 						$fasi .= '<td width="20%">'.$group.'</td>';
 						$fasi .= '<td width="20%">'.$status.'</td>';
-						$fasi .= '<td><a href="'.Url::to(['application/view', 'id' => $f->id]).'" class="btn btn-default btn-sm">VIEW</a></td>';
+						$fasi .= '<td><a href="'.Url::to(['application/view', 'id' => $f->id]).'" class="btn btn-primary btn-sm" style="margin-bottom:5px"><span class="glyphicon glyphicon-search"></span> VIEW</a></td>';
 					$fasi .= '</tr>';
 					}
 					$fasi .='</table>';
@@ -75,8 +80,10 @@ if($campus ){
 			}
 			echo '</table>';
 		}
+		
+		echo '</div>
+</div>';
 	}
 }
 
-?></div>
-</div>
+?>

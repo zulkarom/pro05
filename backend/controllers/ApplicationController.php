@@ -14,6 +14,9 @@ use raoul2000\workflow\validation\WorkflowScenario;
 use backend\models\OfferLetter;
 use backend\models\AcceptLetter;
 use backend\models\Todo;
+use backend\models\SemesterForm;
+use backend\models\Semester;
+use yii\filters\AccessControl;
 
 /**
  * ApplicationController implements the CRUD actions for Application model.
@@ -23,17 +26,23 @@ class ApplicationController extends Controller
     /**
      * @inheritdoc
      */
-    public function behaviors()
+    
+
+	public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
     }
+
 
     /**
      * Lists all Application models.
@@ -41,12 +50,25 @@ class ApplicationController extends Controller
      */
     public function actionIndex()
     {
+		$semester = new SemesterForm;
+		$semester->action = ['application/index'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+			$sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+			$semester->semester_id = $sem['semester_id'];
+		}else{
+			$semester->semester_id = Semester::getCurrentSemester()->id;
+		}
+		
+		
         $searchModel = new ApplicationSearch();
+		$searchModel->selected_sem = $semester->semester_id;
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+			'semester' => $semester
         ]);
     }
 
@@ -94,8 +116,18 @@ class ApplicationController extends Controller
     }
 	
 	public function actionAnalysis(){
+		$semester = new SemesterForm;
+		$semester->action = ['application/analysis'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+			$sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+			$semester->semester_id = $sem['semester_id'];
+		}else{
+			$semester->semester_id = Semester::getCurrentSemester()->id;
+		}
+		
 		return $this->render('analysis', [
-
+			'semester' => $semester
         ]);
 	}
 	

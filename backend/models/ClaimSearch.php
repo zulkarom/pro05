@@ -14,6 +14,7 @@ use backend\models\Semester;
 class ClaimSearch extends Claim
 {
 	public $fasi_name;
+	public $selected_sem;
 	
     /**
      * @inheritdoc
@@ -21,7 +22,7 @@ class ClaimSearch extends Claim
     public function rules()
     {
         return [
-            [['id', 'application_id', 'month', 'updated_at'], 'integer'],
+            [['id', 'application_id', 'month', 'updated_at', 'selected_sem'], 'integer'],
 			[['fasi_name'], 'string'],
             [['year', 'draft_at', 'submit_at', 'status'], 'safe'],
         ];
@@ -71,12 +72,11 @@ class ClaimSearch extends Claim
 			$this->status = 'ClaimWorkflow/bb-submit';
 		}
 		
-		$semester = Semester::getCurrentSemester();
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'application_id' => $this->application_id,
-			'application.semester_id' => $semester->id,
+			'application.semester_id' => $this->selected_sem,
             'month' => $this->month,
             'year' => $this->year,
             'draft_at' => $this->draft_at,

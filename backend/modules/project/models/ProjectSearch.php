@@ -16,13 +16,14 @@ class ProjectSearch extends Project
 	public $fasi;
 	public $status_num;
 	public $default_status = 0;
+	public $selected_sem;
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['status_num'], 'integer'],
+            [['status_num', 'selected_sem'], 'integer'],
 			
 			 [['pro_fund', 'pro_expense'], 'number'],
 			
@@ -49,8 +50,8 @@ class ProjectSearch extends Project
      */
     public function search($params)
     {
-		$semester = Semester::getCurrentSemester();
-        $query = Project::find()->where(['project.semester_id' => $semester->id]);
+		
+        $query = Project::find()->where(['project.semester_id' => $this->selected_sem]);
 		$query->joinWith(['application.fasi.user', 'coordinator'=> function($q) {
 			$q->joinWith(['fasi fasi2' => function($q) {
 			$q->joinWith('user user2');

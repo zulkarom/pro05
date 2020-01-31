@@ -32,5 +32,9 @@ class SemesterForm extends Model
             'semester_id' => 'Pilih Semester',
         ];
     }
+	
+	public function getSemester(){
+		return Semester::findOne($this->semester_id);
+	}
 
 }
