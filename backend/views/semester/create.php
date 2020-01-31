@@ -11,8 +11,10 @@ $this->params['breadcrumbs'][] = ['label' => 'Semesters', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 
 $curr = date('Y') + 0;
+$last = $curr - 1;
 $next = $curr + 1;
-$years = [$curr => $curr, $next => $next];
+
+$years = [$last => $last, $curr => $curr, $next => $next];
 ?>
 <div class="semester-create">
 

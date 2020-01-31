@@ -6,6 +6,8 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use backend\models\SemesterForm;
+use backend\models\Semester;
 
 /**
  * Site controller
@@ -61,7 +63,20 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+		$semester = new SemesterForm;
+		$semester->action = ['site/index'];
+		
+		if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+			$sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+			$semester->semester_id = $sem['semester_id'];
+		}else{
+			$semester->semester_id = Semester::getCurrentSemester()->id;
+		}
+		
+        return $this->render('index', [
+			'semester' => $semester
+		
+		]);
     }
 
     /**

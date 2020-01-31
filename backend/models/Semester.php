@@ -111,6 +111,18 @@ class Semester extends \yii\db\ActiveRecord
 		return $sn;
 	}
 	
+	public function sessionLong(){
+		$session =  substr($this->id, 8, 1);
+		if($session == 1){
+			$sn = 'September';
+		}else if($session == 2){
+			$sn = 'Februari';
+		}else{
+			$sn = '';
+		}
+		return $sn;
+	}
+	
 	public function years(){
 		$year1 = substr($this->id, 0, 4);
 		$year2 = substr($this->id, 4, 4);
@@ -127,6 +139,11 @@ class Semester extends \yii\db\ActiveRecord
 		return $this->sessionShort() . ' ' . $this->years();
 	}
 	
+	public function longFormat(){
+		
+		return strtoupper('Semester ' . $this->sessionLong() . ' ' . $this->years());
+	}
+	
 	public static function getCurrentSemester(){
 		$sem =  self::findOne(['is_current' => 1]);
 		if($sem){
@@ -135,6 +152,8 @@ class Semester extends \yii\db\ActiveRecord
 			return false;
 		}
 	}
+	
+	
 	
 	public static function getOpenSemester(){
 		$sem = self::findOne(['is_open' => 1]);	
@@ -215,6 +234,23 @@ class Semester extends \yii\db\ActiveRecord
 		
 		return $list;
 		
+	}
+	
+	public function listSemester(){
+		return self::find()->orderBy('id DESC')->all();
+	}
+	
+	public static function listSemesterArray(){
+		$array = [];
+		$list = self::find()->orderBy('id DESC')->all();
+		if($list){
+			foreach($list as $row){
+				$array[$row->id] = $row->longFormat();
+			}
+			
+		}
+		
+		return $array;
 	}
 	
 	private static function strMonthYear($month, $year){

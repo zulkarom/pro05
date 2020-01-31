@@ -11,10 +11,16 @@ $this->title = 'Dashboard';
 
 $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed2010/adminlte/dist');
 
-$curr_sem = Semester::getCurrentSemester();
+$sem = $semester->semester_id;
 
 ?>
-<h4>CURRENT SEMESTER: <?=strtoupper($curr_sem->niceFormat())?></h4>
+
+<?= $this->render('../semester/_semester_select', [
+        'model' => $semester,
+    ]) ?>
+
+
+
 <section class="content">
       <!-- Info boxes -->
       <div class="row">
@@ -24,7 +30,7 @@ $curr_sem = Semester::getCurrentSemester();
 
             <div class="info-box-content">
               <span class="info-box-text">TOTAL ACTIVE<br /> FASILITATOR</span>
-              <span class="info-box-number"><?=Stats::countAllCurrentFasilitator()?></span>
+              <span class="info-box-number"><?=Stats::countAllFasilitator($sem)?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -37,7 +43,7 @@ $curr_sem = Semester::getCurrentSemester();
 
             <div class="info-box-content">
               <span class="info-box-text">ACTIVE FASI <br />AT BACHOK</span>
-              <span class="info-box-number"><?=Stats::countCurrentFasilitatorByCampus(1)?></span>
+              <span class="info-box-number"><?=Stats::countFasilitatorByCampus($sem, 1)?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -50,7 +56,7 @@ $curr_sem = Semester::getCurrentSemester();
 
             <div class="info-box-content">
               <span class="info-box-text">ACTIVE FASI <br />AT KOTA</span>
-              <span class="info-box-number"><?=Stats::countCurrentFasilitatorByCampus(2)?></span>
+              <span class="info-box-number"><?=Stats::countFasilitatorByCampus($sem, 2)?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -67,7 +73,7 @@ $curr_sem = Semester::getCurrentSemester();
 
             <div class="info-box-content">
               <span class="info-box-text">ACTIVE FASI <br />AT JELI</span>
-              <span class="info-box-number"><?=Stats::countCurrentFasilitatorByCampus(3)?></span>
+              <span class="info-box-number"><?=Stats::countFasilitatorByCampus($sem, 3)?></span>
             </div>
             <!-- /.info-box-content -->
           </div>
@@ -84,7 +90,7 @@ $curr_sem = Semester::getCurrentSemester();
           <!-- small box -->
           <div class="small-box bg-aqua">
             <div class="inner">
-              <h3>RM<?=number_format(Stats::sumClaimCurrentSemester()->sum_all,0)?></h3>
+              <h3>RM<?=number_format(Stats::sumClaimSemester($sem)->sum_all,0)?></h3>
 
               <p>TOTAL CLAIM <br />CURRENT SEMESTER</p>
             </div>
@@ -99,7 +105,7 @@ $curr_sem = Semester::getCurrentSemester();
           <!-- small box -->
           <div class="small-box bg-green">
             <div class="inner">
-              <h3>RM<?=number_format(Stats::sumClaimCurrentSemesterByCampus(1),0)?></h3>
+              <h3>RM<?=number_format(Stats::sumClaimSemesterByCampus($sem, 1),0)?></h3>
 
               <p>CLAIM FOR BACHOK <br />CURRENT SEMESTER</p>
             </div>
@@ -114,7 +120,7 @@ $curr_sem = Semester::getCurrentSemester();
           <!-- small box -->
           <div class="small-box bg-red">
             <div class="inner">
-              <h3>RM<?=number_format(Stats::sumClaimCurrentSemesterByCampus(2),0)?></h3>
+              <h3>RM<?=number_format(Stats::sumClaimSemesterByCampus($sem, 2),0)?></h3>
 
               <p>CLAIM FOR KOTA <br />CURRENT SEMESTER</p>
             </div>
@@ -129,7 +135,7 @@ $curr_sem = Semester::getCurrentSemester();
           <!-- small box -->
           <div class="small-box bg-yellow">
             <div class="inner">
-             <h3>RM<?=number_format(Stats::sumClaimCurrentSemesterByCampus(3),0)?></h3>
+             <h3>RM<?=number_format(Stats::sumClaimSemesterByCampus($sem, 3),0)?></h3>
 
               <p>CLAIM FOR JELI <br />CURRENT SEMESTER</p>
             </div>
