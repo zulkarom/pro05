@@ -6,6 +6,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use backend\modules\staff\models\Staff;
 
 /**
  * User model
@@ -179,6 +180,10 @@ class User extends ActiveRecord implements IdentityInterface
 	
 	public function getFasi(){
 		return $this->hasOne(Fasi::className(), ['user_id' => 'id']);
+	}
+	
+	public function getStaff(){
+		return $this->hasOne(Staff::className(), ['user_id' => 'id']);
 	}
 
     /**

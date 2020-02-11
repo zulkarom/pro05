@@ -28,19 +28,34 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'attribute' => 'pro_level',
 				'value' => function($model){
-					return $model->programLevel->level_name;
+					if($model->programLevel){
+						return $model->programLevel->level_name;
+					}
+					
 				}
 				
 			],
             'pro_name',
 			[
+				'attribute' => 'pro_name_short',
+				'label' => 'Abbr.',
+				
+			],
+			
+			[
 				'attribute' => 'status',
+				'format' => 'html',
 				'value' => function($model){
+					
 					if($model->status == 1){
-						return 'YES';
+						$lbl = 'YES';
+						$color = 'success';
 					}else{
-						return 'NO';
+						$lbl = 'NO';
+						$color = 'danger';
 					}
+					
+					return '<span class="label label-'.$color.'">'.$lbl.'</span>';
 					
 				}
 				
@@ -49,11 +64,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn',
                  'contentOptions' => ['style' => 'width: 10%'],
-                'template' => '{update} {delete}',
+                'template' => '{update}',
                 //'visible' => false,
                 'buttons'=>[
                     'update'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span>',['/esiap/program/update/', 'id' => $model->id],['class'=>'btn btn-warning btn-sm']);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span> UPDATE',['/esiap/program/update/', 'id' => $model->id],['class'=>'btn btn-warning btn-sm']);
                     },
 					'delete'=>function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-trash"></span>',['/esiap/program/delete/', 'id' => $model->id],['class'=>'btn btn-danger btn-sm', 'data' => [

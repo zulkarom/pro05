@@ -9,10 +9,7 @@ use Yii;
  *
  * @property int $id
  * @property int $crs_version_id
- * @property string $ref_author
  * @property string $ref_year
- * @property string $ref_title
- * @property string $ref_others
  * @property int $is_classic
  * @property int $is_main
  */
@@ -36,7 +33,6 @@ class CourseReference extends \yii\db\ActiveRecord
             [['crs_version_id', 'is_classic', 'is_main'], 'integer'],
             [['ref_year'], 'safe'],
 			[['ref_full'], 'string'],
-            [['ref_author', 'ref_title', 'ref_others'], 'string', 'max' => 200],
         ];
     }
 
@@ -48,11 +44,8 @@ class CourseReference extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'crs_version_id' => 'Crs Version ID',
-            'ref_author' => 'Ref Author',
 			'ref_full' => 'Full Reference',
             'ref_year' => 'Ref Year',
-            'ref_title' => 'Ref Title',
-            'ref_others' => 'Ref Others',
             'is_classic' => 'Is Classic',
             'is_main' => 'Is Main',
         ];
@@ -79,4 +72,17 @@ class CourseReference extends \yii\db\ActiveRecord
 		
 		return $return;
 	}
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
 }

@@ -220,7 +220,7 @@ class CourseClo extends \yii\db\ActiveRecord
 	
 	public function getPlo(){
 		$html = '';
-		$plo_num = $this->defaultVersion->plo_num;
+		$plo_num = $this->defaultVersion->ploNumber;
 		$x=1;
 		for($c=1;$c<=$plo_num;$c++){
 			$prop = 'PLO'.$c;
@@ -310,5 +310,19 @@ class CourseClo extends \yii\db\ActiveRecord
 		
 		return $str;
 	}
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
 	
 }

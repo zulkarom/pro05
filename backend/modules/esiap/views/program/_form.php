@@ -46,7 +46,7 @@ use backend\models\Department;
    <div class="row">
 <div class="col-md-6">
 
-<?= $form->field($model, 'department')->dropDownList(
+<?= $form->field($model, 'department_id')->dropDownList(
         ArrayHelper::map(Department::find()->all(),'id', 'dep_name'), ['prompt' => 'Please Select' ]
     ) ?>
 
@@ -77,19 +77,6 @@ use backend\models\Department;
 
 </div>
 
-   
-
-
-   
-
-<div class="row">
-<div class="col-md-6"> <?= $form->field($model, 'synopsis')->textarea(['rows' => 6]) ?></div>
-
-<div class="col-md-6"> <?= $form->field($model, 'synopsis_bi')->textarea(['rows' => 6]) ?>
-</div>
-
-</div>
-   
 
    
 

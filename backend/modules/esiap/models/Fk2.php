@@ -20,7 +20,6 @@ class Fk2
 	public $wtab;
 	
 	public function generatePdf(){
-
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
 		$this->pdf = new Fk2Start(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -183,18 +182,35 @@ EOD;
 		
 		<tr>
 		<td  width="'.$row5col1.'">
-		<b>Fakulti/Pusat:</b> '.$this->model->setting->faculty.'<br />
-		<i><b>Faculty/Centre:</b> '.$this->model->setting->faculty_bi .'</i> 
+		<b>Fakulti/Pusat:</b> '.$this->model->course->faculty->faculty_name .'<br />
+		<i><b>Faculty/Centre:</b> '.$this->model->course->faculty->faculty_name .'</i> 
 		</td>
 		
 		<td width="'.$row5col2.'">
-		<b>Jabatan:</b> '.$this->model->setting->department.'<br />
-		<i><b>Department:</b> '.$this->model->setting->department_bi .'</i>
+		<b>Jabatan:</b> ';
+		$dep = ' - ';
+		$dep_bi = ' - ';
+		if($this->model->course->department){
+			$dep = $this->model->course->department->dep_name;
+			$dep_bi = $this->model->course->department->dep_name_bi;
+		}
+		$html .= $dep;
+		$html .= '<br />
+		<i><b>Department:</b> '.$dep_bi .'</i>
 		</td>
 		
 		<td colspan="2" width="'.$row5col3.'">
-		<b>Program:</b> '.$this->model->setting->program .'<br />
-		<i><b>Programme:</b> '.$this->model->setting->program_bi.'</i>
+		<b>Program:</b> ';
+		$pro = ' - ';
+		$pro_bi = ' - ';
+		if($this->model->course->program){
+			$pro = $this->model->course->program->pro_name;
+			$pro_bi = $this->model->course->program->pro_name_bi;
+		}
+		$html .= $pro;
+		
+		$html .= '<br />
+		<i><b>Programme:</b> '.$pro_bi .'</i>
 		</td>
 		
 		</tr>
@@ -338,19 +354,21 @@ foreach($this->model->syllabus as $row){
 		$clok++;
 		}
 	}
+	$practical_others = $row->pnp_practical + $row->pnp_others;
 	$style_number = 'style="vertical-align: middle;text-align:center;font-size:8pt"';
 	$html .='</td><td span style="font-size:10pt;">'.$clo_str.'</td>';
 	$html .='<td '.$style_number.'>'.$row->pnp_lecture .'</td>';
 	$html .='<td '.$style_number.'>'.$row->pnp_tutorial .'</td>';
-	$html .='<td '.$style_number.'>'.$row->pnp_practical .'</td>';
+	$html .='<td '.$style_number.'>'.$practical_others.'</td>';
 	//$html .='<td style="vertical-align: middle;text-align:center">'.$row->pnp_others .'</td>';
+	
 	
 	
 	$html .='<td '.$style_number.'>'.$row->nf2f .'</td>';
 	
 	$html .='<td '.$style_number.'>'.$row->independent .'</td>';
 	
-	$sub = $row->pnp_lecture + $row->pnp_tutorial + $row->pnp_practical + $row->independent + $row->nf2f;
+	$sub = $row->pnp_lecture + $row->pnp_tutorial + $practical_others + $row->independent + $row->nf2f;
 	
 	$html .='<td '.$style_number.' width="'.$jum.'">'.$sub.'</td>';
 	$html .='</tr>';
@@ -358,7 +376,7 @@ foreach($this->model->syllabus as $row){
 	
 	$tlec += $row->pnp_lecture;
 	$ttut += $row->pnp_tutorial;
-	$tprac += $row->pnp_practical;
+	$tprac += $practical_others;
 	//$toth += $row->pnp_others;
 	$tind += $row->independent;
 	$tass += $row->nf2f;
@@ -469,16 +487,6 @@ if($this->model->references){
 	foreach($this->model->references as $row){
 		$html .='<tr>';
 		$html .='<td width="4%">'.$i.'. </td>';
-		$au = $row->ref_author;
-		$yr = $row->ref_year;
-		$title = $row->ref_title;
-		$others = $row->ref_others;
-		if($others=="" || $title ==""){
-			$comma = "";
-		}else{
-			$comma = ", ";
-		}
-		$bib = $au.' ('.$yr.'). <i>'.$title.'</i>'.$comma.$others;
 		$html .='<td width="96%">'.$row->formatedReference.'</td>';
 		$html .='</tr>';
 	$i++;
@@ -539,17 +547,11 @@ $per = 0;
 
 $per_sum = 0;
 if($this->model->courseAssessmentSummative){
-	//$kira = count($this->model->courseAssessmentSummative);
-	//if($kira == 1){
-		$arr = $this->model->courseAssessmentSummative;
-		$per_sum = $arr[0]->as_percentage + 0;
-		if($per_sum  > 0){
-			/* //$html .='<tr><td></td>
-			<td><b>B. '.$arr[0]->assess_name .'/ <i>'.$arr[0]->assess_name_bi .'</i> (Summative)</b></td><td align="center">'. $per .'%</td>
-			</tr>'; */
-			$total +=$per_sum ;
-		}
-	//}
+	foreach($this->model->courseAssessmentSummative as $rs){
+		$per_sum +=$rs->as_percentage;
+		$total +=$rs->as_percentage;
+	} 
+		
 }
 
 $border_no_bottom = 'style="border-top:1px solid #000000;border-right:1px solid #000000;border-left:1px solid #000000"';

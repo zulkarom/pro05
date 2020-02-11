@@ -40,7 +40,8 @@ class CourseSlt extends \yii\db\ActiveRecord
 			[['crs_version_id'], 'required', 'on' => 'fresh'],
 			
             //[['crs_version_id', 'lecture_jam', 'lecture_mggu', 'tutorial_jam', 'tutorial_mggu', 'practical_jam', 'practical_mggu', 'others_jam', 'others_mggu', 'independent', 'nf2f'], 'required'],
-            [['crs_version_id', 'lecture_mggu', 'tutorial_mggu', 'practical_mggu', 'others_mggu'], 'integer'],
+            [['crs_version_id', 'lecture_mggu', 'tutorial_mggu', 'practical_mggu', 'others_mggu', 'is_practical'], 'integer'],
+			
             [['lecture_jam', 'tutorial_jam', 'practical_jam', 'others_jam', 'independent', 'nf2f'], 'number'],
         ];
     }
@@ -76,4 +77,17 @@ class CourseSlt extends \yii\db\ActiveRecord
 		}
 		
 	}
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
 }

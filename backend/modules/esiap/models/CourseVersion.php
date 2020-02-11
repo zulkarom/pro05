@@ -5,6 +5,7 @@ namespace backend\modules\esiap\models;
 use Yii;
 use common\models\User;
 use backend\models\GeneralSetting;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "sp_course_version".
@@ -12,21 +13,26 @@ use backend\models\GeneralSetting;
  * @property int $id
  * @property int $course_id
  * @property string $version_name
- * @property int $plo_num
  * @property int $trash
  * @property int $created_by
  * @property string $created_at
  * @property string $updated_at
- * @property int $is_active
+ * @property int $is_developed
  */
 class CourseVersion extends \yii\db\ActiveRecord
 {
 	public $as_percentage;
+	public $assess_f2f;
+	public $assess_nf2f;
 	public $assess_name;
 	public $assess_name_bi;
 	public $delivery_name;
 	public $delivery_name_bi;
 	public $as_hour;
+	public $duplicate = 0;
+	public $dup_course;
+	public $dup_version;
+	
 	
     /**
      * @inheritdoc
@@ -42,12 +48,22 @@ class CourseVersion extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['course_id', 'version_name', 'created_by', 'created_at', 'is_active'], 'required'],
+            [['course_id', 'version_name', 'version_type_id', 'created_by', 'created_at', 'is_developed'], 'required', 'on' => 'create'],
 			
-			[['senate_approve_at', 'faculty_approve_at'], 'required', 'on' => 'save_date'],
+			[['course_id', 'version_name', 'updated_at', 'is_developed', 'is_published'], 'required', 'on' => 'update'],
 			
-            [['course_id', 'created_by', 'is_active', 'status'], 'integer'],
-            [['created_at', 'updated_at'], 'safe'],
+			[['status', 'verified_by', 'verified_at'], 'required', 'on' => 'verify'],
+			
+			[['status'], 'required', 'on' => 'status'],
+			
+			[['senate_approve_at', 'faculty_approve_at', 'senate_approve_show'], 'required', 'on' => 'save_date'],
+			
+
+			
+            [['course_id', 'created_by', 'is_developed', 'is_published', 'status', 'prepared_by', 'verified_by', 'dup_course', 'dup_version', 'version_type_id', 'duplicate'], 'integer'],
+			
+            [['created_at', 'updated_at', 'senate_approve_at', 'faculty_approve_at', 'senate_approve_show', 'prepared_at', 'verified_at'], 'safe'],
+			
             [['version_name'], 'string', 'max' => 200],
         ];
     }
@@ -63,10 +79,20 @@ class CourseVersion extends \yii\db\ActiveRecord
             'version_name' => 'Version Name',
             'created_by' => 'Created By',
             'created_at' => 'Created At',
+			'version_type_id' => 'Version Type',
             'updated_at' => 'Updated At',
-            'is_active' => 'Is Active',
+            'is_developed' => 'Under Development',
+			'is_published' => 'Published',
         ];
     }
+	
+	public function getVersionType(){
+        return $this->hasOne(VersionType::className(), ['id' => 'version_type_id']);
+    }
+	
+	public function getPloNumber(){
+		return $this->versionType->plo_num;
+	}
 	
 	public function getClos()
     {
@@ -76,7 +102,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 /* 	public function getCloAssessments(){
 		return self::find()
         ->select('sp_course_clo.clo_text')
-        ->where(['sp_course_version.id' => $this->id, 'is_active' => 1])
+        ->where(['sp_course_version.id' => $this->id, 'is_developed' => 1])
         ->innerJoin('sp_course_clo', 'sp_course_clo.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_course_clo_assess', 'sp_course_clo.id = sp_course_clo_assess.clo_id')
         ->all();
@@ -109,16 +135,34 @@ class CourseVersion extends \yii\db\ActiveRecord
         
     }
 	
+	
+	
 	public function getAssessmentDirect()
     {
-		return $this->hasMany(CourseAssessment::className(), ['crs_version_id' => 'id'])->orderBy('id ASC')->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')->where(['sp_assessment_cat.is_direct' => 1]);
+		return $this->hasMany(CourseAssessment::className(), ['crs_version_id' => 'id'])->orderBy('id ASC')
+		->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')->where(['sp_assessment_cat.is_direct' => 1]);
         
+    }
+	
+	public function getAssessmentIndirect()
+    {
+		return $this->hasMany(CourseAssessment::className(), ['crs_version_id' => 'id'])->orderBy('id ASC')->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')->where(['sp_assessment_cat.is_direct' => 0]);
+    }
+	
+	public function getAssessmentFormative()
+    {
+		return $this->hasMany(CourseAssessment::className(), ['crs_version_id' => 'id'])->orderBy('id ASC')->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')->where(['sp_assessment_cat.form_sum' => 1]);
+    }
+	
+	public function getAssessmentSummative()
+    {
+		return $this->hasMany(CourseAssessment::className(), ['crs_version_id' => 'id'])->orderBy('id ASC')->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')->where(['sp_assessment_cat.form_sum' => 2]);
     }
 	
 	public function getSltAssessmentFormative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_assessment.assess_hour) AS as_hour')
+		->select('sp_course_assessment.*, SUM(sp_course_assessment.assess_f2f) + SUM(sp_course_assessment.assess_nf2f) AS as_hour')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')
 		->groupBy(['sp_assessment_cat.form_sum'])
@@ -131,7 +175,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public function getSltAssessmentSummative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_assessment.assess_hour) AS as_hour')
+		->select('sp_course_assessment.*, SUM(sp_course_assessment.assess_f2f) + SUM(sp_course_assessment.assess_nf2f) AS as_hour')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')
 		->groupBy(['sp_assessment_cat.form_sum'])
@@ -144,7 +188,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public function getCourseAssessmentFormative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage')
+		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage, sp_course_assessment.assess_f2f, sp_course_assessment.assess_nf2f')
 		->innerJoin('sp_course_clo', 'sp_course_clo.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_course_clo_assess', 'sp_course_clo_assess.clo_id = sp_course_clo.id')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.id = sp_course_clo_assess.assess_id')
@@ -159,7 +203,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public function getCourseAssessmentSummative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage')
+		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage, sp_course_assessment.assess_f2f, sp_course_assessment.assess_nf2f')
 		->innerJoin('sp_course_clo', 'sp_course_clo.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_course_clo_assess', 'sp_course_clo_assess.clo_id = sp_course_clo.id')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.id = sp_course_clo_assess.assess_id')
@@ -183,10 +227,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 		;
     }
 	
-	public function getAssessmentIndirect()
-    {
-		return $this->hasMany(CourseAssessment::className(), ['crs_version_id' => 'id'])->orderBy('id ASC')->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')->where(['sp_assessment_cat.is_direct' => 0]);
-    }
+	
 	
 	
 	public function getSyllabus()
@@ -199,10 +240,32 @@ class CourseVersion extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CourseReference::className(), ['crs_version_id' => 'id'])->orderBy('id ASC');
     }
+
+	
+	public function getMainReferences()
+    {
+        return $this->hasMany(CourseReference::className(), ['crs_version_id' => 'id'])->where(['is_main' => 1])->orderBy('id ASC');
+    }
+	
+	public function getAdditionalReferences()
+    {
+        return $this->hasMany(CourseReference::className(), ['crs_version_id' => 'id'])->where(['is_main' => 0])->orderBy('id ASC');
+    }
 	
 	public function getPreparedBy(){
         return $this->hasOne(User::className(), ['id' => 'prepared_by']);
     }
+	public function getPrepareDate(){
+		return $this->niceDate($this->prepared_at);
+	}
+	
+	public function getVerifiedBy(){
+        return $this->hasOne(User::className(), ['id' => 'verified_by']);
+    }
+	public function getVerifiedDate(){
+		return $this->niceDate($this->verified_at);
+	}
+
 
 	public function getCourse(){
         return $this->hasOne(Course::className(), ['id' => 'course_id']);
@@ -250,8 +313,16 @@ class CourseVersion extends \yii\db\ActiveRecord
 	}
 	
 	public function getLabelActive(){
+		return $this->yesNoLabel($this->is_developed);
+	}
+	
+	public function getLabelPublished(){
+		return $this->yesNoLabel($this->is_published);
+	}
+	
+	private function yesNoLabel($field){
 		$status = '';
-		switch($this->is_active){
+		switch($field){
 			case 1:
 			$status = 'YES';
 			$color = 'success';
@@ -282,12 +353,27 @@ class CourseVersion extends \yii\db\ActiveRecord
 		return $this->niceDate($this->faculty_approve_at);
 	}
 	
-	public function getPrepareDate(){
-		return $this->niceDate($this->prepared_at);
+	public function getPloNumberArray(){
+		$array = array();
+		for($i=1;$i<=12;$i++){
+			$array[$i] = $i;
+		}
+		return $array;
 	}
+	
+	public function getDefaultPloNumber(){
+		return 8;
+	}
+	
+	
+	
 	
 	public function getSetting(){
 		return GeneralSetting::findOne(1);
+	}
+	
+	public function getVersionTypeList(){
+		return ArrayHelper::map(VersionType::find()->all(), 'id', 'type_name');
 	}
 	
 

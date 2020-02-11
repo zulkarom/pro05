@@ -3,6 +3,7 @@
 namespace backend\modules\esiap\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "sp_course_profile".
@@ -40,11 +41,11 @@ class CourseProfile extends \yii\db\ActiveRecord
 			
 			[['crs_version_id'], 'required', 'on' => 'fresh'],
 			
-            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'objective', 'objective_bi', 'rational', 'rational_bi'], 'required', 'on' => 'update'],
+            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'objective', 'objective_bi', 'rational', 'rational_bi', 'offer_sem', 'offer_year', 'requirement', 'additional','requirement_bi', 'additional_bi'], 'required', 'on' => 'update'],
 			
 			
-            [['crs_version_id', 'prerequisite'], 'integer'],
-            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'staff_academic', 'requirement', 'additional', 'objective', 'objective_bi', 'rational', 'rational_bi'], 'string'],
+            [['crs_version_id', 'prerequisite', 'offer_sem', 'offer_year'], 'integer'],
+            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'staff_academic', 'requirement', 'additional','requirement_bi', 'additional_bi', 'objective', 'objective_bi', 'rational', 'rational_bi'], 'string'],
             [['offer_at'], 'string', 'max' => 200],
         ];
     }
@@ -57,21 +58,25 @@ class CourseProfile extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'crs_version_id' => 'Crs Version ID',
-            'prerequisite' => 'Prerequisite',
+            'prerequisite' => 'Prerequisite/co-requisite',
             'synopsis' => 'Synopsis (BM)',
             'synopsis_bi' => 'Synopsis (EN)',
 			'objective' => 'Objective (BM)',
             'objective_bi' => 'Objective (EN)',
 			'rational' => 'Rational (BM)',
             'rational_bi' => 'Rational (EN)',
-            'transfer_skill' => 'Transfer Skill (BM)',
-            'transfer_skill_bi' => 'Transfer Skill (EN)',
+            'transfer_skill' => 'Transferable Skill (BM)',
+            'transfer_skill_bi' => 'Transferable Skill (EN)',
             'feedback' => 'Feedback (BM)',
             'feedback_bi' => 'Feedback (EN)',
             'staff_academic' => 'Staff Academic',
-            'requirement' => 'Requirement',
-            'additional' => 'Additional',
+            'requirement' => 'Special Requirement (BM)',
+            'additional' => 'Additional Information (BM)',
+			'requirement_bi' => 'Special Requirement (EN)',
+            'additional_bi' => 'Additional Information (EN)',
             'offer_at' => 'Offer At',
+			'offer_sem' => 'Semester Offered',
+			'offer_year' => 'Year Offered',
         ];
     }
 	
@@ -101,6 +106,20 @@ class CourseProfile extends \yii\db\ActiveRecord
 			$slt->save();
 		}
 		
+	}
+	
+	public function getTransferables()
+    {
+		return $this->hasMany(CourseTransferable::className(), ['crs_version_id' => 'crs_version_id'])->orderBy('transfer_order ASC');
+    }
+	
+	public function getAcademicStaff()
+    {
+		return $this->hasMany(CourseStaff::className(), ['crs_version_id' => 'crs_version_id'])->orderBy('staff_order ASC');
+    }
+	
+	public function getTransferableList(){
+		return ArrayHelper::map(Transferable::find()->all(), 'id','transferableText');
 	}
 
 }

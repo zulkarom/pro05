@@ -41,15 +41,16 @@ $this->params['breadcrumbs'][] = $this->title;
 					}
 				}
 			]
-			
 			,
-			
 			[
                 'label' => 'Status',
                 'format' => 'html',
                 
                 'value' => function($model){
-                    return $model->defaultVersion->labelStatus;
+					if($model->developmentVersion){
+						 return $model->developmentVersion->labelStatus;
+					}
+                   
                 }
             ],
 

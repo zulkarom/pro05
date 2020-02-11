@@ -12,8 +12,8 @@ use yii\helpers\Url;
 
 $this->title = 'Softskill: ' . $model->course->course_name . ' '. $model->course->course_code;
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Update';
-$plo_num = $model->plo_num;
+$this->params['breadcrumbs'][] = 'Softskill';
+$plo_num = $model->ploNumber;
 $form = ActiveForm::begin(['id' => 'form-clo-softskill']);
 echo $form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false);
 ?>

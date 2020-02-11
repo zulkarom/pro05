@@ -51,5 +51,18 @@ class CourseCloAssessment extends \yii\db\ActiveRecord
 	public function getAssessment(){
         return $this->hasOne(CourseAssessment::className(), ['id' => 'assess_id']);
     }
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
 
 }

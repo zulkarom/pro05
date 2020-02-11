@@ -15,7 +15,7 @@ use kartik\sortable\Sortable;
 
 $this->title = 'Syllabus: ' . $model->course->course_name . ' '. $model->course->course_code;
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = 'Syllabus';
 ?>
 
 <?php $form = ActiveForm::begin(['id' => 'formsyll']); ?>

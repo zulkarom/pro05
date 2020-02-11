@@ -18,7 +18,9 @@ class ProgramSearch extends Program
     public function rules()
     {
         return [
-            [['id', 'pro_level', 'faculty', 'department', 'status', 'pro_cat', 'pro_field', 'grad_credit', 'study_mode', 'full_week_long', 'full_week_short', 'full_sem_long', 'full_sem_short', 'part_week_long', 'part_week_short', 'part_sem_long', 'part_sem_short', 'trash'], 'integer'],
+            [['id', 'pro_level', 'faculty_id', 'department_id', 'status', 'pro_cat', 'pro_field', 'grad_credit', 'study_mode', 'full_week_long', 'full_week_short', 'full_sem_long', 'full_sem_short', 'part_week_long', 'part_week_short', 'part_sem_long', 'part_sem_short', 'trash'], 'integer'],
+			
+			
             [['pro_name', 'pro_name_bi', 'pro_name_short', 'prof_body', 'coll_inst', 'sesi_start', 'pro_sustain', 'synopsis', 'synopsis_bi', 'objective', 'just_stat', 'just_industry', 'just_employ', 'just_tech', 'just_others', 'nec_perjawatan', 'nec_fizikal', 'nec_kewangan', 'kos_yuran', 'kos_beven', 'pro_tindih_pub', 'pro_tindih_pri', 'jumud', 'admission_req', 'admission_req_bi', 'career', 'career_bi'], 'safe'],
             [['full_time_year', 'full_max_year', 'part_max_year', 'part_time_year'], 'number'],
         ];
@@ -42,7 +44,7 @@ class ProgramSearch extends Program
      */
     public function search($params)
     {
-         $query = Program::find()->where(['faculty' => 1, 'trash' => 0])->orderBy('status DESC');
+         $query = Program::find()->where(['faculty_id' => Yii::$app->params['faculty_id'], 'trash' => 0])->andWhere(['>', 'id', 0])->orderBy('status DESC');
 
         // add conditions that should always apply here
 
@@ -62,8 +64,8 @@ class ProgramSearch extends Program
         $query->andFilterWhere([
             'id' => $this->id,
             'pro_level' => $this->pro_level,
-            'faculty' => $this->faculty,
-            'department' => $this->department,
+            'faculty_id' => $this->faculty_id,
+            'department_id' => $this->department_id,
             'status' => $this->status,
             'pro_cat' => $this->pro_cat,
             'pro_field' => $this->pro_field,

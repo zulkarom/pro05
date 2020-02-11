@@ -20,7 +20,7 @@ $this->params['breadcrumbs'][] = 'Reference';
 
 <div class="row">
 <div class="col-md-3"># Use APA Style for References<br />
-# Put in for make it italic e.g. *italic*<br />
+# Put * to make it italic e.g. *italic*<br />
 # References should be 5 years latest edition. In certain cases, classic works can be used</div>
 
 <div class="col-md-9"><i>Example:</i><br/>

@@ -125,18 +125,35 @@ EOD;
 		
 		<tr>
 		<td  width="'.$row5col1.'">
-		<b>Fakulti/Pusat:</b> '.$this->model->setting->faculty.'<br />
-		<i><b>Faculty/Centre:</b> '.$this->model->setting->faculty_bi .'</i> 
+		<b>Fakulti/Pusat:</b> '.$this->model->course->faculty->faculty_name .'<br />
+		<i><b>Faculty/Centre:</b> '.$this->model->course->faculty->faculty_name .'</i> 
 		</td>
 		
 		<td width="'.$row5col2.'">
-		<b>Jabatan:</b> '.$this->model->setting->department.'<br />
-		<i><b>Department:</b> '.$this->model->setting->department_bi .'</i>
+		<b>Jabatan:</b> ';
+		$dep = ' - ';
+		$dep_bi = ' - ';
+		if($this->model->course->department){
+			$dep = $this->model->course->department->dep_name;
+			$dep_bi = $this->model->course->department->dep_name_bi;
+		}
+		$html .= $dep;
+		$html .= '<br />
+		<i><b>Department:</b> '.$dep_bi .'</i>
 		</td>
 		
 		<td colspan="2" width="'.$row5col3.'">
-		<b>Program:</b> '.$this->model->setting->program .'<br />
-		<i><b>Programme:</b> '.$this->model->setting->program_bi.'</i>
+		<b>Program:</b> ';
+		$pro = ' - ';
+		$pro_bi = ' - ';
+		if($this->model->course->program){
+			$pro = $this->model->course->program->pro_name;
+			$pro_bi = $this->model->course->program->pro_name_bi;
+		}
+		$html .= $pro;
+		
+		$html .= '<br />
+		<i><b>Programme:</b> '.$pro_bi .'</i>
 		</td>
 		
 		</tr>
@@ -264,7 +281,8 @@ $html .='<tr><td width="'.$as_span.'" colspan="2">Penilaian berterusan/ Continuo
 $html .= $as_table;
 $html .= '<tr><td colspan="3"></td></tr>';
 if($sum > 0){
-	$html .= '<tr><td colspan="2">'.$as_sum_text.':</td><td>'.$sum.'%</td></tr>';
+	$html .= '<tr><td colspan="2"> Peperiksaan Akhir / Pentaksiran Akhir<br />
+ <i>Final Exam / Final Assessment:</i></td><td>'.$sum.'%</td></tr>';
 }
 
 

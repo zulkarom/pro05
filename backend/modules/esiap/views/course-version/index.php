@@ -7,16 +7,18 @@ use yii\grid\GridView;
 /* @var $searchModel backend\modules\esiap\models\CourseVersionSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Course Versions for ' . $course->course_code .' '. $course->course_name;
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Course Versions: ' . $course->course_code .' '. $course->course_name;
+$this->params['breadcrumbs'][] = ['label' => 'Course List', 'url' => ['/esiap/course-admin/index']];
+$this->params['breadcrumbs'][] = ['label' => 'Update', 'url' => ['/esiap/course-admin/update', 'course' => $course->id]];
+$this->params['breadcrumbs'][] = 'Version List';
 ?>
 <div class="course-version-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-	<?= Html::a('Back', ['/course/list'], ['class' => 'btn btn-default']) ?>
-        <?= Html::a('Create Course Version', ['course-version-create', 'course' => $course->id], ['class' => 'btn btn-success']) ?>
+	<?= Html::a('Back', ['/esiap/course-admin/update', 'course' => $course->id], ['class' => 'btn btn-default']) ?>
+        <?= Html::a('<span class="glyphicon glyphicon-plus"></span> New Version', ['course-version-create', 'course' => $course->id], ['class' => 'btn btn-success']) ?>
     </p>
 
     <div class="box">
@@ -26,21 +28,42 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-            'version_name',
 			[
-                'attribute' => 'is_active',
+				'attribute' => 'version_name',
 				'format' => 'html',
-				'filter' => Html::activeDropDownList($searchModel, 'is_active', [1=>'YES', 2 => 'NO'],['class'=> 'form-control','prompt' => 'Choose Is Active']),
+				'value' => function($model){
+					return $model->version_name . '<br /> <i> - created at '.date('d M Y', strtotime($model->created_at)).'</i>';
+				}
+				
+			],
+			
+			[
+                'attribute' => 'is_published',
+				'format' => 'html',
+				'filter' => Html::activeDropDownList($searchModel, 'is_published', [1=>'YES', 2 => 'NO'],['class'=> 'form-control','prompt' => 'All']),
+				'value' => function($model){
+					return $model->labelPublished;
+					
+				}
+                
+            ],
+            
+			[
+                'attribute' => 'is_developed',
+				'format' => 'html',
+				'filter' => Html::activeDropDownList($searchModel, 'is_developed', [1=>'YES', 2 => 'NO'],['class'=> 'form-control','prompt' => 'All']),
 				'value' => function($model){
 					return $model->labelActive;
 					
 				}
                 
             ],
+			
 			[
                 'attribute' => 'status',
+				'label' => 'Dev Status',
 				'format' => 'html',
-				'filter' => Html::activeDropDownList($searchModel, 'is_active', [0=>'DRAFT', 10 => 'SUBMITTED', 20 => 'VERIFIED'],['class'=> 'form-control','prompt' => 'Choose Status']),
+				'filter' => Html::activeDropDownList($searchModel, 'is_developed', [0=>'DRAFT', 10 => 'SUBMITTED', 20 => 'VERIFIED'],['class'=> 'form-control','prompt' => 'Choose Status']),
 				'value' => function($model){
 					return $model->labelStatus;
 					
@@ -56,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 //'visible' => false,
                 'buttons'=>[
                     'update'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span> UPDATE',['/esiap/course/course-version-update', 'id' => $model->id],['class'=>'btn btn-warning btn-sm']);
+                        return Html::a('<span class="glyphicon glyphicon-pencil"></span> UPDATE',['/esiap/course-admin/course-version-update', 'id' => $model->id],['class'=>'btn btn-warning btn-sm']);
                     }
                 ],
             

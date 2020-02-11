@@ -100,7 +100,7 @@
                         'url' => '#',
                         'items' => [
 
-							['label' => 'Senarai Kursus', 'icon' => 'book', 'url' => ['/course/list']],
+							['label' => 'Senarai Kursus', 'icon' => 'book', 'url' => ['/esiap/course-admin']],
 						
                             ['label' => 'Urus Penawaran', 'icon' => 'book', 'url' => ['/course/index']],
 

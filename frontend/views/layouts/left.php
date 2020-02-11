@@ -1,7 +1,7 @@
 <?php 
 use yii\helpers\Url;
+use backend\modules\esiap\models\CoursePic;
 use backend\modules\esiap\models\Course;
-
 ?>
 
 <aside class="main-sidebar">
@@ -44,8 +44,8 @@ use backend\modules\esiap\models\Course;
 				case 'clo-delivery': case 'report':
 				$course_id = Yii::$app->getRequest()->getQueryParam('course');
 				
-				$course = backend\modules\esiap\Models\Course::findOne($course_id);
-				$status = $course->defaultVersion->status;
+				$course = Course::findOne($course_id);
+				$status = $course->developmentVersion->status;
 				if($status == 0){
 					$visi = true;
 				}else{
@@ -58,10 +58,10 @@ use backend\modules\esiap\models\Course;
                         'url' => '#',
                         'items' => [
 						
-				['label' => 'Course Nomenclature', 'visible' => $visi, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id]],
+				['label' => 'Course Information', 'visible' => $visi, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id]],
 				
 				
-				['label' => 'Course Pro Forma', 'visible' => $visi,'icon' => 'book', 'url' => ['/esiap/course/profile', 'course' => $course_id]],
+				['label' => 'Course Profile', 'visible' => $visi,'icon' => 'book', 'url' => ['/esiap/course/profile', 'course' => $course_id]],
 				
 				['label' => 'Course Learning Outcome', 'visible' => $visi,'icon' => 'book', 'url' => ['/esiap/course/course-clo', 'course' => $course_id]],
 				
@@ -94,17 +94,17 @@ use backend\modules\esiap\models\Course;
 		
 		$penyelaras = [];
 		
-		$coor = Course::find()->where(['coordinator' => Yii::$app->user->identity->id])->all();
+		$coor = CoursePic::find()->where(['staff_id' => Yii::$app->user->identity->id])->all();
 		
 		if($coor){
 			foreach($coor as $c){
-				$ver = $c->defaultVersion->status;
+				$ver = $c->course->developmentVersion->status;
 				if($ver == 0){
 					$rt = '/esiap/course/update';
 				}else{
 					$rt = '/esiap/course/report';
 				}
-				$arr[] = ['label' => $c->course_name, 'icon' => 'book', 'url' => [$rt, 'course' => $c->id]];
+				$arr[] = ['label' => $c->course->course_name, 'icon' => 'book', 'url' => [$rt, 'course' => $c->course_id]];
 			}
 			
 			$menu_coor = [

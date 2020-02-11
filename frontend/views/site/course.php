@@ -59,9 +59,9 @@ table.padded-table td { padding:10px; font-size:18px; color:#000000; }
 				'label' => 'Nama Kursus',
 				'format' => 'raw',
 				'value' => function($model){
-				if($model->defaultVersion){
-					$syp_bm = $model->defaultVersion->profile->synopsis;
-					$syp_bi = $model->defaultVersion->profile->synopsis_bi;
+				if($model->developmentVersion){
+					$syp_bm = $model->developmentVersion->profile->synopsis;
+					$syp_bi = $model->developmentVersion->profile->synopsis_bi;
 				}else{
 					$syp_bm = '';
 					$syp_bi = '';

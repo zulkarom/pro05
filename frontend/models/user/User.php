@@ -3,6 +3,7 @@
 namespace frontend\models\user; 
 
 use common\models\Fasi;
+use backend\modules\staff\models\Staff;
 
 class User extends \dektrium\user\models\User
 {
@@ -42,6 +43,10 @@ class User extends \dektrium\user\models\User
 	
 	public function getFasi(){
 		return $this->hasOne(Fasi::className(), ['user_id' => 'id']);
+	}
+	
+	public function getStaff(){
+		return $this->hasOne(Staff::className(), ['user_id' => 'id']);
 	}
 	
 	public function register(){
