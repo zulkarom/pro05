@@ -20,6 +20,7 @@ $this->params['breadcrumbs'][] = 'CLO';
 <div class="box-body">	
     
     <p><strong>At the end of this course, student should be able to:</strong></p>
+	<i>* in parenthesis taxonomy / PLO mapping will be added automatically</i>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
@@ -40,10 +41,12 @@ $this->params['breadcrumbs'][] = 'CLO';
             <td>CLO<?= $i?></td>
                 <td class="vcenter">
                     <?= $form->field($clo, "[{$clo->id}]clo_text")->textarea(['rows' => '3'])->label(false) ?>
+					<b><i><?=$clo->clo_text. ' ' . $clo->taxoPloBracket?></i></b>
                 </td>
 				
 				<td class="vcenter">
                     <?= $form->field($clo, "[{$clo->id}]clo_text_bi")->textarea(['rows' => '3'])->label(false) ?>
+					<b><i><?=$clo->clo_text_bi. ' ' . $clo->taxoPloBracket?></i></b>
                 </td>
                 
 

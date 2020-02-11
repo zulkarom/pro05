@@ -40,7 +40,7 @@ if($clos){
 		echo $x.'. </td><td>'.$clo->clo_text .'<br /><i>'.$clo->clo_text_bi .'</i>
 		
 		<br />
-		('.$clo->plo .')
+		'.$clo->taxoPloBracket .'
 		</td>';
 		echo "<td>";
 		

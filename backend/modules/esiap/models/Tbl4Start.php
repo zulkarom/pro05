@@ -27,9 +27,9 @@ class Tbl4Start extends \TCPDF {
     public function Header() {
 		
 		
-		$this->setY(18);
-		$w = 192.5;
-		$this ->Line($this->GetX(),$this->GetY(),$w, $this->GetY(), array('width'=>0.3));
+		/* $this->setY(18.3);
+		$w = 18.5;
+		$this ->Line($this->GetX(),$this->GetY(),$w, $this->GetY(), array('width'=>0.8)); */
     }
 
     // Page footer
@@ -37,9 +37,11 @@ class Tbl4Start extends \TCPDF {
         // Position at 15 mm from bottom
 		
 		
+		
+		
 		if($this->lineFooterTable){
 			$this->SetY(-20);
-		$w = 192.5;
+		$w = 198;
 		$this ->Line($this->GetX(),$this->GetY(),$w, $this->GetY(), array('width'=>0.3));
 		}
         
@@ -50,6 +52,10 @@ class Tbl4Start extends \TCPDF {
         $this->SetFont('helvetica', 'I', 8);
         // Page number
         $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		
+		$this->setY(18);
+		$w = 198;
+		$this ->Line($this->GetX(),$this->GetY(),$w, $this->GetY(), array('width'=>0.3));
 		
     }
 }

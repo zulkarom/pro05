@@ -45,7 +45,7 @@ if($clos){
 		echo '<td style="vertical-align:middle;" >CLO'.$x.'</td>';
 		echo '<td style="vertical-align:middle;">' . $clo->clo_text . '<br /><i>'.$clo->clo_text_bi.'</i>
 		<br />
-		('.$clo->plo .')
+		'.$clo->taxoPloBracket .'
 		</td>';
 		echo '<td>';
 		

@@ -42,12 +42,12 @@ class Tbl4
 		$wtab = 180 + 450;
 		$this->wtab = $wtab;
 
-		$this->pdf->lineFooterTable = false;
+		//$this->pdf->lineFooterTable = false;
 	}
 	
 	public function doBody(){
 
-	
+	$this->pdf->lineFooterTable = true;
 $wtab = 180 + 480;
 $this->wtab = $wtab;
 		
@@ -160,7 +160,7 @@ if($this->model->clos){
 	foreach($this->model->clos as $c){
 	$html_clo .= '<tr>
 <td width="'.$col_label.'" '.$style_shade.' align="center">CLO '.$i.'</td>
-<td width="'.$col_content.'" colspan="14" '.$border.'>'.$c->clo_text_bi .'</td>
+<td width="'.$col_content.'" colspan="14" '.$border.'>'.$c->clo_text_bi .' '.$c->taxoPloBracket.'</td>
 </tr>';
 	$i++;	
 	}
@@ -232,7 +232,10 @@ $html_plo .='<table border="0">';
 foreach($c->cloAssessments as $row){
 	$html_plo  .= '<tr>';
 	$html_plo  .= '<td>';
-	$html_plo  .= $row->assessment->assess_name_bi ;
+	if($row->assessment){
+		$html_plo  .= $row->assessment->assess_name_bi ;
+	}
+	
 	$html_plo  .= '</td>';
 	$html_plo  .= '</tr>';
 }

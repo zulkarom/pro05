@@ -46,7 +46,7 @@ if($clos){
 		echo '<tr>';
 		$rowspan_1 = rowspan_1($clo->cloAssessments);
 		echo '<td style="vertical-align:middle;" '.$rowspan_1.'>CLO'.$i.'</td>';
-		echo '<td style="vertical-align:middle;" '.$rowspan_1.'>' . $clo->clo_text . '<br /><i>'.$clo->clo_text_bi.'</i></td>';
+		echo '<td style="vertical-align:middle;" '.$rowspan_1.'>' . $clo->clo_text . '<br /><i>'.$clo->clo_text_bi.'</i><br /> '.$clo->taxoPloBracket.'</td>';
 		colum_2_first($form,$clo->cloAssessments, $assess, $model);
 		echo '</tr>';
 		colum_2($form,$clo->cloAssessments, $assess, $model);
