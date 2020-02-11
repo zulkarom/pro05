@@ -242,7 +242,7 @@ EOD;
 	}
 	
 	public function writeSigniture(){
-		$html = '<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
+		$html = '<b>"RAJA BERDAULAT, RAKYAT MUAFAKAT, NEGERI BERKAT"<br /><br />
 "BERKHIDMAT UNTUK NEGARA"</b>
 <br /><br />
 Saya yang menjalankan amanah,<br />
