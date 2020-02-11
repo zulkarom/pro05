@@ -484,8 +484,8 @@ foreach($this->model->syllabus as $row){
 	if($clo){
 		$kk=1;
 		foreach($clo as $clonum){
-			$comma = $kk == 1 ? "" : ",";
-			$str .= $comma. $clonum;
+			$comma = $kk == 1 ? "" : "<br />";
+			$str .= $comma. 'CLO'.$clonum;
 			$kk++;
 		}
 	}
