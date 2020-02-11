@@ -236,13 +236,13 @@ EOD;
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->setY($y - 48);
+		$this->pdf->setY($y - 42);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
 	public function writeSigniture(){
-		$html = '<b>"RAJA BERDAULAT, RAKYAT MUAFAKAT, NEGERI BERKAT"<br /><br />
+		$html = '<b>"RAJA BERDAULAT, RAKYAT MUAFAKAT, NEGERI BERKAT"<br />
 "BERKHIDMAT UNTUK NEGARA"</b>
 <br /><br />
 Saya yang menjalankan amanah,<br />
@@ -377,7 +377,7 @@ EOD;
 
 		// ---------------------------------------------------------
 
-
+		$this->pdf->setImageScale(1.53);
 
 		// add a page
 		$this->pdf->AddPage("P");
