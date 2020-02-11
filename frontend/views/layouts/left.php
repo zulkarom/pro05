@@ -94,7 +94,7 @@ use backend\modules\esiap\models\Course;
 		
 		$penyelaras = [];
 		
-		$coor = CoursePic::find()->where(['staff_id' => Yii::$app->user->identity->id])->all();
+		$coor = CoursePic::find()->where(['staff_id' => Yii::$app->user->identity->staff->id])->all();
 		
 		if($coor){
 			foreach($coor as $c){
