@@ -63,9 +63,11 @@ class OfferLetter
 		<table cellpadding="1">
 		<tr>
 			<td width="280"></td>
+			<td width="120"></td>
 			<td width="300" align="right">'.$this->model->ref_letter . '</td>
 		</tr>
 		<tr>
+			<td></td>
 			<td></td>
 			<td align="right">'. $date .'</td>
 		</tr>
