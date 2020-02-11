@@ -125,10 +125,10 @@ class CourseController extends Controller
 	 public function actionReport($course)
     {
         $model = $this->findModel($course);
-		
 		$version = $model->developmentVersion;
 
         if ($version->load(Yii::$app->request->post())) {
+			$version->prepared_at = new Expression('NOW()');
 			$version->status = 10;
 			if($version->save()){
 				return $this->redirect(['course/report','course' => $course]);
@@ -869,10 +869,12 @@ class CourseController extends Controller
 		}
     }
 	
-	public function actionFk1($course, $version = false){
+	public function actionFk1($course, $dev = false, $version = false){
 		if($version){
 			//control access
 			$model = $this->findVersion($version);
+		}else if($dev){
+			$model = $this->findDevelopmentVersion($course);
 		}else{
 			$model = $this->findPublishedVersion($course);
 		}
@@ -882,10 +884,12 @@ class CourseController extends Controller
 			$pdf->generatePdf();
 	}
 	
-	public function actionFk2($course, $version = false){
+	public function actionFk2($course, $dev = false, $version = false){
 		if($version){
 			//control access
 			$model = $this->findVersion($version);
+		}else if($dev){
+			$model = $this->findDevelopmentVersion($course);
 		}else{
 			$model = $this->findPublishedVersion($course);
 		}
@@ -894,10 +898,12 @@ class CourseController extends Controller
 			$pdf->generatePdf();
 	}
 	
-	public function actionTbl4($course, $version = false){
+	public function actionTbl4($course, $dev = false, $version = false){
 		if($version){
 			//control access
 			$model = $this->findVersion($version);
+		}else if($dev){
+			$model = $this->findDevelopmentVersion($course);
 		}else{
 			$model = $this->findPublishedVersion($course);
 		}
@@ -906,10 +912,12 @@ class CourseController extends Controller
 			$pdf->generatePdf();
 	}
 	
-	public function actionFk3($course, $version = false){
+	public function actionFk3($course, $dev = false, $version = false){
 		if($version){
 			//control access
 			$model = $this->findVersion($version);
+		}else if($dev){
+			$model = $this->findDevelopmentVersion($course);
 		}else{
 			$model = $this->findPublishedVersion($course);
 		}
