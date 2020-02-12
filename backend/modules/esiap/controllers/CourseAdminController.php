@@ -29,6 +29,8 @@ use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
 use backend\modules\esiap\models\CoursePic;
 use backend\modules\esiap\models\CourseAccess;
+use backend\modules\esiap\models\CourseStaff;
+use backend\modules\esiap\models\CourseTransferable;
 use yii\helpers\Json;
 
 
@@ -572,4 +574,172 @@ class CourseAdminController extends Controller
 			$clo->save();
 		}
 	}
+	
+	public function actionBulkmqf2(){
+		
+		$courses = Course::find()->all();
+		foreach($courses as $course){
+			$mqf2 = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
+			$ori = CourseVersion::find()->where(['course_id' => $course->id])
+					->orderBy('created_at DESC')->limit(1)->all();
+					
+			/* echo 'course:' . $course->id;
+			echo '<br />';
+			echo $ori[0]->id . '<------';die();  */
+			
+			if(!$mqf2){
+				CourseVersion::updateAll(['is_developed' => 0], ['course_id' => $course->id]);
+				$nv = new CourseVersion;
+				$nv->course_id = $course->id;
+				$nv->version_type_id = 2;
+				$nv->version_name = 'MQF2 PLO11';
+				$nv->study_week = '16';
+				$nv->final_week = '17-19';
+				$nv->created_at = new Expression('NOW()');
+				$nv->is_developed = 1;
+				$nv->status = 0;
+				if($nv->save()){
+					
+					//echo $ori[0]->id . '<------';die(); 
+					if($ori){
+						$clone = new CourseVersionClone;
+						$clone->ori_version = $ori[0]->id;
+						$clone->copy_version = $nv->id;
+						if(!$clone->cloneVersion()){
+							echo 'clone failed <br />';
+						}else{
+							echo 'clone good <br />';
+						}
+						
+					}else{
+		
+						echo 'no ori <br />';
+					}
+					
+				}
+			}
+		}
+		
+	}
+	
+	public function actionBulkdeletemqf2(){
+		
+		$courses = Course::find()->all();
+		foreach($courses as $course){
+			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
+			if($ver){
+				$id = $ver->id;
+				$clos = CourseClo::find()->where(['crs_version_id' => $id])->all();
+				if($clos){
+					foreach($clos as $clo){
+						$clo_id = $clo->id;
+						CourseCloAssessment::deleteAll(['clo_id' => $clo_id]);
+						CourseCloDelivery::deleteAll(['clo_id' => $clo_id]);
+					}
+				}
+				CourseClo::deleteAll(['crs_version_id' => $id]);
+				CourseReference::deleteAll(['crs_version_id' => $id]);
+				CourseSyllabus::deleteAll(['crs_version_id' => $id]);
+				CourseSlt::deleteAll(['crs_version_id' => $id]);
+				CourseAssessment::deleteAll(['crs_version_id' => $id]);
+				CourseProfile::deleteAll(['crs_version_id' => $id]);
+				
+				CourseVersion::findOne($id)->delete();
+			}
+		}
+		
+	}
+	
+	public function actionBulkupdatepusatko(){
+		$courses = Course::find()->all();
+		foreach($courses as $course){
+			$version = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
+			if($version){
+				//cari pic
+				$pics = $course->coursePics;
+				if($pics){
+					foreach($pics as $pic){
+						$old = CourseStaff::findOne(['crs_version_id' => $version->id, 'staff_id' => $pic->staff_id]);
+						if(!$old){
+							$staff = new CourseStaff;
+							$staff->crs_version_id = $version->id;
+							$staff->staff_id = $pic->staff_id;
+							$staff->save();
+						}
+						
+					}
+				}
+				//staff
+		
+		
+		//semester 1 -1 
+		
+		$profile = CourseProfile::findOne(['crs_version_id' => $version->id]);
+		if(!$profile){
+			$profile = new CourseProfile;
+			$profile->crs_version_id = $version->id;
+		}
+		$profile->offer_sem = 1;
+		$profile->offer_year = 1;
+		$profile->save();
+		
+		//plo 8 - 11
+		
+		$clos = CourseClo::find()->where(['crs_version_id' => $version->id])->all();
+		if($clos){
+			$x = 1;
+			foreach($clos as $clo){
+				for($i=1;$i<=11;$i++){
+					$prop = 'PLO'.$i;
+					if(($x == 1 and $i == 11) or ($x == 2 and $i == 8) ){
+						$clo->{$prop} = 1;
+					}else{
+						$clo->{$prop} = 0;
+					}
+					
+				}
+				$clo->save();
+				$x++;
+			}
+		}
+		
+		
+		//transferable value & leadership
+		// 9 & 6
+		
+		$transfer1 = CourseTransferable::findOne(['crs_version_id' => $version->id, 'transferable_id' => 9]);
+		if(!$transfer1){
+			$trans1 = new CourseTransferable;
+			$trans1->crs_version_id = $version->id;
+			$trans1->transferable_id = 9;
+			$trans1->transfer_order = 0;
+			$trans1->save();
+		}
+		
+		$transfer2 = CourseTransferable::findOne(['crs_version_id' => $version->id, 'transferable_id' => 6]);
+		if(!$transfer1){
+			$trans1 = new CourseTransferable;
+			$trans1->crs_version_id = $version->id;
+			$trans1->transferable_id = 6;
+			$trans1->transfer_order = 1;
+			$trans1->save();
+		}
+		
+		//slt assess 4 - 2
+		
+		$ass = CourseAssessment::find()->where(['crs_version_id' => $version->id])->all();
+		if($ass){
+			foreach($ass as $as){
+				$as->assess_f2f = 4;
+				$as->assess_nf2f = 2;
+				$as->save();
+			}
+		}
+		
+			}
+		}
+		
+	}
+	
+	
 }
