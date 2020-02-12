@@ -229,7 +229,9 @@ class CourseController extends Controller
                             }
                         }
 
-                    }
+                    }else{
+						$model->flashError();
+					}
 
                     if ($flag) {
                         $transaction->commit();

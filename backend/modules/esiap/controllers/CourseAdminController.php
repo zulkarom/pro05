@@ -224,6 +224,8 @@ class CourseAdminController extends Controller
 				CourseSlt::deleteAll(['crs_version_id' => $id]);
 				CourseAssessment::deleteAll(['crs_version_id' => $id]);
 				CourseProfile::deleteAll(['crs_version_id' => $id]);
+				CourseTransfer::deleteAll(['crs_version_id' => $id]);
+				CourseStaff::deleteAll(['crs_version_id' => $id]);
 				
 				if(CourseVersion::findOne($id)->delete()){
 					
@@ -565,19 +567,20 @@ class CourseAdminController extends Controller
 	}
 	
 	public function actionRemovebracket(){
-		$clos = CourseClo::find()->all();
+		/* $clos = CourseClo::find()->all();
 		foreach($clos as $clo){
 			$bm = $clo->clo_text;
 			$clo->clo_text = trim(preg_replace('/\s*\([^)]*\)/', '', $bm));
 			$bi = $clo->clo_text_bi;
 			$clo->clo_text_bi = trim(preg_replace('/\s*\([^)]*\)/', '', $bi));
 			$clo->save();
-		}
+		} */
 	}
 	
+		
 	public function actionBulkmqf2(){
 		
-		$courses = Course::find()->all();
+		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
 		foreach($courses as $course){
 			$mqf2 = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
 			$ori = CourseVersion::find()->where(['course_id' => $course->id])
@@ -623,7 +626,7 @@ class CourseAdminController extends Controller
 	}
 	
 	public function actionBulkdeletemqf2(){
-		
+		die();/////////////////////////////
 		$courses = Course::find()->all();
 		foreach($courses as $course){
 			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
@@ -651,7 +654,8 @@ class CourseAdminController extends Controller
 	}
 	
 	public function actionBulkupdatepusatko(){
-		$courses = Course::find()->all();
+		//die();////////////////////////stop
+		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
 		foreach($courses as $course){
 			$version = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
 			if($version){
@@ -740,6 +744,5 @@ class CourseAdminController extends Controller
 		}
 		
 	}
-	
 	
 }

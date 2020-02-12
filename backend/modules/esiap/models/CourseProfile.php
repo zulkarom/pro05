@@ -41,7 +41,7 @@ class CourseProfile extends \yii\db\ActiveRecord
 			
 			[['crs_version_id'], 'required', 'on' => 'fresh'],
 			
-            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'objective', 'objective_bi', 'rational', 'rational_bi', 'offer_sem', 'offer_year', 'requirement', 'additional','requirement_bi', 'additional_bi'], 'required', 'on' => 'update'],
+            [['synopsis', 'synopsis_bi', 'feedback', 'feedback_bi', 'objective', 'objective_bi', 'rational', 'rational_bi', 'offer_sem', 'offer_year'], 'required', 'on' => 'update'],
 			
 			
             [['crs_version_id', 'prerequisite', 'offer_sem', 'offer_year'], 'integer'],
@@ -121,5 +121,19 @@ class CourseProfile extends \yii\db\ActiveRecord
 	public function getTransferableList(){
 		return ArrayHelper::map(Transferable::find()->all(), 'id','transferableText');
 	}
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
 
 }

@@ -192,13 +192,16 @@ class CourseVersionClone
 				
 				//kena update assess_id lama ke baru
 				$old_assess = $original->assess_id;
-				$old_name = CourseAssessment::findOne($old_assess)->assess_name;
-				//Yii::$app->session->addFlash('success', $old_name .'---'. $this->copy_version);
-				$new_assess = CourseAssessment::findOne(['assess_name' => $old_name, 'crs_version_id' => $this->copy_version]);
-				if($new_assess){
-					
-					$copy->assess_id = $new_assess->id;
+				if($old_name = CourseAssessment::findOne($old_assess)){
+					$old_name = CourseAssessment::findOne($old_assess)->assess_name;
+					//Yii::$app->session->addFlash('success', $old_name .'---'. $this->copy_version);
+					$new_assess = CourseAssessment::findOne(['assess_name' => $old_name, 'crs_version_id' => $this->copy_version]);
+					if($new_assess){
+						
+						$copy->assess_id = $new_assess->id;
+					}
 				}
+				
 				
 				
 				
