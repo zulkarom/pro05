@@ -227,14 +227,15 @@ echo Select2::widget([
                     'update'=>function ($url, $model) {
 						return '
 						<div class="dropdown">
-  <button class="btn btn-warning btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Actions 
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Actions & Report
   <span class="caret"></span></button>
   <ul class="dropdown-menu">
     <li><a class="modalButton-update" href="'.Url::to(['/esiap/course-admin/course-version-update', 'id' => $model->id]).'">UPDATE</a></li>
     <li><a target="_blank" href="'.Url::to(['/esiap/course/fk1', 'course' => $model->course_id, 'version' => $model->id]).'">FK1</a></li>
     <li><a target="_blank" href="'.Url::to(['/esiap/course/fk2', 'course' => $model->course_id, 'version' => $model->id]).'">FK2</a></li>
 	<li><a target="_blank" href="'.Url::to(['/esiap/course/fk3', 'course' => $model->course_id, 'version' => $model->id]).'">FK3</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4</a></li>
+	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 PDF</a></li>
+	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 EXCEL</a></li>
   </ul>
 </div>
 						

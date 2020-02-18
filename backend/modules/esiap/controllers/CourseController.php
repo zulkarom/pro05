@@ -22,6 +22,7 @@ use backend\modules\esiap\models\Fk1;
 use backend\modules\esiap\models\Fk2;
 use backend\modules\esiap\models\Fk3;
 use backend\modules\esiap\models\Tbl4;
+use backend\modules\esiap\models\Tbl4Excel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -912,6 +913,20 @@ class CourseController extends Controller
 			$pdf = new Tbl4;
 			$pdf->model = $model;
 			$pdf->generatePdf();
+	}
+	
+	public function actionTbl4Excel($course, $dev = false, $version = false){
+		if($version){
+			//control access
+			$model = $this->findVersion($version);
+		}else if($dev){
+			$model = $this->findDevelopmentVersion($course);
+		}else{
+			$model = $this->findPublishedVersion($course);
+		}
+			$pdf = new Tbl4Excel;
+			$pdf->model = $model;
+			$pdf->generateExcel();
 	}
 	
 	public function actionFk3($course, $dev = false, $version = false){

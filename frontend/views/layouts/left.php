@@ -34,7 +34,7 @@ use backend\modules\esiap\models\Course;
 		
 		<?php 
 		
-		$course_focus = '';
+		$course_focus = [];
 		if(Yii::$app->controller->id == 'course' and Yii::$app->controller->module->id == 'esiap'){
 			switch(Yii::$app->controller->action->id){
 				case 'update': case 'profile':case 'course-clo':
@@ -45,12 +45,15 @@ use backend\modules\esiap\models\Course;
 				$course_id = Yii::$app->getRequest()->getQueryParam('course');
 				
 				$course = Course::findOne($course_id);
+				
 				$status = $course->developmentVersion->status;
+				
 				if($status == 0){
 					$visi = true;
 				}else{
 					$visi = false;
 				}
+				
 				$course_focus  = [
                         'label' => $course->course_name,
                         'icon' => 'book',
@@ -124,12 +127,9 @@ use backend\modules\esiap\models\Course;
 		
 		?>
 
-        <?= dmstr\widgets\Menu::widget(
-            [
-                'options' => ['class' => 'sidebar-menu tree', 'data-widget'=> 'tree'],
-                'items' => [
-					
-					['label' => 'Main Menu', 'options' => ['class' => 'header']],
+        <?php
+		
+				$menuItems = [
 					
 					$course_focus,
 					
@@ -200,9 +200,20 @@ use backend\modules\esiap\models\Course;
 					
 			
                     
-                ],
-            ]
-        ) ?>
+                ];
+				
+				?>
+		
+		<?php 
+		
+		$favouriteMenuItems[] = ['label' => 'MAIN MENU', 'options' => ['class' => 'header']];
+		
+		echo dmstr\widgets\Menu::widget([
+			'items' => \yii\helpers\ArrayHelper::merge($favouriteMenuItems, $menuItems),
+		]);
+		
+		
+		?>
 
     </section>
 
