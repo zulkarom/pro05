@@ -1123,7 +1123,7 @@ e-Learning')
 			$i = 1;
 			foreach($arr_all as $rt){
 				$wk = $i == 1 ? $row->week_num . ".  " : '';
-				$br = $i == 1 ? '     ' : "\n";
+				$br = $i == 1 ? '' : "\n";
 				$topic .= $br . $wk . $rt->top_bi;
 				$row_count++;
 				if($rt->sub_topic){
