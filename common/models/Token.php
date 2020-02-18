@@ -17,7 +17,7 @@ class Token {
 		return $randomString;
 	}
 	
-	public function projectKey(){
+	public static function projectKey(){
 		$semester = Semester::getCurrentSemester();
 		$characters = '01DF234SDGSDF56789ABCDEFG489HIJKLMN3OPQR433STUVWXKDFGYZ';
 		$charactersLength = strlen($characters);
