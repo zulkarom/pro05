@@ -1120,8 +1120,11 @@ e-Learning')
 			if($arr_all){
 			//16
 			$row_count = 0;
+			$i = 1;
 			foreach($arr_all as $rt){
-				$topic .= $row->week_num . ".  ". $rt->top_bi;
+				$wk = $i == 1 ? $row->week_num . ".  " : '';
+				$br = $i == 1 ? '     ' : "\n";
+				$topic .= $br . $wk . $rt->top_bi;
 				$row_count++;
 				if($rt->sub_topic){
 					foreach($rt->sub_topic as $rst){
@@ -1129,6 +1132,7 @@ e-Learning')
 					$row_count++;
 					}
 				}
+			$i++;
 			}
 			}
 			

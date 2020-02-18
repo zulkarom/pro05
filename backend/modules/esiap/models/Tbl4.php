@@ -467,8 +467,11 @@ if($this->model->syllabus ){
 	$html .='<td '.$border.'>';
 	$arr_all = json_decode($row->topics);
 	if($arr_all){
+	$i = 1;
 	foreach($arr_all as $rt){
-		$html .= $row->week_num . ".  ". $rt->top_bi;
+		$wk = $i == 1 ? $row->week_num . ".  " : '';
+		$br = $i == 1 ? '' : "<br />";
+		$html .= $br . $wk . $rt->top_bi;
 		
 		if($rt->sub_topic){
 		$html .= '<br/><table>';
@@ -477,6 +480,7 @@ if($this->model->syllabus ){
 			}
 		$html .='</table>';
 		}
+	$i++;
 	}
 	}
 	$html .='</td>';
