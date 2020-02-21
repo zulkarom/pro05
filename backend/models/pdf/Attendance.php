@@ -85,7 +85,7 @@ class Attendance
 				foreach($this->response->result as $row){
 						$html .= '
 						<tr nobr="true">
-						<td style="height: 25px;" width="'.$bil.'"  align="center">'.$x.'</td>
+						<td style="height: 27px;" width="'.$bil.'"  align="center">'.$x.'</td>
 						<td width="'.$name.'" style="padding:9px;">
 						<table>
 						<tr>
