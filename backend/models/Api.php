@@ -17,7 +17,7 @@ class Api
 	
 	public function student(){
 		$this->url = $this->portal . 'student?' . $this->getParams();
-		$json = $this->curlResponse();
+		$json = $this->getContent();
 		return json_decode($json);
 	}
 	
@@ -35,6 +35,10 @@ class Api
 			$url .= '&id=' . $id;
 		}
 		return $url;
+	}
+	
+	public function getContent(){
+		return file_get_contents($this->url);
 	}
 	
 	public function curlResponse(){
