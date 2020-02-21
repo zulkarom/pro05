@@ -123,6 +123,13 @@ if($sem = Semester::getOpenDateSemester()){
         <td><a href="<?=Url::to(['/esiap/course/fk1', 'course' => $course->id])?>" target="_blank" class="btn btn-default" >FK1</a> <a href="<?=Url::to(['/esiap/course/fk2', 'course' => $course->id])?>" target="_blank" class="btn btn-default" >FK2</a> <a href="<?=Url::to(['/esiap/course/fk3', 'course' => $course->id])?>" target="_blank" class="btn btn-default" >FK3</a></td>
 
       </tr>
+	  <tr>
+        <td>
+		<a href="<?=Url::to(['student/index', 'a' => $application->id])?>"><span class="fa fa-users"></span> Senarai Pelajar</a>
+		
+		</td>
+
+      </tr>
     </tbody>
   </table>
 </div>

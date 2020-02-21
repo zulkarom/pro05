@@ -144,6 +144,11 @@ class Semester extends \yii\db\ActiveRecord
 		return strtoupper('Semester ' . $this->sessionLong() . ' ' . $this->years());
 	}
 	
+	public function fullFormat(){
+		
+		return strtoupper('Semester ' . $this->sessionLong() . ' Sesi ' . $this->years());
+	}
+	
 	public static function getCurrentSemester(){
 		$sem =  self::findOne(['is_current' => 1]);
 		if($sem){
