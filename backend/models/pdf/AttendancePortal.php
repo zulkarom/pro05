@@ -6,9 +6,10 @@ use Yii;
 use common\models\Common;
 
 
-class Attendance
+class AttendancePortal
 {
 	public $model;
+	public $date;
 	public $response;
 	public $pdf;
 	public $directoryAsset;
@@ -17,13 +18,15 @@ class Attendance
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		$this->pdf = new AttendanceStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$this->pdf = new AttendancePortalStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
+		$this->pdf->model = $this->model;
+		$this->pdf->date = $this->date;
 		$this->startPage();
 		$this->body();
 
 
-		$this->pdf->Output('attendance.pdf', 'I');
+		$this->pdf->Output('attendance-portal.pdf', 'I');
 	}
 	
 
@@ -32,49 +35,34 @@ class Attendance
 		
 		
 		
-		$wtable = 1160;
+		$wtable = 780;
 		$bil = 45;
-		$box = 50;
 		$matrik = 130;
-		$boxall = $box * 14;
-		$name = $wtable - $bil - $matrik - $boxall;
+		$kehadiran = 90;
+		$jenis = 100;
+		$name = $wtable - $bil - $matrik - $kehadiran - $jenis;
+		$line_height = 200;
 		
 		$html ='
 		<table cellpadding="2" border="1" width="'.$wtable.'">
 		<thead>
-		<tr>
-		<td colspan="17" style="line-height: 160%;">
+		<tr style="background-color:#cccccc">
+			<td width="'.$bil.'" align="center" style="line-height: '.$line_height.'%;"><b>Bil</b></td>
+				<td width="'.$matrik.'" style="line-height: '.$line_height.'%;">
+				<b>  No. Matrik</b></td>
+			<td width="'.$name.'"  style="line-height: '.$line_height.'%;">
 			
-		 <b>Semester</b><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>'. strtoupper($this->model->semester->fullFormat()).'<br />
-		   
-		   <span>&nbsp;</span><b>Subjek</b><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).'
+			<b>  Nama</b>
 			
-
-		</td>
-		</tr>
-		<tr>
-		<td colspan="17">
-	
-		<b>   Kumpulan<span>&nbsp;&nbsp;&nbsp;</span>'.$this->model->applicationGroup->group_name.'</b>
-
-		</td>
-		</tr>
-		<tr style="background-color:#ebebeb">
-			<td rowspan="2" width="'.$bil.'" align="center" style="line-height: 250%;"><b>Bil</b></td>
-			<td rowspan="2" width="'.$name.'" align="center" style="line-height: 250%;"><b>Nama</b></td>
-			<td rowspan="2" width="'.$matrik.'" align="center" style="line-height: 250%;"><b>No. Matrik</b></td>';
-			$html .= '<td colspan="14" width="'.$boxall .'" align="center"><b>Tarikh & Tandatangan</b></td>';
-		$html .= '
-		</tr>
-		<tr style="background-color:#ebebeb">
+			</td>
+		
+			<td width="'.$kehadiran.'" align="center" style="line-height: '.$line_height.'%;"><b>Kehadiran</b></td>
+			<td width="'.$jenis.'" align="center" style="line-height: '.$line_height.'%;"><b>Jenis Data</b></td>
+			
 			';
-		for($i=1;$i<=14;$i++){
-			$html .= '<td width="'.$box.'"></td>';
-		}
 		$html .= '
 		</tr>
 		</thead>
-		
 		
 		
 		';
@@ -84,21 +72,26 @@ class Attendance
 				$x = 1;
 				//style="line-height: 150%;"
 				foreach($this->response->result as $row){
+						$hadir = '';
+						if($row->status == 1){
+							$hadir = '<b style="font-size:14px;color:#1b3110">H</b>';
+						}else{
+							$hadir = '<b style="font-size:14px;color:#FF0000">XH</b>';
+						}
 						$html .= '
 						<tr nobr="true">
-						<td style="height: 27px;" width="'.$bil.'"  align="center">'.$x.'</td>
-						<td width="'.$name.'" style="padding:9px;">
-						<table>
-						<tr>
-						<td width="2%"></td><td width="98%">'.$row->name .'</td>
-						</tr>
-						</table>
-						</td>
-						<td width="'.$matrik.'" align="center">'.$row->id .'</td>';
+						<td style="height: 24px;" width="'.$bil.'"  align="center">'.$x.'</td>
+						<td width="'.$matrik.'">  '.$row->id .'</td>
 						
-						for($d=1;$d<=14;$d++){
-							$html .= '<td width="'.$box.'"></td>';
-						}
+						<td width="'.$name.'" style="padding:9px;">
+						  '.$row->name .'
+						</td>
+						
+						<td width="'.$kehadiran.'" align="center">'.$hadir .'</td>
+						<td width="'.$jenis.'" align="center" ></td>
+						
+						';
+						
 						
 						$html .= '</tr>';
 					$x++;
@@ -139,7 +132,7 @@ EOD;
 		// set margins
 		$this->pdf->SetMargins(15, 40, 15);
 		//$this->pdf->SetMargins(0, 0, 0);
-		$this->pdf->SetHeaderMargin(5);
+		$this->pdf->SetHeaderMargin(10);
 		//$this->pdf->SetHeaderMargin(0);
 
 		 //$this->pdf->SetHeaderMargin(0, 0, 0);
@@ -164,7 +157,7 @@ EOD;
 		$this->pdf->SetFont('arial', '', 8.5);
 
 		// add a page
-		$this->pdf->AddPage("L");
+		$this->pdf->AddPage("P");
 	}
 	
 	

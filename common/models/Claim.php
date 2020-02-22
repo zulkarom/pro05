@@ -7,6 +7,7 @@ use raoul2000\workflow\validation\WorkflowValidator;
 use raoul2000\workflow\validation\WorkflowScenario;
 use common\models\Common;
 use backend\models\ClaimSetting;
+use backend\models\Api;
 
 /**
  * This is the model class for table "claim".
@@ -95,7 +96,7 @@ class Claim extends \yii\db\ActiveRecord
     }
 	
 	public function validateClaimFiles(){
-		$files = $this->claimFiles;
+		/* $files = $this->claimFiles;
 		$kira = count($files);
 		if($kira > 0){
 			foreach($files as $f){
@@ -106,7 +107,7 @@ class Claim extends \yii\db\ActiveRecord
 			}
 		}else{
 			return false;
-		}
+		} */
 		
 		return true;
 	}
@@ -248,5 +249,27 @@ class Claim extends \yii\db\ActiveRecord
 			
 		}
 		return true;
+	}
+	
+	public function getListPortalAttendance(){
+		$model = $this->application;
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$api->subject = $model->acceptedCourse->course->course_code;
+		$api->group = $model->applicationGroup->group_name;
+		$response = $api->attendList();
+		$array = [];
+		if($response){
+			if($response->result){
+				foreach($response->result as $row){
+					$month = date('m', strtotime($row->date)) + 0;
+					if($month == $this->month){
+						$array[] = $row;
+					}
+				}
+			}
+		}
+		
+		return $array;
 	}
 }

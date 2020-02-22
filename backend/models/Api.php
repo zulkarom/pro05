@@ -22,10 +22,31 @@ class Api
 	}
 	
 	public function attendList(){
-		
+		$this->url = $this->portal . 'list?' . $this->getParams();
+		$json = $this->getContent();
+		$obj = json_decode($json);
+		return $obj;
 	}
 	
-	public function attendance(){
+	public function attend(){
+		$this->url = $this->portal . 'attend?' . $this->getParams($this->id);
+		$json = $this->getContent();
+		$obj = json_decode($json);
+		return $obj;
+	}
+	
+	public function getClassDate($id){
+		$response = $this->attendList();
+		if($response){
+			if($response->result){
+				foreach($response->result as $row){
+					if($row->id == $id){
+						return $row->date;
+						break;
+					}
+				}
+			}
+		}
 		
 	}
 	

@@ -66,6 +66,8 @@ class ClaimItem extends \yii\db\ActiveRecord
 		return $this->hasOne(SessionType::className(), ['id' => 'session_type']);
 	}
 	
+
+	
 	public function getClaim(){
 		return $this->hasOne(Claim::className(), ['id' => 'claim_id']);
 	}

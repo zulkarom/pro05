@@ -26,7 +26,7 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 <div class="box">
 <div class="box-header">
 
-<h3 class="box-title">BAHAGIAN B</h3>
+<h3 class="box-title">MAKLUMAT KELAS</h3>
 
 </div>
 <div class="box-body"><div class="claim-form">
@@ -144,7 +144,7 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
             <tr>
 			<td></td>
                 <td colspan="4">
-				<button type="button" class="add-item btn btn-default btn-sm"><span class="fa fa-plus"></span> New Item</button>
+				<button type="button" class="add-item btn btn-default btn-sm"><span class="fa fa-plus"></span> Tambah Kelas</button>
 				
 				</td>
                 <td><strong id="claim-total-hour"></strong></td>
@@ -188,18 +188,56 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 
 
 <div class="box">
+<div class="box-header">
+
+<h3 class="box-title">KEHADIRAN PELAJAR</h3><br />
+<i>* muat naik kehadiran sekiranya tiada rekod dari portal UMK</i>
+</div>
 <div class="box-body">
 
 
 <table class="table table-striped table-hover">
 
 <tbody>
+
+<tr>
+<td>
+<div class="row">
+<div class="col-md-3"><b>Dari Portal UMK</b><br />
+(<i><?=strtoupper($model->monthName()) . ' ' . $model->year?></i>)
+
+</div>
+
+<div class="col-md-9">
+
+<?php 
+
+if($model->getListPortalAttendance()){
+	foreach($model->getListPortalAttendance() as $row){
+		echo '<a href="'.Url::to(['student/attendance-portal-pdf', 'a' => $model->application_id, 'id' => $row->id]).'" target="_blank" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-download-alt"></span> '. date('d M Y',  strtotime($row->date)).'</a>  ';
+	}
+	
+}
+
+?>
+
+
+
+</div>
+
+</div>
+
+</td>
+</tr>
+
+
 	<?php 
 	if($model->claimFiles){
 		foreach($model->claimFiles as $file){
 			$file->file_controller = 'claim';
 			?>
 			<tr>
+			
 				<td><?=Upload::fileInput($file, 'claim', false, true)?></td>
 			</tr>
 			<?php

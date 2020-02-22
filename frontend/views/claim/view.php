@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\DetailView;
 
 
@@ -40,8 +41,24 @@ table.detail-view th {
 					return $m->getWfLabel();
 				}
 			],
-			'total_hour',
+			
 			'rate_amount:currency',
+			
+			[
+				'label' => 'Senarai Kelas',
+				'format' => 'html',
+				'value' => function($m){
+					$items = $m->claimItems;
+					$str = '';
+					if($items){
+						foreach($items as $item){
+							$str .= date('d M Y', strtotime($item->item_date)) . ' ('.$item->hourStart->hour_format .' - '.$item->hourEnd->hour_format .') - '.$item->sessionType->type_name.'<br />';
+						}
+					}
+					return $str;
+				}
+			],
+			'total_hour',
 			[
 				'label' => 'Jumlah Tuntutan',
 				'format' => 'currency',
@@ -57,7 +74,21 @@ table.detail-view th {
 				}
 			],
 			[
-				'label' => 'Fail Kehadiran',
+				'label' => 'Kehadiran Dari Portal UMK',
+				'format' => 'raw',
+				'value' => function($m){
+					$str = '';
+					if($m->getListPortalAttendance()){
+						foreach($m->getListPortalAttendance() as $row){
+							$str .= '<a href="'.Url::to(['student/attendance-portal-pdf', 'a' => $m->application_id, 'id' => $row->id]).'" target="_blank" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-download-alt"></span> '. date('d M Y',  strtotime($row->date)).'</a>  ';
+						}
+						
+					}
+					return $str;
+				}
+			],
+			[
+				'label' => 'Kehadiran Muat Naik',
 				'format' => 'raw',
 				'value' => function($m){
 					$files = $m->claimFiles;
@@ -86,7 +117,7 @@ table.detail-view th {
         ],
     ]) ?>
 
-<i>* Sila <b>muat turun, cetak, tandatangan dan hantar</b> borang tuntutan ke Pejabat Ko-Kurikulum<br />beserta fail kehadiran dan surat tawaran perlantikan fasilitator.</i>
+<i>* Sila <b>muat turun, cetak, tandatangan dan hantar</b> borang tuntutan ke Pejabat Kokurikulum<br />beserta fail kehadiran dan surat tawaran perlantikan fasilitator.</i>
 
 </div>
 
