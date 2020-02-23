@@ -69,7 +69,12 @@ class StudentController extends Controller
 		
 		$pdf = new AttendancePortal;
 		$pdf->model = $model;
-		$pdf->date = $api->getClassDate($id);
+		$obj = $api->getClassDate($id);
+		$pdf->date = $obj->date;
+		$pdf->venue = $obj->venue;
+		$pdf->venue_code = $obj->venue_code;
+		$pdf->start_time = $obj->start_time;
+		$pdf->duration = $obj->duration;
 		$pdf->response = $response;
 		$pdf->generatePdf();
 	}

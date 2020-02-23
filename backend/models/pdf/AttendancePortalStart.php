@@ -8,6 +8,11 @@ class AttendancePortalStart extends \TCPDF {
 	
 	public $model;
 	public $date;
+	public $venue;
+	public $venue_code;
+	public $start_time;
+	public $duration;
+	
     //Page header
     public function Header() {
 		//$this->myX = $this->getX();
@@ -19,6 +24,10 @@ class AttendancePortalStart extends \TCPDF {
 		$page = $this->getPage();
 		$height = 33;
 		$line_height = 220;
+		
+		$time = strtotime($this->start_time) + ($this->duration * 60 * 60);
+		//echo strtotime($this->start_time) . '=' . ($this->duration * 60 * 60); die();
+		$timeend = date('H:i', $time);
 		$html ='
 		<table border="1" cellpadding="2">
 		<tr>
@@ -27,17 +36,17 @@ class AttendancePortalStart extends \TCPDF {
 		<img src="images/logo-attend.png" />
 		</td>
 		<td width="92%" height="'.$height.'" style="line-height:'.$line_height.'%">
-		    '.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).' - '.$this->model->applicationGroup->group_name.'
+		    '.$this->model->acceptedCourse->course->course_code.' ('.$this->model->applicationGroup->group_name.') - '.strtoupper($this->model->acceptedCourse->course->course_name).'
 		</td>
 		</tr>
 		
 		<tr>
-		<td height="'.$height.'" style="background-color:#cccccc;line-height:'.$line_height.'%"><b>  TARIKH: '.$this->date .'</b>
+		<td height="'.$height.'" style="background-color:#cccccc;line-height:'.$line_height.'%"><b>  TARIKH : '.$this->date .'  &nbsp; MASA : '.$this->start_time.' - '.$timeend.'</b>
 		</td>
 		</tr>
 		
 		<tr>
-		<td height="'.$height.'" style="background-color:#cccccc;line-height:'.$line_height.'%"><b>  TEMPAT: </b>
+		<td height="'.$height.'" style="background-color:#cccccc;line-height:'.$line_height.'%"><b>  TEMPAT : '.$this->venue_code .' - '.$this->venue .'</b>
 		</td>
 		</tr>
 		
@@ -60,7 +69,18 @@ class AttendancePortalStart extends \TCPDF {
     }
 	
 	 public function Footer() {
+		 $y = $this->getY();
+		 $this->SetFont('arial', '', 8.5);
 		 
+		 $time = strtoupper(date('d-M-Y h:m A', time()));
+		 
+		  $this->Cell(0, 10, 'eFasi @  '. $time, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+		  
+		  $this->setY($y);
+		  $this->Cell(0, 10, '* H = HADIR, XH = TIDAK HADIR ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		 $this->setY($y);
+
+		  $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().' of '.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
 	 }
 
 

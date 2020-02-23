@@ -13,15 +13,23 @@ class AttendancePortal
 	public $response;
 	public $pdf;
 	public $directoryAsset;
+	public $venue;
+	public $venue_code;
+	public $start_time;
+	public $duration;
 	
 	public function generatePdf(){
-
+		date_default_timezone_set("Asia/Kuala_Lumpur");
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
 		$this->pdf = new AttendancePortalStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
 		$this->pdf->model = $this->model;
 		$this->pdf->date = $this->date;
+		$this->pdf->venue = $this->venue;
+		$this->pdf->venue_code = $this->venue_code;
+		$this->pdf->start_time = $this->start_time;
+		$this->pdf->duration = $this->duration;
 		$this->startPage();
 		$this->body();
 
@@ -88,12 +96,13 @@ class AttendancePortal
 						</td>
 						
 						<td width="'.$kehadiran.'" align="center">'.$hadir .'</td>
-						<td width="'.$jenis.'" align="center" ></td>
+						<td width="'.$jenis.'" align="center" >'.$row->type .'</td>
 						
 						';
 						
 						
 						$html .= '</tr>';
+						
 					$x++;
 				}
 			}

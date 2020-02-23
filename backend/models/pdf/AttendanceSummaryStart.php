@@ -73,7 +73,7 @@ class AttendanceSummaryStart extends \TCPDF {
 		  $this->Cell(0, 10, '* H = HADIR, XH = TIDAK HADIR ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		 $this->setY($y);
 
-		  $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+		  $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().' of '.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
 		  
 		 
 		

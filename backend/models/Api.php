@@ -88,18 +88,31 @@ class Api
 	}
 	
 	public function getClassDate($id){
+		$obj = new \stdClass;
+		$obj->date = '';
+		$obj->venue = '';
+		$obj->venue_code = '';
+		$obj->start_time = '';
+		$obj->duration = '';
+		
+		
 		$response = $this->attendList();
 		if($response){
 			if($response->result){
 				foreach($response->result as $row){
 					if($row->id == $id){
-						return $row->date;
+						$obj->date = $row->date;
+						$obj->venue = $row->venue;
+						$obj->venue_code = $row->venue_code;
+						$obj->start_time = $row->starttime;
+						
+						$obj->duration = $row->duration;
 						break;
 					}
 				}
 			}
 		}
-		
+		return $obj;
 	}
 	
 	public function getParams($id = null){
