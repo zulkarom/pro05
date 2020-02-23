@@ -59,12 +59,7 @@ class Api
 								$stud = new \stdClass;
 								//$stud->student_id = $s->id;
 								$attend = '';
-								$cdate = $row->date;
-								//$cdate = '29-03-2020';
-								//echo strtotime($cdate) .' <= '. time();
-								//die();
-								if(strtotime($cdate) <= time()){
-									
+								
 									if($result_attend){
 										if($result_attend->result){
 											foreach($result_attend->result as $r){
@@ -75,7 +70,7 @@ class Api
 											}
 										}
 									}
-								}
+						
 								
 								$stud->status = $attend;
 								$array_students[$s->id] = $stud;
