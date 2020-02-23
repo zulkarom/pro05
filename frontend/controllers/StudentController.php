@@ -10,6 +10,7 @@ use common\models\Application;
 use backend\models\Api;
 use backend\models\pdf\Attendance;
 use backend\models\pdf\AttendancePortal;
+use backend\models\pdf\AttendanceSummary;
 
 /**
  * Site controller
@@ -69,6 +70,24 @@ class StudentController extends Controller
 		$pdf = new AttendancePortal;
 		$pdf->model = $model;
 		$pdf->date = $api->getClassDate($id);
+		$pdf->response = $response;
+		$pdf->generatePdf();
+	}
+	
+	public function actionAttendanceSummaryPdf($a){
+		$model = $this->findApplication($a);
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$api->subject = $model->acceptedCourse->course->course_code;
+		$api->group = $model->applicationGroup->group_name;
+		$response = $api->summary();
+		
+		/* echo '<pre>';
+		print_r($response);
+		exit(); */
+		
+		$pdf = new AttendanceSummary;
+		$pdf->model = $model;
 		$pdf->response = $response;
 		$pdf->generatePdf();
 	}

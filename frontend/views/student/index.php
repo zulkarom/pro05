@@ -25,7 +25,7 @@ if($response){
 	?>
 
 <div class="row">
-<div class="col-md-9"><?php 
+<div class="col-md-8"><?php 
 echo strtoupper('<h4>Semester ' . $model->semester->niceFormat());echo '<br />';
 echo $model->acceptedCourse->course->course_code;echo '<br />';
 echo $model->acceptedCourse->course->course_name;
@@ -33,8 +33,9 @@ echo ' (' .$model->applicationGroup->group_name . ')</h4>';
 echo '<br />';
 ?></div>
 
-<div class="col-md-3">
-<a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger"><span class="glyphicon glyphicon-download-alt"></span> Helaian Kehadiran</a> 
+<div class="col-md-4">
+<a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Helaian Kehadiran</a>
+<a href="<?=Url::to(['student/attendance-summary-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Ringkasan Kehadiran</a>  
 <!-- <a href="" target="_blank" class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span> Template Markah</a> -->
 </div>
 

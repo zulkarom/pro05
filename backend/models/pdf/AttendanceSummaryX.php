@@ -6,7 +6,7 @@ use Yii;
 use common\models\Common;
 
 
-class Attendance
+class AttendanceSummary
 {
 	public $model;
 	public $response;
@@ -83,10 +83,10 @@ class Attendance
 		';
 		
 		if($this->response){
-			if($this->response->result){
+			if($this->response->student->result){
 				$x = 1;
 				//style="line-height: 150%;"
-				foreach($this->response->result as $row){
+				foreach($this->response->student->result as $row){
 						$html .= '
 						<tr nobr="true">
 						<td style="height: 27px;" width="'.$bil.'"  align="center">'.$x.'</td>

@@ -13,6 +13,8 @@ class AttendanceStart extends \TCPDF {
 		//$this->myY = $this->getY();
 		//$savedX = $this->x;
 		//savedY = $this->y;
+		date_default_timezone_set("Asia/Kuala_Lumpur");
+	
 		$dir = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
 		$page = $this->getPage();

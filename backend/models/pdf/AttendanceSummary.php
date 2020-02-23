@@ -6,7 +6,7 @@ use Yii;
 use common\models\Common;
 
 
-class Attendance
+class AttendanceSummary
 {
 	public $model;
 	public $response;
@@ -14,82 +14,56 @@ class Attendance
 	public $directoryAsset;
 	
 	public function generatePdf(){
-		
-		
-		
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		$this->pdf = new AttendanceStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$this->pdf = new AttendanceSummaryStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		
+		$this->pdf->model = $this->model;
 		
 		$this->startPage();
 		$this->body();
 
-
 		$this->pdf->Output('attendance.pdf', 'I');
 	}
 	
-
-	
 	public function body(){
-		
-		
-		
 		$wtable = 1160;
 		$bil = 45;
 		$box = 50;
-		$matrik = 130;
+		$matrik = 110;
 		$boxall = $box * 14;
 		$name = $wtable - $bil - $matrik - $boxall;
 		
 		$html ='
 		<table cellpadding="2" border="1" width="'.$wtable.'">
 		<thead>
-		<tr>
-		<td colspan="17" style="line-height: 160%;">
-			
-		 <b>Semester</b><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>'. strtoupper($this->model->semester->fullFormat()).'<br />
-		   
-		   <span>&nbsp;</span><b>Subjek</b><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).'
-			
-
-		</td>
-		</tr>
-		<tr>
-		<td colspan="17">
-	
-		<b>   Kumpulan<span>&nbsp;&nbsp;&nbsp;</span>'.$this->model->applicationGroup->group_name.'</b>
-
-		</td>
-		</tr>
+		
 		<tr style="background-color:#ebebeb">
-			<td rowspan="2" width="'.$bil.'" align="center" style="line-height: 250%;"><b>Bil</b></td>
-			<td rowspan="2" width="'.$name.'" align="center" style="line-height: 250%;"><b>Nama</b></td>
-			<td rowspan="2" width="'.$matrik.'" align="center" style="line-height: 250%;"><b>No. Matrik</b></td>';
-			$html .= '<td colspan="14" width="'.$boxall .'" align="center"><b>Tarikh & Tandatangan</b></td>';
-		$html .= '
-		</tr>
-		<tr style="background-color:#ebebeb">
+			<td width="'.$bil.'" align="center" style="line-height: 250%;"><b>#</b></td>
+			<td width="'.$matrik.'"  style="line-height: 250%;"><b>  Student ID</b></td>
+			<td width="'.$name.'" style="line-height: 250%;"><b>  Student Name</b></td>
 			';
-		for($i=1;$i<=14;$i++){
-			$html .= '<td width="'.$box.'"></td>';
-		}
+			
+			foreach($this->response->colums->result as $col){
+			$html .= '<td width="'.$box.'" style="line-height: 250%;" align="center"><b>'.date('d-m', strtotime($col->date)) .'</b></td>';
+			
+			}
+		
 		$html .= '
 		</tr>
 		</thead>
-		
-		
-		
 		';
 		
 		if($this->response){
-			if($this->response->result){
+			if($this->response->student->result){
 				$x = 1;
 				//style="line-height: 150%;"
-				foreach($this->response->result as $row){
+				foreach($this->response->student->result as $row){
 						$html .= '
 						<tr nobr="true">
 						<td style="height: 27px;" width="'.$bil.'"  align="center">'.$x.'</td>
+						<td width="'.$matrik.'">  '.$row->id .'</td>
 						<td width="'.$name.'" style="padding:9px;">
 						<table>
 						<tr>
@@ -97,10 +71,18 @@ class Attendance
 						</tr>
 						</table>
 						</td>
-						<td width="'.$matrik.'" align="center">'.$row->id .'</td>';
+						';
 						
-						for($d=1;$d<=14;$d++){
-							$html .= '<td width="'.$box.'"></td>';
+						foreach($this->response->colums->result as $col){
+							$res = $this->response->attend[$col->id]->students[$row->id]->status;
+							if($res == 1){
+								$hadir = '<b style="font-size:14px;color:#1b3110">H</b>';
+							}else{
+								$hadir = '<b style="font-size:14px;color:#FF0000">XH</b>';
+							}
+							
+						$html .= '<td width="'.$box.'" style="line-height: 250%;" align="center"><b>'.$hadir .'</b></td>';
+						
 						}
 						
 						$html .= '</tr>';
@@ -142,7 +124,7 @@ EOD;
 		// set margins
 		$this->pdf->SetMargins(15, 40, 15);
 		//$this->pdf->SetMargins(0, 0, 0);
-		$this->pdf->SetHeaderMargin(5);
+		$this->pdf->SetHeaderMargin(10);
 		//$this->pdf->SetHeaderMargin(0);
 
 		 //$this->pdf->SetHeaderMargin(0, 0, 0);

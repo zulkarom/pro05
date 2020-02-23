@@ -130,6 +130,14 @@ if($sem = Semester::getOpenDateSemester()){
 		</td>
 
       </tr>
+	  <tr>
+        <td>
+		<a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $application->id])?>" target="_blank"><span class="fa fa-file-pdf-o"></span> Helaian Kehadiran</a>
+		
+		</td>
+
+      </tr>
+	  
     </tbody>
   </table>
 </div>

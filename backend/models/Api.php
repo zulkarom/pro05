@@ -35,6 +35,58 @@ class Api
 		return $obj;
 	}
 	
+	public function summary(){
+		$obj = new \stdClass;
+		$student_list = $this->student();
+		$obj->student = $student_list;
+		$list = $this->attendList();
+		$obj->colums = $list;
+		$attend = new \stdClass;
+		
+		$attendArray = [];
+		if($list){
+			if($list->result){
+				foreach($list->result as $row){
+					$obj_row = new \stdClass;
+					$obj_row->date = $row->date;
+					//$obj_row->id = $row->id;
+					$this->id = $row->id;
+					$result_attend = $this->attend();
+					$array_students = [];
+					if($student_list){
+						if($student_list->result){
+							foreach($student_list->result as $s){
+								$stud = new \stdClass;
+								//$stud->student_id = $s->id;
+								$attend = '';
+								if(strtotime($row->date) <= time()){
+									if($result_attend){
+										if($result_attend->result){
+											foreach($result_attend->result as $r){
+												if($r->id == $s->id){
+													$attend = $r->status;
+													break;
+												}
+											}
+										}
+									}
+								}
+								
+								$stud->status = $attend;
+								$array_students[$s->id] = $stud;
+								
+							}
+						}
+					}
+					$obj_row->students = $array_students;
+					$attendArray[$row->id] = $obj_row;
+				}
+			}
+		}
+		$obj->attend = $attendArray;
+		return $obj;
+	}
+	
 	public function getClassDate($id){
 		$response = $this->attendList();
 		if($response){
@@ -60,6 +112,23 @@ class Api
 	
 	public function getContent(){
 		return file_get_contents($this->url);
+	}
+	
+	public function getContentX(){
+		set_error_handler(
+			function ($severity, $message, $file, $line) {
+				throw new \ErrorException($message, $severity, $severity, $file, $line);
+			}
+		);
+
+		try {
+			return file_get_contents($this->url);
+		}
+		catch (\Exception $e) {
+			echo $e->getMessage();die();
+		}
+
+		restore_error_handler();
 	}
 	
 	public function curlResponse(){

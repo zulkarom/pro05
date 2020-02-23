@@ -1,4 +1,4 @@
-
+link download helaian kehadiran kat dashboard - done
 
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
 
@@ -6,7 +6,11 @@ edit manual application - overwrite
 block tarikh kena bekki claim klu lebih tahun - kes hari tu
 buat menu untuk admin only list with its role - ability to add admin
 admin boleh edit details kursus
-penyelaras nak lebih dari satu
+
 
 		//"kartik-v/yii2-sortable": "@dev",
 		//"kartik-v/yii2-widget-datepicker": "@dev",
+		
+		
+====================done===================
+penyelaras nak lebih dari satu
