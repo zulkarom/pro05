@@ -59,7 +59,10 @@ class Api
 								$stud = new \stdClass;
 								//$stud->student_id = $s->id;
 								$attend = '';
-								if(strtotime($row->date) <= time()){
+								//echo strtotime($row->date) .'=='. time();
+								//die();
+								if(strtotime($row->date) > time()){
+									
 									if($result_attend){
 										if($result_attend->result){
 											foreach($result_attend->result as $r){

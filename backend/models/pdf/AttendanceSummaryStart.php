@@ -28,7 +28,7 @@ class AttendanceSummaryStart extends \TCPDF {
 		<td align="center" width="8%" rowspan="3">
 		<img src="images/logo-attend.png" />
 		</td>
-		<td width="92%" height="'.$height.'" style="line-height:'.$line_height.'%">&nbsp;&nbsp;<b>OVERALL ATTENDANCE</b>
+		<td width="92%" height="'.$height.'" style="line-height:'.$line_height.'%">&nbsp;&nbsp;<b>STUDENT ATTENDANCE (OVERALL)</b>
 		</td>
 		</tr>
 		
@@ -38,7 +38,7 @@ class AttendanceSummaryStart extends \TCPDF {
 		</tr>
 		
 		<tr>
-		<td height="'.$height.'" style="background-color:#ebebeb;line-height:'.$line_height.'%">&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).' ('.$this->model->applicationGroup->group_name.')
+		<td height="'.$height.'" style="background-color:#ebebeb;line-height:'.$line_height.'%">&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->model->acceptedCourse->course->course_code.' ('.$this->model->applicationGroup->group_name.') - '.strtoupper($this->model->acceptedCourse->course->course_name).'
 		</td>
 		</tr>
 		
