@@ -59,9 +59,11 @@ class Api
 								$stud = new \stdClass;
 								//$stud->student_id = $s->id;
 								$attend = '';
-								//echo strtotime($row->date) .'=='. time();
+								$cdate = $row->date;
+								//$cdate = '29-03-2020';
+								//echo strtotime($cdate) .' <= '. time();
 								//die();
-								if(strtotime($row->date) > time()){
+								if(strtotime($cdate) <= time()){
 									
 									if($result_attend){
 										if($result_attend->result){
