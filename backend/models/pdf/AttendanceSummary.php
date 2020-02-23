@@ -14,7 +14,7 @@ class AttendanceSummary
 	public $directoryAsset;
 	
 	public function generatePdf(){
-
+		date_default_timezone_set("Asia/Kuala_Lumpur");
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
 		$this->pdf = new AttendanceSummaryStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
@@ -31,7 +31,7 @@ class AttendanceSummary
 		$wtable = 1160;
 		$bil = 45;
 		$box = 50;
-		$matrik = 110;
+		$matrik = 90;
 		$boxall = $box * 14;
 		$name = $wtable - $bil - $matrik - $boxall;
 		
@@ -108,8 +108,8 @@ EOD;
 		// set document information
 		$this->pdf->SetCreator(PDF_CREATOR);
 		$this->pdf->SetAuthor('eFasi');
-		$this->pdf->SetTitle('Attendance List');
-		$this->pdf->SetSubject('Attendance List');
+		$this->pdf->SetTitle('Overall Attendance');
+		$this->pdf->SetSubject('Overall Attendance');
 		$this->pdf->SetKeywords('');
 
 
@@ -128,10 +128,10 @@ EOD;
 		//$this->pdf->SetHeaderMargin(0);
 
 		 //$this->pdf->SetHeaderMargin(0, 0, 0);
-		$this->pdf->SetFooterMargin(20);
+		$this->pdf->SetFooterMargin(18);
 
 		// set auto page breaks
-		$this->pdf->SetAutoPageBreak(TRUE, 20); //margin bottom
+		$this->pdf->SetAutoPageBreak(TRUE, 23); //margin bottom
 
 		// set image scale factor
 		$this->pdf->setImageScale(PDF_IMAGE_SCALE_RATIO);

@@ -38,7 +38,7 @@ class AttendanceSummaryStart extends \TCPDF {
 		</tr>
 		
 		<tr>
-		<td height="'.$height.'" style="background-color:#ebebeb;line-height:'.$line_height.'%">&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).' - '.$this->model->applicationGroup->group_name.'
+		<td height="'.$height.'" style="background-color:#ebebeb;line-height:'.$line_height.'%">&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).' ('.$this->model->applicationGroup->group_name.')
 		</td>
 		</tr>
 		
@@ -62,6 +62,21 @@ class AttendanceSummaryStart extends \TCPDF {
 	
 	 public function Footer() {
 		 
+		 $y = $this->getY();
+		 $this->SetFont('arial', '', 8.5);
+		 
+		 $time = strtoupper(date('d-M-Y h:m A', time()));
+		 
+		  $this->Cell(0, 10, 'eFasi @  '. $time, 0, false, 'L', 0, '', 0, false, 'T', 'M');
+		  
+		  $this->setY($y);
+		  $this->Cell(0, 10, '* H = HADIR, XH = TIDAK HADIR ', 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		 $this->setY($y);
+
+		  $this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'R', 0, '', 0, false, 'T', 'M');
+		  
+		 
+		
 	 }
 
 
