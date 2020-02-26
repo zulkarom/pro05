@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use yii\helpers\Url;
 use raoul2000\workflow\validation\WorkflowValidator;
 use raoul2000\workflow\validation\WorkflowScenario;
 use common\models\Common;
@@ -100,6 +101,39 @@ class Claim extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ClaimAttend::className(), ['claim_id' => 'id']);
     }
+	
+	public function getClaimAttendLinks(){
+		$model = $this->application;
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$api->subject = $model->acceptedCourse->course->course_code;
+		$api->group = $model->applicationGroup->group_name;
+		$response = $api->attendList();
+		
+		$portal = 
+		$html = '';
+		$list = $this->claimAttends;
+		if($list){
+			foreach($list as $row){
+				if($response){
+					if($response->result){
+						$k = 1;
+						foreach($response->result as $x){
+							if($x->id == $row->portal_id){
+								$time = strtotime($x->starttime) + ($x->duration * 60 * 60);
+								$timeend = date('H:i', $time);
+								$html .= '<a href="'.Url::to(['student/attendance-portal-pdf', 'a' => $model->id , 'id' => $row->portal_id]).'" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-download-alt"></span> ' . '[' . $k . '] ' . $x->date . ' ' . $x->starttime . ' - '.$timeend.'</a> ';
+							}
+						$k++;
+						}
+					}
+				}
+				
+			}
+		}
+		
+		return $html;
+	}
 	
 	public function validateClaimFiles(){
 		$attend = $this->claimAttends;

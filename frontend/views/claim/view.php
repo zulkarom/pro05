@@ -77,14 +77,8 @@ table.detail-view th {
 				'label' => 'Kehadiran Dari Portal UMK',
 				'format' => 'raw',
 				'value' => function($m){
-					$str = '';
-					if($m->getListPortalAttendance()){
-						foreach($m->getListPortalAttendance() as $row){
-							$str .= '<a href="'.Url::to(['student/attendance-portal-pdf', 'a' => $m->application_id, 'id' => $row->id]).'" target="_blank" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-download-alt"></span> '. date('d M Y',  strtotime($row->date)).'</a>  ';
-						}
-						
-					}
-					return $str;
+					
+					return $m->claimAttendLinks;
 				}
 			],
 			[

@@ -89,7 +89,21 @@ use common\models\Upload;
 </div>
 <div class="box-body">
 
-<?php 
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <tbody>
+      <tr>
+        <td>Portal UMK</td>
+        <td>
+		<?php 
+		echo $model->claimAttendLinks;
+		?>
+		</td>
+      </tr>
+      <tr>
+        <td>Muat Naik</td>
+        <td>
+		<?php 
 if($model->claimFiles){
 	foreach($model->claimFiles as $file){
 		echo Upload::showFile($file, 'claim', 'claim') .' ';
@@ -97,6 +111,14 @@ if($model->claimFiles){
 } 
 
 ?>
+		
+		</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
 
 
 </div>
