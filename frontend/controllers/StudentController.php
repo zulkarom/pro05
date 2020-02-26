@@ -89,6 +89,7 @@ class StudentController extends Controller
 		
 		/* echo '<pre>';
 		print_r($response);
+		die();
 		exit(); */
 		
 		$pdf = new AttendanceSummary;

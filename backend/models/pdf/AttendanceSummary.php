@@ -76,11 +76,15 @@ class AttendanceSummary
 						foreach($this->response->colums->result as $col){
 							$res = $this->response->attend[$col->id]->students[$row->id]->status;
 							if(strtotime($col->date) <= time()){
+								
 							if($res == 1){
 								$hadir = '<b style="font-size:14px;color:#1b3110">H</b>';
+							}else if($res == -1){
+								$hadir = '';
 							}else{
 								$hadir = '<b style="font-size:14px;color:#FF0000">XH</b>';
 							}
+							
 							}else{
 								$hadir = '';
 							}

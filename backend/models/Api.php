@@ -28,6 +28,11 @@ class Api
 		return $obj;
 	}
 	
+	public function attendListRecorded(){
+		$response = attendList();
+		
+	}
+	
 	public function attend(){
 		$this->url = $this->portal . 'attend?' . $this->getParams($this->id);
 		$json = $this->getContent();
@@ -38,9 +43,9 @@ class Api
 	public function summary(){
 		$obj = new \stdClass;
 		$student_list = $this->student();
-		$obj->student = $student_list;
+		$obj->student = $student_list; /////LIST STUDENTS
 		$list = $this->attendList();
-		$obj->colums = $list;
+		$obj->colums = $list; ////////LIST CLASSES
 		$attend = new \stdClass;
 		
 		$attendArray = [];
@@ -52,14 +57,28 @@ class Api
 					//$obj_row->id = $row->id;
 					$this->id = $row->id;
 					$result_attend = $this->attend();
+
+					$open = false;
+						if($result_attend){
+							if($result_attend->result){
+								foreach($result_attend->result as $rr){
+									$status = $rr->status;
+									if($status == 1){
+										$open = true;
+										break;
+									}
+									
+								}
+							}
+						}
+									
 					$array_students = [];
 					if($student_list){
 						if($student_list->result){
 							foreach($student_list->result as $s){
-								$stud = new \stdClass;
-								//$stud->student_id = $s->id;
 								$attend = '';
-								
+								$stud = new \stdClass;
+								if($open){
 									if($result_attend){
 										if($result_attend->result){
 											foreach($result_attend->result as $r){
@@ -70,10 +89,14 @@ class Api
 											}
 										}
 									}
-						
+																
+									$stud->status = $attend;
+									$array_students[$s->id] = $stud;
+								}else{
+									$stud->status = -1;
+									$array_students[$s->id] = $stud;
+								}
 								
-								$stud->status = $attend;
-								$array_students[$s->id] = $stud;
 								
 							}
 						}
