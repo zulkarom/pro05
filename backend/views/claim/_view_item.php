@@ -96,7 +96,8 @@ use common\models\Upload;
         <td>Portal UMK</td>
         <td>
 		<?php 
-		echo $model->claimAttendLinks;
+		echo file_get_contents('https://portal.umk.edu.my/api/timetable/list?semester=201920201&subject=APT2043&group=L4');
+		//echo $model->claimAttendLinks;
 		?>
 		</td>
       </tr>
