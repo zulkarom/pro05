@@ -96,7 +96,6 @@ use common\models\Upload;
         <td>Portal UMK</td>
         <td>
 		<?php 
-		$model->backend = true;
 		echo $model->claimAttendLinks;
 		?>
 		</td>

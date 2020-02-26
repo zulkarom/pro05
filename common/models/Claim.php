@@ -27,7 +27,6 @@ class Claim extends \yii\db\ActiveRecord
 	public $hour_app;
 	public $month_year;
 	public $sum_all;
-	public $backend = false;
     /**
      * @inheritdoc
      */
@@ -123,12 +122,7 @@ class Claim extends \yii\db\ActiveRecord
 							if($x->id == $row->portal_id){
 								$time = strtotime($x->starttime) + ($x->duration * 60 * 60);
 								$timeend = date('H:i', $time);
-								if($this->backend){
-									$url = Yii::$app->urlManager->createUrl('./../student/attendance-portal-pdf?a='.$model->id .'&id=' . $row->portal_id);
-								}else{
-									$url = Url::to(['student/attendance-portal-pdf', 'a' => $model->id , 'id' => $row->portal_id]);
-								}
-								$html .= '<a href="'.$url.'" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-download-alt"></span> ' . '[' . $k . '] ' . $x->date . ' ' . $x->starttime . ' - '.$timeend.'</a> ';
+								$html .= '<a href="'.Url::to(['student/attendance-portal-pdf', 'a' => $model->id , 'id' => $row->portal_id]).'" target="_blank" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-download-alt"></span> ' . '[' . $k . '] ' . $x->date . ' ' . $x->starttime . ' - '.$timeend.'</a> ';
 							}
 						$k++;
 						}
