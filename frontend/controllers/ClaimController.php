@@ -14,6 +14,7 @@ use backend\models\ClaimPrint;
 use common\models\Claim;
 use common\models\ClaimItem;
 use common\models\ClaimFile;
+use backend\models\ClaimAttend;
 use common\models\Model;
 use common\models\Upload;
 use common\models\Application;
@@ -137,9 +138,9 @@ class ClaimController extends Controller
 				
 				if($model->save()){
 					
-					$file = new ClaimFile;
+					/* $file = new ClaimFile;
 					$file->claim_id = $model->id;
-					$file->save();
+					$file->save(); */
 					
 					return $this->redirect(['claim/update/', 'id' => $model->id]);
 				}
@@ -243,21 +244,76 @@ class ClaimController extends Controller
                                 break;
                             }
                         }
-
+						
+						//update attend
+						
+						$attend = Yii::$app->request->post('attendportal');
+						//if($attend){
+							//print_r($attend);
+							//die();
+                            $kira_post = count($attend);
+                            $kira_lama = count($model->claimAttends);
+                            if($kira_post > $kira_lama){
+                                $bil = $kira_post - $kira_lama;
+                                for($i=1;$i<=$bil;$i++){
+                                    $insert = new ClaimAttend;
+                                    $insert->claim_id = $model->id;
+                                    $insert->save();
+                                }
+                            }else if($kira_post < $kira_lama){
+    
+                                $bil = $kira_lama - $kira_post;
+                                $deleted = ClaimAttend::find()
+                                  ->where(['claim_id'=>$model->id])
+                                  ->limit($bil)
+                                  ->all();
+                                if($deleted){
+                                    foreach($deleted as $del){
+                                        $del->delete();
+                                    }
+                                }
+                            }
+                            
+                            $update_attend = ClaimAttend::find()
+                            ->where(['claim_id' => $model->id])
+                            ->all();
+    
+                            if($update_attend){
+                                $i=0;
+                                foreach($update_attend as $ut){
+                                    $ut->portal_id = $attend[$i];
+									$ut->updated_at = new Expression('NOW()');
+                                    if(!$ut->save()){
+										$ut->flashError();
+									}
+                                    $i++;
+                                }
+                            }
+                       // }
+						
+						/////
+						
+						
                     }
+					
+					$model = $this->findModel($id);
 
                     if ($flag) {
 						
                         $transaction->commit();
 						if($wf == 'draft'){
 							Yii::$app->session->addFlash('success', "Maklumat tuntutan telah berjaya disimpan");
+							return $this->redirect(['update', 'id' => $id]);
+							
 						}else if(($wf == 'submit')){
 							if($model->validateClaimFiles()){
 								
+								//if(true){
 								if($model->checkDueDate()){
 									$model->submit_at = new Expression('NOW()');
 									$model->sendToStatus('bb-submit');
 									if($model->save()){
+										
 										Yii::$app->session->addFlash('success', "Permohonan tuntutan telah berjaya dihantar.");
 											return $this->redirect(['claim/view', 'id' => $model->id]);
 
@@ -371,6 +427,7 @@ class ClaimController extends Controller
     }
 	
 	public function actionUpload($attr, $id){
+		
 		$attr = $this->clean($attr);
         $model = $this->findClaimFile($id);
 		$model->file_controller = 'claim';

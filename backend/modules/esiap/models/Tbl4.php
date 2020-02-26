@@ -634,7 +634,7 @@ $html .='<tr style="font-weight:bold">
 			<td width="'.$assess_percent .'" colspan="3" align="center" '.$border.'></td>
 			<td width="'.$assess_f2f .'" colspan="2" align="center" '.$border.'></td>
 			<td width="'.$assess_nf2f .'" align="center" '.$border.'></td>
-			<td width="'.$flex.'" align="center" '.$border.'></td>
+			<td width="'.$flex.'" align="center" '.$style_shade.'></td>
 			</tr>';
 	}
 	

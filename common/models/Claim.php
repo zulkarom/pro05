@@ -8,6 +8,7 @@ use raoul2000\workflow\validation\WorkflowScenario;
 use common\models\Common;
 use backend\models\ClaimSetting;
 use backend\models\Api;
+use backend\models\ClaimAttend;
 
 /**
  * This is the model class for table "claim".
@@ -95,20 +96,31 @@ class Claim extends \yii\db\ActiveRecord
         return $this->hasMany(ClaimFile::className(), ['claim_id' => 'id']);
     }
 	
+	public function getClaimAttends()
+    {
+        return $this->hasMany(ClaimAttend::className(), ['claim_id' => 'id']);
+    }
+	
 	public function validateClaimFiles(){
-		/* $files = $this->claimFiles;
-		$kira = count($files);
-		if($kira > 0){
-			foreach($files as $f){
-				if($f->claim_file == ''){
-					return false;
-					exit();
-				}
-			}
-		}else{
-			return false;
-		} */
+		$attend = $this->claimAttends;
+		$kira = count($attend) + 0;
 		
+		if($kira == 0){
+			
+			$files = $this->claimFiles;
+			$kira = count($files);
+			
+			if($kira > 0){
+				foreach($files as $f){
+					if($f->claim_file == ''){
+						return false;
+						exit();
+					}
+				}
+			}else{
+				return false;
+			}
+		}
 		return true;
 	}
 	
@@ -272,4 +284,28 @@ class Claim extends \yii\db\ActiveRecord
 		
 		return $array;
 	}
+	
+	public function getListPortalAttendanceAll(){
+		$model = $this->application;
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$api->subject = $model->acceptedCourse->course->course_code;
+		$api->group = $model->applicationGroup->group_name;
+		$response = $api->attendList();
+		$array = [];
+		if($response){
+			if($response->result){
+				$i=1;
+				foreach($response->result as $row){
+					$time = strtotime($row->starttime) + ($row->duration * 60 * 60);
+					$timeend = date('H:i', $time);
+					$array[$row->id] = '[' . $i . '] ' . date('d M Y', strtotime($row->date)) . ' ' . $row->starttime . ' - ' . $timeend;
+				$i++;
+				}
+			}
+		}
+		
+		return $array;
+	}
+	
 }

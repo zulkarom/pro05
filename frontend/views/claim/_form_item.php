@@ -10,6 +10,7 @@ use kartik\date\DatePicker;
 use common\models\SessionType;
 use common\models\Hour;
 use common\models\Upload;
+use kartik\select2\Select2;
 
 
 $form = ActiveForm::begin(['id' => 'dynamic-form']); 
@@ -209,20 +210,16 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 </div>
 
 <div class="col-md-9">
-
 <?php 
+echo Select2::widget([
+    'name' => 'attendportal',
+    'value' => ArrayHelper::map($model->claimAttends, 'portal_id', 'portal_id'),
+    'data' => $model->getListPortalAttendanceAll(),
+    'options' => ['multiple' => true, 'placeholder' => 'Select Attendance...']
+]);
 
-if($model->getListPortalAttendance()){
-	foreach($model->getListPortalAttendance() as $row){
-		echo '<a href="'.Url::to(['student/attendance-portal-pdf', 'a' => $model->application_id, 'id' => $row->id]).'" target="_blank" class="btn btn-default btn-sm"> <span class="glyphicon glyphicon-download-alt"></span> '. date('d M Y',  strtotime($row->date)).'</a>  ';
-	}
-	
-}
-
+//print_r($model->getListPortalAttendanceAll());
 ?>
-
-
-
 </div>
 
 </div>
