@@ -3,6 +3,8 @@
 namespace backend\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use backend\models\ClaimAttend;
 
 
 class Api
@@ -28,9 +30,52 @@ class Api
 		return $obj;
 	}
 	
-	public function attendListRecorded(){
-		$response = attendList();
+	public function attendListRecorded($application){
+		$already = ArrayHelper::map(ClaimAttend::find()
+					->joinWith('claim')
+					->where(['application_id' => $application])
+					->all(), 'portal_id', 'portal_id');
+						
+					
+		$response = $this->attendList();
+		$array = [];
+		if($response){
+			if($response->result){
+				foreach($response->result as $row){
+					$open = false;
+					
+					//if(!(in_array($row->id, $already))){
+						$this->id = $row->id;
+						$result_attend = $this->attend(); //API
+							if($result_attend){
+								if($result_attend->result){
+									foreach($result_attend->result as $rr){
+										$status = $rr->status;
+										if($status == 1){
+											$open = true;
+											break;
+										}
+										
+									}
+								}
+							}
+					//}
+					
+					
+					if($open){
+						$obj = new \stdClass;
+						$obj->id = $row->id;
+						$obj->date = $row->date;
+						$obj->starttime = $row->starttime;
+						$obj->duration = $row->duration;
+						$array[] = $obj;
+					}
+					
+				}
+			}
+		}
 		
+		return $array;
 	}
 	
 	public function attend(){

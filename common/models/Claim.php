@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 use raoul2000\workflow\validation\WorkflowValidator;
 use raoul2000\workflow\validation\WorkflowScenario;
 use common\models\Common;
@@ -101,6 +102,17 @@ class Claim extends \yii\db\ActiveRecord
     {
         return $this->hasMany(ClaimAttend::className(), ['claim_id' => 'id']);
     }
+	
+	public function getClaimAttendsNotThis()
+    {
+        return ClaimAttend::find()
+		->select('portal_id')
+		->joinWith('claim')
+		->where(['claim.application_id' => $this->application_id])
+		->andWhere(['<>', 'claim_attend.claim_id', $this->id])
+		->all();
+    }
+	
 	
 	public function getClaimAttendLinks(){
 		$model = $this->application;
@@ -334,6 +346,63 @@ class Claim extends \yii\db\ActiveRecord
 					$time = strtotime($row->starttime) + ($row->duration * 60 * 60);
 					$timeend = date('H:i', $time);
 					$array[$row->id] = '[' . $i . '] ' . date('d M Y', strtotime($row->date)) . ' ' . $row->starttime . ' - ' . $timeend;
+				$i++;
+				}
+			}
+		}
+		
+		return $array;
+	}
+	
+	public function getListPortalAttendanceRecorded(){
+		
+		$model = $this->application;
+		
+		$already = ArrayHelper::map($this->claimAttendsNotThis, 'portal_id', 'portal_id');
+		//print_r($this->claimAttendsNotThis);die();
+
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$api->subject = $model->acceptedCourse->course->course_code;
+		$api->group = $model->applicationGroup->group_name;
+		$response = $api->attendList();
+		$array = [];
+		if($response){
+			if($response->result){
+				$i=1;
+				foreach($response->result as $row){
+					if(!(in_array($row->id, $already))){
+					$open = false;	
+					//check future date pulak
+					if(strtotime($row->date) <= time()){
+						$api->id = $row->id;
+						$result_attend = $api->attend(); //API
+						if($result_attend){
+							if($result_attend->result){
+								foreach($result_attend->result as $rr){
+									$status = $rr->status;
+									if($status == 1){
+										$open = true;
+										break;
+									}
+									
+								}
+							}
+						}
+					}
+					
+					
+					
+					if($open){
+						$time = strtotime($row->starttime) + ($row->duration * 60 * 60);
+						$timeend = date('H:i', $time);
+						$array[$row->id] = '[' . $i . '] ' . date('d M Y', strtotime($row->date)) . ' ' . $row->starttime . ' - ' . $timeend;
+					}
+					
+					
+					
+					
+					}
 				$i++;
 				}
 			}

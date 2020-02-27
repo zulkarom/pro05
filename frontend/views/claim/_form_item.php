@@ -192,7 +192,6 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 <div class="box-header">
 
 <h3 class="box-title">KEHADIRAN PELAJAR</h3><br />
-<i>* muat naik kehadiran sekiranya tiada rekod dari portal UMK</i>
 </div>
 <div class="box-body">
 
@@ -204,8 +203,8 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 <tr>
 <td>
 <div class="row">
-<div class="col-md-3"><b>Dari Portal UMK</b><br />
-(<i><?=strtoupper($model->monthName()) . ' ' . $model->year?></i>)
+<div class="col-md-3"><b>Pilih Dari Portal UMK</b><br />
+(<i>QRCode</i>)
 
 </div>
 
@@ -214,7 +213,7 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 echo Select2::widget([
     'name' => 'attendportal',
     'value' => ArrayHelper::map($model->claimAttends, 'portal_id', 'portal_id'),
-    'data' => $model->getListPortalAttendanceAll(),
+    'data' => $model->getListPortalAttendanceRecorded(),
     'options' => ['multiple' => true, 'placeholder' => 'Select Attendance...']
 ]);
 
@@ -246,7 +245,8 @@ echo Select2::widget([
 
 </table>
 <br />
-<button type="submit" class="btn btn-default" name="wflow" value="add-file" ><span class="glyphicon glyphicon-plus"></span> Tambah Salinan Kehadiran</button>
+<button type="submit" class="btn btn-default" name="wflow" value="add-file" ><span class="glyphicon glyphicon-plus"></span> Tambah Salinan Kehadiran</button><br />
+<i>* muat naik kehadiran sekiranya tiada rekod dari portal UMK </i>
 
 </div>
 </div>
@@ -254,7 +254,7 @@ echo Select2::widget([
 
 <?php if($model->getWfStatus() == 'draft' or $model->getWfStatus() == 'returned'){ ?>
  <div class="form-group">
-        <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> Simpan', ['class' => 'btn btn-default', 'name' => 'wflow', 'value' => 'draft']) ?> 
+        <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> Simpan & Lihat', ['class' => 'btn btn-default', 'name' => 'wflow', 'value' => 'draft']) ?> 
 		
 		<?= Html::submitButton('<span class="glyphicon glyphicon-send"></span> Hantar', ['class' => 'btn btn-warning', 'name' => 'wflow', 'value' => 'submit', 'data' => [
                 'confirm' => 'Andakah anda pasti untuk hantar tuntutan ini?'

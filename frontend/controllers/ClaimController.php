@@ -87,11 +87,20 @@ class ClaimController extends Controller
     {
 		$model = $this->findModel($id);
 		$status = $model->getWfStatus();
-		if($status == 'draft' or $status == 'returned'){
+		 if($status == 'draft' or $status == 'returned'){
 			$this->redirect(['update', 'id' => $id]);
-		}
+		} 
 		
 		return $this->render('view', [
+				'model' => $model,
+			]);
+        
+    }
+	
+	public function actionDraftview($id)
+    {
+		$model = $this->findModel($id);		
+		return $this->render('draftview', [
 				'model' => $model,
 			]);
         
@@ -173,7 +182,12 @@ class ClaimController extends Controller
      */
     public function actionUpdate($id)
     {
+		
+		
+		
         $model = $this->findModel($id);
+//print_r($model->getListPortalAttendanceRecorded($model->application_id));die();
+
 		$model->scenario = 'save-draft';
 		$status = $model->getWfStatus();
 		
@@ -302,8 +316,8 @@ class ClaimController extends Controller
 						
                         $transaction->commit();
 						if($wf == 'draft'){
-							Yii::$app->session->addFlash('success', "Maklumat tuntutan telah berjaya disimpan");
-							return $this->redirect(['update', 'id' => $id]);
+							Yii::$app->session->addFlash('info', "Maklumat tuntutan telah berjaya disimpan. Status tuntutan masih dalam deraf, sila klik butang [Kembali Kemaskini] untuk kemaskini dan hantar");
+							return $this->redirect(['draftview', 'id' => $id]);
 							
 						}else if(($wf == 'submit')){
 							if($model->validateClaimFiles()){

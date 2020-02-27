@@ -3,6 +3,7 @@
 namespace backend\models;
 
 use Yii;
+use common\models\Claim;
 
 /**
  * This is the model class for table "claim_attend".
@@ -60,5 +61,11 @@ class ClaimAttend extends \yii\db\ActiveRecord
         }
 
     }
+	
+	public function getClaim()
+    {
+        return $this->hasOne(Claim::className(), ['id' => 'claim_id']);
+    }
+
 
 }
