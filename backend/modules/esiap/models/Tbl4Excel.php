@@ -1105,8 +1105,8 @@ eg:
 e-Learning')
 			->setCellValue('P' . $row2, 'Independent Learning (NF2F)')
 			->setCellValue('K' . $row3, 'L')
-			->setCellValue('L' . $row3, 'P')
-			->setCellValue('M' . $row3, 'T')
+			->setCellValue('L' . $row3, 'T')
+			->setCellValue('M' . $row3, 'P')
 			->setCellValue('N' . $row3, 'O')
 			;
 			

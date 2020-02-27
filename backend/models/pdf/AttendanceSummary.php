@@ -158,6 +158,9 @@ EOD;
 
 		// add a page
 		$this->pdf->AddPage("L");
+		
+		$this->pdf->curr_page = $this->pdf->getAliasNumPage();
+		$this->pdf->total_page = $this->pdf->getAliasNbPages();
 	}
 	
 	
