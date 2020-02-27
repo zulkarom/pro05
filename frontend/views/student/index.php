@@ -35,7 +35,7 @@ echo '<br />';
 
 <div class="col-md-4">
 <a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Helaian Kehadiran</a>
-<a href="<?=Url::to(['student/attendance-summary-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Ringkasan Kehadiran</a>  
+<a href="<?=Url::to(['student/attendance-summary-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Kehadiran (QR Code)</a>  
 <!-- <a href="" target="_blank" class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span> Template Markah</a> -->
 </div>
 

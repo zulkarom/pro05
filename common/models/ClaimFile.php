@@ -38,6 +38,7 @@ class ClaimFile extends \yii\db\ActiveRecord
 			[['claim_file'], 'required', 'on' => 'claim_upload'],
 			
 			[['claim_instance'], 'file', 'skipOnEmpty' => true, 'extensions' => 'pdf, png, jpg, gif', 'maxSize' => 5000000],
+			
 			[['updated_at'], 'required', 'on' => 'claim_delete'],
 			
 			
