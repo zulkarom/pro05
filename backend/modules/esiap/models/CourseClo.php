@@ -210,7 +210,7 @@ class CourseClo extends \yii\db\ActiveRecord
 		if($per){
 			return $per->percentage;
 		}else{
-			return '';
+			return 0;
 		}
 	}
 	

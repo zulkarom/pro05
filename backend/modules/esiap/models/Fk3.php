@@ -362,13 +362,16 @@ if($clo_assess){
 	$ix = 0;
 	$arr = [];
 	foreach($clo_assess as $ca){
-		$html .= '<td align="center">'.$clo->assessPercent($ca->id) .'</td>';
+		$val = $clo->assessPercent($ca->id);
+		$val = $val == 0 ? '' : $val;
+		$html .= '<td align="center">'. $val .'</td>';
 		$per = $clo->assessPercent($ca->id) + 0;
 		$sub += $per;
 	$ix++;
 	}
 }
 $gtotal += $sub;
+
 $html .= '<td align="center">'.$sub.'</td>';
 $html .= '<td>';
 
