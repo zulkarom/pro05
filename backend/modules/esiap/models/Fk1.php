@@ -218,10 +218,49 @@ $html .= '</td></tr>
 <tr nobr="true"><td>
 Kemahiran Boleh Pindah<br />
 <i>Transferable Skills</i>
-</td><td>
-'.$this->model->profile->transfer_skill .'<br />
-<i>'.$this->model->profile->transfer_skill_bi .'</i>
-</td></tr>
+</td><td>';
+
+
+$version_type = $this->model->version_type_id;
+$transferables = $this->model->profile->transferables;
+$html_transfer = '';
+
+if($version_type == 1){
+	
+	$html_transfer .= $this->model->profile->transfer_skill .'<br />
+	<i>'.$this->model->profile->transfer_skill_bi .'</i>';
+
+}elseif($version_type == 2){
+	$bm = '';
+	$bi = '';
+	
+	if($transferables){
+		$k = 1;
+		foreach($transferables as $transfer){
+			$comma = $k == 1 ? '' : ', ';
+			if($k == 1){
+				$bm .= $transfer->transferable->transferable_text;
+				$bi .= $transfer->transferable->transferable_text_bi;
+			}else{
+				$bm .= ', ' . strtolower($transfer->transferable->transferable_text);
+				$bi .= ', ' . strtolower($transfer->transferable->transferable_text_bi);
+			}
+			
+		$k++;
+		}
+	}
+	$html_transfer = $bm . '<br /><i>' . $bi . '</i>';
+
+	
+}else{ // if no version type
+	$html_transfer .= 'NO_APPLICATION_VERSION_TYPE_ERROR';
+}
+
+
+$html .= $html_transfer;
+
+
+$html .= '</td></tr>
 
 
 

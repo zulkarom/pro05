@@ -227,9 +227,6 @@ class CourseVersion extends \yii\db\ActiveRecord
 		;
     }
 	
-	
-	
-	
 	public function getSyllabus()
     {
 		CourseSyllabus::checkSyllabus($this->id);
