@@ -35,7 +35,7 @@ use richardfan\widget\JSRegister;
 <div class="col-md-11">
 
 <div class="row">
-<div class="col-md-7"><?= $form->field($model, 'eft_name') ?></div>
+<div class="col-md-7"><?= $form->field($model, 'eft_name')->dropDownList($model->eftPersonList, ['prompt' => 'Please Select' ]) ?></div>
 
 <div class="col-md-5"><?= $form->field($model, 'eft_ic') ?>
 </div>

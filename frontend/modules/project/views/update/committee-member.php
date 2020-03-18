@@ -62,6 +62,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
             <tr class="position-item">
                 <td class="vcenter">
                     <?php
+					//echo $indexPosition; die();
                         // necessary for update action.
                         if (! $modelPosition->isNewRecord) {
                             echo Html::activeHiddenInput($modelPosition, "[{$indexPosition}]id");
@@ -81,7 +82,8 @@ use wbraganca\dynamicform\DynamicFormWidget;
 				
 				<td>
 				
-				<?php 					
+				<?php
+						
 					echo  $this->render('_form-members', [
                         'form' => $form,
                         'indexPosition' => $indexPosition,

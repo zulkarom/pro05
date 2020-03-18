@@ -230,6 +230,19 @@ class Project extends \yii\db\ActiveRecord
 		return $ic_string;
 	}
 	
+	public function getEftPersonList(){
+		$list = $this->projectStudents;
+		$array = [];
+		if($list){
+			foreach($list as $row){
+				$array[$row->student->student_name] = $row->student->student_name;
+			}
+		}
+		$fasi_name = strtoupper($this->fasi->user->fullname);
+		$array[$this->fasi->user->fullname] = $this->fasi->user->fullname;
+		return $array;
+	}
+	
 	public function getFasiCoorPost(){
 		$app = $this->application;
 		$coor = $this->coordinator;
@@ -351,7 +364,9 @@ class Project extends \yii\db\ActiveRecord
 	
 	 public function getProjectStudents()
     {
-        return $this->hasMany(ProjectStudent::className(), ['project_id' => 'id']);
+        return $this->hasMany(ProjectStudent::className(), ['project_id' => 'id'])
+		->joinWith('student')
+		->orderBy('student_name ASC');
     }
 	
 	public function studentInvolved(){

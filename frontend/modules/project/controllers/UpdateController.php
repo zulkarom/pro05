@@ -27,6 +27,7 @@ use yii\data\ActiveDataProvider;
 use backend\modules\project\models\Person;
 use backend\modules\project\models\House;
 use backend\modules\project\models\Room;
+use backend\models\Api;
 
 /**
  * Default controller for the `project` module
@@ -42,9 +43,17 @@ class UpdateController extends Controller
     {
 		$token = strtoupper($token);
 		$model = $this->findModel($token);
+		
+		//add auto students
+		$app = $model->application;
+		$api = new Api;
+		$api->semester = $app->semester->id;
+		$api->subject = $app->acceptedCourse->course->course_code;
+		$api->group = $app->applicationGroup->group_name;
+		$response = $api->student();
+		
+		$this->addStudents($model->id, $response);
 
-		
-		
 		
 		if($model){
 			
@@ -131,7 +140,37 @@ class UpdateController extends Controller
 		
     }
 	
+	protected function addStudents($project, $response){
+		if($response){
+			if($response->result){
+				foreach($response->result as $stu){
+					$fstu = Student::findOne(['student_matric' => $stu->id]);
+					if($fstu){
+						$inv = ProjectStudent::findOne(['student_id' => $fstu->id, 'project_id' => $project]);
+						if(!$inv){
+							$this->addStudentInvolved($fstu->id, $project);
+						}
+					}else{
+						$newstu = new Student;
+						$newstu->student_matric = $stu->id;
+						$newstu->student_name = $stu->name;
+						if($newstu->save()){
+							$this->addStudentInvolved($newstu->id, $project);
+						}
+					}
+				}
+				
+			}
+		}
+		
+	}
 	
+	protected function addStudentInvolved($student_id, $project){
+		$stud = new ProjectStudent;
+		$stud->student_id = $student_id;
+		$stud->project_id = $project;
+		return ($stud->save());
+	}
 	
 	public function actionCommitteeMember($token){
 		
@@ -147,7 +186,11 @@ class UpdateController extends Controller
 		
         $modelsPosition = $model->committeePositions;
 		if(count($modelsPosition) == 0){
-			$student = ProjectStudent::findOne(['project_id' => $model->id]);
+			$student = ProjectStudent::find()
+			->joinWith('student')
+			->orderBy('student_name ASC')
+			->where(['project_id' => $model->id])
+			->one();
 			if($student){
 				$model->putDefaultPosition($student->student_id);
 				$model = $this->findModel($token);
@@ -305,7 +348,11 @@ class UpdateController extends Controller
 	
 		$committees = $model->mainCommittees;
 		if(count($committees) == 0){
-			$student = ProjectStudent::findOne(['project_id' => $model->id]);
+			$student = ProjectStudent::find()
+			->joinWith('student')
+			->orderBy('student_name ASC')
+			->where(['project_id' => $model->id])
+			->one();
 			if($student){
 				$model->putDefaultCommittee($student->student_id);
 				$model = $this->findModel($token);
@@ -959,10 +1006,14 @@ class UpdateController extends Controller
 				return $this->redirect(['/project/update/preview', 'token' => $token]);
 			}
 		$query = ProjectStudent::find()->where(['pro_token' => $token]);
-		$query->joinWith(['project','student']);
+		$query->joinWith(['project','student'])->orderBy('student_name ASC');
 		
 		$dataProvider = new ActiveDataProvider([
             'query' => $query,
+			'pagination' => [
+                'pageSize' => 100,
+            ],
+
         ]);
 
         return $this->render('student', [

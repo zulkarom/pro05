@@ -39,7 +39,7 @@ class Student extends \yii\db\ActiveRecord
 			
 			 [['email'], 'email'],
 			 
-			 ['student_name', 'validateAllCaps'],
+			 //['student_name', 'validateAllCaps'],
 			
             [['program'], 'string', 'max' => 100],
 			
