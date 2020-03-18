@@ -146,6 +146,8 @@ class UpdateController extends Controller
 				foreach($response->result as $stu){
 					$fstu = Student::findOne(['student_matric' => $stu->id]);
 					if($fstu){
+						$fstu->student_name = $stu->name;
+						$fstu->save();
 						$inv = ProjectStudent::findOne(['student_id' => $fstu->id, 'project_id' => $project]);
 						if(!$inv){
 							$this->addStudentInvolved($fstu->id, $project);
