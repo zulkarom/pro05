@@ -40,7 +40,7 @@ class AttendanceSummary
 		<thead>
 		
 		<tr style="background-color:#ebebeb">
-			<td width="'.$bil.'" align="center" style="line-height: 250%;"><b>#</b></td>
+			<td width="'.$bil.'" align="center" style="line-height: 250%;"><b>No.</b></td>
 			<td width="'.$matrik.'"  style="line-height: 250%;"><b>  Student ID</b></td>
 			<td width="'.$name.'" style="line-height: 250%;"><b>  Student Name</b></td>
 			';

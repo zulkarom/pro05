@@ -1,3 +1,11 @@
+report attendance individual kena sama dengan overall - done
+buang # at overall attendance - done
+pull down student
+edit course buat edit/filter categories
+excel template markah
+
+
+
 link download helaian kehadiran kat dashboard - done
 
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
