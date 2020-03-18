@@ -239,7 +239,8 @@ class Project extends \yii\db\ActiveRecord
 			}
 		}
 		$fasi_name = strtoupper($this->fasi->user->fullname);
-		$array[$this->fasi->user->fullname] = $this->fasi->user->fullname;
+		$array[$fasi_name] = $fasi_name;
+
 		return $array;
 	}
 	
