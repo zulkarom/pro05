@@ -54,7 +54,7 @@ class AttendancePortal
 		$html ='
 		<table cellpadding="2" border="1" width="'.$wtable.'">
 		<thead>
-		<tr style="background-color:#cccccc">
+		<tr style="background-color:#ebebeb">
 			<td width="'.$bil.'" align="center" style="line-height: '.$line_height.'%;"><b>Bil</b></td>
 				<td width="'.$matrik.'" style="line-height: '.$line_height.'%;">
 				<b>  No. Matrik</b></td>
