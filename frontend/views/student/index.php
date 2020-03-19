@@ -34,9 +34,9 @@ echo '<br />';
 ?></div>
 
 <div class="col-md-4">
-<a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Helaian Kehadiran</a>
-<a href="<?=Url::to(['student/attendance-summary-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Kehadiran (QR Code)</a>  
-<!-- <a href="" target="_blank" class="btn btn-success"><span class="glyphicon glyphicon-download-alt"></span> Template Markah</a> -->
+<div class="form-group" align="right"><a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-danger btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Helaian Kehadiran</a>
+<a href="<?=Url::to(['student/attendance-summary-pdf', 'a' => $model->id])?>" target="_blank" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Kehadiran (QR Code)</a> </div> 
+<div class="form-group" align="right"><a href="<?=Url::to(['student/mark-template-excel', 'a' => $model->id])?>" target="_blank" class="btn btn-success btn-sm"><span class="glyphicon glyphicon-download-alt"></span> Template Markah</a> </div>
 </div>
 
 </div>

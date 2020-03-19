@@ -11,6 +11,7 @@ use backend\models\Api;
 use backend\models\pdf\Attendance;
 use backend\models\pdf\AttendancePortal;
 use backend\models\pdf\AttendanceSummary;
+use backend\models\excel\MarkExcel;
 
 /**
  * Site controller
@@ -110,6 +111,23 @@ class StudentController extends Controller
 		$pdf->model = $model;
 		$pdf->response = $response;
 		$pdf->generatePdf();
+	}
+	
+	public function actionMarkTemplateExcel($a){
+		$model = $this->findApplication($a);
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$code = $model->acceptedCourse->course->course_code;
+		$api->subject = $code;
+		$api->group = $model->applicationGroup->group_name;
+		$response = $api->student();
+		
+		$course = $code . ' ' . $model->acceptedCourse->course->course_name;
+		
+		$xls = new MarkExcel;
+		$xls->courseName = $course;
+		$xls->response = $response;
+		$xls->generateExcel();
 	}
 	
 	protected function findApplication($id)

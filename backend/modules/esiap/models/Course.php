@@ -55,7 +55,7 @@ class Course extends \yii\db\ActiveRecord
 			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'is_dummy'], 'required', 'on' => 'update'],
 			
 			
-            [['program_id', 'department_id', 'faculty_id', 'is_dummy', 'course_type', 'is_active', 'method_type'], 'integer'],
+            [['program_id', 'department_id', 'faculty_id', 'is_dummy', 'course_type', 'is_active', 'method_type', 'component_id'], 'integer'],
 			
             [['course_name', 'course_name_bi'], 'string', 'max' => 100],
 			

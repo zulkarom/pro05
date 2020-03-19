@@ -1,6 +1,6 @@
 report attendance individual kena sama dengan overall - done
 buang # at overall attendance - done
-pull down student
+pull down student - done
 edit course buat edit/filter categories
 excel template markah
 

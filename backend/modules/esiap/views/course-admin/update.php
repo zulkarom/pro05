@@ -62,6 +62,16 @@ $this->params['breadcrumbs'][] = 'Update';
 
 
 </div>
+
+<?php 
+
+if(Yii::$app->params['faculty_id'] == 21){
+	echo $form->field($model, 'component_id')->dropDownList(
+        ArrayHelper::map( \backend\models\Component::find()->all(), 'id', 'description'), ['prompt' => 'Please Select' ]
+    )->label('Component');
+}
+
+?>
 	
 <?= $form->field($model, 'program_id')->dropDownList(
         ArrayHelper::map(Program::find()->where(['faculty_id' => Yii::$app->params['faculty_id'], 'trash' => 0])->all(),'id', 'pro_name'), ['prompt' => 'Please Select' ]
