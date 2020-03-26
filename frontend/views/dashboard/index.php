@@ -120,7 +120,7 @@ if($sem = Semester::getOpenDateSemester()){
 
       </tr>
       <tr>
-        <td><a href="<?=Url::to(['/esiap/course/fk1', 'course' => $course->id])?>" target="_blank" class="btn btn-default" >FK1</a> <a href="<?=Url::to(['/esiap/course/fk2', 'course' => $course->id])?>" target="_blank" class="btn btn-default" >FK2</a> <a href="<?=Url::to(['/esiap/course/fk3', 'course' => $course->id])?>" target="_blank" class="btn btn-default" >FK3</a></td>
+        <td><a href="<?=Url::to(['/esiap/course/tbl4', 'course' => $course->id])?>" target="_blank" class="btn btn-default" ><span class="glyphicon glyphicon-download-alt"></span> TABLE 4 - <?=$course->course_code?></a> </td>
 
       </tr>
 	  <tr>

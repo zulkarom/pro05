@@ -125,6 +125,7 @@ class StudentController extends Controller
 		$course = $code . ' ' . $model->acceptedCourse->course->course_name;
 		
 		$xls = new MarkExcel;
+		$xls->model = $model;
 		$xls->courseName = $course;
 		$xls->response = $response;
 		$xls->generateExcel();

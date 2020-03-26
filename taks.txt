@@ -1,8 +1,4 @@
-report attendance individual kena sama dengan overall - done
-buang # at overall attendance - done
-pull down student - done
-edit course category - done
-excel template markah -done
+
 
 
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
@@ -18,5 +14,11 @@ admin boleh edit details kursus
 		
 		
 ====================done===================
+update eFasi:
+report attendance individual header kena sama dengan overall - done
+replace # -> No. at overall attendance - done
+project: pull down student frm api - done
+edit course category - done
+excel simple template markah -done
 link download helaian kehadiran kat dashboard - done
 penyelaras nak lebih dari satu

@@ -872,74 +872,53 @@ class CourseController extends Controller
 		}
     }
 	
-	public function actionFk1($course, $dev = false, $version = false){
-		if($version){
-			//control access
-			$model = $this->findVersion($version);
-		}else if($dev){
-			$model = $this->findDevelopmentVersion($course);
-		}else{
-			$model = $this->findPublishedVersion($course);
-		}
-		
+	public function actionFk1($course, $dev = false, $version = false){		
 			$pdf = new Fk1;
-			$pdf->model = $model;
+			$pdf->model = $this->decideVersion($course, $dev, $version);
 			$pdf->generatePdf();
 	}
 	
 	public function actionFk2($course, $dev = false, $version = false){
-		if($version){
-			//control access
-			$model = $this->findVersion($version);
-		}else if($dev){
-			$model = $this->findDevelopmentVersion($course);
-		}else{
-			$model = $this->findPublishedVersion($course);
-		}
 			$pdf = new Fk2;
-			$pdf->model = $model;
+			$pdf->model = $this->decideVersion($course, $dev, $version);
 			$pdf->generatePdf();
 	}
 	
-	public function actionTbl4($course, $dev = false, $version = false){
+	private function decideVersion($course, $dev, $version){
 		if($version){
 			//control access
 			$model = $this->findVersion($version);
 		}else if($dev){
 			$model = $this->findDevelopmentVersion($course);
 		}else{
-			$model = $this->findPublishedVersion($course);
+			$published =CourseVersion::findOne(['course_id' => $course, 'is_published' => 1]);
+			$developed =CourseVersion::findOne(['course_id' => $course, 'is_developed' => 1]);
+			if($published){
+				$model = $published;
+			}else if($developed){
+				$model = $developed;
+			}else{
+				die('Neither published nor development version exist!');
+			}
 		}
+		return $model;
+	}
+	
+	public function actionTbl4($course, $dev = false, $version = false){
 			$pdf = new Tbl4;
-			$pdf->model = $model;
+			$pdf->model = $this->decideVersion($course, $dev, $version);
 			$pdf->generatePdf();
 	}
 	
 	public function actionTbl4Excel($course, $dev = false, $version = false){
-		if($version){
-			//control access
-			$model = $this->findVersion($version);
-		}else if($dev){
-			$model = $this->findDevelopmentVersion($course);
-		}else{
-			$model = $this->findPublishedVersion($course);
-		}
 			$pdf = new Tbl4Excel;
-			$pdf->model = $model;
+			$pdf->model = $pdf->model = $this->decideVersion($course, $dev, $version);
 			$pdf->generateExcel();
 	}
 	
 	public function actionFk3($course, $dev = false, $version = false){
-		if($version){
-			//control access
-			$model = $this->findVersion($version);
-		}else if($dev){
-			$model = $this->findDevelopmentVersion($course);
-		}else{
-			$model = $this->findPublishedVersion($course);
-		}
 			$pdf = new Fk3;
-			$pdf->model = $model;
+			$pdf->model = $this->decideVersion($course, $dev, $version);
 			$pdf->generatePdf();
 	}
 	
