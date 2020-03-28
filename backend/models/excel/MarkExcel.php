@@ -10,6 +10,7 @@ use PhpOffice\PhpSpreadsheet\Style\Border;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
+use PhpOffice\PhpSpreadsheet\Style\Protection;
 
 
 class MarkExcel
@@ -66,7 +67,7 @@ class MarkExcel
 		$this->topAssessementMark();
 		$this->listStudentMark();
 		$this->analyseClo();
-		
+		$this->setProtection();
 
 		$this->generate();
 	}
@@ -406,8 +407,6 @@ class MarkExcel
 	
 	public function analyseClo(){
 		
-		
-		
 		$row0 = $this->lastRowMark + 2;
 		$row1 = $row0 + 1;
 		$row2 = $row1 + 1;
@@ -422,7 +421,8 @@ class MarkExcel
 			
 		$this->sheet->getStyle('H'.$row5.':I'.$row5)
 			->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-			$this->sheet->getStyle('H'.$row5.':I'.$row5)
+		
+		$this->sheet->getStyle('H'.$row5.':I'.$row5)
 			->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER)
 			->setWrapText(true);
 		
@@ -455,6 +455,10 @@ class MarkExcel
 		$this->sheet->getStyle('H'.$row3. ':I' . $row3)->getNumberFormat()
 		->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
 		
+		$this->sheet->getStyle('H'.$row4. ':I' . $row4)->getNumberFormat()
+		->setFormatCode(NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED1);
+		
+		
 		$this->sheet
 			->setCellValue('G'. $row0, 'CLO ANALYSIS')
 			->setCellValue('H'. $row0, 'CLO 1')
@@ -476,9 +480,7 @@ class MarkExcel
 			->setCellValue('I'. $row5, '=VLOOKUP(I'.$row4.',REF!$D$2:$E$6,2)')
 			;
 			
-			$this->sheet->getProtection()
-			->setPassword('efasi123')
-			->setSheet(true);
+			
 	}
 	
 	public function startRefleksiSheet(){
@@ -973,6 +975,39 @@ class MarkExcel
 	public function setMarkahActive(){
 		$this->spreadsheet->setActiveSheetIndex(0);
 		$this->sheet = $this->spreadsheet->getActiveSheet();
+	}
+	
+	public function setProtection(){
+		$pass = 'efasi123';
+		$this->spreadsheet->setActiveSheetIndex(0);
+		$this->sheet = $this->spreadsheet->getActiveSheet();
+		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
+		$this->sheet->getProtection()
+			->setPassword($pass)
+			->setSheet(true);
+		///
+		
+		
+		$this->spreadsheet->setActiveSheetIndex(1);
+		$this->sheet = $this->spreadsheet->getActiveSheet();
+		$this->sheet->getStyle('E16:F'.$this->lastRow)->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
+		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
+		$this->sheet->getProtection()
+			->setPassword($pass)
+			->setSheet(true);
+			
+		$this->spreadsheet->setActiveSheetIndex(2);
+		$this->sheet = $this->spreadsheet->getActiveSheet();
+		$this->sheet->getStyle('E16:F'.$this->lastRow)->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
+		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
+		$this->sheet->getProtection()
+			->setPassword($pass)
+			->setSheet(true);
+		$this->spreadsheet->setActiveSheetIndex(3);
+		$this->sheet = $this->spreadsheet->getActiveSheet();
+		$this->sheet->getProtection()
+			->setPassword($pass)
+			->setSheet(true);
 	}
 	
 	
