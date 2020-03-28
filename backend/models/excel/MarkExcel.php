@@ -991,18 +991,19 @@ class MarkExcel
 		$this->spreadsheet->setActiveSheetIndex(1);
 		$this->sheet = $this->spreadsheet->getActiveSheet();
 		$this->sheet->getStyle('E16:F'.$this->lastRow)->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
-		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
 		$this->sheet->getProtection()
 			->setPassword($pass)
 			->setSheet(true);
+		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
 			
 		$this->spreadsheet->setActiveSheetIndex(2);
 		$this->sheet = $this->spreadsheet->getActiveSheet();
 		$this->sheet->getStyle('E16:F'.$this->lastRow)->getProtection()->setLocked(Protection::PROTECTION_UNPROTECTED);
-		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
 		$this->sheet->getProtection()
 			->setPassword($pass)
 			->setSheet(true);
+		$this->sheet->getStyle('A1')->applyFromArray($this->normal);
+		
 		$this->spreadsheet->setActiveSheetIndex(3);
 		$this->sheet = $this->spreadsheet->getActiveSheet();
 		$this->sheet->getProtection()
