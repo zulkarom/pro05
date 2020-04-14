@@ -224,7 +224,7 @@ class CourseAdminController extends Controller
 				CourseSlt::deleteAll(['crs_version_id' => $id]);
 				CourseAssessment::deleteAll(['crs_version_id' => $id]);
 				CourseProfile::deleteAll(['crs_version_id' => $id]);
-				CourseTransfer::deleteAll(['crs_version_id' => $id]);
+				CourseTransferable::deleteAll(['crs_version_id' => $id]);
 				CourseStaff::deleteAll(['crs_version_id' => $id]);
 				
 				if(CourseVersion::findOne($id)->delete()){
