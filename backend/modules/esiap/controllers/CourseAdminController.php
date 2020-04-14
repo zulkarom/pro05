@@ -588,6 +588,9 @@ class CourseAdminController extends Controller
 				->all();
 				if($syl){
 					foreach($syl as $s){
+						$s->pnp_lecture = 0;
+						$s->pnp_tutorial = 0;
+						$s->pnp_practical = 0;
 						$s->pnp_others = 0;
 						$s->nf2f = 2;
 						if($s->save()){
@@ -673,6 +676,7 @@ class CourseAdminController extends Controller
 				
 				CourseVersion::findOne($id)->delete();
 			}
+			echo 'delete good; ';
 		}
 		exit;
 	}
