@@ -70,7 +70,7 @@ class CourseVersionClone
 	
 	public function syllabus(){
 		
-		$originals = CourseSyllabus::find()->where(['crs_version_id' => $this->ori_version])->orderBy('syl_order ASC')->all();
+		$originals = CourseSyllabus::find()->where(['crs_version_id' => $this->ori_version])->orderBy('syl_order ASC, id ASC')->all();
 		$flag = true;
 		if($originals){
 			$i = 0;
