@@ -577,12 +577,35 @@ class CourseAdminController extends Controller
 		} */
 	}
 	
+	public function actionBulkCovidUpdateSlt(){
+		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
+		foreach($courses as $course){
+			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'Covid Version']);
+			if($ver){
+				$syl = CourseSyllabus::find()
+				->where(['week_num' => ['6','7','8','9','10', '11', '12'], 'crs_version_id' => $ver->id])
+				->andWhere("topics NOT LIKE '%cuti%'")
+				->all();
+				if($syl){
+					foreach($syl as $s){
+						$s->pnp_others = 0;
+						$s->nf2f = 2;
+						if($s->save()){
+							echo 'SLT good.';
+						}
+					}
+				}
+			}
+			
+		}
+		exit;
+	}
 		
-	public function actionBulkmqf2(){
+	public function actionBulkCovidClone(){
 		
 		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
 		foreach($courses as $course){
-			$mqf2 = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
+			$mqf2 = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'Covid Version']);
 			$ori = CourseVersion::find()->where(['course_id' => $course->id])
 					->orderBy('created_at DESC')->limit(1)->all();
 					
@@ -595,7 +618,7 @@ class CourseAdminController extends Controller
 				$nv = new CourseVersion;
 				$nv->course_id = $course->id;
 				$nv->version_type_id = 2;
-				$nv->version_name = 'MQF2 PLO11';
+				$nv->version_name = 'Covid Version';
 				$nv->study_week = '16';
 				$nv->final_week = '17-19';
 				$nv->created_at = new Expression('NOW()');
@@ -609,9 +632,9 @@ class CourseAdminController extends Controller
 						$clone->ori_version = $ori[0]->id;
 						$clone->copy_version = $nv->id;
 						if(!$clone->cloneVersion()){
-							echo 'clone failed <br />';
+							echo 'clone failed ';
 						}else{
-							echo 'clone good <br />';
+							echo 'clone good; ';
 						}
 						
 					}else{
@@ -622,14 +645,15 @@ class CourseAdminController extends Controller
 				}
 			}
 		}
+		exit;
 		
 	}
 	
-	public function actionBulkdeletemqf2(){
-		die();/////////////////////////////
+	public function actionBulkDeleteCovid(){
+		//die();/////////////////////////////
 		$courses = Course::find()->all();
 		foreach($courses as $course){
-			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
+			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'Covid Version']);
 			if($ver){
 				$id = $ver->id;
 				$clos = CourseClo::find()->where(['crs_version_id' => $id])->all();
@@ -650,7 +674,7 @@ class CourseAdminController extends Controller
 				CourseVersion::findOne($id)->delete();
 			}
 		}
-		
+		exit;
 	}
 	
 	public function actionBulkupdatepusatko(){
