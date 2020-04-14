@@ -10,10 +10,14 @@ use yii\helpers\Url;
 /* @var $model backend\modules\esiap\models\Course */
 
 
-$this->title = 'Assessment: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Course Assessment';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Assessment';
 ?>
+
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 	

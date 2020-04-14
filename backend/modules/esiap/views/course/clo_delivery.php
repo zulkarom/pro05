@@ -10,7 +10,7 @@ use backend\modules\esiap\models\CourseDelivery;
 /* @var $model backend\modules\esiap\models\Course */
 
 
-$this->title = 'Delivery: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Course Delivery';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Delivery';
 $plo_num = $model->ploNumber;
@@ -18,7 +18,9 @@ $form = ActiveForm::begin(['id' => 'form-clo-plo']);
 echo $form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false);
 ?>
 
-
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
 <div class="box">
 <div class="box-header"></div>
 <div class="box-body">

@@ -21,7 +21,12 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <div class="course-form">
 
+<?=$this->render('_header',[
+'course' => $model
+])?>
+
     <?php $form = ActiveForm::begin(); ?>
+
 	
 <div class="box">
 <div class="box-header"></div>

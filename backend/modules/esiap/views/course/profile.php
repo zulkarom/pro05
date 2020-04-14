@@ -9,15 +9,22 @@ use backend\modules\staff\models\Staff;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\esiap\models\Course */
 
-$this->title = 'Course Proforma: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Course Proforma';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Pro Forma';
 ?>
 
+<?=$this->render('_header',[
+'course' => $model->courseVersion->course
+])?>
+
+
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 	
 <div class="box">
-<div class="box-header"></div>
+<div class="box-header">
+
+</div>
 <div class="box-body">	
 
 

@@ -9,10 +9,18 @@ use kartik\date\DatePicker;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\esiap\models\Course */
 
-$this->title = 'Preview & Submit: ' . $model->course_name . ' '. $model->course_code;
+$this->title = 'Preview & Submit';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Preview & Submit';
-echo '<b>STATUS: </b>' . $version->labelStatus;
+
+
+?>
+
+<?=$this->render('_header',[
+'course' => $model
+])?>
+
+<?php echo '<b>STATUS: </b>' . $version->labelStatus;
 echo '<br /><br />';
 ?>
 

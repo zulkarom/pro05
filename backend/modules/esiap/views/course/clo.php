@@ -8,10 +8,14 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\esiap\models\Course */
 
-$this->title = 'Course Learning Outcome: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Course Learning Outcome';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'CLO';
 ?>
+
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 	

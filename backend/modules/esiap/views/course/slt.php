@@ -10,13 +10,16 @@ use yii\helpers\Url;
 /* @var $model backend\modules\esiap\models\Course */
 
 
-$this->title = 'SLT: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Student Learning Time';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'SLT';
 
 $form = ActiveForm::begin(['id' => 'form-clo-assessment']); 
 ?>
 
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
 
 <div class="box">
 <div class="box-header"></div>

@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $model backend\modules\esiap\models\Course */
 
 
-$this->title = 'Softskill: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Softskill';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Softskill';
 $plo_num = $model->ploNumber;
@@ -18,6 +18,9 @@ $form = ActiveForm::begin(['id' => 'form-clo-softskill']);
 echo $form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false);
 ?>
 
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
 
 <div class="box">
 <div class="box-header"></div>

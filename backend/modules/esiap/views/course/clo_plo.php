@@ -9,13 +9,15 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\esiap\models\Course */
 
-$this->title = 'CLO PLO: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'CLO vs. PLO';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'CLO PLO';
 $form = ActiveForm::begin(['id' => 'form-clo-plo']);
 ?>
 
-
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
 <div class="box">
 <div class="box-header"></div>
 <div class="box-body">

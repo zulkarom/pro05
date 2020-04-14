@@ -7,13 +7,17 @@ use yii\widgets\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $model backend\modules\esiap\models\Course */
 
-$this->title = 'Reference: ' . $model->course->course_name . ' '. $model->course->course_code;
+$this->title = 'Reference';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Reference';
 ?>
 
  <?php $form = ActiveForm::begin(); ?>
-	
+
+<?=$this->render('_header',[
+'course' => $model->course
+])?>
+
 <div class="box">
 <div class="box-header"></div>
 <div class="box-body">	
