@@ -73,6 +73,7 @@ class CourseVersionClone
 		$originals = CourseSyllabus::find()->where(['crs_version_id' => $this->ori_version])->orderBy('syl_order ASC')->all();
 		$flag = true;
 		if($originals){
+			$i = 0;
 			foreach($originals as $original){
 				if ($flag === false) {
 					break;
@@ -82,12 +83,14 @@ class CourseVersionClone
 				$copy->crs_version_id = $this->copy_version;
 				$copy->created_at = new Expression('NOW()');
 				$copy->updated_at = new Expression('NOW()');
+				$copy->syl_order = $i;
 				if(!($flag = $copy->save())){
 					$copy->flashError();
 					break;
 				}else{
 
 				}
+			$i++;
 			}
 		}
 		
