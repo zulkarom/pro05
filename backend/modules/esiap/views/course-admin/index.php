@@ -25,7 +25,7 @@ $exportColumns = [
 			],
 			
             [
-                'label' => 'Published',
+                'label' => 'Publish',
                 'format' => 'html',
                 'value' => function($model){
 					if($model->publishedVersion){
@@ -41,7 +41,7 @@ $exportColumns = [
                 }
             ],
 			[
-                'label' => 'Dev Status',
+                'label' => 'Development',
                 'format' => 'html',
                 
                 'value' => function($model){
@@ -101,22 +101,32 @@ $exportColumns = [
             ['class' => 'yii\grid\SerialColumn'],
 			[
 				'attribute' => 'course_code',
-				'contentOptions' => ['style' => 'width: 10%'],
+			//	'contentOptions' => ['style' => 'width: 10%'],
 				
 			],
             
 			[
 				'attribute' => 'course_name',
-				'contentOptions' => ['style' => 'width: 45%'],
+			//	'contentOptions' => ['style' => 'width: 45%'],
 				'format' => 'html',
 				'label' => 'Course Name',
 				'value' => function($model){
-					return strtoupper($model->course_name) . ' / <i>' . strtoupper($model->course_name_bi) . '</i>';
+					return strtoupper($model->course_name) . '<br /><i>' . strtoupper($model->course_name_bi) . '</i>';
 				}
 				
 			],
+			
+			[
+				'label' => 'Coordinator',
+				'format' => 'html',
+				'value' => function($model){
+					return $model->picStr;
+				}
+				
+			],
+			
             [
-                'label' => 'Published',
+                'label' => 'Publish',
                 'format' => 'html',
                 'value' => function($model){
 					if($model->publishedVersion){
@@ -132,12 +142,12 @@ $exportColumns = [
                 }
             ],
 			[
-                'label' => 'Dev Status',
+                'label' => 'Development',
                 'format' => 'html',
                 
                 'value' => function($model){
 					if($model->developmentVersion){
-						return $model->developmentVersion->labelStatus;
+						return $model->developmentVersion->labelStatus . '<br />' . '<i>'.$model->developmentVersion->version_name.'</i>';
 					}else{
 						return 'NONE';
 					}

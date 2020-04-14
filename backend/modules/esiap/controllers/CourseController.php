@@ -3,6 +3,7 @@
 namespace backend\modules\esiap\controllers;
 
 use Yii;
+use backend\modules\esiap\models\AssessmentCat;
 use backend\modules\esiap\models\Course;
 use backend\modules\esiap\models\CourseProfile;
 use backend\modules\esiap\models\CourseClo;
@@ -694,45 +695,61 @@ class CourseController extends Controller
 	
 	public function actionCourseAssessment($course)
     {
-		
-        $model = $this->findDevelopmentVersion($course);
-		
-		$items = $model->assessments;
-		
         
         if (Yii::$app->request->post()) {
 			if(Yii::$app->request->validateCsrfToken()){
 				
                 $assess = Yii::$app->request->post('CourseAssessment');
+				if($assess){
+				//print_r($assess);die();
 				$final = 0;
 				$flag = true;
+				$transaction = Yii::$app->db->beginTransaction();
 				foreach($assess as $key => $as){
+					if(!$flag ){
+						break;
+					}
+					//Yii::$app->session->addFlash('info', $as['id']);
 					$assesment = CourseAssessment::findOne($as['id']);
 					if($assesment){
-						if($final == 1){
-							Yii::$app->session->addFlash('error', "Only one final assessment is allowed!");
-							$flag = false;
-							break;
-						}
-						$cat = $assesment->assessmentCat;
+						$cat = AssessmentCat::findOne($as['assess_cat']);
 						$form_sum = $cat->form_sum;
-						$final = $form_sum == 2 ? 1 : 0;
+						$final = $final + ($form_sum == 2 ? 1 : 0);
 						$assesment->assess_name = $as['assess_name'];
 						$assesment->assess_name_bi = $as['assess_name_bi'];
 						$assesment->assess_cat = $as['assess_cat'];
-						$assesment->save();
+						
+						if($final > 1){
+							Yii::$app->session->addFlash('error', "Only one final exam or assessment is allowed!");
+							$flag = false;
+							break;
+						}
+						
+						
+						if(!$assesment->save()){
+							$flag = false;
+							break;
+						}
 					}
 				}
 				if($flag){
+					$transaction->commit();
 					Yii::$app->session->addFlash('success', "Data Updated");
+					return $this->redirect(['course-assessment','course'=>$course]);
+					
+				}else{
+					$transaction->rollBack();
+					return $this->redirect(['course-assessment','course'=>$course]);
+				}
+				
 				}
 				
             }
-			return $this->redirect(['course-assessment','course'=>$course]);
+			
 		}
 		
-		
-	
+	$model = $this->findDevelopmentVersion($course);
+	$items = $model->assessments;
 	
 		return $this->render('assessment', [
 				'model' => $model,
