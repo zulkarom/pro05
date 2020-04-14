@@ -630,12 +630,15 @@ class CourseController extends Controller
 		if ($model->load(Yii::$app->request->post())) {
 	
 			if(Yii::$app->request->validateCsrfToken()){
+				$flag = true;
 				$post_slt = Yii::$app->request->post('slt');
 				foreach($post_slt as $key => $val){
 				$slt->{$key} = $val;
 				}
 				$slt->is_practical = Yii::$app->request->post('is_practical');
-				$slt->save();
+				if(!$slt->save()){
+					$flag = false;
+				}
 				
 				$post_assess = Yii::$app->request->post('assess');
 				if($post_assess){
@@ -645,6 +648,7 @@ class CourseController extends Controller
 					if($as){
 						$as->assess_f2f = $val;
 						if(!$as->save()){
+							$flag = false;
 							$as->flashError();
 						}
 					}
@@ -659,6 +663,7 @@ class CourseController extends Controller
 					if($as){
 						$as->assess_nf2f = $val;
 						if(!$as->save()){
+							$flag = false;
 							$as->flashError();
 						}
 					}
@@ -676,12 +681,16 @@ class CourseController extends Controller
 							$syl->{$i} = $v;
 						}
 						if(!$syl->save()){
+							$flag = false;
 							$syl->flashError();
 						}
 					}
 				}
             }
 			//die();
+			if($flag){
+				Yii::$app->session->addFlash('success', "Student Learning Time has been successfully updated");
+			}
 			return $this->redirect(['course-slt', 'course' => $course]);
 			
 		}
