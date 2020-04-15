@@ -64,8 +64,8 @@ $exportColumns = [
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 	
 	<div class="row">
-<div class="col-md-6">
-        <?= Html::a('<span class="glyphicon glyphicon-plus"></span> New Course', ['create'], ['class' => 'btn btn-success']) ?>  
+<div class="col-md-5">
+       <div class="form-group"> <?= Html::a('<span class="glyphicon glyphicon-plus"></span> New Course', ['create'], ['class' => 'btn btn-success']) ?>  
 		
 		<?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
@@ -79,13 +79,13 @@ $exportColumns = [
         ExportMenu::FORMAT_PDF => false,
 		ExportMenu::FORMAT_EXCEL_X => false,
     ],
-]);?>
+]);?></div>
 		
 		
 		
  </div>
 
-<div class="col-md-6" align="right">
+<div class="col-md-7" align="right">
 
 <?=$this->render('_search', ['model' => $searchModel])?>
 </div>
@@ -102,7 +102,27 @@ $exportColumns = [
 
 
 
-<?= GridView::widget([
+<?php
+
+if(Yii::$app->params['faculty_id'] == 21 ){
+	$cat = [
+				'label' => 'Component',
+				'value' => function($model){
+					return $model->component->name;
+				}
+				
+			];
+}else{
+	$cat = [
+				'label' => 'Program',
+				'value' => function($model){
+					return $model->program->pro_name_short;
+				}
+				
+			];
+}
+
+echo GridView::widget([
          'dataProvider' => $dataProvider,
 		'options' => [ 'style' => 'table-layout:fixed;' ],
 		'export' => false,
@@ -127,8 +147,10 @@ $exportColumns = [
 				
 			],
 			
+			$cat ,
+			
 			[
-				'label' => 'Coordinator',
+				'label' => 'In Charge',
 				'format' => 'html',
 				'value' => function($model){
 					return $model->picStr;

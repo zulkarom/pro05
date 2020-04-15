@@ -13,6 +13,7 @@ use backend\modules\esiap\models\Course;
 class CourseAdminSearch extends Course
 {
 	public $search_course;
+	public $search_cat;
     /**
      * @inheritdoc
      */
@@ -20,6 +21,8 @@ class CourseAdminSearch extends Course
     {
         return [
             [['search_course'], 'string'],
+			
+			[['search_cat'], 'integer'],
         ];
     }
 
@@ -62,7 +65,13 @@ class CourseAdminSearch extends Course
         }
 		
 		// grid filtering conditions
-        $query->andFilterWhere(['like', 'course_code', $this->search_course]);
+        
+		
+		if(Yii::$app->params['faculty_id']== 21){
+			$query->andFilterWhere(['like', 'component_id', $this->search_cat]);
+		}else{
+			$query->andFilterWhere(['like', 'program_id', $this->search_cat]);
+		}
 
 
         $query->orFilterWhere(['like', 'course_name', $this->search_course])
