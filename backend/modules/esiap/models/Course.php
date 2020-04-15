@@ -177,6 +177,16 @@ class Course extends \yii\db\ActiveRecord
 
 	}
 	
+	public function getDefaultVersion(){
+		if($this->publishedVersion){
+			return $this->publishedVersion;
+		}else if($this->developmentVersion){
+			return $this->developmentVersion;
+		}else{
+			return false;
+		}
+	}
+	
 	public function getFaculty(){
         return $this->hasOne(Faculty::className(), ['id' => 'faculty_id']);
     }

@@ -3,6 +3,8 @@
 namespace backend\modules\esiap\controllers;
 
 use Yii;
+
+use backend\modules\esiap\models\Tbl4Excel;
 use backend\modules\esiap\models\CourseAdminSearch;
 use backend\modules\esiap\models\CourseInactiveSearch;
 use backend\modules\esiap\models\Course;
@@ -268,12 +270,12 @@ class CourseAdminController extends Controller
 				if($model->status == 20){
 					if($model->is_developed ==1){
 						Yii::$app->session->addFlash('error', "You can not publish and develop at the same time");
-						return $this->redirect(['course-version-update', 'id' => $id]);
+						return $this->redirect(['/esiap/course-admin/update', 'course' => $model->course->id]);
 					}
 					CourseVersion::updateAll(['is_published' => 0], ['course_id' => $model->course_id]);
 				}else{
 					Yii::$app->session->addFlash('error', "The status must be verified before publishing");
-					return $this->redirect(['course-version-update', 'id' => $id]);
+					return $this->redirect(['/esiap/course-admin/update', 'course' => $model->course->id]);
 				}
 			}
 			
@@ -281,6 +283,8 @@ class CourseAdminController extends Controller
 				Yii::$app->session->addFlash('success', "Course Version Updated");
 				return $this->redirect(['/esiap/course-admin/update', 'course' => $model->course->id]);
 			}
+			
+			
             
         }
 
@@ -342,11 +346,11 @@ class CourseAdminController extends Controller
         if ($model->load(Yii::$app->request->post())) {
 			$model->updated_at = new Expression('NOW()');    
 			if($model->save()){
-
+			$flag = true;
             $staff_pic_arr = Yii::$app->request->post('staff_pic');
 			
 			if($staff_pic_arr){
-				//echo 'hai';die();
+				
 				$kira_post = count($staff_pic_arr);
 				$kira_lama = count($model->coursePics);
 				if($kira_post > $kira_lama){
@@ -355,7 +359,9 @@ class CourseAdminController extends Controller
 					for($i=1;$i<=$bil;$i++){
 						$insert = new CoursePic;
 						$insert->course_id = $model->id;
-						$insert->save();
+						if(!$insert->save()){
+							$flag = false;
+						}
 					}
 				}else if($kira_post < $kira_lama){
 
@@ -432,7 +438,7 @@ class CourseAdminController extends Controller
 					}
 				}
 			}
-			
+			Yii::$app->session->addFlash('success', "Course Updated");
 			}else{
 				$model->flashError();
 			}
@@ -770,6 +776,18 @@ class CourseAdminController extends Controller
 		
 			}
 		}
+		
+	}
+	
+	public function actionTable4(){
+		if(Yii::$app->request->post()){
+			$pdf = new Tbl4Excel;
+			$pdf->multiple = true;
+			$pdf->courses = Yii::$app->request->post('selection');
+			$pdf->generateExcel();
+		}
+		
+
 		
 	}
 	

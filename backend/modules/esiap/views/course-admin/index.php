@@ -1,19 +1,22 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
+use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\esiap\models\CourseSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Courses';
+$this->title = 'Active Courses';
 $this->params['breadcrumbs'][] = $this->title;
 
 
 
 $exportColumns = [
+	
 	['class' => 'yii\grid\SerialColumn'],
 			'course_code',
             'course_name',
@@ -89,15 +92,23 @@ $exportColumns = [
 
 </div>
 
+<?php $form = ActiveForm::begin([
+	'action' => Url::to(['/esiap/course-admin/table4'])
+]); ?>
 
     <div class="box">
 <div class="box-header"></div>
-<div class="box-body"><?= GridView::widget([
+<div class="box-body">
+
+
+
+<?= GridView::widget([
          'dataProvider' => $dataProvider,
 		'options' => [ 'style' => 'table-layout:fixed;' ],
 		'export' => false,
        // 'filterModel' => $searchModel,
         'columns' => [
+			['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
 			[
 				'attribute' => 'course_code',
@@ -125,32 +136,38 @@ $exportColumns = [
 				
 			],
 			
-            [
-                'label' => 'Publish',
-                'format' => 'html',
-                'value' => function($model){
-					if($model->publishedVersion){
-						$lbl = 'YES';
-						$color = 'success';
-					}else{
-						$lbl =  'NO';
-						$color = 'danger';
-					}
-					
-					return '<span class="label label-'.$color.'">'.$lbl.'</span>';
-                    
-                }
-            ],
+			
+			
+           
 			[
                 'label' => 'Development',
                 'format' => 'html',
                 
                 'value' => function($model){
 					if($model->developmentVersion){
+						
 						return $model->developmentVersion->labelStatus . '<br />' . '<i>'.$model->developmentVersion->version_name.'</i>';
 					}else{
 						return 'NONE';
 					}
+                    
+                }
+            ],
+			 [
+                'label' => 'Publish',
+                'format' => 'html',
+                'value' => function($model){
+					if($model->publishedVersion){
+						$lbl = 'YES';
+						$color = 'success';
+						$version = '<br /><i>' . $model->publishedVersion->version_name . '</i>';
+					}else{
+						$lbl =  'NO';
+						$color = 'danger';
+						$version = '';
+					}
+					
+					return '<span class="label label-'.$color.'">'.$lbl.'</span>'.$version;
                     
                 }
             ],
@@ -170,5 +187,28 @@ $exportColumns = [
         ],
     ]); ?></div>
 </div>
+
+
+
+<div class="form-group">
+        
+<?= Html::submitButton('<span class="glyphicon glyphicon-download-alt"></span> Download Table 4 ', ['class' => 'btn btn-success', 'name'=> 'actiontype', 'value' => 'generate']) ?>
+    </div>
+
+
+<?php ActiveForm::end(); ?>
+
+
+<?php 
+
+$js = '
+$("#checkAll").click(function(){
+    $(\'input:checkbox\').not(this).prop(\'checked\', this.checked);
+});
+
+';
+$this->registerJs($js);
+?>
+
 
 </div>

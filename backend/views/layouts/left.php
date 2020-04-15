@@ -99,10 +99,11 @@
                         'icon' => 'book',
                         'url' => '#',
                         'items' => [
-
+							['label' => 'Urus Penawaran', 'icon' => 'book', 'url' => ['/course/index']],
 							['label' => 'Senarai Kursus', 'icon' => 'book', 'url' => ['/esiap/course-admin']],
+							['label' => 'Kursus TIdak Aktif', 'icon' => 'book', 'url' => ['/esiap/course-admin/inactive']],
 						
-                            ['label' => 'Urus Penawaran', 'icon' => 'book', 'url' => ['/course/index']],
+                            
 
                         ],
                     ],

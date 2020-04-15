@@ -79,7 +79,7 @@ $exportColumns = [
             
 			[
 				'attribute' => 'course_name',
-				'contentOptions' => ['style' => 'width: 45%'],
+				//'contentOptions' => ['style' => 'width: 45%'],
 				'format' => 'html',
 				'label' => 'Course Name',
 				'value' => function($model){
@@ -92,6 +92,7 @@ $exportColumns = [
             ['class' => 'yii\grid\ActionColumn',
                 'template' => '{update}',
                 //'visible' => false,
+				'contentOptions' => ['style' => 'width: 5px'],
                 'buttons'=>[
                     'update'=>function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span> Update',['/esiap/course-admin/update/', 'course' => $model->id],['class'=>'btn btn-warning btn-sm']);
