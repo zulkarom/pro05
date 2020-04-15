@@ -584,6 +584,7 @@ class CourseAdminController extends Controller
 	}
 	
 	public function actionBulkCovidUpdateSlt(){
+		die();
 		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
 		foreach($courses as $course){
 			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'Covid Version']);
@@ -611,7 +612,7 @@ class CourseAdminController extends Controller
 	}
 		
 	public function actionBulkCovidClone(){
-		
+		die();
 		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
 		foreach($courses as $course){
 			$mqf2 = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'Covid Version']);
@@ -659,7 +660,7 @@ class CourseAdminController extends Controller
 	}
 	
 	public function actionBulkDeleteCovid(){
-		//die();/////////////////////////////
+		die();/////////////////////////////
 		$courses = Course::find()->all();
 		foreach($courses as $course){
 			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'Covid Version']);
@@ -688,7 +689,7 @@ class CourseAdminController extends Controller
 	}
 	
 	public function actionBulkupdatepusatko(){
-		//die();////////////////////////stop
+		die();////////////////////////stop
 		$courses = Course::find()->where(['faculty_id' => Yii::$app->params['faculty_id']])->all();
 		foreach($courses as $course){
 			$version = CourseVersion::findOne(['course_id' => $course->id, 'version_type_id' => 2]);
