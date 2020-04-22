@@ -10,7 +10,7 @@ if($coor){
 ?>
 <div class="box box-primary">
 <div class="box-header">
-	<div class="box-title">KETUA TERAS</div>
+	<div class="box-title">KETUA TERAS: SEMESTER <?=strtoupper($semester->niceFormat())?></div>
 </div>
 <div class="box-body ">
 

@@ -248,7 +248,7 @@ $token = $application->project->pro_token;
         
 <?php } ?>
 
-  <h3>SEMESTER <?=strtoupper($semester->niceFormat())?></h3>
+
 <?php 
 echo $this->render('ketua-teras', [
 	'semester' => $semester
