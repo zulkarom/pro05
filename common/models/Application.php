@@ -395,6 +395,25 @@ class Application extends \yii\db\ActiveRecord
             
     }
 	
+	public static function findFasiNameByCourseCodeAndSemester($course_code, $semester, $group){		
+		return (new \yii\db\Query())
+		->select('g.group_name , u.fullname as fasiname')
+		->from('application a')
+		->innerJoin('application_course ac','ac.application_id = a.id')
+		->innerJoin('sp_course c', 'c.id = ac.course_id')
+		->innerJoin('application_group g','g.id = a.group_id')
+		->innerJoin('fasi f', 'f.id = a.fasi_id')
+		->innerJoin('user u', 'u.id = f.user_id')
+		->where([
+			'c.course_code' => $course_code, 
+			'g.group_name' => $group,
+			'ac.is_accepted' => 1, 
+			'a.semester_id' => $semester, 
+			'a.status' => 'ApplicationWorkflow/f-accept', 
+			])
+		->one();
+	}
+	
 
 
 }

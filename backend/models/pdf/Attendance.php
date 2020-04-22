@@ -9,6 +9,9 @@ use common\models\Common;
 class Attendance
 {
 	public $model;
+	public $semester;
+	public $course;
+	public $group;
 	public $response;
 	public $pdf;
 	public $directoryAsset;
@@ -48,9 +51,9 @@ class Attendance
 		<tr>
 		<td colspan="17" style="line-height: 160%;">
 			
-		 <b>Semester</b><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>'. strtoupper($this->model->semester->fullFormat()).'<br />
+		 <b>Semester</b><span>&nbsp;&nbsp;&nbsp;&nbsp;</span>'. strtoupper($this->semester->fullFormat()).'<br />
 		   
-		   <span>&nbsp;</span><b>Subjek</b><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'.$this->model->acceptedCourse->course->course_code.' - '.strtoupper($this->model->acceptedCourse->course->course_name).'
+		   <span>&nbsp;</span><b>Subjek</b><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>'.$this->course->course_code.' - '.strtoupper($this->course->course_name).'
 			
 
 		</td>
@@ -58,7 +61,7 @@ class Attendance
 		<tr>
 		<td colspan="17">
 	
-		<b>   Kumpulan<span>&nbsp;&nbsp;&nbsp;</span>'.$this->model->applicationGroup->group_name.'</b>
+		<b>   Kumpulan<span>&nbsp;&nbsp;&nbsp;</span>'.$this->group.'</b>
 
 		</td>
 		</tr>

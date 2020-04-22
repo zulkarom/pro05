@@ -7,6 +7,9 @@ use Yii;
 class AttendanceSummaryStart extends \TCPDF {
 	
 	public $model;
+	public $course;
+	public $semester;
+	public $group;
 	public $curr_page;
 	public $total_page;
 
@@ -44,13 +47,13 @@ class AttendanceSummaryStart extends \TCPDF {
 		</tr>
 		
 		<tr height="'.$height.'" style="line-height:'.$line_height.'%">
-		<td>&nbsp;&nbsp;<b>SEMESTER: </b>'. strtoupper($this->model->semester->fullFormat()).'
+		<td>&nbsp;&nbsp;<b>SEMESTER: </b>'. strtoupper($this->semester->fullFormat()).'
 		</td>
 		<td>&nbsp;&nbsp;eFasi (QRcode)</td>
 		</tr>
 		
 		<tr height="'.$height.'" style="line-height:'.$line_height.'%">
-		<td>&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->model->acceptedCourse->course->course_code.' ('.$this->model->applicationGroup->group_name.') - '.strtoupper($this->model->acceptedCourse->course->course_name).'
+		<td>&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->course->course_code.' ('.$this->group.') - '.strtoupper($this->course->course_name).'
 		</td>
 		<td>&nbsp;&nbsp;'.$time.'</td>
 		</tr>

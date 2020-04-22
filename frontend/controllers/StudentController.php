@@ -12,6 +12,9 @@ use backend\models\pdf\Attendance;
 use backend\models\pdf\AttendancePortal;
 use backend\models\pdf\AttendanceSummary;
 use backend\models\excel\MarkExcel;
+use backend\modules\esiap\models\Course;
+use backend\models\Semester;
+
 
 /**
  * Site controller
@@ -95,6 +98,25 @@ class StudentController extends Controller
 		
 		$pdf = new AttendanceSummary;
 		$pdf->model = $model;
+		$pdf->course = $model->acceptedCourse->course;
+		$pdf->semester = $model->semester;
+		$pdf->group = $model->applicationGroup->group_name;
+		$pdf->response = $response;
+		$pdf->generatePdf();
+	}
+	
+	public function actionAttendanceSummaryAdminPdf($course, $semester, $group){
+		//mgkin validate dulu
+		$api = new Api;
+		$api->semester = $semester;
+		$api->subject = $course;
+		$api->group = $group;
+		$response = $api->summary();
+		
+		$pdf = new AttendanceSummary;
+		$pdf->course = Course::findOne(['course_code' => $course]);
+		$pdf->semester = Semester::findOne($semester);
+		$pdf->group = $group;
 		$pdf->response = $response;
 		$pdf->generatePdf();
 	}
@@ -108,7 +130,24 @@ class StudentController extends Controller
 		$response = $api->student();
 		
 		$pdf = new Attendance;
-		$pdf->model = $model;
+		$pdf->course = $model->acceptedCourse->course;
+		$pdf->semester = $model->semester;
+		$pdf->group = $model->applicationGroup->group_name;
+		$pdf->response = $response;
+		$pdf->generatePdf();
+	}
+	
+	public function actionAttendanceSheetAdminPdf($course, $semester, $group){
+		$api = new Api;
+		$api->semester = $semester;
+		$api->subject = $course;
+		$api->group = $group;
+		$response = $api->student();
+	
+		$pdf = new Attendance;
+		$pdf->course = Course::findOne(['course_code' => $course]);
+		$pdf->semester = Semester::findOne($semester);
+		$pdf->group = $group;
 		$pdf->response = $response;
 		$pdf->generatePdf();
 	}
@@ -122,11 +161,37 @@ class StudentController extends Controller
 		$api->group = $model->applicationGroup->group_name;
 		$response = $api->student();
 		
-		$course = $code . ' ' . $model->acceptedCourse->course->course_name;
-		
 		$xls = new MarkExcel;
 		$xls->model = $model;
-		$xls->courseName = $course;
+		$xls->courseName = $model->acceptedCourse->course->course_name;
+		$xls->courseCode = $model->acceptedCourse->course->course_code;
+		$xls->group = $model->applicationGroup->group_name;
+		$xls->fasi = $model->fasi->user->fullname;
+		$xls->semester = $model->semester;
+		$xls->response = $response;
+		$xls->generateExcel();
+	}
+	
+	public function actionMarkTemplateAdminExcel($course, $semester, $group){
+		
+		$fasi = Application::findFasiNameByCourseCodeAndSemester($course, $semester, $group);
+		$course = Course::findOne(['course_code' => $course]);
+		$api = new Api;
+		$api->subject = $course->course_code;
+		$api->group = $group;
+		$api->semester = $semester;
+
+		$response = $api->student();
+		
+		//$mcourse = $course->course_code . ' ' . $course->course_name;
+		
+		$xls = new MarkExcel;
+		//$xls->model = $model;
+		$xls->courseName = $course->course_name;
+		$xls->courseCode = $course->course_code;
+		$xls->group = $group;
+		$xls->fasi = $fasi['fasiname'];
+		$xls->semester = Semester::findOne($semester);
 		$xls->response = $response;
 		$xls->generateExcel();
 	}

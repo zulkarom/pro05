@@ -59,4 +59,24 @@ class Stats
 		}
 
 	}
+	
+	public static function getMyCoorGroups($course, $semester){
+		return (new \yii\db\Query())
+		->select('g.group_name as group, u.fullname as fasiname')
+		->from('sp_course_pic pic')
+		->innerJoin('application_course ac','ac.course_id = pic.course_id')
+		->innerJoin('application a','ac.application_id = a.id')
+		->innerJoin('application_group g','g.id = a.group_id')
+		->innerJoin('fasi f', 'f.id = a.fasi_id')
+		->innerJoin('user u', 'u.id = f.user_id')
+		->where([
+			'ac.course_id' => $course, 
+			'ac.is_accepted' => 1, 
+			'a.semester_id' => $semester, 
+			'a.status' => 'ApplicationWorkflow/f-accept', 
+			'pic.staff_id' => Yii::$app->user->identity->staff->id
+			])
+		->orderBy('g.group_name ASC')
+		->all();
+	}
 }

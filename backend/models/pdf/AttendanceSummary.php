@@ -9,6 +9,7 @@ use common\models\Common;
 class AttendanceSummary
 {
 	public $model;
+	
 	public $response;
 	public $pdf;
 	public $directoryAsset;
@@ -20,6 +21,9 @@ class AttendanceSummary
 		$this->pdf = new AttendanceSummaryStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
 		$this->pdf->model = $this->model;
+		$this->pdf->course = $this->course;
+		$this->pdf->semester = $this->semester;
+		$this->pdf->group = $this->group;
 		
 		$this->startPage();
 		$this->body();

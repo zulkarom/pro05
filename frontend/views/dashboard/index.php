@@ -2,6 +2,8 @@
 use backend\models\Semester;
 use yii\helpers\Url;
 use common\models\Common;
+
+
 /* @var $this yii\web\View */
 
 $this->title = 'DASHBOARD';
@@ -93,10 +95,13 @@ if($sem = Semester::getOpenDateSemester()){
         </div>
         <!-- ./col -->
       </div>
+  <h3>SEMESTER <?=strtoupper($semester->niceFormat())?></h3>
+
+	  
 <?php if($application){
 	$course = $application->acceptedCourse->course;
 	?>  
-	  <h3>SEMESTER <?=strtoupper($semester->niceFormat())?></h3>
+	
 	  
   
 	  <div class="row">
@@ -242,6 +247,16 @@ $token = $application->project->pro_token;
 </div>
         
 <?php } ?>
+
+  <h3>SEMESTER <?=strtoupper($semester->niceFormat())?></h3>
+<?php 
+echo $this->render('ketua-teras', [
+	'semester' => $semester
+]);
+?>
+
+
+
     </div>
 	
 		  
