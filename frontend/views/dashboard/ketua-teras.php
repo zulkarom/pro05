@@ -60,6 +60,8 @@ foreach($coor as $c){
 	}else{
 		foreach($arr_groups as $ag){
 			  $str_kehadiran .= '<li><a href="'. Url::to(['/student/attendance-sheet-admin-pdf/', 'course' => $c->course->course_code, 'semester' => $semester->id, 'group' => $g['group']]) . '" target="_blank">'.$ag->group_name.'</a></li>';
+			  $str_qr .= '<li><a href="'. Url::to(['/student/attendance-sheet-admin-pdf/', 'course' => $c->course->course_code, 'semester' => $semester->id, 'group' => $g['group']]) . '" target="_blank">'.$ag->group_name.'</a></li>';
+			  $str_mark .= '<li><a href="'. Url::to(['/student/attendance-sheet-admin-pdf/', 'course' => $c->course->course_code, 'semester' => $semester->id, 'group' => $g['group']]) . '" target="_blank">'.$ag->group_name.'</a></li>';
 		  }
 	}
 	
