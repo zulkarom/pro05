@@ -110,8 +110,7 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 					
 					
 					
-					<?= $form->field($item, "[{$indexItem}]hour_start")->dropDownList(
-					ArrayHelper::map(Hour::find()->all(),'id', 'hour_format'), ['class'=>'form-control calc-amount calc-all' ,'prompt' => 'Please Select' ]
+					<?= $form->field($item, "[{$indexItem}]hour_start")->dropDownList(Hour::listHoursArray(), ['class'=>'form-control calc-amount calc-all' ,'prompt' => 'Please Select' ]
 					)->label(false) ?>
 
 
@@ -119,8 +118,7 @@ $form = ActiveForm::begin(['id' => 'dynamic-form']);
 				
 				<td class="vcenter">
 				
-					<?= $form->field($item, "[{$indexItem}]hour_end")->dropDownList(
-					ArrayHelper::map(Hour::find()->all(),'id', 'hour_format'), ['class'=>'form-control calc-amount' ,'prompt' => 'Please Select' ]
+					<?= $form->field($item, "[{$indexItem}]hour_end")->dropDownList(Hour::listHoursArray(), ['class'=>'form-control calc-amount' ,'prompt' => 'Please Select' ]
 					)->label(false) ?>
 					
                 </td>
@@ -342,8 +340,8 @@ function calc_element(el){
 	var rate = parseFloat($('#fasi-rate').val());
 	var arr_this = el.attr('id').split('-');
 	var item_index = arr_this[1];
-	var start = parseInt($('#claimitem-' + item_index + '-hour_start').val());
-	var end = parseInt($('#claimitem-' + item_index + '-hour_end').val());
+	var start = parseFloat($('#claimitem-' + item_index + '-hour_start').val());
+	var end = parseFloat($('#claimitem-' + item_index + '-hour_end').val());
 	var total = end - start;
 	if(total > 0){
 		str_hours = '<span class="sub-total-hour">' + total + '</span> x ' + 'RM' + rate;

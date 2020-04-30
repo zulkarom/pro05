@@ -28,7 +28,8 @@ class Hour extends \yii\db\ActiveRecord
         return [
             [['id'], 'required'],
             [['id'], 'integer'],
-            [['hour_format'], 'string', 'max' => 4],
+			[['hour_val'], 'number'],
+            [['hour_format'], 'string', 'max' => 6],
             [['id'], 'unique'],
         ];
     }
@@ -43,4 +44,13 @@ class Hour extends \yii\db\ActiveRecord
             'hour_format' => 'Hour Format',
         ];
     }
+	
+	public static function listHoursArray(){
+		$list = self::find()->orderBy('hour_val')->all();
+		$array = array();
+		foreach($list as $item){
+			$array[''.$item->hour_val.''] = $item->hour_format;
+		}
+		return $array;
+	}
 }

@@ -32,8 +32,9 @@ class ClaimItem extends \yii\db\ActiveRecord
         return [
             [['item_date', 'hour_start', 'hour_end', 'session_type'], 'required'],
 			
-            [['claim_id', 'hour_start', 'hour_end', 'session_type'], 'integer'],
+            [['claim_id', 'session_type'], 'integer'],
 			
+			[['hour_start', 'hour_end'], 'number'],
 			
             [['item_date'], 'safe'],
         ];
@@ -55,11 +56,11 @@ class ClaimItem extends \yii\db\ActiveRecord
     }
 	
 	public function getHourStart(){
-		return $this->hasOne(Hour::className(), ['id' => 'hour_start']);
+		return $this->hasOne(Hour::className(), ['hour_val' => 'hour_start']);
 	}
 	
 	public function getHourEnd(){
-		return $this->hasOne(Hour::className(), ['id' => 'hour_end']);
+		return $this->hasOne(Hour::className(), ['hour_val' => 'hour_end']);
 	}
 	
 	public function getSessionType(){
