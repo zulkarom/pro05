@@ -1,34 +1,4 @@
-ALTER TABLE `claim_item` CHANGE `hour_start` `hour_start` DOUBLE NOT NULL, CHANGE `hour_end` `hour_end` DOUBLE NOT NULL;
-ALTER TABLE `hour` ADD `hour_val` DOUBLE NOT NULL AFTER `id`;
-UPDATE `hour` SET `hour_val` = `hour`.`id`;
-UPDATE `hour` SET `id` = '24' WHERE `hour`.`id` = 0;
-ALTER TABLE `hour` CHANGE `id` `id` INT(3) NOT NULL AUTO_INCREMENT;
 
-INSERT INTO `hour` (`hour_val`, `hour_format`) VALUES
-(0.5, '12:30 AM'),
-(1.5, '1:30 AM'),
-(2.5, '2:30 AM'),
-(3.5, '3:30 AM'),
-(4.5, '4:30 AM'),
-(5.5, '5:30 AM'),
-(6.5, '6:30 AM'),
-(7.5, '7:30 AM'),
-(8.5, '8:30 AM'),
-(9.5, '9:30 AM'),
-(10.5, '10:30 AM'),
-(11.5, '11:30 AM'),
-(12.5, '12:30 PM'),
-(13.5, '1:30 PM'),
-(14.5, '2:30 PM'),
-(15.5, '3:30 PM'),
-(16.5, '4:30 PM'),
-(17.5, '5:30 PM'),
-(18.5, '6:30 PM'),
-(19.5, '7:30 PM'),
-(20.5, '8:30 PM'),
-(21.5, '9:30 PM'),
-(22.5, '10:30 PM'),
-(23.5, '11:30 PM');
 
 
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator

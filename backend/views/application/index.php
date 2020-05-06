@@ -23,6 +23,14 @@ $exportColumns = [
 			 }
 			],
 			[
+			 'label' => 'NRIC',
+			 'contentOptions' => [ 'style' => 'width: 35%;' ],
+			
+			 'value' => function($model){
+				return '="' . strtoupper($model->fasi->nric) . '"';
+			 }
+			],
+			[
 			 'label' => 'Kursus',
 			 'value' => function($model){
 				return $model->listAppliedCoursesString("\n");
