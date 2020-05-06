@@ -31,6 +31,18 @@ $exportColumns = [
 			 }
 			],
 			[
+			 'label' => 'Kategori',
+			 'contentOptions' => [ 'style' => 'width: 35%;' ],
+			
+			 'value' => function($model){
+				 if($model->fasi->umk_staff == 1){
+					 return 'STAFF UMK';
+				 }else{
+					 return 'FASILITATOR LUAR';
+				 }
+			 }
+			],
+			[
 			 'label' => 'Kursus',
 			 'value' => function($model){
 				return $model->listAppliedCoursesString("\n");
