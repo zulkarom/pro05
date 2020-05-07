@@ -24,11 +24,13 @@ $this->params['breadcrumbs'][] = $this->title;
    <div class="table-responsive"> <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
+		'options' => [ 'style' => 'table-layout:fixed;' ],
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			[
 			 'attribute' => 'fullname',
 			 'label' => 'Nama Fasilitator',
+			 'contentOptions' => [ 'style' => 'width: 30%;' ],
 			 'value' => function($model){
 					return strtoupper($model->fasi->user->fullname);
 			 }
@@ -36,6 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			
 			[
 			 'label' => 'Course',
+			 'contentOptions' => [ 'style' => 'width: 20%;' ],
 			 'value' => function($model){
 					return strtoupper($model->acceptedCourse->course->course_name);
 			 }
@@ -52,7 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             ['class' => 'yii\grid\ActionColumn',
-				 'contentOptions' => ['style' => 'width: 8.7%'],
+				 'contentOptions' => ['style' => 'width: 19%'],
 				'template' => '{application} {view} {login}',
 				
 				'buttons'=>[
