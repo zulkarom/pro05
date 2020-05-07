@@ -6,6 +6,7 @@ use Yii;
 use common\models\Fasi;
 use common\models\User;
 use backend\models\FasiSearch;
+use backend\models\FasiActiveSearch;
 use backend\models\UserToken;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -45,6 +46,17 @@ class FasiController extends Controller
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+	
+	public function actionActiveFasi()
+    {
+        $searchModel = new FasiActiveSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('fasi', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);

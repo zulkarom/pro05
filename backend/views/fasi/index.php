@@ -8,65 +8,54 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\FasiSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Active Fasilitators';
+$this->title = 'Fasilitator';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="fasi-index">
-<?php echo $this->render('_search', ['model' => $searchModel]); ?>
+
     <div class="box">
 <div class="box-header"></div>
-<div class="box-body">
-
-
+<div class="box-body"><?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
 
 
    <div class="table-responsive"> <?= GridView::widget([
         'dataProvider' => $dataProvider,
-        //'filterModel' => $searchModel,
-		'options' => [ 'style' => 'table-layout:fixed;' ],
+        'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 			[
 			 'attribute' => 'fullname',
 			 'label' => 'Nama Fasilitator',
-			 'contentOptions' => [ 'style' => 'width: 30%;' ],
 			 'value' => function($model){
-					return strtoupper($model->fasi->user->fullname);
+				if($model->user){
+					return strtoupper($model->user->fullname);
+				}
 			 }
 			],
+			'nric',
+			'user.email',
 			
 			[
-			 'label' => 'Course',
-			 'contentOptions' => [ 'style' => 'width: 20%;' ],
+			 'label' => 'Daftar Pada',
 			 'value' => function($model){
-					return strtoupper($model->acceptedCourse->course->course_name);
+				if($model->user){
+					return date('d M Y', $model->user->created_at);
+				}
 			 }
 			],
-			
-			//AcceptedCourse
-			
-			[
-			 'label' => 'Campus',
-			 'value' => function($model){
-					return strtoupper($model->campus->campus_name);
-			 }
-			],
-
+            
 
             ['class' => 'yii\grid\ActionColumn',
-				 'contentOptions' => ['style' => 'width: 19%'],
-				'template' => '{application} {view} {login}',
+				 'contentOptions' => ['style' => 'width: 8.7%'],
+				'template' => '{view} {login}',
 				
 				'buttons'=>[
 					'login'=>function ($url, $model) {
-						return '<a href="'.Url::to(['/fasi/login-fasi', 'id' => $model->fasi->user_id]).'" target="_blank" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-lock"></span> Login as</a>';
+						return '<a href="'.Url::to(['/fasi/login-fasi', 'id' => $model->user_id]).'" target="_blank" class="btn btn-primary btn-sm"><span class="glyphicon glyphicon-lock"></span> Login</a>';
 					},
 					'view'=>function ($url, $model) {
-						return '<a href="'.Url::to(['/fasi/view', 'id' => $model->fasi->id]).'" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-user"></span></a>';
-					},
-					'application'=>function ($url, $model) {
-						return '<a href="'.Url::to(['/application/view', 'id' => $model->id]).'" class="btn btn-info btn-sm"><span class="glyphicon glyphicon-search"></span></a>';
+						return '<a href="'.Url::to(['/fasi/view', 'id' => $model->id]).'" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-search"></span> View</a>';
 					}
 
 				],

@@ -120,7 +120,9 @@
 						
 							['label' => 'User List', 'icon' => 'user', 'url' => ['/user/index'],],
 							
-							['label' => 'Fasilitator List', 'icon' => 'user', 'url' => ['/fasi/index'],],
+							['label' => 'All Fasilitators', 'icon' => 'user', 'url' => ['/fasi/index'],],
+							
+							['label' => 'Active Fasilitators', 'icon' => 'user', 'url' => ['/fasi/active-fasi'],],
 							
 							//['label' => 'User Signup', 'icon' => 'plus', 'url' => ['/admin/user/signup'],],
 							

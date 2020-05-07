@@ -12,7 +12,7 @@ use backend\models\Campus;
 
 
   <?php $form = ActiveForm::begin([
-    'action' => ['index'],
+    'action' => ['/fasi/active-fasi'],
 	'id' => 'form-search',
     'method' => 'get',
 ]); ?>
@@ -36,7 +36,7 @@ $this->registerJs('
 
 
 
-$("#fasisearch-campus").change(function(){
+$("#fasiactivesearch-campus").change(function(){
 	
 	$("#form-search").submit();
 	

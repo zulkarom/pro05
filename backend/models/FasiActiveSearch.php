@@ -5,22 +5,26 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
+use common\models\Application;
+use backend\models\Semester;
 use common\models\Fasi;
 
 /**
  * FasiSearch represents the model behind the search form of `common\models\Fasi`.
  */
-class FasiSearch extends Fasi
+class FasiActiveSearch extends Fasi
 {
 	public $fullname;
 	public $email;
+	public $campus;
+	
     /**
      * @inheritdoc
      */
     public function rules()
     {
         return [
-            [['fullname', 'nric', 'email'], 'string'],
+			[['campus'], 'integer'],
 
         ];
     }
@@ -43,13 +47,22 @@ class FasiSearch extends Fasi
      */
     public function search($params)
     {
-        $query = Fasi::find();
-		$query->joinWith(['user']);
+		$sem = Semester::getCurrentSemester();
+        $query = Application::find()
+		->where(['semester_id' => $sem->id, 'application.status' => 'ApplicationWorkflow/f-accept']);
+		$query->joinWith(['fasi.user']);
+		$query->orderBy('user.fullname ASC');
+		
+		//$query->joinWith(['user']);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+			'pagination' => [
+                'pageSize' => 100,
+            ],
+
         ]);
 
         $this->load($params);
@@ -59,10 +72,13 @@ class FasiSearch extends Fasi
             // $query->where('0=1');
             return $dataProvider;
         }
+		
+		$query->andFilterWhere([
+            'campus_id' => $this->campus,
+        ]);
 
 
-        $query->andFilterWhere(['like', 'address_postal', $this->address_postal])
-            ->andFilterWhere(['like', 'path_file', $this->path_file]);
+/* 
 			
 		$dataProvider->sort->attributes['fullname'] = [
         'asc' => ['user.fullname' => SORT_ASC],
@@ -70,7 +86,7 @@ class FasiSearch extends Fasi
 		]; 
 		
 		$query->andFilterWhere(['like', 'user.fullname', $this->fullname]);
-
+ */
 
         return $dataProvider;
     }
