@@ -119,10 +119,10 @@
                         'items' => [
 						
 							['label' => 'User List', 'icon' => 'user', 'url' => ['/user/index'],],
-							
+							['label' => 'Active Fasilitators', 'icon' => 'user', 'url' => ['/fasi/active-fasi'],],
 							['label' => 'All Fasilitators', 'icon' => 'user', 'url' => ['/fasi/index'],],
 							
-							['label' => 'Active Fasilitators', 'icon' => 'user', 'url' => ['/fasi/active-fasi'],],
+							
 							
 							//['label' => 'User Signup', 'icon' => 'plus', 'url' => ['/admin/user/signup'],],
 							
