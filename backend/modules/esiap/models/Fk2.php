@@ -311,6 +311,28 @@ $html .= '<th align="center"><b>
 
 ';
 
+/////////////////
+function midbreak($week){
+	$html_mid ='<tr nobr="true">';
+	$html_mid .='<td align="center">'.$week.'. </td>';
+	$html_mid .='<td>';
+	
+	$html_mid .= '<span style="font-size:10pt;">Cuti Pertengahan Semester<br />
+		<i>Mid Semester Break</i></span>';
+	$html_mid .='</td><td></td>';
+	$html_mid .='<td></td>';
+	$html_mid .='<td></td>';
+	$html_mid .='<td></td>';
+	$html_mid .='<td></td>';
+	$html_mid .='<td></td>';
+	$html_mid .='<td></td>';
+	$html_mid .='</tr>';
+	return $html_mid;
+}
+
+
+//////////////
+
 $tlec = 0;
 $ttut = 0;
 $tprac =0;
@@ -319,9 +341,20 @@ $tind = 0;
 $tass = 0;
 $tgrand = 0;
 $mid = 8;
+$week_num = 1;
+$arr_br = json_decode($this->model->syllabus_break);
 foreach($this->model->syllabus as $row){
+	$show_week = '';
+	if($row->duration > 1){
+		$end = $week_num + $row->duration - 1;
+		$show_week = $week_num . '-' . $end;
+	}else{
+		$show_week = $week_num;
+	}
+	
+	
 	$html .='<tr nobr="true">';
-	$html .='<td align="center">'.$row->week_num.'. </td>';
+	$html .='<td align="center">'.$show_week.'. </td>';
 	$html .='<td>';
 	$arr_all = json_decode($row->topics);
 	if($arr_all){
@@ -381,11 +414,22 @@ foreach($this->model->syllabus as $row){
 	$tind += $row->independent;
 	$tass += $row->nf2f;
 	$tgrand +=$sub;
+	
+	//check sem breaks
+	
+	if(in_array($week_num, $arr_br)){
+		
+		$week_num = $week_num + 1;
+		$html .= midbreak($week_num);
+	}
+	
+	$week_num = $week_num + $row->duration;
 		
 }
 
 $html .='<tr>';
-	$html .='<td align="center">'.$this->model->study_week .'. </td>';
+	$week_study_num = $week_num ;
+	$html .='<td align="center">'.$week_study_num .'. </td>';
 	$html .='<td align="center">';
 		$html .= '<span style="font-size:12p">Minggu Ulangkaji/ <br /><i>Study Week</i></span>';
 	$html .='</td><td></td>';
@@ -399,8 +443,10 @@ $html .='<tr>';
 	$html .='<td></td>';
 	$html .='</tr>';
 	
+	$week_fe_start = $week_num + 1;
+	$week_fe_end = $week_num + 3;
 	$html .='<tr>';
-	$html .='<td align="center">'.$this->model->final_week.'. </td>';
+	$html .='<td align="center">'.$week_fe_start.'-'.$week_fe_end.' </td>';
 	$html .='<td>';
 		$html .= 'Peperiksaan Akhir/ Pentaksiran Akhir<br />
 <i>Final Exam/  Final Assessment</i>

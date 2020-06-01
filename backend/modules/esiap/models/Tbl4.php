@@ -462,16 +462,25 @@ $tind = 0;
 $tass = 0;
 $tgrand = 0;
 if($this->model->syllabus ){
+	$week_num = 1;
 	foreach($this->model->syllabus as $row){
+	if($row->duration > 1){
+		$end = $week_num + $row->duration - 1;
+		$show_week = $week_num . '-<br />' . $end;
+	}else{
+		$show_week = $week_num;
+	}
+	$week_num = $week_num + $row->duration;
 	$html .='<tr nobr="true">';
 	$html .='<td '.$border.'>';
 	$arr_all = json_decode($row->topics);
 	if($arr_all){
 	$i = 1;
+	$html .= '<table><tr><td width="7%">'.$show_week.'. </td><td width="93%">';
 	foreach($arr_all as $rt){
 		$wk = $i == 1 ? $row->week_num . ".  " : '';
 		$br = $i == 1 ? '' : "<br />";
-		$html .= $br . $wk . $rt->top_bi;
+		$html .= $br . $rt->top_bi;
 		
 		if($rt->sub_topic){
 		$html .= '<br/><table>';
@@ -482,6 +491,7 @@ if($this->model->syllabus ){
 		}
 	$i++;
 	}
+	$html .= '</td></tr></table>';
 	}
 	$html .='</td>';
 	$clo = json_decode($row->clo);

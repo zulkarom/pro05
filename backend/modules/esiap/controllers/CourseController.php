@@ -304,33 +304,31 @@ class CourseController extends Controller
 		return $this->redirect(['course-reference','course'=>$course]);
 	}
 	
-	public function actionCourseSyllabusAdd($version){
+	protected function courseSyllabusAdd($version){
 		$last_week = CourseSyllabus::find()->select('MAX(syl_order) as last_order')->where(['crs_version_id' => $version])->one();
 		
 		$syl = new CourseSyllabus;
-		$syl->syl_order = $last_week->last_order;
+		$syl->syl_order = $last_week->last_order + 1;
 		$syl->scenario = 'addweek';
 		
 		$syl->crs_version_id = $version;
 		if($syl->save()){
-			//
+			return true;
 		}else{
 			$syl->flashError();
+			return false;
 		}
-		$version = CourseVersion::findOne($version);
-		$course = $version->course_id;
-		return $this->redirect(['course-syllabus','course'=>$course]);
 	}
 	
-	public function actionCourseSyllabusDelete($version, $id){
+	protected function courseSyllabusDelete($version, $id){
 		$syl = CourseSyllabus::findOne(['crs_version_id' => $version, 'id' => $id]);
-		$syl->delete();
-		$version = CourseVersion::findOne($version);
-		$course = $version->course_id;
-		return $this->redirect(['course-syllabus','course'=>$course]);
+		if($syl->delete()){
+			return true;
+		}
 	}
 	
 	public function actionCourseSyllabus($course){
+		
 		$model = $this->findDevelopmentVersion($course);
 		$syllabus = $model->syllabus;
 		
@@ -349,7 +347,8 @@ class CourseController extends Controller
 					if(Yii::$app->request->post('input-week-'.$i)){
 						$syl->scenario = 'saveall';
 						$syl->topics = Yii::$app->request->post('input-week-'.$i);
-						$syl->week_num = Yii::$app->request->post('week-num-'.$i);
+						$syl->duration = Yii::$app->request->post('week-duration-'.$i);
+						//$syl->week_num = Yii::$app->request->post('week-num-'.$i);
 						if(Yii::$app->request->post($i . '-clo')){
 							$clo = json_encode(Yii::$app->request->post($i . '-clo'));
 							$syl->clo = $clo;
@@ -361,11 +360,27 @@ class CourseController extends Controller
 				$i++;
 				}
 				
-				$model->study_week = Yii::$app->request->post('study-week');
-				$model->final_week = Yii::$app->request->post('final-week');
+				$model->syllabus_break = json_encode(Yii::$app->request->post('sem_break'));
+				
+				//$model->study_week = Yii::$app->request->post('study-week');
+				//$model->final_week = Yii::$app->request->post('final-week');
 				$model->save();
 				
-				Yii::$app->session->addFlash('success', "Data Updated");
+				//check additional action
+				if(Yii::$app->request->post('btn-submit') == 'add-week'){
+					if($this->courseSyllabusAdd($model->id)){
+						Yii::$app->session->addFlash('success', "Adding new week successful");
+					}
+				}else if(Yii::$app->request->post('btn-submit') == 'delete-week'){
+					$id = Yii::$app->request->post('delete-week-id');
+					if($this->courseSyllabusDelete($model->id, $id)){
+						Yii::$app->session->addFlash('success', "Deleting the week successful");
+					}
+				}else{
+					Yii::$app->session->addFlash('success', "Syllabus Updated");
+				}
+				
+				
 			}
 			return $this->redirect(['course-syllabus', 'course' => $course]);
 			
@@ -381,7 +396,9 @@ class CourseController extends Controller
 	public function actionCourseSyllabusReorder($id){
 		$model = $this->findDevelopmentVersion($id);
 		$syllabus = $model->syllabus;
-		$reorder = Yii::$app->request->queryParams['or'];
+		if(array_key_exists('or',Yii::$app->request->queryParams)){
+			$reorder = Yii::$app->request->queryParams['or'];
+		//print_r(reorder);die();
 		if($syllabus){
 			foreach($syllabus as $s){
 				if (array_key_exists($s->id,$reorder)){
@@ -391,6 +408,8 @@ class CourseController extends Controller
 				
 			}
 		}
+		}
+		
 		return $this->redirect(['course-syllabus', 'course' => $id]);
 	}
 	

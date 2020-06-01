@@ -6,6 +6,7 @@ use yii\widgets\ActiveForm;
 use richardfan\widget\JSRegister;
 use yii\bootstrap\Modal;
 use kartik\sortable\Sortable;
+use kartik\select2\Select2;
 
 
 
@@ -23,27 +24,48 @@ $this->params['breadcrumbs'][] = 'Syllabus';
 ])?>
 
 <?php $form = ActiveForm::begin(['id' => 'formsyll']); ?>
+<?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 	
 <div class="box">
-<div class="box-header"></div>
 <div class="box-body">	
-
-<i>* Do consider to put also mid semester break here normally at Week 7 or Week 8 <br />Topik (BM) = Cuti Pertengahan Semester | Topic (EN) = Mid Semester Break</i>
     
-<?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
-
-
 
 
 	<table class='table table-hover table-striped'>
-	<thead><tr><th width='10%'>WEEK</th><th width='10%'>CLO</th><th>TOPICS</th><th></th></tr></thead>
+	<thead><tr>
+	<th width='8%'>WEEK</th>
+	
+	<th width='10%'>CLO</th>
+	<th>TOPICS</th>
+	<th>DURATION<br />
+	
+	</th>
+	<th></th>
+	
+	</tr></thead>
 <?php 
+
 $totalclo = count($clos);
 $i = 1;
+$week_num = 1;
+$arr_week = array();
+$array_week_sorting = array();
 foreach($syllabus as $row){ ?>
 	<tr>
-	<td><label>WEEK</label>
-	<input type="text" class="form-control" value="<?=$row->week_num?>" name="week-num-<?=$i?>" required />
+	<td>
+	<?php 
+	$show_week = '';
+	if($row->duration > 1){
+		$end = $week_num + $row->duration - 1;
+		$show_week = $week_num . ' - ' . $end;
+	}else{
+		$show_week = $week_num;
+	}
+	$arr_week[$week_num] = 'WEEK ' . $show_week;
+	
+	echo $show_week;
+	$week_num = $week_num + $row->duration;
+	?>
 	<input id="input-week-<?php echo $i ; ?>" name="input-week-<?php echo $i ; ?>" type="hidden" value="" />
 	</td>
 	<td>
@@ -63,8 +85,13 @@ foreach($syllabus as $row){ ?>
 		<div id='topic-<?php echo $i; ?>'>
 		<?php 
 		$arr_all = json_decode($row->topics);
+		$ex_topic = '';
+		$topic_num = 1;
 		if($arr_all){
 		foreach($arr_all as $rt){
+			if($topic_num == 1){
+					$ex_topic = $rt->top_bm;
+				}
 		?>
 		<div class='topic-container form-group'>
 		<div class='row'>
@@ -74,6 +101,7 @@ foreach($syllabus as $row){ ?>
 		<div class='col-md-5'>
 			<div class='form-group'>
 			<textarea rows="1" class='form-control topic-text'><?php echo $rt->top_bm;?></textarea>
+			
 			</div>
 		</div>
 		<div class='col-md-1'><label>Topic: </label><br><i>(EN)</i></div>
@@ -88,26 +116,30 @@ foreach($syllabus as $row){ ?>
 		<div class='consubtopic'>
 		<div class='consubtopicinput'>
 		<?php 
+		
 		if($rt->sub_topic){
+			
 			foreach($rt->sub_topic as $rst){
+				
 			?>
-			<div class='row-subtopic'><div class='row'>
-			<div class='col-md-1'></div>
-			<div class='col-md-1'><label>Sub (BM): </label></div>
-			<div class='col-md-4'>
-			<div class='form-group'>
-			<textarea rows='1' class='form-control subtopic-text'><?php echo $rst->sub_bm;?></textarea>
-			</div>
-			</div>
-			<div class='col-md-1'></div>
-			<div class='col-md-1'><label>Sub (EN): </label></div>
-			<div class='col-md-4'>
-			<div class='form-group'>
-			<textarea rows='1' class='form-control subtopic-text'><?php echo $rst->sub_bi;?></textarea>
-			</div>
-			</div>
-			</div></div>
+				<div class='row-subtopic'><div class='row'>
+				<div class='col-md-1'></div>
+				<div class='col-md-1'><label>Sub (BM): </label></div>
+				<div class='col-md-4'>
+				<div class='form-group'>
+				<textarea rows='1' class='form-control subtopic-text'><?php echo $rst->sub_bm;?></textarea>
+				</div>
+				</div>
+				<div class='col-md-1'></div>
+				<div class='col-md-1'><label>Sub (EN): </label></div>
+				<div class='col-md-4'>
+				<div class='form-group'>
+				<textarea rows='1' class='form-control subtopic-text'><?php echo $rst->sub_bi;?></textarea>
+				</div>
+				</div>
+				</div></div>
 			<?php
+			
 			}
 		}
 		?>
@@ -122,7 +154,12 @@ foreach($syllabus as $row){ ?>
 			</div>
 		</div>
 		</div>
-		<?php } } ?>
+		<?php 
+		$topic_num++;
+		} } 
+		
+		$array_week_sorting[] = ['content' => 'WEEK ' . $show_week . ' ' . $ex_topic, 'options' => ['id' => $row->id, 'class' => 'week-item']];
+		?>
 		</div>
 		
 		
@@ -134,17 +171,38 @@ foreach($syllabus as $row){ ?>
 	
 	
 	</td>
+	
+	
 	<td>
 	
-	<?= Html::a('<span class="glyphicon glyphicon-remove"></span>', ['course/course-syllabus-delete', 'version' => $model->id, 'id' => $row->id], [
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this week?',
-                'method' => 'post',
-            ],
-        ]) ?>
+	<?php 
+	$weeks = ['1' => '1 Week','2' => '2 Weeks','3' => '3 Weeks','4' => '4 Weeks','5' => '5 Weeks'];
+	
+	?>
+	
+	<select class="form-control" id="week-duration-<?php echo $i ; ?>" name="week-duration-<?php echo $i ; ?>">
+		<?php 
+		foreach($weeks as $val => $week){
+			$sel = $row->duration == $val ? 'selected' : '';
+			echo '<option value="'.$val.'" '.$sel.'>'.$week.'</option>';
+		}
+		
+		?>
+	</select>
+	
+	</td>
+	
+	
+	<td>
+	
+	<a href="javascript:void(0)" data="<?=$row->id?>" class="btn-delete-week"><span class="glyphicon glyphicon-remove"></span></a> 
+	
 
 	
 	</td>
+	
+	
+	
 	</tr>
 	
 <?php
@@ -157,30 +215,20 @@ $i++;
 
 
 	<div class="row">
-	<div class="col-md-1">
 
-
-</div>
-<div class="col-md-11"><a href="<?=Url::to(['course/course-syllabus-add', 'version' => $model->id])?>" class="btn btn-warning btn-sm"><span class='glyphicon glyphicon-plus'></span> Add Week</a> 
+<div class="col-md-4"><button type="button" id="btn-add-week" class="btn btn-warning btn-sm"><span class='glyphicon glyphicon-plus'></span> Add Week</button> 
 
 
 <?php 
 Modal::begin([
     'header' => '<h5>Re-order Weeks</h5>',
     'toggleButton' => ['label' => '<i class="glyphicon glyphicon-move"></i> Re-order Weeks', 'class' => 'btn btn-warning btn-sm'],
-	'size' => 'modal-sm',
+	'size' => 'modal-md',
     'footer' => '<div class="form-group">
                             <a id="btn-reorder" href="'.Url::to(['course/course-syllabus-reorder', 'id' => $model->course->id]) .'" class="btn btn-success">Re-order</a> 
-                         </div>
-
-                         <?php ActiveForm::end(); ?>'
+                         </div>'
 ]);
 
-$array = [];
-
-foreach($syllabus as $row){
-	$array[] = ['content' => 'WEEK ' . $row->week_num, 'options' => ['id' => $row->id, 'class' => 'week-item']];
-}
 
 echo Sortable::widget([
     'type' => Sortable::TYPE_LIST,
@@ -188,7 +236,7 @@ echo Sortable::widget([
 	'pluginEvents' => [
 		'sortupdate' => 'function() {updateWeekSorting();}',
 	],
-    'items' => $array
+    'items' => $array_week_sorting
 ]); 
 
 Modal::end();
@@ -197,22 +245,39 @@ Modal::end();
 
 </div>
 
+<div class="col-md-4"><label>Mid-Semester Break After Week: </label></div>
 
+<div class="col-md-3"><?php 
+$sem_break = json_decode($model->syllabus_break);
+
+echo Select2::widget([
+    'name' => 'sem_break',
+    'value' => $sem_break,
+    'data' => $arr_week,
+    'options' => ['multiple' => true, 'required' => true, 'placeholder' => 'Select week ...']
+]);
+
+?>
+</div>
 
 </div>
 	
-	<br /><i>* please save before adding or removing weeks</i>
+
+
+
 	</td><td colspan="2"></td></tr>
 <?php 
-if(!$model->final_week){
+/* if(!$model->final_week){
 	$model->final_week = '17-19';
 }
 if(!$model->study_week){
 	$model->study_week = '16';
 }
-
+ */
 ?>
-<tr><td>
+
+<?php 
+/* <tr><td>
 	<label>WEEK</label>
 	<input type="text" class="form-control" value="<?=$model->study_week?>" name="study-week" />
 	
@@ -230,7 +295,10 @@ if(!$model->study_week){
 	
 	<td colspan="3" style="vertical-align:middle">Peperiksaan Akhir<br />
 <i>Final Exam</i>
-</td></tr>	
+</td></tr>	 */
+
+?>
+
 	
 	
 </table>
@@ -239,7 +307,8 @@ if(!$model->study_week){
 
 
     <div class="form-group">
-        <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE SYLLABUS', ['class' => 'btn btn-primary']) ?>
+	<input type="hidden" id="delete-week-id" name="delete-week-id" value="" />
+        <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE SYLLABUS', ['class' => 'btn btn-primary', 'name' => 'btn-submit', 'id' => 'btn-submit', 'value' => 'normal']) ?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -247,6 +316,21 @@ if(!$model->study_week){
 
 <?php JSRegister::begin(); ?>
 <script>
+
+$("#btn-add-week").click(function(){
+	$("#btn-submit").val("add-week");
+	$("form#formsyll").submit();
+});
+
+$(".btn-delete-week").click(function(){
+	var id = $(this).attr("data");
+	$("#delete-week-id").val(id);
+	$("#btn-submit").val("delete-week");
+	$("form#formsyll").submit();
+});
+
+
+
 var tw = <?=count($syllabus)?>;
 for(i=1;i<=tw;i++){
 		$("#btn-topic-"+i).click(function(){

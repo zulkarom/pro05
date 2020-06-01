@@ -1159,7 +1159,15 @@ e-Learning')
 		$this->sltContentStart = $row3 + 1;
 		
 		if($this->model->syllabus ){
+			$week_num = 1;
 			foreach($this->model->syllabus as $row){
+				if($row->duration > 1){
+					$end = $week_num + $row->duration - 1;
+					$show_week = $week_num . ' - ' . $end;
+				}else{
+					$show_week = $week_num;
+				}
+				$week_num = $week_num + $row->duration;
 			$arr_all = json_decode($row->topics);
 			$topic = '';
 			if($arr_all){
@@ -1167,7 +1175,7 @@ e-Learning')
 			$row_count = 0;
 			$i = 1;
 			foreach($arr_all as $rt){
-				$wk = $i == 1 ? $row->week_num . ".  " : '';
+				$wk = $i == 1 ? $show_week . ".  " : '';
 				$br = $i == 1 ? '' : "\n";
 				$topic .= $br . $wk . $rt->top_bi;
 				$row_count++;
