@@ -829,7 +829,7 @@ class CourseAdminController extends Controller
 								$found = true;
 								break;
 							}
-							$week_num = $week_num + $syl->duration - 1;
+							$week_num = $week_num + $syl->duration;
 						}
 					}
 					$json = '["'.$br.'"]';
@@ -871,7 +871,7 @@ class CourseAdminController extends Controller
 								$found2 = true;
 								break;
 							}
-							$week_num = $week_num + $syl->duration -1;
+							$week_num = $week_num + $syl->duration;
 						}
 					
 					}
