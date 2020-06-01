@@ -810,4 +810,74 @@ class CourseAdminController extends Controller
 		exit();
 	}
 	
+	public function actionAutoSetMidtermOne(){
+		$list = Course::find()->where(['credit_hour' => 1])->all();
+		foreach($list as $row){
+			echo $row->course_name;
+			$version = CourseVersion::find()->where(['course_id' => $row->id])->all();
+			if($version){
+				$br = 7;
+				foreach($version as $ver){
+					$syll = CourseSyllabus::find()->where(['crs_version_id' => $ver->id])->all();
+					if($syll){
+						$week_num = 1;
+						$found = false;
+						foreach($syll as $syl){
+							
+							if($week_num >= 7){
+								$br = $week_num;
+								$found = true;
+								break;
+							}
+							$week_num = $week_num + $syl->duration;
+						}
+					}
+					$ver->syllabus_break = '["'.$br.'"]';
+					$ver->save();
+				}
+			}
+			echo '<br />';
+		}
+		exit();
+	}
+	
+	public function actionAutoSetMidtermTwo(){
+		$list = Course::find()->where(['credit_hour' => 2])->all();
+		foreach($list as $row){
+			echo $row->course_name;
+			$version = CourseVersion::find()->where(['course_id' => $row->id])->all();
+			if($version){
+				foreach($version as $ver){
+					$syll = CourseSyllabus::find()->where(['crs_version_id' => $ver->id])->all();
+					$br1 = 7;
+					$br2 = 21;
+					if($syll){
+						
+						$week_num = 1;
+						$found1 = true;
+						$found2 = true;
+						
+						foreach($syll as $syl){
+							
+							if($found1 = false and $week_num >= 7){
+								$br1 = $week_num;
+								$found1 = true;
+							}
+							if($found2 = false and $week_num >= 21){
+								$br2 = $week_num;
+								$found2 = true;
+								break;
+							}
+							$week_num = $week_num + $syl->duration;
+						}
+					}
+					$ver->syllabus_break = '["'.$br1.'", "'.$br2.'"]';
+					$ver->save();
+				}
+			}
+			echo '<br />';
+		}
+		exit();
+	}
+	
 }
