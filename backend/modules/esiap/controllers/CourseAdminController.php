@@ -792,4 +792,22 @@ class CourseAdminController extends Controller
 		
 	}
 	
+	public function actionAutoWeekDuration(){
+		$list = CourseSyllabus::find()->all();
+		foreach($list as $row){
+			
+			if (strpos($row->week_num, '-') !== false and strpos($row->week_num, '(') == false) {
+				$string = str_replace(" ", "", $row->week_num);
+				$arr = explode("-",$string);
+				$duration = $arr[1] - $arr[0] + 1;
+				$row->duration = $duration;
+				$row->save();
+				echo $duration;
+				echo '<br />';
+			}
+			
+		}
+		exit();
+	}
+	
 }
