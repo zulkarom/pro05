@@ -824,7 +824,7 @@ class CourseAdminController extends Controller
 						$found = false;
 						foreach($syll as $syl){
 							
-							if($week_num >= 7){
+							if($found == false and $week_num >= 7){
 								$br = $week_num;
 								$found = true;
 								break;
@@ -832,7 +832,9 @@ class CourseAdminController extends Controller
 							$week_num = $week_num + $syl->duration;
 						}
 					}
-					$ver->syllabus_break = '["'.$br.'"]';
+					$json = '["'.$br.'"]';
+					echo $json . ' ';
+					$ver->syllabus_break = $json;
 					$ver->save();
 				}
 			}
@@ -850,29 +852,35 @@ class CourseAdminController extends Controller
 				foreach($version as $ver){
 					$syll = CourseSyllabus::find()->where(['crs_version_id' => $ver->id])->all();
 					$br1 = 7;
-					$br2 = 21;
+						$br2 = 21;
 					if($syll){
+						//echo 'syll'.$ver->id. ' ';
 						
 						$week_num = 1;
-						$found1 = true;
-						$found2 = true;
+						$found1 = false;
+						$found2 = false;
 						
 						foreach($syll as $syl){
 							
-							if($found1 = false and $week_num >= 7){
+							if($found1 == false and $week_num >= 7){
 								$br1 = $week_num;
 								$found1 = true;
 							}
-							if($found2 = false and $week_num >= 21){
+							if($found2 == false and $week_num >= 20){
 								$br2 = $week_num;
 								$found2 = true;
 								break;
 							}
 							$week_num = $week_num + $syl->duration;
 						}
+					
 					}
-					$ver->syllabus_break = '["'.$br1.'", "'.$br2.'"]';
+					
+					$json = '["'.$br1.'", "'.$br2.'"]';
+					echo $json . ' ';
+					$ver->syllabus_break = $json;
 					$ver->save();
+					
 				}
 			}
 			echo '<br />';
