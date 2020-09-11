@@ -64,7 +64,7 @@ use backend\modules\esiap\models\Course;
 				['label' => 'Course Information', 'visible' => $visi, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id]],
 				
 				
-				['label' => 'Course Profile', 'visible' => $visi,'icon' => 'book', 'url' => ['/esiap/course/profile', 'course' => $course_id]],
+			
 				
 				['label' => 'Course Learning Outcome', 'visible' => $visi,'icon' => 'book', 'url' => ['/esiap/course/course-clo', 'course' => $course_id]],
 				
