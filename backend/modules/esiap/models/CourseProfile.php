@@ -45,7 +45,9 @@ class CourseProfile extends \yii\db\ActiveRecord
 			
 			
             [['crs_version_id', 'prerequisite', 'offer_sem', 'offer_year'], 'integer'],
-            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'staff_academic', 'requirement', 'additional','requirement_bi', 'additional_bi', 'objective', 'objective_bi', 'rational', 'rational_bi'], 'string'],
+			
+            [['synopsis', 'synopsis_bi', 'transfer_skill', 'transfer_skill_bi', 'feedback', 'feedback_bi', 'staff_academic', 'requirement', 'additional','requirement_bi', 'additional_bi', 'objective', 'objective_bi', 'rational', 'rational_bi', 'offer_remark'], 'string'],
+			
             [['offer_at'], 'string', 'max' => 200],
         ];
     }
@@ -65,8 +67,8 @@ class CourseProfile extends \yii\db\ActiveRecord
             'objective_bi' => 'Objective (EN)',
 			'rational' => 'Rational (BM)',
             'rational_bi' => 'Rational (EN)',
-            'transfer_skill' => 'Transferable Skill (BM)',
-            'transfer_skill_bi' => 'Transferable Skill (EN)',
+            'transfer_skill' => 'Transferable Skill (BM) Open Ended',
+            'transfer_skill_bi' => 'Transferable Skill (EN) Open Ended',
             'feedback' => 'Feedback (BM)',
             'feedback_bi' => 'Feedback (EN)',
             'staff_academic' => 'Staff Academic',
@@ -90,8 +92,11 @@ class CourseProfile extends \yii\db\ActiveRecord
 	
 	public function getCoursePrerequisite(){
 		$result = Course::findOne($this->prerequisite);
+		
 		if($result){
-			return [$result->course_code, $result->course_code];
+			$bm = $result->course_code . ' ' . $result->course_name;
+		$bi = $result->course_code . ' ' . $result->course_name_bi;
+			return [$bm, $bi];
 		}else{
 			return ['Tiada','Nil'];
 		}

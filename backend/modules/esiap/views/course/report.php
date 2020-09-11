@@ -31,24 +31,24 @@ echo '<br /><br />';
 
 	<tbody><tr>
 		<td width="5%">1.</td>
-		<td><span class="glyphicon glyphicon-file"></span> FK01 - PRO FORMA KURSUS / <i>COURSE PRO FORMA</i>                             </td>
+		<td><span style="color:red"><span class="fa fa-file-pdf-o"></span></span> FK01 - PRO FORMA KURSUS / <i>COURSE PRO FORMA</i>                             </td>
 		<td><a href="<?=Url::to(['/esiap/course/fk1', 'course' => $model->id, 'dev' => 1])?>" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download</a></td>
 	</tr>
 	<tr>
 		<td width="5%">2.</td>
-		<td><span class="glyphicon glyphicon-file"></span> FK02 - MAKLUMAT KURSUS / <i>COURSE INFORMATION </i>                               </td>
+		<td><span style="color:red"><span class="fa fa-file-pdf-o"></span></span> FK02 - MAKLUMAT KURSUS / <i>COURSE INFORMATION </i>                               </td>
 		<td><a href="<?=Url::to(['/esiap/course/fk2', 'course' => $model->id, 'dev' => 1])?>" target="_blank"  class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download</a></td>
 	</tr>
 	<tr>
 		<td width="5%">3.</td>
-		<td><span class="glyphicon glyphicon-file"></span> FK03 - PENJAJARAN KONSTRUKTIF / <i>CONSTRUCTIVE ALIGNMENT       </i>                         </td>
+		<td><span style="color:red"><span class="fa fa-file-pdf-o"></span></span> FK03 - PENJAJARAN KONSTRUKTIF / <i>CONSTRUCTIVE ALIGNMENT       </i>                         </td>
 		<td><a href="<?=Url::to(['/esiap/course/fk3', 'course' => $model->id, 'dev' => 1])?>" target="_blank" class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> Download</a></td>
 	</tr>
 	
 	<tr>
 		<td width="5%">2.</td>
-		<td><span class="glyphicon glyphicon-file"></span>TABLE 4 - MAKLUMAT KURSUS / <i>COURSE INFORMATION </i>                               </td>
-		<td><a href="<?=Url::to(['/esiap/course/tbl4-excel', 'course' => $model->id, 'dev' => 1])?>" target="_blank"  class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> EXCEL</a> <a href="<?=Url::to(['/esiap/course/tbl4', 'course' => $model->id, 'dev' => 1])?>" target="_blank"  class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> PDF</a></td>
+		<td><span style="color:green"><span class="fa fa-file-excel-o"></span></span> TABLE 4 - SUMMARY OF COURSE INFORMATION                               </td>
+		<td><a href="<?=Url::to(['/esiap/course/tbl4-excel', 'course' => $model->id, 'dev' => 1])?>" target="_blank"  class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> TABLE4 1.0</a> <a href="<?=Url::to(['/esiap/course/tbl4-excel2', 'course' => $model->id, 'dev' => 1])?>" target="_blank"  class="btn btn-default"><span class="glyphicon glyphicon-download-alt"></span> TABLE4 2.0</a></td>
 	</tr>
 	
 </tbody></table>

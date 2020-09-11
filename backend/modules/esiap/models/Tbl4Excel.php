@@ -1206,22 +1206,10 @@ e-Learning')
 				}
 			}
 			
-			$numbers = [$row->pnp_lecture, $row->pnp_tutorial, $row->pnp_practical, $row->pnp_others, $row->nf2f, $row->independent];
+			$numbers = [$row->pnp_lecture, $row->pnp_tutorial, $row->pnp_practical, $row->pnp_others, $row->tech_others, $row->independent];
 			
 			$this->item10SltContentText($height, $topic, $clo_str, $numbers);
 			
-			/* 
-			$html .= $str ;
-			
-			$sub = $row->pnp_lecture + $row->pnp_tutorial + $row->pnp_practical + $row->pnp_others + $row->independent + $row->nf2f;
-			$html .= $sub;
-			$tlec += $row->pnp_lecture;
-			$ttut += $row->pnp_tutorial;
-			$tprac += $row->pnp_practical;
-			$toth += $row->pnp_others;
-			$tind += $row->nf2f;
-			$tass += $row->independent;
-			$tgrand +=$sub; */
 				
 		}
 		}
@@ -1416,7 +1404,7 @@ e-Learning')
 			foreach($this->model->courseAssessmentFormative as $rf){
 					$per = $rf->as_percentage + 0;
 					$f2f = $rf->assess_f2f;
-					$nf2f = $rf->assess_nf2f;
+					$nf2f = $rf->assess_f2f_tech;
 					$data = [$per, $f2f, $nf2f];
 					
 					$this->item10SltAssessConText($i, $rf->assess_name_bi, $data);
@@ -1613,18 +1601,16 @@ e-Learning')
 			foreach($this->model->courseAssessmentSummative as $rf){
 					$per = $rf->as_percentage + 0;
 					$f2f = $rf->assess_f2f;
-					$nf2f = $rf->assess_nf2f;
+					$nf2f = $rf->assess_f2f_tech;
 					$data = [$per, $f2f, $nf2f];
 					
 					$this->item10SltAssessSumText($i, $rf->assess_name_bi, $data);
 			$i++;
 			}
-			}else{
-				$data = ['','',''];
-				$this->item10SltAssessSumText(1, '', $data);
-			}
-		
-		
+		}else{
+			$data = ['','',''];
+			$this->item10SltAssessSumText(1, '', $data);
+		}
 	}
 	
 	public function item10SltAssessSumText($number, $name, $data){

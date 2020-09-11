@@ -73,6 +73,7 @@ class SiteController extends Controller
 			$semester->semester_id = Semester::getCurrentSemester()->id;
 		}
 		
+		
         return $this->render('index', [
 			'semester' => $semester
 		

@@ -7,7 +7,7 @@ use yii\jui\JuiAsset;
 use backend\modules\staff\models\Staff;
 
 /* @var $this yii\web\View */
-/* @var $model backend\modules\esiap\models\Course */
+/* @var $profile backend\modules\esiap\models\Course */
 
 $this->title = 'Course Proforma';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
@@ -15,7 +15,7 @@ $this->params['breadcrumbs'][] = 'Pro Forma';
 ?>
 
 <?=$this->render('_header',[
-'course' => $model->courseVersion->course
+'course' => $profile->courseVersion->course
 ])?>
 
 
@@ -30,11 +30,11 @@ $this->params['breadcrumbs'][] = 'Pro Forma';
 
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'synopsis')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'synopsis')->textarea(['rows' => '6']) ?></div>
 
 
 
-<div class="col-md-6"><?= $form->field($model, 'synopsis_bi')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'synopsis_bi')->textarea(['rows' => '6']) ?></div>
 
 </div>
 
@@ -106,32 +106,32 @@ $this->params['breadcrumbs'][] = 'Pro Forma';
     </table>
     <?php DynamicFormWidget::end(); ?>
 
-<?= $form->field($model, 'prerequisite')->dropDownList($model->course->allCoursesArray()) ?>
+<?= $form->field($profile, 'prerequisite')->dropDownList($profile->course->allCoursesArray()) ?>
     
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'offer_sem')->dropDownList([1=>1,2=>2,3=>3], ['prompt' => 'Please Select' ]) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'offer_sem')->dropDownList([1=>1,2=>2,3=>3], ['prompt' => 'Please Select' ]) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'offer_year')->dropDownList([1=>1,2=>2,3=>3, 4=>4, 5=>5], ['prompt' => 'Please Select' ]) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'offer_year')->dropDownList([1=>1,2=>2,3=>3, 4=>4, 5=>5], ['prompt' => 'Please Select' ]) ?></div>
 </div>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'objective')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'objective')->textarea(['rows' => '6']) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'objective_bi')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'objective_bi')->textarea(['rows' => '6']) ?></div>
 </div>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'rational')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'rational')->textarea(['rows' => '6']) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'rational_bi')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'rational_bi')->textarea(['rows' => '6']) ?></div>
 
 
 </div>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'feedback')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'feedback')->textarea(['rows' => '4']) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'feedback_bi')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'feedback_bi')->textarea(['rows' => '4']) ?></div>
 </div>
 
 
@@ -141,19 +141,19 @@ $this->params['breadcrumbs'][] = 'Pro Forma';
 
 <?php 
 
-if($model->courseVersion->version_type_id == 1){
+if($profile->courseVersion->version_type_id == 1){
 	?>
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'transfer_skill')->textarea(['rows' => '5']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'transfer_skill')->textarea(['rows' => '5']) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'transfer_skill_bi')->textarea(['rows' => '5']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'transfer_skill_bi')->textarea(['rows' => '5']) ?></div>
 
 
 </div>
 
 
 <?php	
-}else if($model->courseVersion->version_type_id == 2){
+}else if($profile->courseVersion->version_type_id == 2){
 	?>
 
 
@@ -198,7 +198,7 @@ if($model->courseVersion->version_type_id == 1){
                             echo Html::activeHiddenInput($transferable, "[{$i}]id");
                         }
                     ?>
-                    <?= $form->field($transferable, "[{$i}]transferable_id")->dropDownList($model->transferableList, ['prompt' => 'Please Select' ])->label(false) ?>
+                    <?= $form->field($transferable, "[{$i}]transferable_id")->dropDownList($profile->transferableList, ['prompt' => 'Please Select' ])->label(false) ?>
                 </td>
                 
                
@@ -230,15 +230,15 @@ if($model->courseVersion->version_type_id == 1){
 ?>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'requirement')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'requirement')->textarea(['rows' => '4']) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'requirement_bi')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'requirement_bi')->textarea(['rows' => '4']) ?></div>
 </div>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($model, 'additional')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'additional')->textarea(['rows' => '4']) ?></div>
 
-<div class="col-md-6"><?= $form->field($model, 'additional_bi')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'additional_bi')->textarea(['rows' => '4']) ?></div>
 </div>
 
 </div>

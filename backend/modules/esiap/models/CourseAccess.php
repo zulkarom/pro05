@@ -33,7 +33,7 @@ class CourseAccess extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['staff_id'], 'required'],
+            [['course_id'], 'required'],
             [['staff_id', 'course_id', 'acc_order'], 'integer'],
             [['updated_at'], 'safe'],
             [['staff_id'], 'exist', 'skipOnError' => true, 'targetClass' => Staff::className(), 'targetAttribute' => ['staff_id' => 'id']],
@@ -70,4 +70,18 @@ class CourseAccess extends \yii\db\ActiveRecord
     {
         return $this->hasOne(Course::className(), ['id' => 'course_id']);
     }
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
 }

@@ -396,7 +396,6 @@ class CourseAdminController extends Controller
 			
 
             $staff_access_arr = Yii::$app->request->post('staff_access');
-			
 			if($staff_access_arr){
 				//echo 'hai';die();
 				$kira_post = count($staff_access_arr);
@@ -405,9 +404,12 @@ class CourseAdminController extends Controller
 					
 					$bil = $kira_post - $kira_lama;
 					for($i=1;$i<=$bil;$i++){
+						//print_r($staff_access_arr);die();
 						$insert = new CourseAccess;
 						$insert->course_id = $model->id;
-						$insert->save();
+						if(!$insert->save()){
+							$insert->flashError();
+						}
 					}
 				}else if($kira_post < $kira_lama){
 

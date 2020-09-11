@@ -75,7 +75,7 @@ class CourseSyllabus extends \yii\db\ActiveRecord
     }
 	
 	public static function createWeeks($version){
-		for($i=1;$i<=15;$i++){
+		for($i=1;$i<=14;$i++){
 			$week = new self();
 			$week->scenario = 'addweek';
 			$week->crs_version_id = $version;

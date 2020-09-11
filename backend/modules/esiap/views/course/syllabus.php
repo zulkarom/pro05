@@ -50,6 +50,10 @@ $i = 1;
 $week_num = 1;
 $arr_week = array();
 $array_week_sorting = array();
+$list_weeks = ['1' => '1 Week'];
+for($ii=2;$ii<=20;$ii++){
+	$list_weeks[$ii] = $ii.' Weeks';
+}
 foreach($syllabus as $row){ ?>
 	<tr>
 	<td>
@@ -175,14 +179,11 @@ foreach($syllabus as $row){ ?>
 	
 	<td>
 	
-	<?php 
-	$weeks = ['1' => '1 Week','2' => '2 Weeks','3' => '3 Weeks','4' => '4 Weeks','5' => '5 Weeks'];
 	
-	?>
 	
 	<select class="form-control" id="week-duration-<?php echo $i ; ?>" name="week-duration-<?php echo $i ; ?>">
 		<?php 
-		foreach($weeks as $val => $week){
+		foreach($list_weeks as $val => $week){
 			$sel = $row->duration == $val ? 'selected' : '';
 			echo '<option value="'.$val.'" '.$sel.'>'.$week.'</option>';
 		}
@@ -245,7 +246,9 @@ Modal::end();
 
 </div>
 
-<div class="col-md-4"><label>Mid-Semester Break After Week: </label></div>
+<div class="col-md-4"><label>Mid-Semester Break After Week: </label><br />
+<i style="font-size:12px">* mid-semester break will be inserted automatically in FK2 from this setting.</i>
+</div>
 
 <div class="col-md-3"><?php 
 $sem_break = json_decode($model->syllabus_break);

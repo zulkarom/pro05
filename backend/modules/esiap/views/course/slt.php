@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use richardfan\widget\JSRegister;
 
 
 /* @var $this yii\web\View */
@@ -20,8 +21,13 @@ $form = ActiveForm::begin(['id' => 'form-clo-assessment']);
 <?=$this->render('_header',[
 'course' => $model->course
 ])?>
-
-<div class="box">
+<style>
+.online{
+	background-color:#f5f5f5
+	text-align:center;
+}
+</style>
+<div class="box box-primary">
 <div class="box-header"></div>
 <div class="box-body">
 
@@ -40,171 +46,6 @@ $aclo="";$asyll="";
 
 
 ?>
-<div class="row">
-<div class="col-md-6">
-<table class="table table-striped table-hover">
-<thead>
-	<tr>
-		<th>Guided Learning (F2F)</th>
-		<th width="20%">Hour</th>
-		<th width="20%">Week</th>
-		<th width="20%" style="text-align:center">Total</th>
-	</tr>
-</thead>
-	<tr>
-		<td>Lecture</td>
-		<td><input class="form-control tgcal" name="slt[lecture_jam]" id="lecture_jam" style="text-align:center" value="<?php echo $slt->lecture_jam;?>" /></td>
-		<td ><input class="form-control tgcal" name="slt[lecture_mggu]" id="lecture_mggu" style="text-align:center" value="<?php echo $slt->lecture_mggu;?>" /></td>
-		<td style="text-align:center;font-weight:bold" id="sublec">0</td>
-	</tr>
-	<tr>
-		<td>Tutorial</td>
-		<td><input class="form-control tgcal" name="slt[tutorial_jam]" id="tutorial_jam" style="text-align:center" value="<?php echo $slt->tutorial_jam;?>"  /></td>
-		<td><input class="form-control tgcal" name="slt[tutorial_mggu]" id="tutorial_mggu" style="text-align:center" value="<?php echo $slt->tutorial_mggu;?>"  /></td>
-		<td style="text-align:center;font-weight:bold" id="subtut">0</td>
-	</tr>
-	<tr>
-		<td>Practical</td>
-		<td><input class="form-control tgcal" name="slt[practical_jam]" id="practical_jam" style="text-align:center" value="<?php echo $slt->practical_jam;?>"  /></td>
-		<td><input class="form-control tgcal" name="slt[practical_mggu]" id="practical_mggu" style="text-align:center" value="<?php echo $slt->practical_mggu;?>"  /></td>
-		<td style="text-align:center;font-weight:bold" id="subprac">0</td>
-	</tr>
-	<tr>
-		<td>Others</td>
-		<td><input class="form-control tgcal" name="slt[others_jam]" id="others_jam" style="text-align:center" value="<?php echo $slt->others_jam;?>"  /></td>
-		<td><input class="form-control tgcal" name="slt[others_mggu]" id="others_mggu" style="text-align:center" value="<?php echo $slt->others_mggu;?>"  /></td>
-		<td style="text-align:center;font-weight:bold" id="subother">0</td>
-	</tr>
-
-	
-	<tr>
-		<td colspan="3"><strong>Total Guided Learning (F2F)</strong></td>
-		<td style="text-align:center"><strong id="jumlearning">0</strong></td>
-	</tr>
-	
-	<tr>
-		<td colspan="3"><strong>Guided Learning (NF2F)</strong><br />
-		<i>*E-learning, Project, HIEPs, Assignment, LI, SIEP etc.</i>
-		
-		</td>
-		<td style="text-align:center"><input type="text" class="form-control tgcal"  id="jum-nf2f" name="slt[nf2f]" value="<?php echo $slt->nf2f;?>" style="text-align:center" /></td>
-	</tr>
-	
-	<tr>
-		<td colspan="3"><strong>Total Guided Learning (a)</strong></td>
-		<td style="text-align:center"><strong id="jumguidedlearning">0</strong></td>
-	</tr>
-
-	
-	<tr>
-		<td colspan="3"><strong>Independent Learning </strong>(c) - (a) - (b)<div id="negwarn" style="color:red"></div></td>
-
-		<td style="text-align:center"><strong id="indlearn">0</strong> </td>
-	</tr>
-	<tr>
-		<td colspan="3"><strong>Student Learning Time (c)</strong></td>
-
-		<td style="text-align:center"><strong id="total-slt-hour"><?php echo $slt_hour;?></strong></td>
-	</tr>
-	<tr>
-		<td colspan="3"><strong>Credit Hour</strong> (c) / <span id="notional_hour"><?=$notional?></span> </td>
-
-		<td style="text-align:center"><strong id="credit_hour_val"><?php echo $ch?></strong></td>
-	</tr>
-</table>
-</div>
-<div class="col-md-6">
-
-<table class="table table-striped table-hover">
-<thead>
-	<tr>
-	<th colspan="3"><strong>Assessment</strong></th>
-		
-	</tr>
-</thead>
-	<tr>
-		<td><b>Formative Assessment</b></td>
-		<td width="20%"><b>F2F</b></td>
-		<td width="20%"><b>NF2F</b></td>
-	</tr>
-	<?php 
-	
-	$assdirect = $model->assessmentFormative;
-	$assindirect= $model->assessmentSummative;
-	
-	$arrass = "";
-	$i=1;
-	if($assdirect){
-		
-		foreach($assdirect as $rhead){
-			$id = $rhead->id;
-
-			$arrass .= $i == 1 ? $id : "," . $id ;
-			echo "<tr><td>".$rhead->assess_name_bi ."</td>
-			<td>
-			<input class='form-control tgcal' name='assess[".$id . "]' id='ass-".$id . "' value='" . $rhead->assess_f2f . "' style='text-align:center' /></td>
-			<td>
-			<input class='form-control tgcal' name='assess2[".$id . "]' id='ass2-".$id . "' value='" . $rhead->assess_nf2f . "' style='text-align:center' /></td>
-			</tr>
-			";
-		$i++;
-		}
-	}
-	//".$rhead->slt->assess_f2f ."
-	?>
-	
-
-	
-	<tr>
-		<td><b>Summative Assessment</b></td>
-		<td><b>F2F</b></td>
-		<td><b>NF2F</b></td>
-	</tr>
-	<?php 
-	if($assindirect){
-		foreach($assindirect as $rhead){
-			$id = $rhead->id;
-			$arrass .= $i == 1 ? $id : "," . $id ;
-			echo "<tr><td>".$rhead->assess_name_bi ."</td>
-			<td><input class='form-control tgcal' name='assess[".$id . "]' id='ass-".$id . "' value='".$rhead->assess_f2f ."' style='text-align:center' /></td>
-			<td><input class='form-control tgcal' name='assess2[".$id . "]' id='ass2-".$id . "' value='".$rhead->assess_nf2f ."' style='text-align:center' /></td>
-			</tr>
-			";
-			$i++;
-		}
-	
-	}
-	?>
-	<tr>
-	<td><strong>Total Assessment Hour (b)</strong>
-	</td>
-		<td style="text-align:center"><strong id="jumass">0</strong></td>
-		<td style="text-align:center"><strong id="jumass2">0</strong></td>
-	</tr>
-</table>
-
-<div class="form-group">
-<div class="checkbox"><label for="is_practical">
-<input type="hidden" name="is_practical" value="0">
-<?php 
-if($slt->is_practical == 1){
-	$checked = 'checked';
-}else{
-	$checked = '';
-}
-
-?>
-<input type="checkbox" id="is_practical" name="is_practical" value="1" <?=$checked?>>
-Please tick if this course is Latihan Industri/ Clinical Placement/ Practicum/ WBL using Effective Learning Time(ELT) of 50%
-</label>
-<div class="help-block"></div>
-</div>
-</div>
-
-</div>
-</div>
-
-
 
 <div class='row'>
 	<div class='col-md-12'>
@@ -214,26 +55,72 @@ Please tick if this course is Latihan Industri/ Clinical Placement/ Practicum/ W
 	<tr>
 	<th width='1%' rowspan='3'>WEEK</th>
 	<th rowspan='3' width="25%">TOPICS</th>
-	<th colspan="7" style="text-align:center">STUDENT LEARNING TIMES</th></tr>
+	
+	<th colspan="8" style="text-align:center">FACE-TO-FACE (F2F)</th>
+	
+	<th rowspan="3"  style="vertical-align:bottom;text-align:center">
+	NF2F<br />
+	INDEPENDENT LEARNING<br />
+	(ASYNCHRONOUS)
+	
+	</th>
+	<th rowspan="3" style="vertical-align:bottom;text-align:center">TOTAL<br />SLT</th>
+	
+	</tr>
 	
 	<tr>
 	
-	<th style='text-align:center' colspan='4' >GUIDED LEARNING (F2F)
+	<th style='text-align:center' colspan='4' >PHYSICAL
 	
-	</th><th rowspan="2" style="vertical-align:top;text-align:center">GUIDED LEARNING<br />(NF2F)
-	<br /><i style="font-weight:normal">*E-learning, Project, HIEPs, Assignment, LI, SIEP etc.</i>
-	</th><th rowspan="2" style="vertical-align:top">INDEPENDENT<br />LEARNING</th><th rowspan="2" style="vertical-align:top">TOTAL</th></tr>
+	</th>
 	
-	<tr><th >LECTURE</th><th>TUTORIAL</th><th>PRACTICAL</th><th>OTHERS</th></tr>
+	<th style="vertical-align:top;text-align:center; background-color:#f5f5f5" colspan="4">
+	ONLINE/ TECHONOLY-MEDIATED <br />
+	(SYNCHRONOUS)
+
+
+	</th>
+	
+	
+	</tr>
+	
+	<tr>
+	
+	<th style='text-align:center'>L</th><th style='text-align:center'>T</th><th style='text-align:center'>P</th><th style='text-align:center'>O</th>
+	
+	<th style='text-align:center;background-color:#f5f5f5'>L</th><th style='text-align:center;background-color:#f5f5f5'>T</th><th style='text-align:center;background-color:#f5f5f5'>P</th><th style='text-align:center;background-color:#f5f5f5'>O</th>
+	
+	
+	</tr>
 	</thead>
 <?php 
 
 $arr_syll = "";
 $i=1;
+$week_num = 1;
 foreach($syll as $row){ ?>
 	<tr>
 	<td>
-	<b><?php echo $row->week_num ; ?></b>
+	<b><?php 
+	$show_week = '';
+	if($row->duration > 1){
+		$end = $week_num + $row->duration - 1;
+		$show_week = $week_num . ' - ' . $end;
+	}else{
+		$show_week = $week_num;
+	}
+	$arr_week[$week_num] = 'WEEK ' . $show_week;
+	
+	echo $show_week;
+	
+	$week_num = $week_num + $row->duration;
+	
+	
+	
+	
+	?>
+	
+	</b>
 	</td>
 	<td>
 	
@@ -271,9 +158,22 @@ foreach($syll as $row){ ?>
 	
 
 	
-	<td style="vertical-align:middle">
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][nf2f]" id="nf2f_<?php echo $row->id;?>" value="<?php echo $row->nf2f ; ?>"  />
+	<td style="vertical-align:middle;background-color:#f5f5f5">
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_lecture]" id="tech_lecture_<?php echo $row->id;?>" value="<?php echo $row->tech_lecture ; ?>"  />
 	</td>
+	
+	<td style="vertical-align:middle;background-color:#f5f5f5">
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_tutorial]" id="tech_tutorial_<?php echo $row->id;?>" value="<?php echo $row->tech_tutorial ; ?>"  />
+	</td>
+	<td style="vertical-align:middle;background-color:#f5f5f5">
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_practical]" id="tech_practical_<?php echo $row->id;?>" value="<?php echo $row->tech_practical ; ?>"  />
+	</td>
+	<td style="vertical-align:middle;background-color:#f5f5f5">
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_others]" id="tech_others_<?php echo $row->id;?>" value="<?php echo $row->tech_others ; ?>"  />
+	</td>
+	
+	
+	
 	<td style="vertical-align:middle">
 	<input type="text" style="text-align:center" value="<?php echo $row->independent ; ?>" name="syll[<?php echo $row->id;?>][independent]" id="independent_<?php echo $row->id;?>" class="form-control tgsyl" />
 	</td>
@@ -295,61 +195,258 @@ $i++;
 <td id="subsyll_pnp_tutorial">0</td>
 <td id="subsyll_pnp_practical">0</td>
 <td id="subsyll_pnp_others">0</td>
-<td id="subsyll_nf2f">0</td>
+<td id="subsyll_tech_lecture">0</td>
+<td id="subsyll_tech_tutorial">0</td>
+<td id="subsyll_tech_practical">0</td>
+<td id="subsyll_tech_others">0</td>
 <td id="subsyll_independent">0</td>
 <td id="subsyll_total">0</td>
 </tr>
 
-<tr style="text-align:center;font-weight:bold">
-<td colspan="2"><b>Assessment</b></td>
-<td colspan="6"></td>
-<td id="subsyll_assess">0</td>
-</tr>
-
-<tr style="text-align:center;font-weight:bold">
-<td colspan="2"><b>Total SLT</b></td>
-<td id="subsyll_pnp_lecturex">0</td>
-<td id="subsyll_pnp_tutorialx">0</td>
-<td id="subsyll_pnp_practicalx">0</td>
-<td id="subsyll_pnp_othersx">0</td>
-<td id="subsyll_nf2fx">0</td>
-<td id="subsyll_independentx">0</td>
-<td id="subsyll_totalx">0</td>
-</tr>
-
-<tr style="text-align:center;font-style:italic">
-<td colspan="2">Setting (Above)</td>
-<td id="setsyll_pnp_lecture">0</td>
-<td id="setsyll_pnp_tutorial">0</td>
-<td id="setsyll_pnp_practical">0</td>
-<td id="setsyll_pnp_others">0</td>
-<td id="setsyll_nf2f">0</td>
-<td id="setsyll_independent">0</td>
-<td id="setsyll_total"></td>
-</tr>
-
-<tr style="text-align:center">
-<td colspan="2"><i>Is Total SLT Equal to Setting?</i></td>
-<td id="gly_pnp_lecture"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-<td id="gly_pnp_tutorial"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-<td id="gly_pnp_practical"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-<td id="gly_pnp_others"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-
-<td id="gly_nf2f"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-<td id="gly_independent"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-<td id="gly_total"><span class="glyphicon glyphicon-warning-sign" style="color:red"></span></td>
-</tr>
 </table>
 </div>
 	</div>
+
+
+
+</div>
+	</div>
+
+<div class="box box-success">
+<div class="box-header"></div>
+<div class="box-body">	
+
+<div class="row">
+
+<div class="col-md-12">
+
+<table class="table table-striped table-hover">
+<thead>
+	<tr>
+		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
+		FORMATIVE ASSESSMENT
+		</b></th>
+		<th width="40%" colspan="2" style="text-align:center"><b>FACE-TO-FACE(F2F)</b></th>
+		<th width="20%" style="text-align:center" rowspan="2"><b>NF2F <br />
+INDEPENDENT LEARNING FOR ASSESSMENT<br />
+ (ASYNCHRONOUS)</b></th>
+ 
+ <th style="text-align:center;vertical-align:bottom" rowspan="2"><b>TOTAL</b></th>
+ 
+ 
+	</tr>
+	
+	<tr>
+		
+		<th style="text-align:center"><b>PHYSICAL</b></th>
+		<th style="text-align:center"><b>ONLINE/<br /> TECHONOLY-MEDIATED (SYNCHRONOUS)
+
+		</b></th>
+		
+		
+		
+	</tr>
+	
+	
+</thead>
+	
+	<?php 
+	
+	$assdirect = $model->assessmentFormative;
+	$assindirect= $model->assessmentSummative;
+	
+	$arrFormAss = "";
+	$i=1;
+	if($assdirect){
+		
+		foreach($assdirect as $rhead){
+			$id = $rhead->id;
+
+			$arrFormAss .= $i == 1 ? $id : "," . $id ;
+			echo "<tr><td>".$rhead->assess_name ." / <i>".$rhead->assess_name_bi ."</i></td>
+			
+			<td>
+			<input class='form-control tgcal' name='assess[".$id . "]' id='form-ass-".$id . "' value='" . $rhead->assess_f2f . "' style='text-align:center' /></td>
+			
+			<td>
+			<input class='form-control tgcal' name='assess_tech[".$id . "]' id='form-ass-tech-".$id . "' value='" . $rhead->assess_f2f_tech . "' style='text-align:center' /></td>
+			
+			<td>
+			<input class='form-control tgcal' name='assess2[".$id . "]' id='form-ass2-".$id . "' value='" . $rhead->assess_nf2f . "' style='text-align:center' /></td>
+			
+			<td align='center'><b><span id='form-subtotal-".$id."'></span></b></td>
+			</tr>
+			";
+		$i++;
+		}
+	}
+	//".$rhead->slt->assess_f2f ."
+	
+	?>
 	
 
+	
+	<tr>
+	<td> <strong>TOTAL FORMATIVE</strong>
+	</td>
+		<td style="text-align:center"><strong id="form-total-ass">0</strong></td>
+		<td style="text-align:center"><strong id="form-total-ass-tech">0</strong></td>
+		<td style="text-align:center"><strong id="form-total-ass2">0</strong></td>
+		<td style="text-align:center"><strong id="form-total">0</strong></td>
+	</tr>
+	
 
+	
+</table>
+
+<table class="table table-striped table-hover">
+	
+
+	
+	<thead>
+	<tr>
+		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
+		SUMMATIVE ASSESSMENT
+		</b></th>
+		<th width="40%" colspan="2" style="text-align:center"><b>FACE-TO-FACE (F2F)</b></th>
+		<th width="20%" style="text-align:center" rowspan="2"><b>NF2F <br />
+		INDEPENDENT LEARNING FOR ASSESSMENT<br />
+ (ASYNCHRONOUS)</b></th>
+ 
+ <th style="text-align:center;vertical-align:bottom" rowspan="2"><b>TOTAL</b></th>
+ 
+	</tr>
+	
+	<tr>
+		
+		<th style="text-align:center"><b>PHYSICAL</b></th>
+		<th style="text-align:center"><b>ONLINE/<br /> TECHONOLY-MEDIATED (SYNCHRONOUS)
+
+		</b></th>
+</thead>
+
+	<?php 
+	$arrSumAss = "";
+	
+	if($assindirect){
+		foreach($assindirect as $rhead){
+			$id = $rhead->id;
+			$arrSumAss .= $i == 1 ? $id : "," . $id ;
+			echo "<tr><td>".$rhead->assess_name_bi ." / <i>".$rhead->assess_name_bi ."</i></td>
+			<td><input class='form-control tgcal' name='assess[".$id . "]' id='sum-ass-".$id . "' value='".$rhead->assess_f2f ."' style='text-align:center' /></td>
+			
+			<td><input class='form-control tgcal' name='assess_tech[".$id . "]' id='sum-ass-tech-".$id . "' value='".$rhead->assess_f2f_tech ."' style='text-align:center' /></td>
+			
+			
+			<td><input class='form-control tgcal' name='assess2[".$id . "]' id='sum-ass2-".$id . "' value='".$rhead->assess_nf2f ."' style='text-align:center' /></td>
+			
+			<td align='center'><b><span id='sum-subtotal-".$id."'></span></b></td>
+			</tr>
+			";
+			$i++;
+		}
+	}
+	?>
+	<tr>
+	<td> <strong>TOTAL SUMMATIVE</strong>
+	</td>
+	
+		<td style="text-align:center"><strong id="sum-total-ass">0</strong></td>
+		<td style="text-align:center"><strong id="sum-total-ass-tech">0</strong></td>
+		<td style="text-align:center"><strong id="sum-total-ass2">0</strong></td>
+		
+
+		<td style="text-align:center"><strong id="sum-total">0</strong></td>
+	</tr>
+	
+	
+	<tr><td colspan="4" align="right"><strong>SLT FOR ASSESSMENT</strong>
+	</td>
+		<td style="text-align:center"><strong id="jum-assess">0</strong></td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>GRAND TOTAL FOR SLT</strong>
+	</td>
+		<td style="text-align:center"><strong id="total-slt">0</strong></td>
+	</tr>
+	
+	<tr>
+	<td></td>
+	<td colspan="4" align="right">
+	<div class="form-group">
+<div class="checkbox"><label for="is_practical">
+<input type="hidden" name="is_practical" value="0">
+<?php 
+if($slt->is_practical == 1){
+	$checked = 'checked';
+}else{
+	$checked = '';
+}
+
+?>
+<input type="checkbox" id="is_practical" name="is_practical" value="1" <?=$checked?>>
+Please tick if this course is Latihan Industri/ Clinical Placement/ <br />
+Practicum/ WBL using Effective Learning Time(ELT) of 50%
+</label>
+<div class="help-block"></div>
+</div>
+</div>
+
+	
+	</td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>Generated Credit Hour by SLT</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="hour-slt">?</span></strong></td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>Credit Hour set for this course</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="hour-set"><?=$model->course->credit_hour?></span></strong></td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>% SLT for F2F Physical Component</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="per-physical">0</span>%</strong></td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>% SLT for Online & Independent Learning Component</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="per-online">0</span>%</strong></td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>% SLT for All Practical Component</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="per-all-practical">0</span>%</strong></td>
+	</tr>
+	
+	<tr><td colspan="4" align="right"><strong>% SLT for F2F Physical Practical Component</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="per-physical-practical">0</span>%</strong></td>
+	</tr>
+	
+	
+	
+	
+	<tr><td colspan="4" align="right"><strong>% SLT for F2F Online Practical Component</strong>
+	</td>
+		<td style="text-align:center"><strong><span id="per-tech-practical">0</span>%</strong></td>
+	</tr>
+	
+	
+</table>
 
 
 
 </div>
 </div>
+
+
+</div>
+</div>
+
+
 <div align="center">
 	
 	<?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
@@ -361,132 +458,46 @@ $i++;
 <?php ActiveForm::end()?>
 
 
-<?php 
-
-$js = '
-
-
-	cal_indlearn();
-	cal_syll_week();
-	cal_syll_week2();
-	cal_syll_col();
-	cal_syll_col2();
-	checkEqual();
+<?php JSRegister::begin(); ?>
+<script>
+	calcAll();
 	
 	$("#is_practical").click(function(){
-		var notional;
-		if($(this).is(":checked")){
-			notional = 80;
-		}else{
-			notional = 40;
-			
-		}
-		$("#notional_hour").text(notional);
-		var credit = myparse($("#credit_hour_val").text());
-		//alert(credit);
-		var total = notional * credit;
-		$("#total-slt-hour").text(total);
 		
 		
-		cal_indlearn();
-	cal_syll_week();
-	cal_syll_week2();
-	cal_syll_col();
-	cal_syll_col2();
-		checkEqual();
+	calcAll();
 	});
 	
 	$(".tgcal").keyup(function(){
-		cal_indlearn();
-		checkEqual();
+		calcAll();
 	});
 	
 	$(".tgsyl").keyup(function(){
-		cal_syll_week();
-		cal_syll_week2();
-		cal_syll_col();
-		cal_syll_col2();
-		checkEqual();
+		calcAll();
 	});
-	
 
-
-function cal_indlearn(){
-	var slt = getSlt();
-	var ind = slt - calculate_guided_learning() - cal_ass();
-	$("#indlearn").text(ind);
-	$("#setsyll_independent").text(myfor(ind));
-	if(ind < 0 ){
-		$("#negwarn").html(\'<span class="glyphicon glyphicon-warning-sign"></span> The Value Cannot Be Negative!\');
-	}else{
-		$("#negwarn").html("");
-	}
-	
-	
+function calcAll(){
+	calcTotalSlt();
+	cal_syll_col();
+	assFormVertical();
+	assSumVertical();
+	calcPhysical();
+	calcTech();
+	calcPractical();
+	calcCreditHourSlt();
 }
+
+
 
 function getSlt(){
-	return myparse($("#total-slt-hour").text());
+	return myparse($("#total-slt").text());
 }
 
-function calculate_learning(){
-var besar = cal_lec() + cal_tut() + cal_prac() + cal_other() ;	
-$("#jumlearning").text(myfor(besar));
-return besar;
-}
-
-function cal_nf2f(){
-	var num = myparse($("#jum-nf2f").val());
-	$("#setsyll_nf2f").text(myfor(num));
-	return num;
-}
-
-function calculate_guided_learning(){
-var besar = calculate_learning() + cal_nf2f();	
-$("#jumguidedlearning").text(myfor(besar));
-return besar;
-}
 
 function myfor(num){
 	return parseFloat(num.toFixed(2)) + 0;
 }
 
-function cal_other(){
-	var other_hour = $("#others_jam").val();
-	var other_week = $("#others_mggu").val();
-	var jum = myparse(other_hour) * myparse(other_week);
-	$("#subother").text(myfor(jum));
-	$("#setsyll_pnp_others").text(myfor(jum));
-	return jum;
-	
-}
-
-function cal_prac(){
-	var prac_hour = $("#practical_jam").val();
-	var prac_week = $("#practical_mggu").val();
-	var jum = myparse(prac_hour) * myparse(prac_week);
-	$("#subprac").text(myfor(jum));
-	$("#setsyll_pnp_practical").text(myfor(jum));
-	return jum;
-	
-}
-
-function cal_tut(){
-	var tut_hour = $("#tutorial_jam").val();
-	var tut_week = $("#tutorial_mggu").val();
-	var jum = myparse(tut_hour) * myparse(tut_week);
-	$("#subtut").text(myfor(jum));
-	$("#setsyll_pnp_tutorial").text(myfor(jum));
-	return jum;
-}
-function cal_lec(){
-	var lec_hour = $("#lecture_jam").val();
-	var lec_week = $("#lecture_mggu").val();
-	var jum = myparse(lec_hour) * myparse(lec_week);
-	$("#sublec").text(myfor(jum));
-	$("#setsyll_pnp_lecture").text(myfor(jum));
-	return jum;
-}
 
 function myparse(num){
 	if(!parseFloat(num)){
@@ -496,8 +507,158 @@ function myparse(num){
 	}
 }
 
-function cal_ass(){
-	var arr = [' . $arrass . '];
+function assFormHorizontal(){
+	var arr = [<?=$arrFormAss?>];
+	var jum = 0;
+	for(i=0;i<arr.length;i++){
+		var subjum = 0;
+		subjum += myparse($("#form-ass-"+arr[i]).val());
+		subjum += myparse($("#form-ass-tech-"+arr[i]).val());
+		subjum += myparse($("#form-ass2-"+arr[i]).val());
+		jum += subjum;
+		$("#form-subtotal-"+arr[i]).text(myfor(subjum));
+	}
+	$("#form-total").text(myfor(jum));
+	return jum;
+}
+
+function assFormVertical(){
+	var arr = [<?=$arrFormAss?>];
+	var ass = ['ass', 'ass-tech', 'ass2'];
+	
+	for(x=0;x<ass.length;x++){
+		var subjum = 0;
+		for(i=0;i<arr.length;i++){
+			subjum += myparse($("#form-" + ass[x] + "-"+arr[i]).val());
+		}
+		//alert(subjum);
+		$("#form-total-" + ass[x]).text(myfor(subjum));
+	}
+}
+
+function assSumHorizontal(){
+	
+	var arr = [<?=$arrSumAss?>];
+	var jum = 0;
+	for(i=0;i<arr.length;i++){
+		var subjum = 0;
+		subjum += myparse($("#sum-ass-"+arr[i]).val());
+		subjum += myparse($("#sum-ass-tech-"+arr[i]).val());
+		subjum += myparse($("#sum-ass2-"+arr[i]).val());
+		jum += subjum;
+		$("#sum-subtotal-"+arr[i]).text(myfor(subjum));
+	}
+	$("#sum-total").text(myfor(jum));
+	return jum;
+}
+
+function assSumVertical(){
+	var arr = [<?=$arrSumAss?>];
+	var ass = ['ass', 'ass-tech', 'ass2'];
+	
+	for(x=0;x<ass.length;x++){
+		var subjum = 0;
+		for(i=0;i<arr.length;i++){
+			subjum += myparse($("#sum-" + ass[x] + "-"+arr[i]).val());
+		}
+		//alert(subjum);
+		$("#sum-total-" + ass[x]).text(myfor(subjum));
+	}
+}
+
+function totalSltAssessment(){
+	//jum-assess
+	var sum = assSumHorizontal();
+	var form = assFormHorizontal();
+	var jum = sum + form;
+	$("#jum-assess").text(myfor(jum));
+	return jum;
+}
+
+function calcTotalSlt(){
+	var syll = cal_syll_week();
+	var ass = totalSltAssessment();
+	var grand = syll + ass;
+	$("#total-slt").text(myfor(grand));
+	return grand;
+}
+
+function calcPhysical(){
+	var lec = myparse($("#subsyll_pnp_lecture").text());
+	var prac = myparse($("#subsyll_pnp_practical").text());
+	var tut = myparse($("#subsyll_pnp_tutorial").text());
+	var other = myparse($("#subsyll_pnp_others").text());
+	var syll = lec + prac + tut + other;
+	
+	var form = myparse($("#form-total-ass").text());
+	var sum = myparse($("#sum-total-ass").text());
+	
+	var total = syll + form + sum;
+	var per = total / getSlt() * 100;
+	
+	$("#per-physical").text(myfor(per));
+	
+}
+
+function calcTech(){
+	var lec = myparse($("#subsyll_tech_lecture").text());
+	var prac = myparse($("#subsyll_tech_practical").text());
+	var tut = myparse($("#subsyll_tech_tutorial").text());
+	var other = myparse($("#subsyll_tech_others").text());
+	var ind = myparse($("#subsyll_independent").text());
+	var syll = lec + prac + tut + other + ind;
+	
+	var form = myparse($("#form-total-ass-tech").text());
+	var sum = myparse($("#sum-total-ass-tech").text());
+	var form_ind = myparse($("#form-total-ass2").text());
+	var sum_ind = myparse($("#sum-total-ass2").text());
+	
+	var total = syll + form + sum + form_ind + sum_ind;
+	var per = total / getSlt() * 100;
+	
+	$("#per-online").text(myfor(per));
+	
+}
+
+function calcPhysicalPractical(){
+	var prac = myparse($("#subsyll_pnp_practical").text());
+	var per = prac / getSlt() * 100;
+	
+	$("#per-physical-practical").text(myfor(per));
+	return per;
+}
+
+function calcTechPractical(){
+	var prac = myparse($("#subsyll_tech_practical").text());
+	var per = prac / getSlt() * 100;
+	
+	$("#per-tech-practical").text(myfor(per));
+	return per;
+}
+
+function calcCreditHourSlt(){
+	var slt = getSlt();
+	//=IF(X102 ="√",INT(F14X94/80),INT(X94/40)) is_practical
+	var delimiter = 40;
+			if($("#is_practical").prop("checked") == true){
+               delimiter = 80;
+            }
+            else{
+                delimiter = 40;
+            }
+	var credit = Math.floor(slt / delimiter);
+	$("#hour-slt").text(myfor(credit));
+}
+
+function calcPractical(){
+	var phy = calcPhysicalPractical();
+	var tech = calcTechPractical();
+	var jum = phy + tech;
+	$("#per-all-practical").text(myfor(jum));
+}
+
+/* function cal_ass(){
+	var arr = [];
 	var jum = 0;
 	var jum2 = 0;
 	
@@ -511,48 +672,20 @@ function cal_ass(){
 
 	$("#jumass").text(myfor(jum));
 	$("#jumass2").text(myfor(jum2));
+	
 	var gtotal = jum + jum2;
 	$("#subsyll_assess").text(myfor(gtotal));
 	
 	return gtotal;
 	
-}
-function glystr(what){
-	var sign = "ok";
-	var color = "green";
-	if(what == 0){
-		sign = "warning-sign";
-		color = "red";
-	}
-	return \'<span class="glyphicon glyphicon-\' + sign + \'" style="color:\' + color + \'"></span>\';
-}
-function checkEqual(){
-	
-	$("#setsyll_total").text(getSlt());
-	
-	
-	var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others", "independent", "nf2f", "total"];
-	for(s=0;s<arrw.length;s++){
-		var syl = myparse($("#subsyll_"+arrw[s]).text());
-		var set = $("#setsyll_"+arrw[s]).text();
-		if(arrw[s] == "total"){
-			syl += myparse($("#subsyll_assess").text());
-		}
-		
-		
-		if(syl == set){
-			$("#gly_"+arrw[s]).html(glystr(1));
-		}else{
-			$("#gly_"+arrw[s]).html(glystr(0));
-		}
-	}
-}
+} */
+
 
 function cal_syll_week(){
-	var arrsyl = ['.$arr_syll.'];
+	var arrsyl = [<?=$arr_syll?>];
 	var tot= 0;
 	for(n=0;n<arrsyl.length;n++){
-		var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others",  "independent", "nf2f"];
+		var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others", "tech_lecture", "tech_tutorial", "tech_practical", "tech_others",  "independent"];
 		sub = 0;
 		for(s=0;s<arrw.length;s++){
 			sub += getNumValue(arrw[s], arrsyl[n]);
@@ -561,66 +694,30 @@ function cal_syll_week(){
 		tot += sub;
 	}
 	$("#subsyll_total").text(myfor(tot));
-}
-
-function cal_syll_week2(){
-	var arrsyl = ['.$arr_syll.'];
-	var tot= 0;
-	for(n=0;n<arrsyl.length;n++){
-		var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others",  "independent", "nf2f"];
-		sub = 0;
-		for(s=0;s<arrw.length;s++){
-			sub += getNumValue(arrw[s], arrsyl[n]);
-		}
-		$("#subsyll_"+arrsyl[n]).text(myfor(sub));
-		tot += sub;
-	}
-	tot = tot + cal_ass();
-	$("#subsyll_totalx").text(myfor(tot));
+	return tot;
 }
 
 function cal_syll_col(){
-	var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others", "independent", "nf2f"];
+	var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others", "tech_lecture", "tech_tutorial", "tech_practical", "tech_others", "independent"];
 	var tot= 0;
 	for(s=0;s<arrw.length;s++){
-		var arrsyl = ['.$arr_syll.'];
+		var arrsyl = [<?=$arr_syll?>];
 		sub = 0;
 		for(n=0;n<arrsyl.length;n++){
 			sub += getNumValue(arrw[s], arrsyl[n]);
 		}
-		$("#subsyll_"+arrw[s]).text(myfor(sub));
-			
+		$("#subsyll_" + arrw[s]).text(myfor(sub));	
 	}
-	
-	
-	
 }
 
-function cal_syll_col2(){
-	var arrw = ["pnp_lecture", "pnp_tutorial", "pnp_practical", "pnp_others", "independent", "nf2f"];
-	var tot= 0;
-	for(s=0;s<arrw.length;s++){
-		var arrsyl = ['.$arr_syll.'];
-		sub = 0;
-		for(n=0;n<arrsyl.length;n++){
-			sub += getNumValue(arrw[s], arrsyl[n]);
-		}
-		$("#subsyll_"+arrw[s] + "x").text(myfor(sub));
-			
-	}
-	
-	
-	
-}
+
 
 function getNumValue(mystr, week){
 	return myparse($("#"+mystr+"_"+week).val());
 }
 
+//alert('hai');
 
+</script>
+<?php JSRegister::end(); ?>
 
-';
-
-$this->registerJs($js);
-
-?>

@@ -28,7 +28,7 @@ echo $form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label
 
 <table class="table table-hover table-striped">
 <thead>
-<tr><th>No. </th><th>Course Learning Outcome</th><th></th>
+<tr><th>No. </th><th>Course Learning Outcome</th><th width="50%"></th>
 
 </tr>
 

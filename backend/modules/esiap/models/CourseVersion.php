@@ -23,6 +23,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 {
 	public $as_percentage;
 	public $assess_f2f;
+	public $assess_f2f_tech;
 	public $assess_nf2f;
 	public $assess_name;
 	public $assess_name_bi;
@@ -188,22 +189,25 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public function getCourseAssessmentFormative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage, sp_course_assessment.assess_f2f, sp_course_assessment.assess_nf2f')
+		
+		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage, 
+		sp_course_assessment.assess_f2f, sp_course_assessment.assess_nf2f, sp_course_assessment.assess_f2f_tech')
+		
 		->innerJoin('sp_course_clo', 'sp_course_clo.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_course_clo_assess', 'sp_course_clo_assess.clo_id = sp_course_clo.id')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.id = sp_course_clo_assess.assess_id')
 		->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')
 		->groupBy(['sp_course_clo_assess.assess_id'])
 		->where(['sp_course_assessment.crs_version_id' => $this->id,'sp_assessment_cat.form_sum' => 1])
-		->all()
-		;
+		->all();
         
     }
 	
 	public function getCourseAssessmentSummative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage, sp_course_assessment.assess_f2f, sp_course_assessment.assess_nf2f')
+		->select('sp_course_assessment.*, SUM(sp_course_clo_assess.percentage) AS as_percentage, 
+		sp_course_assessment.assess_f2f, sp_course_assessment.assess_nf2f, sp_course_assessment.assess_f2f_tech')
 		->innerJoin('sp_course_clo', 'sp_course_clo.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_course_clo_assess', 'sp_course_clo_assess.clo_id = sp_course_clo.id')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.id = sp_course_clo_assess.assess_id')

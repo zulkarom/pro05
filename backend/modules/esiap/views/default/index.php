@@ -29,31 +29,40 @@ $this->params['breadcrumbs'][] = $this->title;
 
             ['class' => 'yii\grid\ActionColumn',
                  'contentOptions' => ['style' => 'width: 25%'],
-                'template' => '{fk1} {fk2} {fk3}',
+                'template' => '{fk1} {fk2} {fk3} {tbl4}',
                 //'visible' => false,
                 'buttons'=>[
                     'fk1'=>function ($url, $model) {
-						$version = $model->course->publishedVersion;
+						$version = $model->course->defaultVersion;
 						if($version){
-							return Html::a('<span class="glyphicon glyphicon-download-alt"></span> FK01',['/esiap/course/fk1/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-danger btn-sm']);
+							return Html::a('FK01',['/esiap/course/fk1/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
 						}else{
 							return '-';
 						}
                         
                     },
 					'fk2'=>function ($url, $model) {
-						$version = $model->course->publishedVersion;
+						$version = $model->course->defaultVersion;
 						if($version){
-							return Html::a('<span class="glyphicon glyphicon-download-alt"></span> FK02',['/esiap/course/fk2/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-danger btn-sm']);
+							return Html::a('FK02',['/esiap/course/fk2/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
 						}else{
 							return '-';
 						}
                         
                     },
 					'fk3'=>function ($url, $model) {
-						$version = $model->course->publishedVersion;
+						$version = $model->course->defaultVersion;
 						if($version){
-							return Html::a('<span class="glyphicon glyphicon-download-alt"></span> FK03',['/esiap/course/fk3/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-danger btn-sm']);
+							return Html::a('FK03',['/esiap/course/fk3/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
+						}else{
+							return '-';
+						}
+                        
+                    },
+					'tbl4'=>function ($url, $model) {
+						$version = $model->course->defaultVersion;
+						if($version){
+							return Html::a('TBL4',['/esiap/course/tbl4-excel2/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
 						}else{
 							return '-';
 						}

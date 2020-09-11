@@ -23,6 +23,7 @@ use backend\modules\esiap\models\Fk1;
 use backend\modules\esiap\models\Fk2;
 use backend\modules\esiap\models\Fk3;
 use backend\modules\esiap\models\Tbl4;
+use backend\modules\esiap\models\Tbl4Excel2;
 use backend\modules\esiap\models\Tbl4Excel;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -99,30 +100,7 @@ class CourseController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($course)
-    {
-        $model = $this->findModel($course);
-		$version = $model->developmentVersion;
-		$status = $version->status;
-		if($status == 0){
-			$version->scenario = 'save_date';
-			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				
-				if ($version->load(Yii::$app->request->post()) && $version->save()) {
-					Yii::$app->session->addFlash('success', "Data Updated");
-					return $this->redirect(['update','course' => $course]);
-				}
-			}
-
-			return $this->render('update', [
-				'model' => $model,
-				'version' => $version
-			]);
-		}else{
-			return $this->redirect(['report', 'course' => $course]);
-		}
-		
-    }
+    
 	
 	 public function actionReport($course)
     {
@@ -162,21 +140,37 @@ class CourseController extends Controller
         ]);
     }
 	
-	public function actionProfile($course)
+	public function actionUpdate($course)
     {
-        $model = $this->findProfile($course);
-		$model->scenario = 'update';
-		$transferables = $model->transferables;
-		$staffs = $model->academicStaff;
+        $model = $this->findModel($course);
+		$version = $model->developmentVersion;
+		$status = $version->status;
+		if($status == 0){
+			
+			$version->scenario = 'save_date';
+			if ($model->load(Yii::$app->request->post()) && $model->save()) {
+				
+				if ($version->load(Yii::$app->request->post()) && $version->save()) {
+					Yii::$app->session->addFlash('success', "Data Updated");
+				}
+			}
+			
+			
+        $profile = $this->findProfile($course);
+		$profile->scenario = 'update';
+		$transferables = $profile->transferables;
+		$staffs = $profile->academicStaff;
 
-        if ($model->load(Yii::$app->request->post())) {
+        if ($profile->load(Yii::$app->request->post())) {
             
-            $model->updated_at = new Expression('NOW()');    
-            
-            $oldIDs = ArrayHelper::map($transferables, 'id', 'id');
+            $profile->updated_at = new Expression('NOW()');    
+			
+			
+             $oldIDs = ArrayHelper::map($transferables, 'id', 'id');
 			$staff_oldIDs = ArrayHelper::map($staffs, 'id', 'id');
             
             $transferables = Model::createMultiple(CourseTransferable::classname(), $transferables);
+			
 			$staffs = Model::createMultiple(CourseStaff::classname(), $staffs);
             
             Model::loadMultiple($transferables, Yii::$app->request->post());
@@ -184,6 +178,8 @@ class CourseController extends Controller
             
             $deletedIDs = array_diff($oldIDs, array_filter(ArrayHelper::map($transferables, 'id', 'id')));
 			$staff_deletedIDs = array_diff($staff_oldIDs, array_filter(ArrayHelper::map($staffs, 'id', 'id')));
+			
+			
             
 			foreach ($transferables as $i => $t) {
                 $t->transfer_order = $i;
@@ -193,7 +189,8 @@ class CourseController extends Controller
             }
 
 			
-            $valid = $model->validate();
+			
+            $valid = $profile->validate();
             $valid = Model::validateMultiple($transferables) && $valid;
 			$valid = Model::validateMultiple($staffs) && $valid;
             
@@ -201,11 +198,14 @@ class CourseController extends Controller
 
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
-                    if ($flag = $model->save(false)) {
+					
+                    if ($flag = $profile->save(false)) {
+						
                         if (! empty($deletedIDs)) {
                             CourseTransferable::deleteAll(['id' => $deletedIDs]);
                         }
-						if (! empty($deletedIDs)) {
+						//print_r($staff_deletedIDs);die();
+						if (! empty($staff_deletedIDs)) {
                             CourseStaff::deleteAll(['id' => $staff_deletedIDs]);
                         }
                         foreach ($transferables as $i => $transfer) {
@@ -213,7 +213,7 @@ class CourseController extends Controller
                                 break;
                             }
                             //do not validate this in model
-                            $transfer->crs_version_id = $model->crs_version_id;
+                            $transfer->crs_version_id = $profile->crs_version_id;
 
                             if (!($flag = $transfer->save(false))) {
                                 break;
@@ -224,7 +224,7 @@ class CourseController extends Controller
                                 break;
                             }
                             //do not validate this in model
-                            $staff->crs_version_id = $model->crs_version_id;
+                            $staff->crs_version_id = $profile->crs_version_id;
 
                             if (!($flag = $staff->save(false))) {
                                 break;
@@ -232,13 +232,13 @@ class CourseController extends Controller
                         }
 
                     }else{
-						$model->flashError();
+						$profile->flashError();
 					}
 
                     if ($flag) {
                         $transaction->commit();
                             Yii::$app->session->addFlash('success', "Course Profile updated");
-                            return $this->redirect(['profile', 'course' => $course]);
+                            return $this->redirect(['update', 'course' => $course]);
                     } else {
                         $transaction->rollBack();
                     }
@@ -248,13 +248,77 @@ class CourseController extends Controller
                 }
             }
         }
+			
+			
 
-        return $this->render('profile', [
-            'model' => $model,
-			'transferables' => (empty($transferables)) ? [new CourseTransferable] : $transferables,
-			'staffs' => (empty($staffs)) ? [new CourseStaff] : $staffs
-        ]);
+			return $this->render('update', [
+				'model' => $model,
+				'version' => $version,
+				'profile' => $profile,
+				'transferables' => (empty($transferables)) ? [new CourseTransferable] : $transferables,
+				'staffs' => (empty($staffs)) ? [new CourseStaff] : $staffs
+			]);
+			
+		}else{
+			
+			return $this->redirect(['report', 'course' => $course]);
+			
+		}
+		
     }
+	
+	private function updateAcademicStaff(){
+		
+			$flag = true;
+            $staff_pic_arr = Yii::$app->request->post('staff_pic');
+			
+			if($staff_pic_arr){
+				
+				$kira_post = count($staff_pic_arr);
+				$kira_lama = count($model->coursePics);
+				if($kira_post > $kira_lama){
+					
+					$bil = $kira_post - $kira_lama;
+					for($i=1;$i<=$bil;$i++){
+						$insert = new CoursePic;
+						$insert->course_id = $model->id;
+						if(!$insert->save()){
+							$flag = false;
+						}
+					}
+				}else if($kira_post < $kira_lama){
+
+					$bil = $kira_lama - $kira_post;
+					$deleted = CoursePic::find()
+					  ->where(['course_id'=>$model->id])
+					  ->limit($bil)
+					  ->all();
+					if($deleted){
+						foreach($deleted as $del){
+							$del->delete();
+						}
+					}
+				}
+				
+				$update_pic = CoursePic::find()
+				->where(['course_id' => $model->id])
+				->all();
+				//echo count($staff_pic_arr);
+				//echo count($update_pic);die();
+
+				if($update_pic){
+					$i=0;
+					foreach($update_pic as $ut){
+						$ut->staff_id = $staff_pic_arr[$i];
+						$ut->save();
+						$i++;
+					}
+				}
+	}
+	
+	}
+	
+
 	
 	public function actionCourseReference($course){
 		$model = $this->findDevelopmentVersion($course);
@@ -328,7 +392,7 @@ class CourseController extends Controller
 	}
 	
 	public function actionCourseSyllabus($course){
-		
+		//print_r(Yii::$app->request->post());die();
 		$model = $this->findDevelopmentVersion($course);
 		$syllabus = $model->syllabus;
 		
@@ -348,14 +412,16 @@ class CourseController extends Controller
 						$syl->scenario = 'saveall';
 						$syl->topics = Yii::$app->request->post('input-week-'.$i);
 						$syl->duration = Yii::$app->request->post('week-duration-'.$i);
-						//$syl->week_num = Yii::$app->request->post('week-num-'.$i);
+						$syl->week_num = '#1';
 						if(Yii::$app->request->post($i . '-clo')){
 							$clo = json_encode(Yii::$app->request->post($i . '-clo'));
 							$syl->clo = $clo;
 						}
 						
 						
-						$syl->save();
+						if(!$syl->save()){
+							$syl->flashError();
+						}
 					}
 				$i++;
 				}
@@ -650,10 +716,11 @@ class CourseController extends Controller
 	
 			if(Yii::$app->request->validateCsrfToken()){
 				$flag = true;
+				//print_r(Yii::$app->request->post('slt'));die();
 				$post_slt = Yii::$app->request->post('slt');
-				foreach($post_slt as $key => $val){
+				/* foreach($post_slt as $key => $val){
 				$slt->{$key} = $val;
-				}
+				} */
 				$slt->is_practical = Yii::$app->request->post('is_practical');
 				if(!$slt->save()){
 					$flag = false;
@@ -681,6 +748,23 @@ class CourseController extends Controller
 					$as->scenario = 'update_slt2';
 					if($as){
 						$as->assess_nf2f = $val;
+						if(!$as->save()){
+							$flag = false;
+							$as->flashError();
+						}
+					}
+				}
+				}
+				
+				
+				$post_assess = Yii::$app->request->post('assess_tech');
+				//print_r($post_assess);die();
+				if($post_assess){
+					foreach($post_assess as $key => $val){
+					$as = CourseAssessment::findOne($key);
+					$as->scenario = 'update_slt_tech';
+					if($as){
+						$as->assess_f2f_tech = $val;
 						if(!$as->save()){
 							$flag = false;
 							$as->flashError();
@@ -953,6 +1037,12 @@ class CourseController extends Controller
 			$pdf = new Tbl4;
 			$pdf->model = $this->decideVersion($course, $dev, $version);
 			$pdf->generatePdf();
+	}
+	
+	public function actionTbl4Excel2($course, $dev = false, $version = false){
+			$pdf = new Tbl4Excel2;
+			$pdf->model = $this->decideVersion($course, $dev, $version);
+			$pdf->generateExcel();
 	}
 	
 	public function actionTbl4Excel($course, $dev = false, $version = false){
