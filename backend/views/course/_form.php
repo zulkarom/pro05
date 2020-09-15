@@ -20,11 +20,12 @@ use backend\models\Component;
 <?php
 //$model->campus_1 = 0;
 //echo $form->field($model, 'campus_1')->checkbox(['label' => 'Kampus Bachok'])
+
+
 echo $form->field($model, 'campus_1')->checkBox() ?>
 
-
-<?= $form->field($model, 'campus_2')->checkbox(['value' => 1]) ?>
-<?= $form->field($model, 'campus_3')->checkbox(['value' => 1]) ?>
+<?= $form->field($model, 'campus_2')->checkbox() ?>
+<?= $form->field($model, 'campus_3')->checkbox() ?>
 
    
 

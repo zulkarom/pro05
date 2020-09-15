@@ -3,11 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
-use backend\modules\esiap\models\Course;
+use backend\models\Course;
 use backend\models\CourseSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * CourseController implements the CRUD actions for Course model.
@@ -17,13 +18,18 @@ class CourseController extends Controller
     /**
      * @inheritdoc
      */
-    public function behaviors()
+       
+
+	public function behaviors()
     {
         return [
-            'verbs' => [
-                'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
         ];
@@ -101,8 +107,15 @@ class CourseController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['index']);
+        if ($model->load(Yii::$app->request->post())) {
+		
+			if($model->save()){
+				Yii::$app->session->addFlash('success', 'Penawaran bagi kursus ' . $model->course_name . " telah kemaskini");
+				return $this->redirect(['index']);
+			}else{
+				$model->flashError();
+			}
+            
         }
 
         return $this->render('update', [
