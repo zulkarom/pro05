@@ -83,7 +83,7 @@ class Project extends \yii\db\ActiveRecord
 			
 			[['eft_account', 'eft_ic'], 'number'],
 			
-			//['pro_name', 'validateAllCaps'],
+			['pro_name', 'validateAllCaps'],
 
 			[['eft_email'], 'email'],
 			

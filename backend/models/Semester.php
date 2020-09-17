@@ -5,6 +5,7 @@ namespace backend\models;
 use Yii;
 use yii\db\Expression;
 use common\models\Common;
+use backend\modules\project\models\TmplApproveProject;
 
 /**
  * This is the model class for table "semester".
@@ -42,7 +43,7 @@ class Semester extends \yii\db\ActiveRecord
 			[['is_current', 'date_start', 'date_end', 'open_at', 'close_at', 'result_date'], 'required', 'on' => 'update'],
 			
 			
-            [['id', 'is_current', 'is_open'], 'integer'],
+            [['id', 'is_current', 'is_open', 'template_fasi_id', 'template_project_id'], 'integer'],
             [['description'], 'string'],
             [['date_start', 'date_end', 'open_at', 'close_at'], 'safe'],
             [['id'], 'unique'],
@@ -68,6 +69,8 @@ class Semester extends \yii\db\ActiveRecord
             'date_end' => 'End Date **',
             'open_at' => 'Open Date ***',
             'close_at' => 'Close Date ***',
+			'template_fasi_id' => 'Fasi Offer Letter Template',
+			'template_project_id' => 'Project Approval Letter Template',
         ];
     }
 	
@@ -262,4 +265,14 @@ class Semester extends \yii\db\ActiveRecord
 		$str_month = Common::months();
 		return strtoupper($str_month[$month]) . ' ' . $year;
 	}
+	
+	public function getOfferTemplate(){
+         return $this->hasOne(TmplOfferFasi::className(), ['id' => 'template_fasi_id']);
+    }
+	
+	public function getProjectTemplate(){
+         return $this->hasOne(TmplApproveProject::className(), ['id' => 'template_project_id']);
+    }
+
+
 }

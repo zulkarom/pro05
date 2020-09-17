@@ -108,6 +108,7 @@ class SemesterController extends Controller
 			$model->setIsCurrentOpen();
 			$model->updated_at = new Expression('NOW()');
 			if($model->save()){
+				Yii::$app->session->addFlash('success', "Semester telah dikemaskini");
 				 return $this->redirect(['index']);
 			}
 			

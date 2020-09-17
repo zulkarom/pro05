@@ -2,6 +2,9 @@
 
 
 use kartik\date\DatePicker;
+use backend\models\TmplOfferFasi;
+use backend\modules\project\models\TmplApproveProject;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Semester */
@@ -118,5 +121,30 @@ echo $form->field($model, 'result_date')->widget(DatePicker::classname(), [
 <div class="col-md-6"><?=$form->field($model, 'description')->textarea(['rows' => 3]) ?></div>
 
 </div>
+<?php
+
+if($model->isNewRecord){
+	$default = TmplOfferFasi::findOne(['is_active' => 1]);
+	if($default){
+		$model->template_fasi_id = $default->id;
+	}
+}
+
+echo $form->field($model, 'template_fasi_id')->dropDownList(
+        ArrayHelper::map(TmplOfferFasi::find()->orderBy('created_at DESC')->all(), 'id', 'template_name')
+    ) ?>
+	
+<?php
+
+if($model->isNewRecord){
+	$default = TmplApproveProject::findOne(['is_active' => 1]);
+	if($default){
+		$model->template_project_id = $default->id;
+	}
+}
+
+echo $form->field($model, 'template_project_id')->dropDownList(
+        ArrayHelper::map(TmplApproveProject::find()->orderBy('created_at DESC')->all(), 'id', 'template_name')
+    ) ?>
 
 <?= $this->render('_note') ?>

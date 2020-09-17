@@ -262,5 +262,11 @@ class User extends ActiveRecord implements IdentityInterface
 		
 		return $array;
 	}
+	
+	public function getAdministrator(){
+         return $this->hasOne(AuthAssignment::className(), ['user_id' => 'id']) 
+		 ->where(['item_name' => 'administrator']);;
+    }
+
 
 }

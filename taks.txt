@@ -1,6 +1,94 @@
+ALTER TABLE `semester` ADD `template_fasi_id` INT NOT NULL AFTER `result_date`, ADD `template_project_id` INT NOT NULL AFTER `template_fasi_id`;
+UPDATE `semester` SET `template_fasi_id` = '1';
+UPDATE `semester` SET `template_project_id` = '1';
 
+CREATE TABLE `tmpl_approve_project` (
+  `id` int(11) NOT NULL,
+  `template_name` varchar(200) NOT NULL,
+  `pengarah` varchar(100) NOT NULL,
+  `yg_benar` text NOT NULL,
+  `tema` text NOT NULL,
+  `per3` text NOT NULL,
+  `per4` text NOT NULL,
+  `per5` text NOT NULL,
+  `signiture_file` text NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `adj_x` double NOT NULL,
+  `adj_y` double NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+--
+-- Dumping data for table `tmpl_approve_project`
+--
 
+INSERT INTO `tmpl_approve_project` (`id`, `template_name`, `pengarah`, `yg_benar`, `tema`, `per3`, `per4`, `per5`, `signiture_file`, `is_active`, `adj_x`, `adj_y`, `created_at`, `updated_at`) VALUES
+(1, 'Template surat lama - Dr. Nazri', 'DR. MOHD NAZRI BIN MUHAYIDDIN', 'Saya yang menjalankan amanah', '\"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT\"\r\n\"BERKHIDMAT UNTUK NEGARA\"', 'Sepanjang tempoh program berlangsung, mohon pihak {TUAN} dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.', 'Sehubungan dengan itu, pihak {TUAN} adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sama ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak {TUAN}.', 'Sekiranya terdapat sebarang pertanyaan, pihak {TUAN} boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.', '2020/830720035643/signiture_16003635025f639beebd11e4.76344563.png', 1, 0, 0, '2020-09-18 00:00:00', '2020-09-18 01:25:02');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tmpl_offer_fasi`
+--
+
+CREATE TABLE `tmpl_offer_fasi` (
+  `id` int(11) NOT NULL,
+  `template_name` varchar(200) NOT NULL,
+  `pengarah` varchar(100) NOT NULL,
+  `yg_benar` text NOT NULL,
+  `tema` text NOT NULL,
+  `nota_elaun` text NOT NULL,
+  `per3` text NOT NULL,
+  `per4` text NOT NULL,
+  `signiture_file` text NOT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  `adj_x` double NOT NULL,
+  `adj_y` double NOT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tmpl_offer_fasi`
+--
+
+INSERT INTO `tmpl_offer_fasi` (`id`, `template_name`, `pengarah`, `yg_benar`, `tema`, `nota_elaun`, `per3`, `per4`, `signiture_file`, `is_active`, `adj_x`, `adj_y`, `created_at`, `updated_at`) VALUES
+(1, 'Template lama - Dr Nazri', 'DR. MOHD NAZRI BIN MUHAYIDDIN', 'Saya yang menjalankan amanah', '\"RAJA BERDAULAT, RAKYAT MUAFAKAT, NEGERI BERKAT\"\r\n\"BERKHIDMAT UNTUK NEGARA\"', 'Tuntutan tidak melebihi 12 Jam untuk satu bulan, maksimum tuntutan 28 jam untuk setiap semester. Tuntutan mestilah dibuat secara bulanan melalui borang yang peroleh di Pusat Kokurikulum berserta salinan surat lantikan dan borang kehadiran pelajar', 'Bersama-sama ini juga disertakan senarai tugas {FASILITATOR} sambilan Kursus Kokurikulum Berkredit Pusat Kokurikulum. (Rujuk Lampiran 1)', 'Sekiranya bersetuju dengan tawaran ini sila penuhi borang penerimaan sebagai {FASILITATOR} sambilan dan kembalikan borang berkenaan sama datang sendiri atau fakskan melalui talian 09-771262 ke Pusat Kokurikulum dengan kadar segera.', '2020/830720035643/signiture_16003101775f62cba1765153.26455937.png', 0, 0, 0, '2020-09-17 09:30:07', '2020-09-17 23:37:28');
+
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `tmpl_approve_project`
+--
+ALTER TABLE `tmpl_approve_project`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tmpl_offer_fasi`
+--
+ALTER TABLE `tmpl_offer_fasi`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `tmpl_approve_project`
+--
+ALTER TABLE `tmpl_approve_project`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `tmpl_offer_fasi`
+--
+ALTER TABLE `tmpl_offer_fasi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  
+  
 mgkin kertas kerja utk pembantu fasi tak perlu generate - kecuali takde main fasilitator
 
 edit manual application - overwrite

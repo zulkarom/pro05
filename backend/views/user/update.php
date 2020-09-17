@@ -28,6 +28,8 @@ $this->params['breadcrumbs'][] = 'Update';
 	<?= $form->field($model, 'fullname')->textInput(['maxlength' => true]) ?>
 	
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
+	
+	 <?= $form->field($model, 'rawPassword')->passwordInput(['maxlength' => true])->label('Reset Password (leave blank if no change)') ?>
 
 
     <div class="form-group">

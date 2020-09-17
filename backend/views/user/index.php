@@ -6,9 +6,13 @@ use yii\grid\GridView;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Registered Users';
+$this->title = 'Users List';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+
+<div class="form-group"><?=Html::a('Create User', ['create'], ['class' => 'btn btn-success'])?></div>
+
+
 <div class="box">
 <div class="box-header"></div>
 <div class="box-body"><div class="users-index">

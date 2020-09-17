@@ -19,8 +19,10 @@ $rules = array_keys(Configs::authManager()->getRules());
 $rules = array_combine($rules, $rules);
 unset($rules[RouteRule::RULE_NAME]);
 ?>
-<div class="role-index">
-    <h1><?= Html::encode($this->title) ?></h1>
+<div class="box">
+<div class="box-header"></div>
+<div class="box-body"><div class="role-index">
+
     <p>
         <?= Html::a(Yii::t('rbac-admin', 'Create ' . $labels['Item']), ['create'], ['class' => 'btn btn-success']) ?>
     </p>
@@ -48,4 +50,6 @@ unset($rules[RouteRule::RULE_NAME]);
     ])
     ?>
 
+</div></div>
 </div>
+

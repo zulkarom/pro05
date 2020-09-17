@@ -10,7 +10,7 @@ use yii\widgets\Pjax;
 /* @var $usernameField string */
 /* @var $extraColumns string[] */
 
-$this->title = 'Admin Assignment';
+$this->title = 'User Assignment';
 $this->params['breadcrumbs'][] = $this->title;
 
 $columns = [

@@ -48,6 +48,8 @@
 						
                             ['label' => 'Release Letter', 'icon' => 'truck', 'url' => ['/offer-letter/release'],],
 							
+							['label' => 'Letter Template', 'icon' => 'envelope', 'url' => ['/tmpl-offer-fasi'],],
+							
 							['label' => 'Fasilitator Tasks', 'icon' => 'user', 'url' => ['/fasi-task/index'],],
 							
 	
@@ -85,6 +87,7 @@
 							['label' => 'Senarai Peruntukan', 'icon' => 'money', 'url' => ['/project-admin/default/allocation']],
                             ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
 							['label' => 'Milestone', 'icon' => 'truck', 'url' => ['/project-admin/default/milestone']],
+							['label' => 'Approve Letter Template', 'icon' => 'envelope', 'url' => ['/project-admin/tmpl-approve-project']],
 
                         ],
                     ],

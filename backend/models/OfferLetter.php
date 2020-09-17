@@ -5,6 +5,8 @@ namespace backend\models;
 use Yii;
 use common\models\Common;
 use frontend\models\LoginAsset;
+use yii\helpers\Url;
+
 
 
 class OfferLetter
@@ -13,10 +15,13 @@ class OfferLetter
 	public $pdf;
 	public $tuan = 'tuan';
 	public $directoryAsset;
+	public $template;
+	public $fontSize = 9.5;
 	
 	public function generatePdf(){
 		
-		//LoginAsset::register($this);
+		$this->template = $this->model->semester->offerTemplate;
+		
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
@@ -84,7 +89,8 @@ class OfferLetter
 		';
 		
 		$this->pdf->SetMargins(20, 10, 20);
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		
+		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -128,7 +134,7 @@ EOD;
 		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Universiti Malaysia Kelantan bersetuju melantik '.$this->tuan .' sebagai '.ucwords($this->fasiType()).' Sambilan seperti butir-butir berikut:
 		<br /><br />
 		';
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -187,17 +193,20 @@ EOD;
 			<td>Tarikh Kuatkuasa</td>
 			<td>:</td>
 			<td>'.Common::date_malay_short($this->model->semester->date_start) .' - '.Common::date_malay_short($this->model->semester->date_end).'</td>
-		</tr>
-		<tr>
+		</tr>';
+		
+		$elaun_note = $this->template->nota_elaun;
+		
+		$html .= '<tr>
 			<td></td>
 			<td>g)</td>
 			<td>Kadar Elaun</td>
 			<td>:</td>
-			<td>RM'.$this->model->rate_amount .' Sejam<br/>(Tuntutan tidak melebihi 12 Jam untuk satu bulan, maksimum tuntutan 28 jam untuk setiap semester. Tuntutan mestilah dibuat secara bulanan melalui borang yang peroleh di Pusat Kokurikulum berserta salinan surat lantikan dan borang kehadiran pelajar)</td>
+			<td>RM'.$this->model->rate_amount .' Sejam<br/>('.$elaun_note.')</td>
 		</tr>
 		</table>
 		';
-		$this->pdf->SetFont('helvetica', 'B', 9.5);
+		$this->pdf->SetFont('arial', 'B', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -206,13 +215,20 @@ EOD;
 	}
 	
 	public function writeEnding(){
-
+		$per3 = $this->template->per3;
+		$per3 = str_replace('{FASILITATOR}', $this->fasiType(), $per3);
+		
+		$per4 = $this->template->per4;
+		$per4 = str_replace('{FASILITATOR}', $this->fasiType(), $per4);
+		
+		
+		//$this->fasiType()
 		$html = '<br />
-		<table width="600"><tr><td><span style="text-align:justify;">3. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		Bersama-sama ini juga disertakan senarai tugas '.$this->fasiType().' sambilan Kursus Kokurikulum Berkredit Pusat Kokurikulum. (Rujuk Lampiran 1)
+		<table width="700"><tr><td><span style="text-align:justify;">3. &nbsp;&nbsp;&nbsp;
+		'.$per3.'
 		<br /><br />
-		4. &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		Sekiranya bersetuju dengan tawaran ini sila penuhi borang penerimaan sebagai '.$this->fasiType().' sambilan dan kembalikan borang berkenaan sama datang sendiri atau fakskan melalui talian 09-771262 ke Pusat Kokurikulum dengan kadar segera.
+		4. &nbsp;&nbsp;&nbsp;
+		'.$per4.'
 		<br /><br /></span>
 		Segala kerjasama dan komitmen '.$this->tuan.' adalah amatlah dihargai.
 		<br /><br />
@@ -220,7 +236,7 @@ EOD;
 		<br />
 		</td></tr></table>';
 
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -231,29 +247,45 @@ EOD;
 
 	
 	public function writeSignitureImg(){
-		$y = $this->pdf->getY();
+		
+		$sign = $this->template->signiture_file;
+		if(!$sign){
+			die('no signiture - plz upload the signature properly');
+		}
+
+		$file = Yii::getAlias('@upload/'. $sign);
+		
 		$html = '
-		<img src="images/sig-trans-832HI36FGSOV83.png" />
+		<img src="'.$file.'" />
 		';
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->setY($y - 42);
+		$y = $this->pdf->getY();
+		$adjy = $this->template->adj_y;
+		
+		$posY = $y - 42 + $adjy;
+		$this->pdf->setY($posY);
+		
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
 	public function writeSigniture(){
-		$html = '<b>"RAJA BERDAULAT, RAKYAT MUAFAKAT, NEGERI BERKAT"<br />
-"BERKHIDMAT UNTUK NEGARA"</b>
+		$tema = $this->template->tema;
+		$tema = nl2br($tema);
+		$benar = $this->template->yg_benar;
+		$pengarah = $this->template->pengarah;
+		
+		$html = '<b>'.$tema.'</b>
 <br /><br />
-Saya yang menjalankan amanah,<br />
+'.$benar.',<br />
 <br /><br /><br />
-<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
+<b>'.$pengarah.'</b><br />
 Pengarah<br />
 Pusat Kokurikulum<br />
 		';
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -275,7 +307,7 @@ EOD;
 		
 		</table>
 		';
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -307,7 +339,7 @@ EOD;
 		
 		
 		';
-		$this->pdf->SetFont('helvetica', 'B', 10);
+		$this->pdf->SetFont('arial', 'B', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -328,7 +360,7 @@ EOD;
 		
 		
 		$html .= '</table>';
-		$this->pdf->SetFont('helvetica', '', 9.5);
+		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
 EOD;

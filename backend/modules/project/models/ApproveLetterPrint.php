@@ -13,10 +13,13 @@ class ApproveLetterPrint
 	public $model;
 	public $pdf;
 	public $directoryAsset;
+	public $template;
 	
 	public function generatePdf(){
 		
 		//LoginAsset::register($this);
+		
+		$this->template = $this->model->semester->projectTemplate;
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
@@ -91,6 +94,17 @@ EOD;
 		
 		$jan = $this->model->fasi->gender;
 		$saudara = $jan == 1 ? 'tuan' : 'puan' ;
+		
+		$per3 = $this->template->per3;
+		$per3 = str_replace('{TUAN}', $saudara, $per3);
+		
+		$per4 = $this->template->per4;
+		$per4 = str_replace('{TUAN}', $saudara, $per4);
+		
+		$per5 = $this->template->per5;
+		$per5 = str_replace('{TUAN}', $saudara, $per5);
+		
+		
 		$html = ucfirst($saudara) . ',<br /><br />
 		
 		<b>KELULUSAN BAGI MENGADAKAN '.strtoupper($this->model->pro_name .' BAGI KURSUS KOKURIKULUM BERKREDIT '.$this->model->course->course_code  .' '.$this->model->course->course_name .' ('.$this->model->group->group_name . ') SEMESTER '. $this->model->semester->niceFormat()) .'</b>
@@ -101,13 +115,13 @@ EOD;
 		<div style="text-align:justify">
 		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Pusat Kokurikulum, Pejabat Timbalan Naib Cancelor (Hal Ehwal Pelajar & Alumni) bersetuju meluluskan program sepertimana yang dinyatakan diatas yang akan diadakan pada <b>'. $this->model->projectDate .'</b> bertempat di <b>'.$this->model->location.'</b> dengan kadar peruntukan <b>RM'. number_format($amt, 2) .' (Ringgit Malaysia: '. ucwords(ConvertNumberMalay::convertNumber($amt)).' Sahaja)</b>. Bayaran peruntukan akan disalurkan kepada wakil yang dilantik oleh pihak '.$saudara.' iaitu <b>'.$this->model->eft_name .' (No. K/P: '.$this->model->eftIcString .')</b>
 		<br /><br />
-		3. &nbsp;&nbsp;&nbsp;Sepanjang tempoh program berlangsung, mohon pihak '.$saudara.' dan fasilitator berkenaan untuk menjaga nama baik Universiti Malaysia Kelantan serta memastikan program tersebut berjalan dengan lancar dan mematuhi peraturan-peraturan universiti.
+		3. &nbsp;&nbsp;'.$per3.'
 		
 		<br /><br />
-		4. &nbsp;&nbsp;&nbsp;Sehubungan dengan itu, pihak '.$saudara.' adalah dipohon untuk mengemukakan laporan aktiviti berserta gambar (dalam bentuk CD) serta laporan kewangan (beserta resit-resit asal pembelian) dalam tempoh satu (1) minggu dari tarikh program diadakan kepada Pusat Kokurikulum. Bersama-sama ini disertakan borang laporan aktiviti pelajar dan borang akuan penerimaan wang untuk tindakan pihak '.$saudara.'.
+		4. &nbsp;&nbsp;'.$per4.'
 		
 		<br /><br />
-		5. &nbsp;&nbsp;&nbsp;Sekiranya terdapat sebarang pertanyaan, pihak '.$saudara.' boleh menghubungi Puan Siti Norhidayah bin Mat Hussin di talian (09-7717094/014-6691481). Sebarang perubahan/pindaan akan dimaklumkan dengan kadar segera.
+		5. &nbsp;&nbsp;'.$per5.'
 		</div>
 
 		<br />
@@ -116,12 +130,16 @@ EOD;
 Sekian terima kasih.
 <br /><br />';
 
-$html .='<b>"RAJA BERDAULAT, RAKYAT SEPAKAT, NEGERI BERKAT"<br />
-"BERKHIDMAT UNTUK NEGARA"</b>
+$tema = $this->template->tema;
+		$tema = nl2br($tema);
+		$benar = $this->template->yg_benar;
+		$pengarah = $this->template->pengarah;
+
+$html .='<b>'.$tema.'</b>
 <br /><br />
-Saya yang menjalankan amanah,<br />
+'.$benar.',<br />
 <br /><br /><br />
-<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
+<b>'.$pengarah.'</b><br />
 Pengarah<br />
 Pusat Kokurikulum<br />
 
@@ -137,14 +155,25 @@ EOD;
 	
 	
 	public function writeSigniture(){
-		$y = $this->pdf->getY();
+		$sign = $this->template->signiture_file;
+		if(!$sign){
+			die('no signiture - plz upload the signature properly');
+		}
+
+		$file = Yii::getAlias('@upload/'. $sign);
+		
+		
 		$html = '
-		<img src="images/sig-trans-832HI36FGSOV83.png" />
+		<img src="'.$file.'" />
 		';
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->setY($y - 48);
+		$y = $this->pdf->getY();
+		$adjy = $this->template->adj_y;
+		
+		$posY = $y - 48 + $adjy;
+		$this->pdf->setY($posY);
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}

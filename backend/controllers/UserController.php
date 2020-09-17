@@ -79,6 +79,7 @@ class UserController extends Controller
 		$model->created_at = new Expression('NOW()');
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+			Yii::$app->session->addFlash('success', "A user has been created");
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -99,8 +100,20 @@ class UserController extends Controller
 		$model->scenario = 'update';
 		$model->updated_at = new Expression('NOW()');
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($model->load(Yii::$app->request->post())) {
+			
+			if($model->rawPassword){
+				$model->setPassword($model->rawPassword);
+			}
+			
+			
+			if($model->save()){
+				Yii::$app->session->addFlash('success', "Data Updated");
+				return $this->redirect(['view', 'id' => $model->id]);
+			}
+			
+            
+			
         } else {
             return $this->render('update', [
                 'model' => $model,
