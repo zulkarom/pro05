@@ -108,11 +108,16 @@ class CourseController extends Controller
 		$version = $model->developmentVersion;
 
         if ($version->load(Yii::$app->request->post())) {
-			$version->prepared_at = new Expression('NOW()');
-			$version->status = 10;
-			if($version->save()){
-				return $this->redirect(['course/report','course' => $course]);
+			if($version->progress == 100){
+				$version->prepared_at = new Expression('NOW()');
+				$version->status = 10;
+				if($version->save()){
+					return $this->redirect(['course/report','course' => $course]);
+				}
+			}else{
+				Yii::$app->session->addFlash('error', "The progress should be 100%");
 			}
+			
             
         }
 
@@ -143,15 +148,21 @@ class CourseController extends Controller
 	public function actionUpdate($course)
     {
         $model = $this->findModel($course);
+		$model->scenario = 'update2';
 		$version = $model->developmentVersion;
 		$status = $version->status;
+		
 		if($status == 0){
 			
-			$version->scenario = 'save_date';
 			if ($model->load(Yii::$app->request->post()) && $model->save()) {
-				
-				if ($version->load(Yii::$app->request->post()) && $version->save()) {
-					Yii::$app->session->addFlash('success', "Data Updated");
+				$version->scenario = 'pgrs_info';
+				if(Yii::$app->request->post('complete') == 1){
+					$version->pgrs_info = 2;
+				}else{
+					$version->pgrs_info = 1;
+				}
+				if (!$version->save()) {
+					$version->flashError();
 				}
 			}
 			
@@ -237,7 +248,7 @@ class CourseController extends Controller
 
                     if ($flag) {
                         $transaction->commit();
-                            Yii::$app->session->addFlash('success', "Course Profile updated");
+                            Yii::$app->session->addFlash('success', "Course Information updated");
                             return $this->redirect(['update', 'course' => $course]);
                     } else {
                         $transaction->rollBack();
@@ -324,8 +335,15 @@ class CourseController extends Controller
 		$model = $this->findDevelopmentVersion($course);
 		$ref = $model->references;
 		
+		if($ref){
+			foreach($ref as $r){
+				$r->scenario = 'saveall';
+			}
+		}
+		
 		if(Yii::$app->request->post()){
 			if(Yii::$app->request->validateCsrfToken()){
+				$flag = true;
 				$post_ref = Yii::$app->request->post('ref');
 				foreach($post_ref as $key => $pref){
 					$ref = CourseReference::findOne($key);
@@ -334,10 +352,25 @@ class CourseController extends Controller
 						$ref->ref_year = $pref['year'];
 						$ref->is_main = $pref['main'];
 						$ref->is_classic = $pref['isclassic'];
-						$ref->save();
+						if(!$ref->save()){
+							$flag = false;
+						}
 					}
 				}
 				
+				if($flag){
+					//update progress
+					$model->scenario = 'pgrs_ref';
+					if(Yii::$app->request->post('complete') == 1){
+						$model->pgrs_ref = 2;
+					}else{
+						$model->pgrs_ref = 1;
+					}
+					if (!$model->save()) {
+						$model->flashError();
+					}
+					Yii::$app->session->addFlash('success', "The references has been updated");
+				}
 
 			}
 			return $this->redirect(['course-reference', 'course' => $course]);
@@ -351,6 +384,7 @@ class CourseController extends Controller
 	
 	public function actionCourseReferenceAdd($course, $version){
 		$ref = new CourseReference;
+		$ref->scenario = 'add';
 		$ref->crs_version_id = $version;
 		if($ref->save()){
 			//
@@ -446,6 +480,17 @@ class CourseController extends Controller
 					Yii::$app->session->addFlash('success', "Syllabus Updated");
 				}
 				
+				//update progress
+				$model->scenario = 'pgrs_syll';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_syll = 2;
+				}else{
+					$model->pgrs_syll = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
+				}
+				
 				
 			}
 			return $this->redirect(['course-syllabus', 'course' => $course]);
@@ -502,6 +547,11 @@ class CourseController extends Controller
 		
         $model = $this->findDevelopmentVersion($course);
 		$clos = $model->clos;
+		/* if($clos){
+			foreach($clos as $clo){
+				$clo->scenario = 'clo';
+			}
+		} */
         
         if (Yii::$app->request->post()) {
 			if(Yii::$app->request->validateCsrfToken()){
@@ -523,6 +573,17 @@ class CourseController extends Controller
 				}
             }
 			if($flag){
+				//update progress
+				$model->scenario = 'pgrs_clo';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_clo = 2;
+				}else{
+					$model->pgrs_clo = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
+				}
+				
 				Yii::$app->session->addFlash('success', "Data Updated");
 				return $this->redirect(['course-clo','course'=>$course]);
 			}
@@ -564,6 +625,18 @@ class CourseController extends Controller
 				
             }
 			if($flag){
+				
+				//update progress
+				$model->scenario = 'pgrs_plo';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_plo = 2;
+				}else{
+					$model->pgrs_plo = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
+				}
+				
 				Yii::$app->session->addFlash('success', "Data Updated");
 				return $this->redirect(['clo-plo', 'course' => $course]);
 			}
@@ -593,6 +666,17 @@ class CourseController extends Controller
 							$row->save();
 						}
 					}
+				}
+				
+				//update progress
+				$model->scenario = 'pgrs_tax';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_tax = 2;
+				}else{
+					$model->pgrs_tax = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
 				}
             }
 			return $this->redirect(['clo-taxonomy', 'course' => $course]);
@@ -637,6 +721,19 @@ class CourseController extends Controller
 						}
 					}
 				}
+				
+				//update progress
+				$model->scenario = 'pgrs_delivery';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_delivery = 2;
+				}else{
+					$model->pgrs_delivery = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
+				}
+				
+				
             }
 			return $this->redirect(['clo-delivery', 'course' => $course]);
 			
@@ -665,11 +762,19 @@ class CourseController extends Controller
 						}
 					}
 				}
+				//update progress
+				$model->scenario = 'pgrs_soft';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_soft = 2;
+				}else{
+					$model->pgrs_soft = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
+				}
             }
 			return $this->redirect(['clo-softskill', 'course' => $course]);
-			
 		}
-	
 		return $this->render('clo_softskill', [
 				'model' => $model,
 				'clos' => $clos
@@ -686,16 +791,37 @@ class CourseController extends Controller
 		$clos = $model->clos;
 		if ($model->load(Yii::$app->request->post())) {
 			if(Yii::$app->request->validateCsrfToken()){
+			$flag = true;
                 $cloAs = Yii::$app->request->post('CourseCloAssessment');
 				if($cloAs){
 					foreach($cloAs as $ca){
 						$row = CourseCloAssessment::findOne($ca['id']);
 						$row->assess_id = $ca['assess_id'];
 						$row->percentage = $ca['percentage'];
-						$row->save();
+						if(!$row->save()){
+							$flag = false;
+						}
 					}
 				}
+				
+				if($flag){
+					Yii::$app->session->addFlash('success', "Assessment percentage has been updated");
+					//update progress
+					$model->scenario = 'pgrs_assess_per';
+					if(Yii::$app->request->post('complete') == 1){
+						$model->pgrs_assess_per = 2;
+					}else{
+						$model->pgrs_assess_per = 1;
+					}
+					if (!$model->save()) {
+						$model->flashError();
+					}
+				}
+				
+				
             }
+			
+						
 			return $this->redirect(['clo-assessment', 'course' => $course]);
 			
 		}
@@ -792,6 +918,16 @@ class CourseController extends Controller
             }
 			//die();
 			if($flag){
+				//update progress
+				$model->scenario = 'pgrs_slt';
+				if(Yii::$app->request->post('complete') == 1){
+					$model->pgrs_slt = 2;
+				}else{
+					$model->pgrs_slt = 1;
+				}
+				if (!$model->save()) {
+					$model->flashError();
+				}
 				Yii::$app->session->addFlash('success', "Student Learning Time has been successfully updated");
 			}
 			return $this->redirect(['course-slt', 'course' => $course]);
@@ -807,7 +943,16 @@ class CourseController extends Controller
 	
 	public function actionCourseAssessment($course)
     {
-        
+        $model = $this->findDevelopmentVersion($course);
+		$items = $model->assessments;
+		if($items){
+			foreach($items as $item){
+				$item->scenario = 'saveall';
+			}
+		}
+		
+		
+		
         if (Yii::$app->request->post()) {
 			if(Yii::$app->request->validateCsrfToken()){
 				
@@ -824,19 +969,26 @@ class CourseController extends Controller
 					//Yii::$app->session->addFlash('info', $as['id']);
 					$assesment = CourseAssessment::findOne($as['id']);
 					if($assesment){
-						$cat = AssessmentCat::findOne($as['assess_cat']);
-						$form_sum = $cat->form_sum;
-						$final = $final + ($form_sum == 2 ? 1 : 0);
 						$assesment->assess_name = $as['assess_name'];
 						$assesment->assess_name_bi = $as['assess_name_bi'];
 						$assesment->assess_cat = $as['assess_cat'];
 						
-						if($final > 1){
+						/* if($final > 1){
 							Yii::$app->session->addFlash('error', "Only one final exam or assessment is allowed!");
 							$flag = false;
 							break;
-						}
+						} */
 						
+						//update progress
+						$model->scenario = 'pgrs_assess';
+						if(Yii::$app->request->post('complete') == 1){
+							$model->pgrs_assess = 2;
+						}else{
+							$model->pgrs_assess = 1;
+						}
+						if (!$model->save()) {
+							$model->flashError();
+						}
 						
 						if(!$assesment->save()){
 							$flag = false;
@@ -860,8 +1012,11 @@ class CourseController extends Controller
 			
 		}
 		
-	$model = $this->findDevelopmentVersion($course);
-	$items = $model->assessments;
+	
+	
+	/* foreach($items as $item){
+		$item->scenario = 'saveall';
+	} */
 	
 		return $this->render('assessment', [
 				'model' => $model,
@@ -873,9 +1028,9 @@ class CourseController extends Controller
 		$as = new CourseAssessment;
 		$as->scenario = 'add';
 		$as->crs_version_id = $version;
-		$as->assess_cat = 1;
+/* 		$as->assess_cat = 1;
 		$as->assess_name = 'assesment name';
-		$as->assess_name_bi = 'assesment name - en';
+		$as->assess_name_bi = 'assesment name - en'; */
 		if($as->save()){
 			$version = CourseVersion::findOne($version);
 			$course = $version->course_id;

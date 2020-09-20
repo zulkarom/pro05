@@ -97,12 +97,24 @@ if($ref){
 		echo '<input type="hidden" value="0" name="ref['.$row->id .'][isclassic]" id="chk-'.$row->id .'" class="chk-classic" /><input type="checkbox" value="1" name="ref['.$row->id .'][isclassic]" id="chk-'.$row->id .'" '.$chk.' class="chk-classic" />';
 
 		echo '</td>
-		<td><a href="'. Url::to(['course/course-reference-delete', 'course' => $model->course->id, 'version' => $model->id, 'id'=> $row->id]).'" class="rmv-ref" id="remove-'.$row->id .'"><span class="glyphicon glyphicon-remove"></span></a></td>
+		<td>';
+		
+		echo Html::a('<span class="fa fa-remove"></span>', ['course/course-reference-delete', 'course' => $model->course->id, 'version' => $model->id, 'id' => $row->id], [
+            'class' => 'rmv-ref',
+			'id' => 'remove-'.$row->id,
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this Reference?',
+                'method' => 'post',
+            ],
+        ]);
+		
+		
+		
+		echo '</td>
 		
 	</tr>
 	
-	<tr><td></td><td colspan="5"><b style="font-size:12px"><span class="glyphicon glyphicon-book"></span> 
-	'.$row->formatedReference .'</b>
+	<tr><td></td><td colspan="5">
 	</td></tr>
 	
 	';
@@ -112,16 +124,25 @@ if($ref){
 	
 }
 $script .="]";
+
+//<b style="font-size:12px"><span class="glyphicon glyphicon-book"></span> </b>'.$row->formatedReference .'
 ?>
 	
 </table>
-<br />
+<i>* To add or remove a reference, please save first if you have made any change.</i><br />
 <a href="<?=Url::to(['course/course-reference-add', 'course' => $model->course->id, 'version' => $model->id])?>" id="btn-add" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-plus"></span> Add Reference</a>
-<br /> <i>* please save before add or remove reference</i>
+
 
     
 </div>
 </div>
+
+<div class="form-group">
+<?php 
+$check = $model->pgrs_ref == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
 
 
     <div class="form-group">

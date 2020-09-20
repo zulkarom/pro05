@@ -44,14 +44,15 @@ class CourseAdminSearch extends Course
      */
     public function search($params)
     {
-        $query = Course::find()->where(['is_active' => 1, 'faculty_id' => Yii::$app->params['faculty_id']]);
+        $query = Course::find()
+		->where(['is_active' => 1, 'faculty_id' => Yii::$app->params['faculty_id']]);
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
-                'pageSize' => 200,
+                'pageSize' => 100,
             ],
 
         ]);
@@ -70,12 +71,15 @@ class CourseAdminSearch extends Course
 		if(Yii::$app->params['faculty_id']== 21){
 			$query->andFilterWhere(['like', 'component_id', $this->search_cat]);
 		}else{
-			$query->andFilterWhere(['like', 'program_id', $this->search_cat]);
+			$query->andFilterWhere(['=', 'program_id', $this->search_cat]);
 		}
+		
+		$query->andFilterWhere(['or', 
+            ['like', 'course_name', $this->search_course],
+            ['like', 'course_name_bi', $this->search_course],
+			['like', 'course_code', $this->search_course]
+        ]);
 
-
-        $query->orFilterWhere(['like', 'course_name', $this->search_course])
-            ->orFilterWhere(['like', 'course_name_bi', $this->search_course]);
 
         return $dataProvider;
     }

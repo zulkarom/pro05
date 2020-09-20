@@ -328,6 +328,14 @@ if($profile->courseVersion->version_type_id == 1){
 </div>
 
 
+<div class="form-group">
+<?php 
+$check = $version->pgrs_info == 2 ? 'checked' : '';
+?>
+<label><input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label>
+</div>
+
     <div class="form-group">
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> Save Course Information', ['class' => 'btn btn-primary']) ?>
     </div>
@@ -374,6 +382,12 @@ $(".container-items-staff").sortable({
         $(".dynamicform_wrapper_staff").yiiDynamicForm("updateContainer");
     }
 }).disableSelection();
+
+function hasValue(elem) {
+    return $('#' + elem).filter(function() { return $(this).val(); }).length > 0;
+}
+
+
 
 EOD;
 

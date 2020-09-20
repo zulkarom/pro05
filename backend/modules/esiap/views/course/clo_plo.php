@@ -5,6 +5,7 @@ use kartik\widgets\ActiveForm;
 use backend\modules\esiap\models\AssessmentCat;
 use yii\helpers\ArrayHelper;
 use yii\helpers\Url;
+use richardfan\widget\JSRegister;
 
 /* @var $this yii\web\View */
 /* @var $model backend\modules\esiap\models\Course */
@@ -58,7 +59,7 @@ if($clos){
 			$check = $clo->{$prop} == 1 ? 'checked' : '';
 			echo '<td>';
 			echo '<input type="hidden" name="plo['.$clo->id .'][PLO'.$i.']" value="0" />';
-			echo '<input type="checkbox" name="plo['.$clo->id .'][PLO'.$i.']" value="1" '.$check.' />';
+			echo '<input type="checkbox" class="chk-plo" data="clo-'.$clo->id .'" name="plo['.$clo->id .'][PLO'.$i.']" value="1" '.$check.' />';
 			echo '</td>';
 		}
 		
@@ -76,7 +77,30 @@ if($clos){
 </div>
 
 <div class="form-group">
+<?php 
+$check = $model->pgrs_plo == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
+
+
+<div class="form-group">
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE CLO PLO', ['class' => 'btn btn-primary']) ?>
     </div>
 <?php ActiveForm::end()?>
 
+<?php JSRegister::begin(); ?>
+<script>
+
+$(".chk-plo").click(function(){
+	var val = $(this).attr("data");
+	$('input[data="' + val + '"]').each(function(){
+		$(this).prop('checked' , false)
+	});
+	
+	$(this).prop('checked' , true);
+
+});
+
+</script>
+<?php JSRegister::end(); ?>

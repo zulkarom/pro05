@@ -130,6 +130,12 @@ if($clos){
 </div>
 
 
+<div class="form-group">
+<?php 
+$check = $model->pgrs_tax == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
 
 
 <div class="form-group">

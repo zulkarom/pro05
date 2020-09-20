@@ -66,6 +66,13 @@ if($clos){
 </div>
 
 <div class="form-group">
+<?php 
+$check = $model->pgrs_assess_per == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
+
+<div class="form-group">
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE CLO ASSESSMENT', ['class' => 'btn btn-primary']) ?>
     </div>
 <?php ActiveForm::end()?>

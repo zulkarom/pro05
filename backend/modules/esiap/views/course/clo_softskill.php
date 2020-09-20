@@ -144,7 +144,12 @@ if($clos){
 
 </div></div>
 
-
+<div class="form-group">
+<?php 
+$check = $model->pgrs_soft == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
 
 <div class="form-group">
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE CLO SOFTSKILL', ['class' => 'btn btn-primary']) ?>

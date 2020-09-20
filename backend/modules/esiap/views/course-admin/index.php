@@ -193,6 +193,8 @@ echo GridView::widget([
                     
                 }
             ],
+			
+
 
             ['class' => 'yii\grid\ActionColumn',
                  'contentOptions' => ['style' => 'width: 9%'],

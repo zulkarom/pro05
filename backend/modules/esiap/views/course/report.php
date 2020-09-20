@@ -20,9 +20,6 @@ $this->params['breadcrumbs'][] = 'Preview & Submit';
 'course' => $model
 ])?>
 
-<?php echo '<b>STATUS: </b>' . $version->labelStatus;
-echo '<br /><br />';
-?>
 
 <div class="box box-danger">
 <div class="box-body">

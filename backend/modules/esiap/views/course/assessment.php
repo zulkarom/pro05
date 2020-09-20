@@ -30,8 +30,8 @@ $this->params['breadcrumbs'][] = 'Assessment';
         <thead>
             <tr>
                
-                <th>Assessment (BM)</th>
-                <th>Assessment (EN)</th>
+                <th>Assessment Name (BM)</th>
+                <th>Assessment Name (EN)</th>
 				<th>Category</th>
                 <th class="text-center" style="width: 90px;">
                     
@@ -59,14 +59,23 @@ $this->params['breadcrumbs'][] = 'Assessment';
 				
 				<td class="vcenter">
                     <?= $form->field($item, "[{$indexItem}]assess_cat")->dropDownList(
-        ArrayHelper::map(AssessmentCat::find()->all(),'id', 'cat_name_bi'), ['prompt' => 'Please Select' ]
+        ArrayHelper::map(AssessmentCat::find()->where(['showing' => 1])->all(),'id', 'cat_name_bi'), ['prompt' => 'Please Select' ]
     )
 ->label(false) ?>
                 </td>
                 
 
                 <td class="text-center vcenter" style="width: 90px;">
-                    <a href="<?=Url::to(['course-assessment-delete', 'version' => $model->id, 'id' => $item->id])?>" class="remove-item btn btn-default btn-sm"><span class="fa fa-remove"></span></a>
+				
+				<?= Html::a('<span class="fa fa-remove"></span>', ['course-assessment-delete', 'version' => $model->id, 'id' => $item->id], [
+            'class' => 'remove-item btn btn-default btn-sm',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this Assessment? All setting related to this Assessment also will be deleted.',
+                'method' => 'post',
+            ],
+        ]) ?>
+				
+                   
                 </td>
             </tr>
          <?php endforeach; ?>
@@ -77,7 +86,7 @@ $this->params['breadcrumbs'][] = 'Assessment';
          
                 <td colspan="3">
                 <a href="<?=Url::to(['course-assessment-add', 'version' => $model->id])?>" class="add-item btn btn-default btn-sm"><span class="fa fa-plus"></span> New Assessment</a>
-				<br /><br /><i>* please save before add or remove assessment</i>
+				<br /><br /><i>* To add or remove assessment, please save first if you have made any change.</i>
                 
                 </td>
                 <td>
@@ -99,6 +108,13 @@ $this->params['breadcrumbs'][] = 'Assessment';
 
 </div>
 </div>
+
+<div class="form-group">
+<?php 
+$check = $model->pgrs_assess == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
 
     <div class="form-group">
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE ASSESSMENT', ['class' => 'btn btn-primary']) ?>

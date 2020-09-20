@@ -33,6 +33,7 @@ class Course extends \yii\db\ActiveRecord
 	public $course_code_name;
 	public $staff_pic;
 	public $staff_access;
+	public $progress;
 	
     /**
      * @inheritdoc
@@ -53,11 +54,15 @@ class Course extends \yii\db\ActiveRecord
 			
 			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'is_dummy'], 'required', 'on' => 'update'],
 			
+			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'course_class'], 'required', 'on' => 'update2'],
+			
             [['program_id', 'department_id', 'faculty_id', 'is_dummy', 'course_type', 'is_active', 'method_type', 'component_id', 'course_class'], 'integer'],
 			
             [['course_name', 'course_name_bi'], 'string', 'max' => 100],
 			
             [['course_code'], 'string', 'max' => 50],
+			
+			[['credit_hour'], 'integer'],
 			
 			/* ['course_code', 'unique', 'targetClass' => '\backend\modules\esiap\models\Course', 'message' => 'This course code has already been taken'], */
 			

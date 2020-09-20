@@ -247,7 +247,7 @@ Modal::end();
 </div>
 
 <div class="col-md-4"><label>Mid-Semester Break After Week: </label><br />
-<i style="font-size:12px">* mid-semester break will be inserted automatically in FK2 from this setting.</i>
+<i style="font-size:12px">* mid-semester break will be inserted in FK2 according to this setting.</i>
 </div>
 
 <div class="col-md-3"><?php 
@@ -308,6 +308,13 @@ if(!$model->study_week){
 
 </div></div>
 
+<div class="form-group">
+<?php 
+$check = $model->pgrs_syll == 2 ? 'checked' : ''; ?>
+<label>
+<input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label></div>
+
 
     <div class="form-group">
 	<input type="hidden" id="delete-week-id" name="delete-week-id" value="" />
@@ -326,10 +333,13 @@ $("#btn-add-week").click(function(){
 });
 
 $(".btn-delete-week").click(function(){
-	var id = $(this).attr("data");
-	$("#delete-week-id").val(id);
-	$("#btn-submit").val("delete-week");
-	$("form#formsyll").submit();
+	if(confirm("Are you sure to delete this week?")){
+		var id = $(this).attr("data");
+		$("#delete-week-id").val(id);
+		$("#btn-submit").val("delete-week");
+		$("form#formsyll").submit();
+	}
+	
 });
 
 

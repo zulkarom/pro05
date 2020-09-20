@@ -395,13 +395,13 @@ foreach($this->model->syllabus as $row){
 	$html .='<td '.$style_number.'>'.$practical_others.'</td>';
 	//$html .='<td style="vertical-align: middle;text-align:center">'.$row->pnp_others .'</td>';
 	
+	$tech = $row->tech_lecture + $row->tech_tutorial + $row->tech_practical + $row->tech_others;
 	
-	
-	$html .='<td '.$style_number.'>'.$row->nf2f .'</td>';
+	$html .='<td '.$style_number.'>'.$tech .'</td>';
 	
 	$html .='<td '.$style_number.'>'.$row->independent .'</td>';
 	
-	$sub = $row->pnp_lecture + $row->pnp_tutorial + $practical_others + $row->independent + $row->nf2f;
+	$sub = $row->pnp_lecture + $row->pnp_tutorial + $practical_others + $row->independent + $tech;
 	
 	$html .='<td '.$style_number.' width="'.$jum.'">'.$sub.'</td>';
 	$html .='</tr>';
@@ -412,7 +412,7 @@ foreach($this->model->syllabus as $row){
 	$tprac += $practical_others;
 	//$toth += $row->pnp_others;
 	$tind += $row->independent;
-	$tass += $row->nf2f;
+	$tass += $tech;
 	$tgrand +=$sub;
 	
 	//check sem breaks

@@ -59,13 +59,24 @@ class CourseVersion extends \yii\db\ActiveRecord
 			
 			[['senate_approve_at', 'faculty_approve_at', 'senate_approve_show'], 'required', 'on' => 'save_date'],
 			
-
+			[['pgrs_info'], 'required', 'on' => 'pgrs_info'],
+			[['pgrs_clo'], 'required', 'on' => 'pgrs_clo'],
+			[['pgrs_plo'], 'required', 'on' => 'pgrs_plo'],
+			[['pgrs_tax'], 'required', 'on' => 'pgrs_tax'],
+			[['pgrs_soft'], 'required', 'on' => 'pgrs_soft'],
+			[['pgrs_delivery'], 'required', 'on' => 'pgrs_delivery'],
+			[['pgrs_syll'], 'required', 'on' => 'pgrs_syll'],
+			[['pgrs_slt'], 'required', 'on' => 'pgrs_slt'],
+			[['pgrs_assess'], 'required', 'on' => 'pgrs_assess'],
+			[['pgrs_assess_per'], 'required', 'on' => 'pgrs_assess_per'],
+			[['pgrs_ref'], 'required', 'on' => 'pgrs_ref'],
 			
             [['course_id', 'created_by', 'is_developed', 'is_published', 'status', 'prepared_by', 'verified_by', 'dup_course', 'dup_version', 'version_type_id', 'duplicate'], 'integer'],
-			
             [['created_at', 'updated_at', 'senate_approve_at', 'faculty_approve_at', 'senate_approve_show', 'prepared_at', 'verified_at'], 'safe'],
 			
             [['version_name'], 'string', 'max' => 200],
+			
+			
         ];
     }
 
@@ -292,7 +303,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 		$status = '';
 		switch($this->status){
 			case 0:
-			$status = 'DRAFT';
+			$status = 'DRAFT ' . $this->progress. '%';
 			$color = 'default';
 			break;
 			
@@ -375,6 +386,24 @@ class CourseVersion extends \yii\db\ActiveRecord
 	
 	public function getVersionTypeList(){
 		return ArrayHelper::map(VersionType::find()->all(), 'id', 'type_name');
+	}
+	
+	public function getProgress(){
+		$info = $this->pgrs_info;
+		$clo = $this->pgrs_clo;
+		$plo = $this->pgrs_plo;
+		$tax = $this->pgrs_tax;
+		$soft = $this->pgrs_soft;
+		$delivery = $this->pgrs_delivery;
+		$syll = $this->pgrs_syll;
+		$slt = $this->pgrs_slt;
+		$assess = $this->pgrs_assess;
+		$assess_per = $this->pgrs_assess_per;
+		$ref = $this->pgrs_ref;
+		
+		$jum = $info + $clo + $plo + $tax + $soft + $delivery + $syll + $slt + $assess + $assess_per + $ref;
+		$per = $jum / 22 * 100;
+		return number_format($per,0);
 	}
 	
 

@@ -35,6 +35,7 @@ class CourseAssessment extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
+			
            [['assess_name', 'assess_name_bi', 'assess_cat'], 'required', 'on' => 'saveall'],
 			
 			[['crs_version_id'], 'required', 'on' => 'add'],
@@ -62,9 +63,9 @@ class CourseAssessment extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'crs_version_id' => 'Crs Version ID',
-            'assess_name' => 'Assess Name',
-            'assess_name_bi' => 'Assess Name Bi',
-            'assess_cat' => 'Assess Cat',
+            'assess_name' => 'Assessment Name (BM)',
+            'assess_name_bi' => 'Assessment Name (EN)',
+            'assess_cat' => 'Category',
             'trash' => 'Trash',
             'created_by' => 'Created By',
             'created_at' => 'Created At',

@@ -397,6 +397,10 @@ Practicum/ WBL using Effective Learning Time(ELT) of 50%
 	</tr>
 	
 	<tr><td colspan="4" align="right"><strong>Generated Credit Hour by SLT</strong>
+	<div id="slt-formula"></div>
+	<div style="color:red;font-size:11px" id="slt-alert">
+<span class="glyphicon glyphicon-alert"></span> Please make sure the generated Credit Hour equal to Credit Hour set for this course!
+</div>
 	</td>
 		<td style="text-align:center"><strong><span id="hour-slt">?</span></strong></td>
 	</tr>
@@ -447,11 +451,22 @@ Practicum/ WBL using Effective Learning Time(ELT) of 50%
 </div>
 
 
-<div align="center">
+<div>
 	
 	<?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 
-	<button class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> SAVE STUDENT LEARNING TIMES</button>
+
+
+<?php 
+
+$check = $model->pgrs_slt == 2 ? 'checked' : '';
+?>
+
+<div class="form-group"><label>
+<input type="checkbox" name="complete" value="1" <?=$check?> /> Mark as complete</label>
+</div>
+
+<button class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> SAVE STUDENT LEARNING TIMES</button>
 	</div>
 
 
@@ -485,6 +500,7 @@ function calcAll(){
 	calcTech();
 	calcPractical();
 	calcCreditHourSlt();
+	compareCredit();
 }
 
 
@@ -647,7 +663,18 @@ function calcCreditHourSlt(){
                 delimiter = 40;
             }
 	var credit = Math.floor(slt / delimiter);
+	$("#slt-formula").text('[ '+slt+' / '+delimiter+' ]');
 	$("#hour-slt").text(myfor(credit));
+}
+
+function compareCredit(){
+	var gen = myparse($("#hour-slt").text());
+	var set = myparse($("#hour-set").text());
+	if(gen == set){
+		$("#slt-alert").hide();
+	}else{
+		$("#slt-alert").show();
+	}
 }
 
 function calcPractical(){

@@ -55,8 +55,21 @@ $this->params['breadcrumbs'][] = 'CLO';
                 
 
                 <td class="text-center vcenter">
-                    <a href="<?=Url::to(['course-clo-delete', 'version' => $model->id, 'clo' => $clo->id])?>" class="remove-clo btn btn-default btn-sm"><span class="fa fa-remove"></span></a>
-                </td>
+				
+				<?= Html::a('<span class="fa fa-remove"></span>', ['course-clo-delete', 'version' => $model->id, 'clo' => $clo->id], [
+            'class' => 'remove-clo btn btn-default btn-sm',
+            'data' => [
+                'confirm' => 'Are you sure you want to delete this CLO? All setting related to this CLO also will be deleted.',
+                'method' => 'post',
+            ],
+        ]) ?>
+
+				
+				
+                   
+                
+				
+				</td>
             </tr>
          <?php 
 		 $i++;
@@ -71,7 +84,7 @@ $this->params['breadcrumbs'][] = 'CLO';
                 <td colspan="3">
                 <a href="<?=Url::to(['course-clo-add', 'version' => $model->id])?>" class="add-clo btn btn-default btn-sm"><span class="fa fa-plus"></span> ADD CLO</a>
 				
-				<br /> <i>* please save first before add new</i>
+				<br /> <i>* To add or remove clo, please save first if you have made any change.</i>
                 
                 </td>
     
@@ -83,6 +96,17 @@ $this->params['breadcrumbs'][] = 'CLO';
     
 <?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 
+
+</div>
+</div>
+
+<div class="form-group">
+<?php 
+$check = $model->pgrs_clo == 2 ? 'checked' : '';
+?>
+<label><input type="checkbox" id="complete" name="complete" value="1" <?=$check?> /> Mark as complete
+</label>
+</div>
 
     <div class="form-group">
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE COURSE LEARNING OUTCOME', ['class' => 'btn btn-primary']) ?>

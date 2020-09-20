@@ -1205,8 +1205,8 @@ e-Learning')
 					$kk++;
 				}
 			}
-			
-			$numbers = [$row->pnp_lecture, $row->pnp_tutorial, $row->pnp_practical, $row->pnp_others, $row->tech_others, $row->independent];
+			$tech = $row->tech_lecture + $row->tech_tutorial + $row->tech_practical + $row->tech_others;
+			$numbers = [$row->pnp_lecture, $row->pnp_tutorial, $row->pnp_practical, $row->pnp_others, $tech, $row->independent];
 			
 			$this->item10SltContentText($height, $topic, $clo_str, $numbers);
 			
