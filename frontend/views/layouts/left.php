@@ -79,10 +79,12 @@ use backend\modules\esiap\models\Course;
 				
 				['label' => 'Syllabus', 'visible' => $visi, 'icon' => 'book', 'url' => ['/esiap/course/course-syllabus', 'course' => $course_id]],
 				['label' => 'Assessment', 'visible' => $visi, 'icon' => 'book', 'url' => ['/esiap/course/course-assessment', 'course' => $course_id]],
+				
+				
+				
+				['label' => 'Assessment Percentage', 'visible' => $visi, 'icon' => 'book', 'url' => ['/esiap/course/clo-assessment', 'course' => $course_id]],
+				
 				['label' => 'Student Learning Time', 'visible' => $visi, 'icon' => 'book', 'url' => ['/esiap/course/course-slt', 'course' => $course_id]],
-				
-				
-				['label' => 'CLO Assessment', 'visible' => $visi, 'icon' => 'book', 'url' => ['/esiap/course/clo-assessment', 'course' => $course_id]],
 				
 				['label' => 'References', 'visible' => $visi, 'icon' => 'book', 'url' => ['/esiap/course/course-reference', 'course' => $course_id]],
 				
