@@ -31,21 +31,6 @@ $form = ActiveForm::begin(['id' => 'form-clo-assessment']);
 <div class="box-header"></div>
 <div class="box-body">
 
-<?php
-
-$ch = $model->course->credit_hour;
-if($model->slt->is_practical == 1){
-	$notional = 80;
-}else{
-	$notional = 40;
-}
-
-$slt_hour = $ch * $notional;
-$aclo="";$asyll="";
-
-
-
-?>
 
 <div class='row'>
 	<div class='col-md-12'>

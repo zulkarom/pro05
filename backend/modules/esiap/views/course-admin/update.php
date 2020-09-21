@@ -197,9 +197,9 @@ echo Select2::widget([
 				'label' => 'Version Name',
 				'format' => 'html',
 				'value' => function($model){
-					return $model->version_name . '<br />(' . 
+					return '<a href="'.Url::to(['/esiap/course-admin/course-version-update', 'id' => $model->id]).'" class="modalButton-update">' . $model->version_name . '<br />(' . 
 					$model->versionType->type_name . ')' .
-					'<br /> <i>'.date('d M Y', strtotime($model->created_at)).'</i>';
+					'<br /> <i>'.date('d M Y', strtotime($model->created_at)).'</i> <i class="fa fa-pencil"></i></a>';
 				}
 			],
 			
@@ -237,16 +237,16 @@ echo Select2::widget([
                     'update'=>function ($url, $model) {
 						return '
 						<div class="dropdown">
-  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">Actions & Report
+  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">View Doc Report
   <span class="caret"></span></button>
   <ul class="dropdown-menu">
-    <li><a class="modalButton-update" href="'.Url::to(['/esiap/course-admin/course-version-update', 'id' => $model->id]).'">UPDATE VERSION</a></li>
-    <li><a target="_blank" href="'.Url::to(['/esiap/course/fk1', 'course' => $model->course_id, 'version' => $model->id]).'">FK1</a></li>
-    <li><a target="_blank" href="'.Url::to(['/esiap/course/fk2', 'course' => $model->course_id, 'version' => $model->id]).'">FK2</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/fk3', 'course' => $model->course_id, 'version' => $model->id]).'">FK3</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 PDF</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v1.0</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel2', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v2.0</a></li>
+
+    <li><a target="_blank" href="'.Url::to(['/esiap/course/fk1', 'course' => $model->course_id, 'version' => $model->id]).'">FK1 PDF</a></li>
+    <li><a target="_blank" href="'.Url::to(['/esiap/course/fk2', 'course' => $model->course_id, 'version' => $model->id]).'">FK2 PDF</a></li>
+	<li><a target="_blank" href="'.Url::to(['/esiap/course/fk3', 'course' => $model->course_id, 'version' => $model->id]).'">FK3 PDF</a></li>
+	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v1.0 PDF</a></li>
+	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v1.0 EXL</a></li>
+	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel2', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v2.0 EXL</a></li>
   </ul>
 </div>
 						

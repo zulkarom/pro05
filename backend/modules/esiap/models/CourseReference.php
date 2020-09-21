@@ -48,7 +48,7 @@ class CourseReference extends \yii\db\ActiveRecord
             'id' => 'ID',
             'crs_version_id' => 'Crs Version ID',
 			'ref_full' => 'Full Reference',
-            'ref_year' => 'Ref Year',
+            'ref_year' => 'Reference Year',
             'is_classic' => 'Is Classic',
             'is_main' => 'Is Main',
         ];

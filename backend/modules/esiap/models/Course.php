@@ -185,6 +185,10 @@ class Course extends \yii\db\ActiveRecord
 
 	}
 	
+	public function getVersions(){
+		return $this->hasMany(CourseVersion::className(), ['course_id' => 'id'])->orderBy('created_at DESC');
+	}
+	
 	public function getDefaultVersion(){
 		if($this->publishedVersion){
 			return $this->publishedVersion;
@@ -218,6 +222,11 @@ class Course extends \yii\db\ActiveRecord
 	public function getComponent(){
 		return $this->hasOne(Component::className(), ['id' => 'component_id']);
 	}
+	
+	public function getLevel(){
+		return $this->hasOne(CourseLevel::className(), ['id' => 'course_level']);
+	}
+	
 	
 	public function getCoor(){
 		return $this->hasOne(User::className(), ['id' => 'coordinator']);

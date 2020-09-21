@@ -31,6 +31,7 @@ class CourseVersionClone
 		['crs_version_id' => $this->ori_version]);
 		if($original){
 			$copy = new CourseProfile();
+			
 			$copy->attributes = $original->attributes;
 			$copy->crs_version_id = $this->copy_version;
 			$copy->created_at = new Expression('NOW()');

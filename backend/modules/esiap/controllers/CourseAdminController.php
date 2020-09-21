@@ -5,6 +5,7 @@ namespace backend\modules\esiap\controllers;
 use Yii;
 
 use backend\modules\esiap\models\Tbl4Excel;
+use backend\modules\esiap\models\Tbl4Excel2;
 use backend\modules\esiap\models\CourseAdminSearch;
 use backend\modules\esiap\models\CourseInactiveSearch;
 use backend\modules\esiap\models\Course;
@@ -798,10 +799,16 @@ class CourseAdminController extends Controller
 	
 	public function actionTable4(){
 		if(Yii::$app->request->post()){
-			$pdf = new Tbl4Excel;
-			$pdf->multiple = true;
-			$pdf->courses = Yii::$app->request->post('selection');
-			$pdf->generateExcel();
+			if(Yii::$app->request->post('selection')){
+				$pdf = new Tbl4Excel2;
+				$pdf->multiple = true;
+				$pdf->courses = Yii::$app->request->post('selection');
+				$pdf->generateExcel();
+			}else{
+				Yii::$app->session->addFlash('error', "Please select files first.");
+				return $this->redirect('index');
+			}
+			
 		}
 		
 

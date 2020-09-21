@@ -164,12 +164,12 @@ echo $form->field($model, 'version_type_id')->dropDownList($model->versionTypeLi
 
 <div class="row">
 <div class="col-md-6"><div class="form-group">
-        <?= Html::submitButton('SAVE COURSE VERSION', ['class' => 'btn btn-primary']) ?>
+        <?= Html::submitButton('<i class="fa fa-save"></i> SAVE COURSE VERSION', ['class' => 'btn btn-primary']) ?>
     </div></div>
 
 <div class="col-md-6" align="right">
 
-<?= Html::a('Delete Version', ['course-version-delete', 'id' => $model->id], [
+<?= Html::a('<i class="fa fa-remove"></i> DELETE VERSION', ['course-version-delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this version? This action can not be undone!',

@@ -68,15 +68,12 @@ class Tbl4Excel2
 		if($this->multiple){
 			if($this->courses){
 				$i = 0;
-				foreach($this->courses as $c){
-					$course = Course::findOne($c);
-					if($course){
+				$courses = Course::find()->where(['id' => $this->courses])->all();
+				foreach($courses as $course){
 						$version = $course->defaultVersion;
 						$this->model = $version;
 						$this->createCourseSheet($i);
 						$this->generateSheet();
-						
-					}
 				$i++;
 				}
 				$this->generate(Yii::$app->params['faculty_abbr']);

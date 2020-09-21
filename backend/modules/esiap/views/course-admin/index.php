@@ -216,9 +216,9 @@ echo GridView::widget([
 
 <div class="form-group">
         
-<?= Html::submitButton('<span class="glyphicon glyphicon-download-alt"></span> Download Table 4 ', ['class' => 'btn btn-success', 'name'=> 'actiontype', 'value' => 'generate']) ?>
+<?= Html::submitButton('<span class="glyphicon glyphicon-download-alt"></span> Download Table 4 v2.0', ['class' => 'btn btn-success', 'name'=> 'actiontype', 'value' => 'generate']) ?>
     </div>
-
+* Due to runtime limit, do consider to select only 5 courses max at a time.
 
 <?php ActiveForm::end(); ?>
 

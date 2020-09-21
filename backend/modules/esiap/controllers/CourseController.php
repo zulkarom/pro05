@@ -278,6 +278,18 @@ class CourseController extends Controller
 		
     }
 	
+	public function actionHtmlView($course, $version){
+		$version = $this->findCourseVersion($course, $version);
+		$model = $this->findModel($course);
+		
+		$this->layout = '//main_html';
+		return $this->render('html-view', [
+				'model' => $model,
+				'version' => $version,
+				'current' => false
+			]);
+	}
+	
 	private function updateAcademicStaff(){
 		
 			$flag = true;
@@ -344,14 +356,14 @@ class CourseController extends Controller
 		if(Yii::$app->request->post()){
 			if(Yii::$app->request->validateCsrfToken()){
 				$flag = true;
-				$post_ref = Yii::$app->request->post('ref');
+				$post_ref = Yii::$app->request->post('CourseReference');
 				foreach($post_ref as $key => $pref){
-					$ref = CourseReference::findOne($key);
+					$ref = CourseReference::findOne($pref['id']);
 					if($ref){
-						$ref->ref_full = $pref['full'];
-						$ref->ref_year = $pref['year'];
-						$ref->is_main = $pref['main'];
-						$ref->is_classic = $pref['isclassic'];
+						$ref->ref_full = $pref['ref_full'];
+						$ref->ref_year = $pref['ref_year'];
+						$ref->is_main = $pref['is_main'];
+						$ref->is_classic = $pref['is_classic'];
 						if(!$ref->save()){
 							$flag = false;
 						}
@@ -781,6 +793,17 @@ class CourseController extends Controller
 			]);
 	}
 	
+	public function actionViewCourse($course){
+		$model = $this->findModel($course);
+		$version = $model->developmentVersion;
+		
+		return $this->render('view-course', [
+				'model' => $model,
+				'version' => $version,
+				'current' => true
+			]);
+	}
+	
 	public function actionCloAssessment($course){
 		$model = $this->findDevelopmentVersion($course);
 		$items = $model->assessments;
@@ -973,12 +996,6 @@ class CourseController extends Controller
 						$assesment->assess_name_bi = $as['assess_name_bi'];
 						$assesment->assess_cat = $as['assess_cat'];
 						
-						/* if($final > 1){
-							Yii::$app->session->addFlash('error', "Only one final exam or assessment is allowed!");
-							$flag = false;
-							break;
-						} */
-						
 						//update progress
 						$model->scenario = 'pgrs_assess';
 						if(Yii::$app->request->post('complete') == 1){
@@ -1122,6 +1139,15 @@ class CourseController extends Controller
 	
 	protected function findVersion($id){
 		$default = CourseVersion::findOne($id);
+		if($default){
+			return $default;
+		}else{
+			throw new NotFoundHttpException('Page not found!');
+		}
+	}
+	
+	protected function findCourseVersion($course, $version){
+		$default = CourseVersion::findOne(['course_id' => $course, 'id' => $version]);
 		if($default){
 			return $default;
 		}else{
