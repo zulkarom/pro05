@@ -46,7 +46,7 @@ use backend\modules\esiap\models\Menu as EsiapMenu;
 			foreach($coor as $c){
 				$ver = $c->course->developmentVersion->status;
 				if($ver == 0){
-					$rt = '/esiap/course/update';
+					$rt = '/esiap/course/view-course';
 				}else{
 					$rt = '/esiap/course/report';
 				}

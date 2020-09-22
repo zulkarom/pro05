@@ -109,7 +109,7 @@ foreach($coor as $c){
   </td>
   
   
-  <td><a href="<?=Url::to(['/esiap/course/update/', 'course' => $c->course_id])?>" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span> Kemaskini</a>
+  <td><a href="<?=Url::to(['/esiap/course/view-course/', 'course' => $c->course_id])?>" class="btn btn-warning btn-sm"><span class="glyphicon glyphicon-pencil"></span> Kemaskini</a>
   
   
 </td>
