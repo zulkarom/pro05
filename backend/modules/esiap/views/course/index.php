@@ -26,13 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
             'credit_hour',
 
             ['class' => 'yii\grid\ActionColumn',
-                 'contentOptions' => ['style' => 'width: 10%'],
+                 //'contentOptions' => ['style' => 'width: 10%'],
                 'template' => '{update}',
                 //'visible' => false,
                 'buttons'=>[
                     'update'=>function ($url, $model) {
                         return Html::a('<span class="glyphicon glyphicon-pencil"></span> Update',['/esiap/course/update/', 'course' => $model->id],['class'=>'btn btn-warning btn-sm']);
                     },
+					
+					
                 ],
             
             ],

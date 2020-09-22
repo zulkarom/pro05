@@ -96,7 +96,7 @@ $exportColumns = [
 	'action' => Url::to(['/esiap/course-admin/table4'])
 ]); ?>
 
-    <div class="box">
+    <div class="box box-primary">
 <div class="box-header"></div>
 <div class="box-body">
 
@@ -130,19 +130,26 @@ echo GridView::widget([
         'columns' => [
 			['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
-			[
-				'attribute' => 'course_code',
-			//	'contentOptions' => ['style' => 'width: 10%'],
-				
-			],
+		
             
 			[
 				'attribute' => 'course_name',
 			//	'contentOptions' => ['style' => 'width: 45%'],
 				'format' => 'html',
-				'label' => 'Course Name',
+				'label' => 'Course Code & Name',
 				'value' => function($model){
-					return strtoupper($model->course_name) . '<br /><i>' . strtoupper($model->course_name_bi) . '</i>';
+					
+					return Html::a( $model->course_code . ' ' . strtoupper($model->course_name) . '<br /><i>' . strtoupper($model->course_name_bi) . '</i> <span class="glyphicon glyphicon-pencil"></span>',['/esiap/course-admin/update/', 'course' => $model->id]);
+					
+					
+				}
+				
+			],
+			
+			[
+				'label' => 'Credit',
+				'value' => function($model){
+					return $model->credit_hour;
 				}
 				
 			],
@@ -194,20 +201,18 @@ echo GridView::widget([
                 }
             ],
 			
-
-
-            ['class' => 'yii\grid\ActionColumn',
-                 'contentOptions' => ['style' => 'width: 9%'],
-                'template' => '{update}',
-                //'visible' => false,
-                'buttons'=>[
-                    'update'=>function ($url, $model) {
-                        return Html::a('<span class="glyphicon glyphicon-pencil"></span> Update',['/esiap/course-admin/update/', 'course' => $model->id],['class'=>'btn btn-warning btn-sm']);
-                    },
-
-                ],
-            
+			[
+                'label' => 'Report',
+                'format' => 'raw',
+                'value' => function($model){
+					return $model->reportList('View Doc Report');
+                    
+                }
             ],
+			
+
+
+            
         ],
     ]); ?></div>
 </div>

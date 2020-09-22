@@ -24,7 +24,8 @@ $this->params['breadcrumbs'][] = 'CLO';
 <div class="box-body">	
     
     <p><strong>At the end of this course, student should be able to:</strong></p>
-	<i>* in parenthesis taxonomy / PLO mapping will be added automatically</i>
+	<i><span style="color:red">* Do not include numbering and Taxonomy / PLO mapping in CLO text</span></i><br />
+
     <table class="table table-bordered table-striped">
         <thead>
             <tr>

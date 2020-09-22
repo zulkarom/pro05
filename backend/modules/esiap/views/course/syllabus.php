@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = 'Syllabus';
 <?php $form = ActiveForm::begin(['id' => 'formsyll']); ?>
 <?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 	
-<div class="box">
+<div class="box box-primary">
 <div class="box-body">	
     
 
@@ -99,7 +99,7 @@ foreach($syllabus as $row){ ?>
 		?>
 		<div class='topic-container form-group'>
 		<div class='row'>
-		<div class='col-md-1'><label>Topik: </label>
+		<div class='col-md-1'><label>TOPIC: </label>
 		<br><i>(BM)</i>
 		</div>
 		<div class='col-md-5'>
@@ -108,7 +108,7 @@ foreach($syllabus as $row){ ?>
 			
 			</div>
 		</div>
-		<div class='col-md-1'><label>Topic: </label><br><i>(EN)</i></div>
+		<div class='col-md-1'><label>TOPIC: </label><br><i>(EN)</i></div>
 		<div class='col-md-5'>
 			<div class='form-group'>
 			<textarea rows="1" class='form-control topic-text'><?php echo $rt->top_bi;?></textarea>
@@ -128,14 +128,14 @@ foreach($syllabus as $row){ ?>
 			?>
 				<div class='row-subtopic'><div class='row'>
 				<div class='col-md-1'></div>
-				<div class='col-md-1'><label>Sub (BM): </label></div>
+				<div class='col-md-1'><label>SUB (BM): </label></div>
 				<div class='col-md-4'>
 				<div class='form-group'>
 				<textarea rows='1' class='form-control subtopic-text'><?php echo $rst->sub_bm;?></textarea>
 				</div>
 				</div>
 				<div class='col-md-1'></div>
-				<div class='col-md-1'><label>Sub (EN): </label></div>
+				<div class='col-md-1'><label>SUB (EN): </label></div>
 				<div class='col-md-4'>
 				<div class='form-group'>
 				<textarea rows='1' class='form-control subtopic-text'><?php echo $rst->sub_bi;?></textarea>
@@ -170,7 +170,29 @@ foreach($syllabus as $row){ ?>
 		<br />
 		<button type='button' class='btn btn-default btn-sm' id='btn-topic-<?php echo $i;?>'>
 		<span class='glyphicon glyphicon-plus'></span> Add Topic</button> <button type='button' class='btn btn-default btn-sm' id='btnx-topic-<?php echo $i;?>'>
-		<span class='glyphicon glyphicon-remove'></span> Remove Last Topic</button>
+		<span class='glyphicon glyphicon-remove'></span> Remove Last Topic</button> 
+		
+		<?php 
+Modal::begin([
+    'header' => 'Quick Add Topics (#) and Sub Topics (*)',
+    'toggleButton' => ['label' => '<span class="glyphicon glyphicon-file"></span> Quick Add', 'class' => 'btn btn-default btn-sm btn-quick', 'id' => 'btn-quick-' . $i],
+	'size' => 'modal-lg',
+    'footer' => '<div class="form-group">
+	<button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-default">Close</button> 
+		<button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-primary btn-insert-quick"  id="insert-'.$i.'">Insert</button> 
+	 </div>'
+]);
+?>
+
+<textarea class="form-control" id="quick-box-<?=$i?>" rows="10"></textarea>
+
+<?php
+Modal::end();
+
+
+
+?>
+		
 	
 	
 	
@@ -230,7 +252,7 @@ Modal::begin([
                          </div>'
 ]);
 
-
+echo '<div id="modal-order">';
 echo Sortable::widget([
     'type' => Sortable::TYPE_LIST,
 	'showHandle'=>true,
@@ -239,6 +261,7 @@ echo Sortable::widget([
 	],
     'items' => $array_week_sorting
 ]); 
+echo '</div>';
 
 Modal::end();
 
@@ -269,39 +292,6 @@ echo Select2::widget([
 
 
 	</td><td colspan="2"></td></tr>
-<?php 
-/* if(!$model->final_week){
-	$model->final_week = '17-19';
-}
-if(!$model->study_week){
-	$model->study_week = '16';
-}
- */
-?>
-
-<?php 
-/* <tr><td>
-	<label>WEEK</label>
-	<input type="text" class="form-control" value="<?=$model->study_week?>" name="study-week" />
-	
-	</td>
-	
-	<td colspan="3" style="vertical-align:middle">Minggu Ulang Kaji<br />
-<i>Study Week</i>
-</td></tr>	
-
-<tr><td>
-	<label>WEEK</label>
-	<input type="text" class="form-control" value="<?=$model->final_week?>" name="final-week" />
-	
-	</td>
-	
-	<td colspan="3" style="vertical-align:middle">Peperiksaan Akhir<br />
-<i>Final Exam</i>
-</td></tr>	 */
-
-?>
-
 	
 	
 </table>
@@ -342,6 +332,63 @@ $(".btn-delete-week").click(function(){
 	
 });
 
+$(".btn-quick").click(function(){
+	var str = $(this).attr("id");
+	var arr = str.split("-");
+	var id = arr[2];
+	putQcode(id);
+	//alert(code);
+});
+
+$(".btn-insert-quick").click(function(){
+	var str = $(this).attr("id");
+	var arr = str.split("-");
+	var id = arr[1];
+	$("#topic-" + id).html('');
+	var str = $("#quick-box-"+id).val();
+	var sub;
+	var topic;
+	var subtopic;
+	str = str.trim();
+	str = str.replace(/(\r\n|\n|\r)/gm, "");
+	var html = '';
+	var subhtml = '';
+	//check #
+	if (str.indexOf('#') > -1){
+		var topic_arr = str.split("#");
+		if(topic_arr){
+			for(i=1;i< topic_arr.length;i++){
+				sub = topic_arr[i];
+				//check *
+				if (sub.indexOf('*') > -1){
+					sub_arr = sub.split('*');
+					//topic 0
+						topic = splitLang(sub_arr[0]);
+						
+					subhtml = '';
+					for(x=1;x<sub_arr.length;x++){
+						//sub topic
+						subtopic = splitLang(sub_arr[x]);
+						subhtml += genSubTopic(subtopic[0], subtopic[1]);
+					}
+					html += genTopic(topic[0], topic[1], subhtml);
+				}else{
+					//topic no sub
+					topic = splitLang(sub);
+					html += genTopic(topic[0], topic[1], '');
+				}
+				
+			}
+		}
+	}
+	
+	$("#topic-" + id).html(html);
+	btnSubTopic();
+	$("textarea").each(function(){
+        autosize($(this));
+    });
+});
+
 
 
 var tw = <?=count($syllabus)?>;
@@ -350,7 +397,7 @@ for(i=1;i<=tw;i++){
 			var att = $(this).attr('id');
 			att = att.split('-');
 			var week = att[2];
-			$("#topic-" + week).append(genTopic());
+			$("#topic-" + week).append(genTopic('','',''));
 			btnSubTopic();
 			clearBtn();
 			btnSubTopic();
@@ -376,7 +423,43 @@ for(i=1;i<=tw;i++){
 	});
 
 
+function splitLang(lStr){
+	if (lStr.indexOf('/') > -1){
+		var arr = lStr.split('/');
+		return [arr[0], arr[1]];
+	}else{
+		return [lStr, ''];
+	}
+}
 
+function putQcode(week){
+
+	var str = '';
+ 	$("#topic-"+week+" .topic-text").each(function(i,obj){
+		var val = $(this).val();
+		if(isEven(i)){
+			str += '#' + val ;
+		}else{
+			str += '/' +  val + "\n" ;
+			$(this).parents('.topic-container').children('.consubtopic').children('.consubtopicinput').find('.subtopic-text').each(function(x){
+				var subval = $(this).val();
+				if(isEven(x)){
+					str +=  '*' + subval;
+				}else{
+					str +=  '/' +  subval + "\n";
+				}
+			});
+		}
+		
+	}); 
+	
+	//return str;
+	
+	$("#quick-box-"+week).val(str);
+	
+	
+	
+}
 
 function putJson(){
 	for(g=1;g<=tw;g++){
@@ -433,7 +516,7 @@ function clearBtn(){
 function btnSubTopic(){
 	$(".addsubtopic").click(function(){
 		var sel = $(this).parents("div.consubtopic").children(".consubtopicinput");
-		sel.append(genSubTopic());
+		sel.append(genSubTopic('',''));
 		 autosizeTextarea();
 	});
 	$(".removesubtopic").click(function(){
@@ -443,47 +526,47 @@ function btnSubTopic(){
 	}); 
 }
 
-function genSubTopic(){
+function genSubTopic(bm,bi){
 	var html = "<div class='row-subtopic'><div class='row'>";
 	html += "<div class='col-md-1'></div>";
-	html += "<div class='col-md-1'><label>Sub (BM): </label></div>";
+	html += "<div class='col-md-1'><label>SUB (BM): </label></div>";
 	html += "<div class='col-md-4'>";
 	html += "<div class='form-group'>";
-	html += "<textarea rows='1' class='form-control subtopic-text' ></textarea>";
+	html += "<textarea rows='1' class='form-control subtopic-text' >"+bm+"</textarea>";
 	html += "</div>";
 	html += "</div>";
 	html += "<div class='col-md-1'></div>";
-	html += "<div class='col-md-1'><label>Sub (EN): </label></div>";
+	html += "<div class='col-md-1'><label>SUB (EN): </label></div>";
 	html += "<div class='col-md-4'>";
 	html += "<div class='form-group'>";
-	html += "<textarea rows='1' class='form-control subtopic-text' ></textarea>";
+	html += "<textarea rows='1' class='form-control subtopic-text' >"+bi+"</textarea>";
 	html += "</div>";
 	html += "</div>";
 	html += "</div></div>";
 	return html;
 }
 
-function genTopic(){
+function genTopic(bm,bi, sub){
 	var html = "<div class='topic-container form-group'>";
 		html += "<div class='row'>";
-		html += "<div class='col-md-1'><label>Topik: </label>";
+		html += "<div class='col-md-1'><label>TOPIC: </label>";
 		html += "<br><i>(BM)</i>";
 		html += "</div>";
 		html += "<div class='col-md-5'>";
 			html += "<div class='form-group'>";
-			html += "<textarea rows='1' class='form-control topic-text' ></textarea>";
+			html += "<textarea rows='1' class='form-control topic-text' >"+bm+"</textarea>";
 			html += "</div>";
 		html += "</div>";
-		html += "<div class='col-md-1'><label>Topic: </label><br><i>(EN)</i></div>";
+		html += "<div class='col-md-1'><label>TOPIC: </label><br><i>(EN)</i></div>";
 		html += "<div class='col-md-5'>";
 			html += "<div class='form-group'>";
-			html += "<textarea rows='1' class='form-control topic-text' ></textarea>";
+			html += "<textarea rows='1' class='form-control topic-text' >"+bi+"</textarea>";
 			html += "</div>";
 		html += "</div>";
 		html += "</div>";
 		
 		html += "	<div class='consubtopic'>";
-		html += "<div class='consubtopicinput'> </div>";
+		html += "<div class='consubtopicinput'>"+sub+"</div>";
 			html += "<div class='row'>";
 				html += "<div class='col-md-1'></div>";
 				html += "<div class='col-md-6'>";
@@ -508,13 +591,15 @@ function autosizeTextarea(){
 function updateWeekSorting(){
 	var order = 0;
 	var params = '';
-	$("#w1").find('.week-item').each(function(i, el){
+	$("#modal-order").find('.week-item').each(function(i, el){
 		order = i + 1;
 		id = this.id;
 		params += '&or[' + id + ']=' + order;
 		
      });
+	
 	 var url = $('#btn-reorder').attr('href');
+	 // alert(url + params);
 	 $('#btn-reorder').attr('href', url + params);
 	 //console.log();
 }

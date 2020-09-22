@@ -26,51 +26,15 @@ $this->params['breadcrumbs'][] = $this->title;
 			'course.course_name_bi',
 			'course.credit_hour',
 
-
-            ['class' => 'yii\grid\ActionColumn',
-                 'contentOptions' => ['style' => 'width: 25%'],
-                'template' => '{fk1} {fk2} {fk3} {tbl4}',
-                //'visible' => false,
-                'buttons'=>[
-                    'fk1'=>function ($url, $model) {
-						$version = $model->course->defaultVersion;
-						if($version){
-							return Html::a('FK01',['/esiap/course/fk1/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
-						}else{
-							return '-';
-						}
-                        
-                    },
-					'fk2'=>function ($url, $model) {
-						$version = $model->course->defaultVersion;
-						if($version){
-							return Html::a('FK02',['/esiap/course/fk2/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
-						}else{
-							return '-';
-						}
-                        
-                    },
-					'fk3'=>function ($url, $model) {
-						$version = $model->course->defaultVersion;
-						if($version){
-							return Html::a('FK03',['/esiap/course/fk3/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
-						}else{
-							return '-';
-						}
-                        
-                    },
-					'tbl4'=>function ($url, $model) {
-						$version = $model->course->defaultVersion;
-						if($version){
-							return Html::a('TBL4',['/esiap/course/tbl4-excel2/', 'course' => $model->course_id],['target' => '_blank','class'=>'btn btn-default btn-sm']);
-						}else{
-							return '-';
-						}
-                        
-                    },
-                ],
-            
-            ],
+			[
+                'label' => 'Report',
+                'format' => 'raw',
+                'value' => function($model){
+					return $model->course->reportList('View Doc Report');
+                    
+                }
+            ]
+            ,
         ],
     ]); ?></div></div>
 </div>
@@ -84,35 +48,74 @@ $this->params['breadcrumbs'][] = $this->title;
         'dataProvider' => $dataProvider,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-			'course.course_code',
-            'course.course_name',
-			'course.course_name_bi',
-			'course.credit_hour',
+			
 			[
-				'attribute' => 'course.developmentVersion.labelStatus',
-				'label' => 'Status',
-				'format' => 'html'
-				
+                'label' => 'Course Code & Name',
+                'format' => 'html',
+                
+                'value' => function($model){
+					$course = $model->course;
+					$version = $course->developmentVersion;
+					
+					
+						if($version){
+							return Html::a( $course->course_code . ' ' . strtoupper($course->course_name) . ' / <i>' . strtoupper($course->course_name_bi) . '</i> <span class="glyphicon glyphicon-pencil"></span>',['/esiap/course/view-course/', 'course' => $course->id]);
+						}else{
+							return $course->course_code . ' ' . strtoupper($course->course_name) . '<br /><i>' . strtoupper($course->course_name_bi) . '</i>';
+						}
+						
+					
+					
+                    
+                }
+            ],
+			
+			[
+				'label' => 'Credit',
+				'value' => function($model){
+					return $model->course->credit_hour;
+				}
 				
 			],
-
-            ['class' => 'yii\grid\ActionColumn',
-                 'contentOptions' => ['style' => 'width: 10%'],
-                'template' => '{update}',
-                //'visible' => false,
-                'buttons'=>[
-                    'update'=>function ($url, $model) {
-						$version = $model->course->developmentVersion;
-						if($version){
-							return Html::a('<span class="glyphicon glyphicon-pencil"></span> Update',['/esiap/course/update/', 'course' => $model->course_id],['class'=>'btn btn-warning btn-sm']);
-						}else{
-							return 'NO UDV';
-						}
-                        
-                    },
-                ],
-            
+			
+			[
+				'label' => 'Version',
+				'value' => function($model){
+					if($model->course->developmentVersion){
+						return $model->course->developmentVersion->version_name;
+					}else{
+						return 'NONE';
+					}
+					
+				}
+				
+			],
+			
+			[
+                'label' => 'Status',
+                'format' => 'html',
+                
+                'value' => function($model){
+					if($model->course->developmentVersion){
+						
+						return $model->course->developmentVersion->labelStatus;
+					}else{
+						return 'NONE';
+					}
+                    
+                }
             ],
+			
+			[
+                'label' => 'Report',
+                'format' => 'raw',
+                'value' => function($model){
+					return $model->course->reportList('View Doc Report', $model->course->developmentVersion->id);
+                    
+                }
+            ],
+
+           
         ],
     ]); ?></div></div>
 </div>

@@ -517,6 +517,7 @@ class CourseController extends Controller
 	}
 	
 	public function actionCourseSyllabusReorder($id){
+	
 		$model = $this->findDevelopmentVersion($id);
 		$syllabus = $model->syllabus;
 		if(array_key_exists('or',Yii::$app->request->queryParams)){
@@ -531,6 +532,8 @@ class CourseController extends Controller
 				
 			}
 		}
+		}else{
+			Yii::$app->session->addFlash('error', "No sorting data supplied!");
 		}
 		
 		return $this->redirect(['course-syllabus', 'course' => $id]);

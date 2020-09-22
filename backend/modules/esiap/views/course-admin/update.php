@@ -235,22 +235,7 @@ echo Select2::widget([
                 //'visible' => false,
                 'buttons'=>[
                     'update'=>function ($url, $model) {
-						return '
-						<div class="dropdown">
-  <button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown">View Doc Report
-  <span class="caret"></span></button>
-  <ul class="dropdown-menu">
-
-    <li><a target="_blank" href="'.Url::to(['/esiap/course/fk1', 'course' => $model->course_id, 'version' => $model->id]).'">FK1 PDF</a></li>
-    <li><a target="_blank" href="'.Url::to(['/esiap/course/fk2', 'course' => $model->course_id, 'version' => $model->id]).'">FK2 PDF</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/fk3', 'course' => $model->course_id, 'version' => $model->id]).'">FK3 PDF</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v1.0 PDF</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v1.0 EXL</a></li>
-	<li><a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel2', 'course' => $model->course_id, 'version' => $model->id]).'">TABLE 4 v2.0 EXL</a></li>
-  </ul>
-</div>
-						
-						';
+						return $model->course->reportList('View Doc Report', $model->id);
                     }
                 ],
             

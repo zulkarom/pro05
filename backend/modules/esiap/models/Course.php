@@ -4,10 +4,12 @@ namespace backend\modules\esiap\models;
 
 
 use Yii;
+use yii\helpers\Url;
 use backend\models\Faculty;
 use backend\models\Department;
 use common\models\User;
 use backend\models\Component;
+use yii\bootstrap\Modal;
 
 
 
@@ -230,6 +232,68 @@ class Course extends \yii\db\ActiveRecord
 	
 	public function getCoor(){
 		return $this->hasOne(User::className(), ['id' => 'coordinator']);
+	}
+	
+	public function reportList($text, $version_id = false){
+		if($version_id){
+			$version = CourseVersion::findOne($version_id);
+		}else{
+			$version = $this->defaultVersion;
+		}
+		
+		$html = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#course-'.$this->id.'-version-'.$version->id .'"><span class="fa fa-files-o"></span> View Documents</button>
+
+		<div id="course-'.$this->id.'-version-'.$version->id .'" class="fade modal" role="dialog" tabindex="-1" style="display: none;">
+		<div class="modal-dialog modal-md">
+		<div class="modal-content">
+		<div class="modal-header">
+		<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+		'.$this->course_code.' '. strtoupper($this->course_name).'
+		</div>
+		<div class="modal-body">
+		';
+//<a target="_blank" href="'.Url::to(['/esiap/course/tbl4', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"><i class="fa fa-file-pdf-o"></i> TABLE 4 v1.0</a>
+		$html .= '
+		
+		<div class="form-group">
+		
+		VERSION: '.$version->version_name .'
+		<br />STATUS: '.$version->labelStatus .'
+		
+		</div>
+	  
+		<a target="_blank" href="'.Url::to(['/esiap/course/html-view', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"> <i class="fa fa-globe"></i> HTML</a>
+		
+		
+		<a target="_blank" href="'.Url::to(['/esiap/course/fk1', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"><i class="fa fa-file-pdf-o"></i> FK01</a>
+		
+		<a target="_blank" href="'.Url::to(['/esiap/course/fk2', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"><i class="fa fa-file-pdf-o"></i> FK02</a>
+		
+		<a target="_blank" href="'.Url::to(['/esiap/course/fk3', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"><i class="fa fa-file-pdf-o"></i> FK03</a>
+		
+		<br />
+		
+		
+		
+		<a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"><i class="fa fa-file-excel-o"></i> TABLE 4 v1.0</a>
+		
+		<a target="_blank" href="'.Url::to(['/esiap/course/tbl4-excel2', 'course' => $this->id, 'version' => $version->id]).'" class="btn btn-app"><i class="fa fa-file-excel-o"></i> TABLE 4 v2.0</a>
+		
+		';
+	  
+		$html .= '</div>
+<div class="modal-footer">
+<div class="form-group">
+			<button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-default">Close</button> 
+				
+			 </div>
+</div>
+</div>
+</div>
+</div>';	
+
+return $html;
+		
 	}
 
 }

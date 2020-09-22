@@ -32,7 +32,7 @@ class Menu
 					'url' => '#',
 					'items' => [
 					
-				['label' => 'View Course', 'visible' => $show, 'icon' => 'eye', 'url' => ['/esiap/course/view-course', 'course' => $course_id]],
+				['label' => 'Preview Course', 'visible' => $show, 'icon' => 'eye', 'url' => ['/esiap/course/view-course', 'course' => $course_id]],
 						
 				['label' => 'Course Profile', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id]],
 				
@@ -69,7 +69,7 @@ class Menu
 				
 				['label' => 'References', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-reference', 'course' => $course_id]],
 				
-				['label' => 'Preview & Submit', 'icon' => 'search', 'url' => ['/esiap/course/report', 'course' => $course_id]],
+				['label' => 'Submission', 'icon' => 'send', 'url' => ['/esiap/course/report', 'course' => $course_id]],
 
                  ]
                     ];

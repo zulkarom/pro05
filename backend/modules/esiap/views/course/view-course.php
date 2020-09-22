@@ -39,8 +39,14 @@ $this->params['breadcrumbs'][] = 'Update';
     
 	
   </ul>
-</div>
-<br />
+
+
+<?php 
+
+echo $model->reportList('View Doc Report', $version->id)
+
+?>
+</div>  <br />
 
 <?=$this->render('_view_course', [
             'model' => $model,
