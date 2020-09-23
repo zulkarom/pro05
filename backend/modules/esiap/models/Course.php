@@ -109,6 +109,21 @@ class Course extends \yii\db\ActiveRecord
 		return $str;
 	}
 	
+	public function getStaffViewStr(){
+		$list = $this->courseAccesses;
+		$str = '';
+		if($list){
+			$i = 1;
+			foreach($list as $acc){
+				$br = $i == 1 ? '' : '<br />';
+				$str .= $br. strtoupper($acc->staff->user->fullname);
+				
+			$i++;
+			}
+		}
+		return $str;
+	}
+	
 	public function getCourseAccesses(){
 		return $this->hasMany(CourseAccess::className(), ['course_id' => 'id']);
 	}
@@ -241,7 +256,8 @@ class Course extends \yii\db\ActiveRecord
 			$version = $this->defaultVersion;
 		}
 		
-		$html = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#course-'.$this->id.'-version-'.$version->id .'"><span class="fa fa-files-o"></span> View Documents</button>
+		if($version){
+			$html = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#course-'.$this->id.'-version-'.$version->id .'"><span class="fa fa-files-o"></span> View Documents</button>
 
 		<div id="course-'.$this->id.'-version-'.$version->id .'" class="fade modal" role="dialog" tabindex="-1" style="display: none;">
 		<div class="modal-dialog modal-md">
@@ -290,7 +306,12 @@ class Course extends \yii\db\ActiveRecord
 </div>
 </div>
 </div>
-</div>';	
+</div>';
+		}else{
+			$html = 'NO VERSION';
+		}
+		
+			
 
 return $html;
 		

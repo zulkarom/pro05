@@ -60,7 +60,7 @@ $form = ActiveForm::begin(['id' => 'form-clo-assessment']);
 	</th>
 	
 	<th style="vertical-align:top;text-align:center; background-color:#f5f5f5" colspan="4">
-	ONLINE/ TECHONOLY-MEDIATED <br />
+	ONLINE/ TECHNOLOGY-MEDIATED <br />
 	(SYNCHRONOUS)
 
 
@@ -224,7 +224,7 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	<tr>
 		
 		<th style="text-align:center"><b>PHYSICAL</b></th>
-		<th style="text-align:center"><b>ONLINE/<br /> TECHONOLY-MEDIATED (SYNCHRONOUS)
+		<th style="text-align:center"><b>ONLINE/<br /> TECHNOLOGY-MEDIATED (SYNCHRONOUS)
 
 		</b></th>
 		
@@ -305,7 +305,7 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	<tr>
 		
 		<th style="text-align:center"><b>PHYSICAL</b></th>
-		<th style="text-align:center"><b>ONLINE/<br /> TECHONOLY-MEDIATED (SYNCHRONOUS)
+		<th style="text-align:center"><b>ONLINE/<br /> TECHNOLOGY-MEDIATED (SYNCHRONOUS)
 
 		</b></th>
 </thead>

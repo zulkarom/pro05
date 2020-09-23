@@ -52,7 +52,7 @@ class CourseAdminSearch extends Course
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
-                'pageSize' => 100,
+                'pageSize' => 25,
             ],
 
         ]);

@@ -385,7 +385,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 	}
 	
 	public function getVersionTypeList(){
-		return ArrayHelper::map(VersionType::find()->all(), 'id', 'type_name');
+		return ArrayHelper::map(VersionType::find()->orderBy('id DESC')->all(), 'id', 'type_name');
 	}
 	
 	public function getProgress(){

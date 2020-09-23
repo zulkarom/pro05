@@ -311,8 +311,8 @@ class CourseAdminController extends Controller
 				Yii::$app->session->addFlash('error', "The course code has already exist!");
 			}else{
 				if($model->save()){
-					Yii::$app->session->addFlash('success', "A new course has been successfully created");
-					return $this->redirect('index');
+					Yii::$app->session->addFlash('success', "A new course has been successfully created. Please be noted that creating a development version is needed to fill in course information.");
+					return $this->redirect(['update', 'course' => $model->id]);
 				}
 			}
 			

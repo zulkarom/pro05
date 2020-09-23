@@ -56,6 +56,24 @@ $exportColumns = [
                     
                 }
             ],
+			
+			[
+				'label' => 'Person In Charge',
+				'format' => 'html',
+				'value' => function($model){
+					return $model->picStr;
+				}
+				
+			],
+			
+			[
+				'label' => 'Staff View',
+				'format' => 'html',
+				'value' => function($model){
+					return $model->staffViewStr;
+				}
+				
+			]
 
 ];
 ?>

@@ -10,7 +10,7 @@ use yii\helpers\Url;
 /* @var $model backend\modules\esiap\models\Course */
 
 
-$this->title = 'Softskill';
+$this->title = 'Softskills';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Softskill';
 $plo_num = $model->ploNumber;

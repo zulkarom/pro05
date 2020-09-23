@@ -10,7 +10,7 @@ use backend\modules\esiap\models\CourseDelivery;
 /* @var $model backend\modules\esiap\models\Course */
 
 
-$this->title = 'Course Delivery';
+$this->title = 'Teaching Methods';
 $this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
 $this->params['breadcrumbs'][] = 'Delivery';
 $plo_num = $model->ploNumber;

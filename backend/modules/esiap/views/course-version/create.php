@@ -34,7 +34,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 </div>
 
-<div class="col-md-2"><?php 
+<div class="col-md-4"><?php 
 
 
 

@@ -110,7 +110,12 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Report',
                 'format' => 'raw',
                 'value' => function($model){
-					return $model->course->reportList('View Doc Report', $model->course->developmentVersion->id);
+					if($model->course->developmentVersion){
+						return $model->course->reportList('View Doc Report', $model->course->developmentVersion->id);
+					}else{
+						return 'NONE';
+					}
+					
                     
                 }
             ],
