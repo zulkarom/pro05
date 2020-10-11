@@ -16,6 +16,8 @@ $link = Yii::$app->urlManager->createAbsoluteUrl(['user/login']);
     <p>Sukacita dimaklumkan bahawa permohonan anda (<?=ucwords(strtolower(Html::encode($name))) ?>) telah diluluskan dan surat tawaran boleh dimuat turun melalui sistem e-Fasi di <a href="https://pusatko.umk.edu.my/user/login">http://pusatko.umk.edu.my/user/login</a>.</p>
 	
 	<p>Sekiranya anda bersetuju dengan tugas-tugas fasilitator yang disenaraikan dalam lampiran surat tawaran perlantikan, sila klik [Terima] pada halaman permohonan sistem e-Fasi. Seterusnya, sila cetak, tandatangan dan hantar slip penerimaan perlantikan ke pejabat Pusat Ko-kurikulum.</p>
+	
+	<p>Jangan balas email ini kerana ia dihantar secara automatik.</p>
 
     <p>Sekian dimaklumkan.</p>
 
