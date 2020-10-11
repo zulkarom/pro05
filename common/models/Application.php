@@ -21,6 +21,7 @@ use common\models\Token;
 use backend\modules\project\models\Project;
 use yii\db\Expression;
 
+
 /**
  * This is the model class for table "application".
  *
@@ -65,6 +66,8 @@ class Application extends \yii\db\ActiveRecord
 			[['fasi_id', 'semester_id', 'status', 'draft_at'], 'required', 'on' => WorkflowScenario::enterStatus('a-draft')],
 			
 			[['fasi_id', 'semester_id', 'status', 'draft_at', 'campus_id', 'fasi_type_id'], 'required', 'on' => 'savedraft'],
+			
+			[['campus_id'], 'required', 'on' => 'editadmin'],
 			
             [['submit_at'], 'required', 'on' => WorkflowScenario::enterStatus('b-submit')],
 			

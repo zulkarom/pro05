@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use common\models\Application;
 use common\models\ApplicationCourse;
+use backend\models\Course;
 use backend\models\ApplicationSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -17,6 +18,9 @@ use backend\models\Todo;
 use backend\models\SemesterForm;
 use backend\models\Semester;
 use yii\filters\AccessControl;
+use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
+use common\models\Model;
 
 /**
  * ApplicationController implements the CRUD actions for Application model.
@@ -245,18 +249,108 @@ class ApplicationController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionEdit($id)
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
+        $courses = $model->applicationCourses;
+
+		$model->scenario = 'editadmin';
+		
+
+        if ($model->load(Yii::$app->request->post())) {
+			$model->draft_at = new Expression('NOW()');
+	
+            $oldCourseIDs = ArrayHelper::map($courses, 'id', 'id');
+			
+			$courses = Model::createMultiple(ApplicationCourse::classname());
+			
+			Model::loadMultiple($courses, Yii::$app->request->post());
+			
+			$deletedCourseIDs = array_diff($oldCourseIDs, array_filter(ArrayHelper::map($courses, 'id', 'id')));
+			
+			$valid = $model->validate();
+			
+			$valid = Model::validateMultiple($courses) && $valid;
+			
+			if ($valid) {
+
+                $transaction = Yii::$app->db->beginTransaction();
+                try {
+                    if ($flag = $model->save(false)) {
+						
+						if (! empty($deletedCourseIDs)) {
+                            ApplicationCourse::deleteAll(['id' => $deletedCourseIDs]);
+                        }
+						
+						$s = 0;
+						foreach ($courses as $indexCourse => $course) {
+							if($course->is_accepted == 1){
+								$s++;
+							}
+							
+                            if ($flag === false) {
+                                break;
+                            }
+							$course->application_id = $model->id;
+							
+							
+                            if (!($flag = $course->save(false))) {
+                                break;
+                            }
+                        }
+
+                    }
+						if($s > 1){
+							Yii::$app->session->addFlash('error', "Pilih satu kursus sahaja untuk diluluskan");
+							$transaction->rollBack();
+							return $this->redirect(['application/edit', 'id' => $model->id]);
+						}
+						
+                    if ($flag) {
+						
+                        $transaction->commit();
+						Yii::$app->session->addFlash('success', "Maklumat permohonan telah dikemaskini.");
+						return $this->redirect(['application/view', 'id' => $model->id]);
+						
+						//exit();
+                    } else {
+                        $transaction->rollBack();
+                    }
+                } catch (Exception $e) {
+                    $transaction->rollBack();
+					
+                }
+            }
+		}
 
         return $this->render('update', [
             'model' => $model,
+			'courses' => (empty($courses)) ? [new ApplicationCourse] : $courses
         ]);
     }
+	
+	public function actionListCourse($component, $campus){
+		switch($campus){
+			case 1:
+				$field = 'campus_1';
+			break;
+			case 2:
+				$field = 'campus_2';
+			break;
+			case 3:
+				$field = 'campus_3';
+			break;
+		}
+		
+		$course = Course::find()->where(['component_id' => $component, $field => 1])->all();
+
+		
+		if($course){
+			return Json::encode($course);
+		}
+		
+	}
 
     /**
      * Deletes an existing Application model.

@@ -342,7 +342,12 @@ $tass = 0;
 $tgrand = 0;
 $mid = 8;
 $week_num = 1;
-$arr_br = json_decode($this->model->syllabus_break);
+$arr_break = json_decode($this->model->syllabus_break);
+if($arr_break ){
+	$arr_br = $arr_break;
+}else{
+	$arr_br = array();
+}
 foreach($this->model->syllabus as $row){
 	$show_week = '';
 	if($row->duration > 1){

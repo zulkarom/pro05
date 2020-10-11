@@ -20,7 +20,7 @@ echo $this->render('_view_profile', [
 ?>
 <div class="box">
 <div class="box-header"><i class="fa fa-asterisk"></i>
-<h3 class="box-title">MAKLUMAT PERMOHONAN</h3>
+<h3 class="box-title">MAKLUMAT PERMOHONAN</h3><span class="pull-right"><a href="<?=Url::to(['application/edit', 'id' => $model->id])?>" class="btn btn-default btn-sm"><span class="fa fa-edit"></span> Edit</a></span>
 </div>
 <div class="box-body"><div class="application-view">
 
