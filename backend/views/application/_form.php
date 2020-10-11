@@ -1,13 +1,14 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use kartik\widgets\ActiveForm;
 use backend\models\Campus;
 use yii\helpers\ArrayHelper;
 use wbraganca\dynamicform\DynamicFormWidget;
 use backend\models\Component;
 use yii\jui\JuiAsset;
 use yii\helpers\Url;
+use backend\models\Rate;
 
 
 /* @var $this yii\web\View */
@@ -118,6 +119,35 @@ use yii\helpers\Url;
     
     
     <?php DynamicFormWidget::end(); ?>
+	
+	
+	<div class="row">
+<div class="col-md-4"><?= $form->field($model, 'group_id')->dropDownList(
+        ArrayHelper::map($model->getListGroupAll(),'id', 'group_name'), ['prompt' => 'Please Select' ]
+    ) 
+; ?></div>
+
+<div class="col-md-4"><?= $form->field($model, 'rate_amount', [
+    'addon' => ['prepend' => ['content'=>'RM']]
+]
+)->dropDownList(
+        ArrayHelper::map(Rate::find()->all(),'rate_amount', 'rate_amount'), ['prompt' => 'Please Select' ]
+    ) ->label('Kadar Bayaran (per jam)')
+; ?>
+</div>
+
+<div class="col-md-4"><?= $form->field($model, 'verify_note')->textarea(['rows' => '4'])  ?>
+</div>
+
+</div>
+	
+	
+	
+	
+
+
+
+
 
   
 

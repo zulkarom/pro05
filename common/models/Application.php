@@ -67,7 +67,7 @@ class Application extends \yii\db\ActiveRecord
 			
 			[['fasi_id', 'semester_id', 'status', 'draft_at', 'campus_id', 'fasi_type_id'], 'required', 'on' => 'savedraft'],
 			
-			[['campus_id'], 'required', 'on' => 'editadmin'],
+			[['campus_id', 'rate_amount', 'group_id'], 'required', 'on' => 'editadmin'],
 			
             [['submit_at'], 'required', 'on' => WorkflowScenario::enterStatus('b-submit')],
 			
@@ -319,6 +319,10 @@ class Application extends \yii\db\ActiveRecord
 	
 	public function getListGroup(){
 		return ApplicationGroup::find()->where(['campus_id'=> $this->campus_id] )->all();
+	}
+	
+	public function getListGroupAll(){
+		return ApplicationGroup::find()->all();
 	}
 	
 	public function getHourMonth($month_str){
