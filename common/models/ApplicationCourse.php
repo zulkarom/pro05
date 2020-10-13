@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\helpers\ArrayHelper;
 use backend\models\Course;
+use backend\modules\esiap\models\Course as EsiapCourse;
 
 /**
  * This is the model class for table "application_course".
@@ -56,6 +57,10 @@ class ApplicationCourse extends \yii\db\ActiveRecord
 	
 	public function getCourse(){
 		return $this->hasOne(Course::className(), ['id' => 'course_id']);
+	}
+	
+	public function getEsiapCourse(){
+		return $this->hasOne(EsiapCourse::className(), ['id' => 'course_id']);
 	}
 	
 	public function siblingCourses(){

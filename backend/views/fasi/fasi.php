@@ -18,9 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body">
 
 
-
-
-
    <div class="table-responsive"> <?= GridView::widget([
         'dataProvider' => $dataProvider,
         //'filterModel' => $searchModel,
@@ -40,7 +37,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			 'label' => 'Course',
 			 'contentOptions' => [ 'style' => 'width: 20%;' ],
 			 'value' => function($model){
-					return strtoupper($model->acceptedCourse->course->course_name);
+					if($model->acceptedCourse){
+						return strtoupper($model->acceptedCourse->course->course_name);
+					}
+					
 			 }
 			],
 			

@@ -100,6 +100,7 @@ if($sem = Semester::getOpenDateSemester()){
 	  
 <?php if($application){
 	$course = $application->acceptedCourse->course;
+	$esiapCourse = $application->acceptedCourse->esiapCourse;
 	?>  
 	
 	  
@@ -125,7 +126,14 @@ if($sem = Semester::getOpenDateSemester()){
 
       </tr>
       <tr>
-        <td><a href="<?=Url::to(['/esiap/course/tbl4', 'course' => $course->id])?>" target="_blank" class="btn btn-default" ><span class="glyphicon glyphicon-download-alt"></span> TABLE 4 - <?=$course->course_code?></a> </td>
+        <td>
+		
+		<?=$esiapCourse->reportList('View Doc Report');?>
+		
+	
+		
+		
+		</td>
 
       </tr>
 	  <tr>
