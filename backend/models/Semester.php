@@ -70,7 +70,7 @@ class Semester extends \yii\db\ActiveRecord
             'open_at' => 'Open Date ***',
             'close_at' => 'Close Date ***',
 			'template_fasi_id' => 'Fasi Offer Letter Template',
-			'template_project_id' => 'Project Approval Letter Template',
+			'template_project_id' => 'Project Template',
         ];
     }
 	
