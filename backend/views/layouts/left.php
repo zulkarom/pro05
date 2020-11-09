@@ -87,7 +87,7 @@
 							['label' => 'Senarai Peruntukan', 'icon' => 'money', 'url' => ['/project-admin/default/allocation']],
                             ['label' => 'Penyelaras', 'icon' => 'user', 'url' => ['/project-admin/coordinator']],
 							['label' => 'Milestone', 'icon' => 'truck', 'url' => ['/project-admin/default/milestone']],
-							['label' => 'Project Template', 'icon' => 'envelope', 'url' => ['/project-admin/tmpl-approve-project']],
+							['label' => 'Project Template', 'icon' => 'envelope', 'url' => ['/project-admin/tmpl-approve-project']]
 
                         ],
                     ],
