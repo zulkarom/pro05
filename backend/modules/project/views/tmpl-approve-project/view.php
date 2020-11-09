@@ -26,6 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'template_name',
             'pengarah',
+			'ppendaftar',
             'yg_benar',
             'tema:ntext',
             'per3:ntext',

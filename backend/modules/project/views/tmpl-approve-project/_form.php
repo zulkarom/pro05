@@ -24,7 +24,12 @@ use common\models\Upload;
 
 </div>
  
- 
+  <div class="row">
+
+<div class="col-md-6"><?= $form->field($model, 'ppendaftar')->textInput(['maxlength' => true]) ?>
+</div>
+
+</div>
     
 
    
@@ -55,7 +60,8 @@ use common\models\Upload;
 </div>
 	
 	
-	{FASILITATOR} = fasilitator/pembantu fasilitator<br /><br />
+	{FASILITATOR} = fasilitator/pembantu fasilitator<br />
+	{TUAN} = tuan/puan<br /><br />
     <div class="form-group">
         <?= Html::submitButton('SAVE TEMPLATE', ['class' => 'btn btn-success']) ?>
     </div>

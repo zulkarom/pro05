@@ -11,6 +11,7 @@ class ProjectPrint
 	public $model;
 	public $pdf;
 	public $directoryAsset;
+	public $template;
 
 	
 	public function generatePdf(){
@@ -18,6 +19,8 @@ class ProjectPrint
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
 		$this->pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		
+		$this->template = $this->model->semester->projectTemplate;
 		
 		$this->writeHeaderFooter();
 		$this->startPage();
@@ -350,13 +353,15 @@ EOD;
 		///--------------------back to normal --------------
 		//$this->pdf->setY($storeY);
 		
+		$pengarah = $this->template->pengarah;
+		$ppendaftar = $this->template->ppendaftar;
 		
 		$html = '<br /><br /><br />
 		<table nobr="true"><tr><td>
 		Disokong oleh:
 		<br /><br /><br />
 		.......................................................<br />
-		<b>SITI NORHIDAYAH BINTI MAT HUSSIN</b><br />
+		<b>'.$ppendaftar.'</b><br />
 		Penolong Pendaftar<br />
 		Pusat Kokurikulum<br />
 		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)<br />
@@ -366,7 +371,7 @@ EOD;
 		<table nobr="true"><tr><td>
 		Diluluskan / Tidak Diluluskan:<br /><br /><br />
 		.......................................................<br />
-		<b>DR. MOHD NAZRI BIN MUHAYIDDIN</b><br />
+		<b>'.$pengarah.'</b><br />
 		Pengarah<br />
 		Pusat Kokurikulum<br />
 		Pejabat Timbalan Naib Canselor (Hal Ehwal Pelajar dan Alumni)<br />
