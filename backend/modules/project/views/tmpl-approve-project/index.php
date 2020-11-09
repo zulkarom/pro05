@@ -7,7 +7,7 @@ use yii\grid\GridView;
 /* @var $searchModel backend\models\TmplOfferFasiSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Approve Letter Templates';
+$this->title = 'Project Templates';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="tmpl-offer-fasi-index">
