@@ -66,7 +66,7 @@ class TmplApproveProject extends \yii\db\ActiveRecord
             'id' => 'ID',
             'template_name' => 'Nama Template',
             'pengarah' => 'Name Pengarah',
-			'pengarah' => 'Penolong Pendaftar',
+			'ppendaftar' => 'Penolong Pendaftar',
             'yg_benar' => 'Yang menjalanakan tugas',
             'tema' => 'Daulat Raja',
             'per3' => 'Perkara 3',
