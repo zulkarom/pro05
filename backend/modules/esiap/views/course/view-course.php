@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <?php 
 
-echo $model->reportList('View Doc Report', $version->id)
+echo $model->reportList('View Doc Report', $version->id);
 
 ?>
 </div>  <br />
