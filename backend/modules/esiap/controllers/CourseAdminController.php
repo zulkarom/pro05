@@ -614,8 +614,12 @@ class CourseAdminController extends Controller
 		exit;
 	}
 	
-	public function actionRunBulkClone(){
-		$vname = 'TABLE 4 V2';
+	public function actionRunBulkClone($name){
+		if(empty($name)){
+			echo 'nama mana?';
+			die();
+		}
+		$vname = $name;
 		$transaction = Yii::$app->db->beginTransaction();
         try {
 			$this->bulkCourseClone($vname);
