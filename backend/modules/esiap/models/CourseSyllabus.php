@@ -41,13 +41,13 @@ class CourseSyllabus extends \yii\db\ActiveRecord
 			
 			[['crs_version_id'], 'required', 'on' => 'addweek'],
 			
-			[['pnp_lecture', 'pnp_tutorial', 'pnp_practical', 'pnp_others', 'independent',  'nf2f'], 'required', 'on' => 'slt'],
+			[['pnp_lecture', 'pnp_tutorial', 'pnp_practical', 'pnp_others', 'tech_lecture', 'tech_tutorial', 'tech_practical', 'tech_others', 'independent',  'nf2f'], 'required', 'on' => 'slt'],
 			
             [['crs_version_id', 'syl_order', 'duration'], 'integer'],
 			
             [['topics', 'week_num'], 'string'],
 			
-            [['pnp_lecture', 'pnp_tutorial', 'pnp_practical', 'pnp_others', 'independent', 'assessment', 'nf2f'], 'number'],
+            [['pnp_lecture', 'pnp_tutorial', 'pnp_practical', 'pnp_others', 'tech_lecture', 'tech_tutorial', 'tech_practical', 'tech_others', 'independent', 'assessment', 'nf2f'], 'number'],
 			
             [['clo'], 'string', 'max' => 255],
         ];
