@@ -678,11 +678,11 @@ class CourseAdminController extends Controller
 		
 	}
 	
-	public function actionBulkDeleteVersion(){
+	public function actionBulkDeleteVersion($name){
 		//die();/////////////////////////////
 		$courses = Course::find()->all();
 		foreach($courses as $course){
-			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => 'TABLE 4 V2']);
+			$ver = CourseVersion::findOne(['course_id' => $course->id, 'version_name' => $name]);
 			if($ver){
 				$id = $ver->id;
 				$clos = CourseClo::find()->where(['crs_version_id' => $id])->all();
