@@ -22,8 +22,7 @@ use yii\helpers\Url;
         <td width="20%"><b>VERSION</b></td>
         <td><?=$version->version_name?></td>
       </tr>
-	  
-	   <tr>
+	  <tr>
         <td width="20%"><b>DOCUMENTS</b></td>
         <td><?=$model->reportList('View Doc Report', $version->id)?></td>
       </tr>

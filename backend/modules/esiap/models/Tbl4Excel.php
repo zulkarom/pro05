@@ -1177,11 +1177,11 @@ e-Learning')
 			foreach($arr_all as $rt){
 				$wk = $i == 1 ? $show_week . ".  " : '';
 				$br = $i == 1 ? '' : "\n";
-				$topic .= $br . $wk . $rt->top_bi;
+				$topic .= $br . $wk . trim($rt->top_bi);
 				$row_count++;
 				if($rt->sub_topic){
 					foreach($rt->sub_topic as $rst){
-					$topic .= "\n" . '     - ' . $rst->sub_bi;
+					$topic .= "\n" . '     - ' . trim($rst->sub_bi);
 					$row_count++;
 					}
 				}
@@ -1404,7 +1404,7 @@ e-Learning')
 			foreach($this->model->courseAssessmentFormative as $rf){
 					$per = $rf->as_percentage + 0;
 					$f2f = $rf->assess_f2f;
-					$nf2f = $rf->assess_f2f_tech;
+					$nf2f = $rf->assess_nf2f + $rf->assess_f2f_tech;
 					$data = [$per, $f2f, $nf2f];
 					
 					$this->item10SltAssessConText($i, $rf->assess_name_bi, $data);
@@ -1601,7 +1601,7 @@ e-Learning')
 			foreach($this->model->courseAssessmentSummative as $rf){
 					$per = $rf->as_percentage + 0;
 					$f2f = $rf->assess_f2f;
-					$nf2f = $rf->assess_f2f_tech;
+					$nf2f = $rf->assess_nf2f + $rf->assess_f2f_tech;
 					$data = [$per, $f2f, $nf2f];
 					
 					$this->item10SltAssessSumText($i, $rf->assess_name_bi, $data);

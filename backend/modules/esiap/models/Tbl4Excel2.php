@@ -1541,11 +1541,11 @@ Independent Learning
 			$i = 1;
 			foreach($arr_all as $rt){
 				$br = $i == 1 ? '' : "\n";
-				$topic .= $br .$rt->top_bi;
+				$topic .= $br . trim($rt->top_bi);
 				$row_count++;
 				if($rt->sub_topic){
 					foreach($rt->sub_topic as $rst){
-					$topic .= "\n" . '     - ' . $rst->sub_bi;
+					$topic .= "\n" . '     - ' . trim($rst->sub_bi);
 					$row_count++;
 					}
 				}
