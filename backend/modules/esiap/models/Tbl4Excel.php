@@ -1586,7 +1586,7 @@ e-Learning')
 		
 
 		$this->sheet
-			->setCellValue('C' . $curr_row, 'Continuous Assessment')
+			->setCellValue('C' . $curr_row, 'Final Assessment')
 			->setCellValue('J' . $curr_row, 'Percentage (%) ')
 			->setCellValue('J' . $curr_row, 'Percentage (%) ')
 			->setCellValue('K' . $curr_row, 'F2F')

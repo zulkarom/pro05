@@ -1,0 +1,2 @@
+course-admin/run-bulk-clone?name=TABLE%204%20V2
+course-admin/bulk-delete-version?name=TABLE 4 V2
