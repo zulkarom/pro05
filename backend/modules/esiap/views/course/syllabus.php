@@ -269,8 +269,8 @@ Modal::end();
 
 </div>
 
-<div class="col-md-4"><label>Mid-Semester Break After Week: </label><br />
-<i style="font-size:12px">* mid-semester break will be inserted in FK2 according to this setting.</i>
+<div class="col-md-5"><label>Mid-Semester Break After Week: </label><br />
+<i style="font-size:12px">Note: mid-semester break will be inserted in FK2 according to this setting.</i>
 </div>
 
 <div class="col-md-3"><?php 
@@ -280,7 +280,7 @@ echo Select2::widget([
     'name' => 'sem_break',
     'value' => $sem_break,
     'data' => $arr_week,
-    'options' => ['multiple' => true, 'required' => true, 'placeholder' => 'Select week ...']
+    'options' => ['multiple' => true, 'placeholder' => 'Select week ...']
 ]);
 
 ?>
@@ -316,6 +316,10 @@ $check = $model->pgrs_syll == 2 ? 'checked' : ''; ?>
 
 <?php JSRegister::begin(); ?>
 <script>
+
+
+
+
 
 $("#btn-add-week").click(function(){
 	$("#btn-submit").val("add-week");
