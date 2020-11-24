@@ -76,6 +76,8 @@ class CourseVersion extends \yii\db\ActiveRecord
 			
             [['version_name'], 'string', 'max' => 200],
 			
+			[['syllabus_break'], 'string'],
+			
 			
         ];
     }

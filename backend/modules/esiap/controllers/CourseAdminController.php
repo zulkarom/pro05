@@ -870,43 +870,67 @@ class CourseAdminController extends Controller
 		exit();
 	}
 	
+	public function actionFixBreak(){
+		$list = CourseVersion::find()
+		->where(['version_name' => 'TABLE 4 V2'])
+		->andWhere(['or', 
+            ['syllabus_break' => ''],
+            ['syllabus_break' => 'null']
+        ])		
+		->all();
+		if($list){
+			foreach($list as $row){
+				$course = $row->course_id;
+				$covid = CourseVersion::findOne(['version_name' => 'Covid Version', 'course_id' => $course]);
+				$break_old = $covid->syllabus_break;
+				$row->syllabus_break = $break_old;
+				$row->save();
+				echo $row->course_id . ' done<br />';
+			}
+		}
+	}
+	
 	public function actionAutoSetMidtermTwo(){
+		die();
 		$list = Course::find()->where(['credit_hour' => 2])->all();
 		foreach($list as $row){
 			echo $row->course_name;
 			$version = CourseVersion::find()->where(['course_id' => $row->id])->all();
 			if($version){
 				foreach($version as $ver){
-					$syll = CourseSyllabus::find()->where(['crs_version_id' => $ver->id])->all();
-					$br1 = 7;
-						$br2 = 21;
-					if($syll){
-						//echo 'syll'.$ver->id. ' ';
-						
-						$week_num = 1;
-						$found1 = false;
-						$found2 = false;
-						
-						foreach($syll as $syl){
+					if(empty($ver->syllabus_break) or $ver->syllabus_break == 'null' or $ver->syllabus_break == null){
+						$syll = CourseSyllabus::find()->where(['crs_version_id' => $ver->id])->all();
+						$br1 = 7;
+							$br2 = 21;
+						if($syll){
+							//echo 'syll'.$ver->id. ' ';
 							
-							if($found1 == false and $week_num >= 7){
-								$br1 = $week_num;
-								$found1 = true;
+							$week_num = 1;
+							$found1 = false;
+							$found2 = false;
+							
+							foreach($syll as $syl){
+								
+								if($found1 == false and $week_num >= 7){
+									$br1 = $week_num;
+									$found1 = true;
+								}
+								if($found2 == false and $week_num >= 21){
+									$br2 = $week_num;
+									$found2 = true;
+									break;
+								}
+								$week_num = $week_num + $syl->duration;
 							}
-							if($found2 == false and $week_num >= 21){
-								$br2 = $week_num;
-								$found2 = true;
-								break;
-							}
-							$week_num = $week_num + $syl->duration;
+						
 						}
-					
+						
+						$json = '["'.$br1.'", "'.$br2.'"]';
+						echo $json . ' ';
+						$ver->syllabus_break = $json;
+						$ver->save();
+						
 					}
-					
-					$json = '["'.$br1.'", "'.$br2.'"]';
-					echo $json . ' ';
-					$ver->syllabus_break = $json;
-					$ver->save();
 					
 				}
 			}
