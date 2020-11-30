@@ -17,19 +17,20 @@ class Attendance
 	public $directoryAsset;
 	
 	public function generatePdf(){
+		if($this->response->result){
+			$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		
-		
-
-		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
-		
-		$this->pdf = new AttendanceStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		
-		$this->startPage();
-		$this->body();
+			$this->pdf = new AttendanceStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			
+			$this->startPage();
+			$this->body();
 
 
-		$this->pdf->Output('attendance.pdf', 'I');
+			$this->pdf->Output('attendance.pdf', 'I');
+		}else{
+			echo 'Maaf, tidak dapat data dari UMK Portal. Sila periksa sama ada portal UMK berfungsi atau kursus dan kumpulan tidak ditawarkan.';
+		}
+		
 	}
 	
 

@@ -15,20 +15,25 @@ class AttendanceSummary
 	public $directoryAsset;
 	
 	public function generatePdf(){
-		date_default_timezone_set("Asia/Kuala_Lumpur");
-		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
-		
-		$this->pdf = new AttendanceSummaryStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-		
-		$this->pdf->model = $this->model;
-		$this->pdf->course = $this->course;
-		$this->pdf->semester = $this->semester;
-		$this->pdf->group = $this->group;
-		
-		$this->startPage();
-		$this->body();
+		if($this->response->colums){
+			date_default_timezone_set("Asia/Kuala_Lumpur");
+			$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
+			
+			$this->pdf = new AttendanceSummaryStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+			
+			$this->pdf->model = $this->model;
+			$this->pdf->course = $this->course;
+			$this->pdf->semester = $this->semester;
+			$this->pdf->group = $this->group;
+			
+			$this->startPage();
+			$this->body();
 
-		$this->pdf->Output('attendance.pdf', 'I');
+			$this->pdf->Output('attendance.pdf', 'I');
+		}else{
+			echo 'Maaf, tidak dapat data dari UMK Portal. Sila periksa sama ada portal UMK berfungsi atau kursus dan kumpulan tidak ditawarkan.';
+		}
+		
 	}
 	
 	public function body(){
@@ -49,10 +54,13 @@ class AttendanceSummary
 			<td width="'.$name.'" style="line-height: 250%;"><b>  Student Name</b></td>
 			';
 			
-			foreach($this->response->colums->result as $col){
-			$html .= '<td width="'.$box.'" style="line-height: 250%;" align="center"><b>'.date('d-m', strtotime($col->date)) .'</b></td>';
-			
+			if($this->response->colums){
+				foreach($this->response->colums->result as $col){
+				$html .= '<td width="'.$box.'" style="line-height: 250%;" align="center"><b>'.date('d-m', strtotime($col->date)) .'</b></td>';
+				
+				}
 			}
+			
 		
 		$html .= '
 		</tr>

@@ -24,10 +24,19 @@ class Api
 	}
 	
 	public function attendList(){
-		$this->url = $this->portal . 'list?' . $this->getParams();
-		$json = $this->getContent();
-		$obj = json_decode($json);
-		return $obj;
+        try {
+            $this->url = $this->portal . 'list?' . $this->getParams();
+			$json = $this->getContent();
+			$obj = json_decode($json);
+			return $obj;
+            
+        }
+        catch (Exception $e) 
+        {
+            return [];
+        }
+
+		
 	}
 	
 	public function attendListRecorded($application){
@@ -79,6 +88,7 @@ class Api
 	}
 	
 	public function attend(){
+		
 		$this->url = $this->portal . 'attend?' . $this->getParams($this->id);
 		$json = $this->getContent();
 		$obj = json_decode($json);
@@ -191,22 +201,16 @@ class Api
 		return $url;
 	}
 	
-	public function getContent(){
+	public function getContentxx(){
 		return file_get_contents($this->url);
 	}
 	
-	public function getContentX(){
-		set_error_handler(
-			function ($severity, $message, $file, $line) {
-				throw new \ErrorException($message, $severity, $severity, $file, $line);
-			}
-		);
-
+	public function getContent(){
 		try {
 			return file_get_contents($this->url);
 		}
 		catch (\Exception $e) {
-			echo $e->getMessage();die();
+			return "[]";
 		}
 
 		restore_error_handler();
