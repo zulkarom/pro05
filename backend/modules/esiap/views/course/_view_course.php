@@ -554,7 +554,7 @@ $i++;
 </table></div>
 
 
-<table class="table table-striped table-hover">
+<div class="table-responsive"><table class="table table-striped table-hover">
 <thead>
 	<tr>
 		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
@@ -637,9 +637,9 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	
 
 	
-</table>
+</table></div>
 
-<table class="table table-striped table-hover">
+<div class="table-responsive"><table class="table table-striped table-hover">
 	
 
 	
@@ -751,7 +751,7 @@ if($slt->is_practical == 1){
 	
 	
 	
-</table>
+</table></div>
 <br /><br />
 
 <div class="table-responsive">
