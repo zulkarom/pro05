@@ -255,8 +255,8 @@ class Course extends \yii\db\ActiveRecord
 		}else{
 			$version = $this->defaultVersion;
 		}
-		
-		if($version){
+		$html = '';
+		if($version !==null){
 			$html = '<button type="button" class="btn btn-default" data-toggle="modal" data-target="#course-'.$this->id.'-version-'.$version->id .'"><span class="fa fa-files-o"></span> View Documents</button>
 
 		<div id="course-'.$this->id.'-version-'.$version->id .'" class="fade modal" role="dialog" tabindex="-1" style="display: none;">

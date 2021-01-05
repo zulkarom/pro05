@@ -219,9 +219,11 @@ class Api
 	public function test(){
 		$this->url = $this->portal . 'student?' . $this->getParams();
 		
-		echo $this->url;
+		//echo $this->url;
 		echo '<br /><br /><br />';
-		echo $this->curlResponse();
+		//echo $this->curlResponse();
+		echo '<br /><br /><br />';
+		echo file_get_contents('test.txt');
 		//echo file_get_contents($this->url);
 		
 		
