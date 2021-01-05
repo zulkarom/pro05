@@ -221,7 +221,8 @@ class Api
 		
 		echo $this->url;
 		echo '<br /><br /><br />';
-		echo file_get_contents($this->url);
+		echo $this->curlResponse();
+		//echo file_get_contents($this->url);
 		
 		
 		/* try {
