@@ -201,11 +201,11 @@ class Api
 		return $url;
 	}
 	
-	public function getContent(){
+	public function getContentxxx(){
 		return file_get_contents($this->url);
 	}
 	
-	public function getContentxx(){
+	public function getContent(){
 		try {
 			return file_get_contents($this->url);
 		}
