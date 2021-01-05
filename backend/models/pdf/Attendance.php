@@ -29,6 +29,8 @@ class Attendance
 			$this->pdf->Output('attendance.pdf', 'I');
 		}else{
 			echo 'Maaf, tidak dapat data dari UMK Portal. Sila periksa sama ada portal UMK berfungsi atau kursus dan kumpulan tidak ditawarkan.';
+			die();
+			exit();
 		}
 		
 	}
