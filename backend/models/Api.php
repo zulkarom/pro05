@@ -221,12 +221,15 @@ class Api
 		
 		echo $this->url;
 		echo '<br /><br /><br />';
-		try {
+		echo file_get_contents($this->url);
+		
+		
+		/* try {
 			echo file_get_contents($this->url);
 		}
 		catch (\Exception $e) {
 			return "[]";
-		} 
+		}  */
 	}
 	
 	public function curlResponse(){
