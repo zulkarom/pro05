@@ -62,6 +62,20 @@ class StudentController extends Controller
         ]);
     }
 	
+	public function actionUjianApi($a)
+    {
+	
+		$model = $this->findApplication($a);
+		$api = new Api;
+		$api->semester = $model->semester->id;
+		$api->subject = $model->acceptedCourse->course->course_code;
+		$api->group = $model->applicationGroup->group_name;
+		$api->test();
+		
+	
+		exit();
+    }
+	
 	public function actionAttendancePortalPdf($a, $id){
 		$model = $this->findApplication($a);
 		$api = new Api;

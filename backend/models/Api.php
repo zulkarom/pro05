@@ -216,6 +216,19 @@ class Api
 		restore_error_handler();
 	}
 	
+	public function test(){
+		$this->url = $this->portal . 'student?' . $this->getParams();
+		
+		echo $this->url;
+		echo '<br /><br /><br />';
+		try {
+			echo file_get_contents($this->url);
+		}
+		catch (\Exception $e) {
+			return "[]";
+		} 
+	}
+	
 	public function curlResponse(){
 		$curl = curl_init($this->url);
 		//curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
