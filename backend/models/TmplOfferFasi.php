@@ -42,7 +42,7 @@ class TmplOfferFasi extends \yii\db\ActiveRecord
             [['nota_elaun', 'per3', 'per4'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['template_name', 'yg_benar'], 'string', 'max' => 200],
-            [['pengarah', 'tema'], 'string', 'max' => 100],
+            [['pengarah', 'tema'], 'string', 'max' => 300],
 			
             [['is_active'], 'integer'],
 			
