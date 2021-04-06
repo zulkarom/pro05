@@ -265,7 +265,12 @@ class ClaimController extends Controller
 						//if($attend){
 							//print_r($attend);
 							//die();
-                            $kira_post = count($attend);
+							
+                            
+							$kira_post = 0;
+							if(is_object($attend) or is_array($attend)){
+								$kira_post = count($attend);
+							}
                             $kira_lama = count($model->claimAttends);
                             if($kira_post > $kira_lama){
                                 $bil = $kira_post - $kira_lama;
