@@ -254,6 +254,8 @@ class Claim extends \yii\db\ActiveRecord
 		if($items){
 			$total = 0;
 			foreach($items as $item){
+				$end = is_numeric($item->hour_end) ? $item->hour_end : 0;
+				$start = is_numeric($item->hour_start) ? $item->hour_start : 0;
 				$duration = $item->hour_end - $item->hour_start;
 				$duration = $duration < 0 ? 0 : $duration;
 				$total += $duration;
