@@ -207,7 +207,8 @@ class Api
 	
 	public function getContent(){
 		try {
-			return file_get_contents($this->url);
+			return $this->getContentCurl($this->url);
+			//return file_get_contents($this->url);
 		}
 		catch (\Exception $e) {
 			return "[]";
@@ -233,6 +234,15 @@ class Api
 		catch (\Exception $e) {
 			return "[]";
 		}  */
+	}
+	
+	public function getContentCurl($url){
+      $ch = curl_init();
+      curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+      curl_setopt($ch, CURLOPT_URL, $url);
+      $data = curl_exec($ch);
+      curl_close($ch);
+      return $data;
 	}
 	
 	public function curlResponse(){
