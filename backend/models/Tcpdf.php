@@ -18,7 +18,10 @@ class Tcpdf extends \TCPDF {
 	
 	public $font_header_size = 10;
 	
-
+	public function error($msg)
+    {
+        throw new Exception($msg);
+    }
     //Page header
     public function Header() {
 		//$this->myX = $this->getX();
