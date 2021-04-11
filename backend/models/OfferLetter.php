@@ -27,7 +27,7 @@ class OfferLetter
 		
 		$this->pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
-		$this->writeHeaderFooter();
+		//$this->writeHeaderFooter();
 		$this->startPage();
 		
 		$this->writeRef();
