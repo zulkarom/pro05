@@ -44,7 +44,7 @@ class OfferLetter
 		$this->pdf->AddPage("P");
 		$this->writeTask();
 
-		$this->pdf->Output('surat-tawaran.pdf', 'I');
+		//$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
 	
 	public function writeHeaderFooter(){
