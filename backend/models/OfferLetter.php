@@ -30,8 +30,8 @@ class OfferLetter
 		//$this->writeHeaderFooter();
 		$this->startPage();
 		
-		$this->writeRef();
-	/* 	$this->writeTitle();
+	/*	$this->writeRef();
+	 	$this->writeTitle();
 		$this->writeTable();
 		
 		$this->pdf->AddPage("P");
@@ -42,6 +42,7 @@ class OfferLetter
 		
 		$this->pdf->AddPage("P");
 		$this->writeTask(); */
+$this->pdf->Cell(0, 0, 'TEST CELL STRETCH: no stretch', 1, 1, 'C', 0, '', 0);
 
 		$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
@@ -54,7 +55,7 @@ class OfferLetter
 		$this->pdf->footer_html ='<img src="images/letterfoot.jpg" />';
 	}
 	public function writeRef(){
-		/* $status = $this->model->getWfStatus();
+		$status = $this->model->getWfStatus();
 		if($status == 'release' or $status == 'accept'){
 			$release = $this->model->released_at;
 			$date = strtoupper(Common::date_malay($release));
@@ -93,18 +94,9 @@ class OfferLetter
 		//echo $html;
 		$tbl = <<<EOD
 		$html
-EOD; */
-		
-		//$this->pdf->writeHTML($tbl, true, false, false, false, '');
-		// set some text to print
-$txt = <<<EOD
-TCPDF Example 002
-
-Default page header and footer are disabled using setPrintHeader() and setPrintFooter() methods.
 EOD;
-
-// print a block of text using Write()
-$this->pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
+		
+		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}
 	
 	public function getSemester(){
