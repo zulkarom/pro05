@@ -31,18 +31,18 @@ class OfferLetter
 		$this->startPage();
 		
 		$this->writeRef();
-		$this->writeTitle();
-		$this->writeTable();
+		//$this->writeTitle();
+		//$this->writeTable();
 		
-		$this->pdf->AddPage("P");
-		$this->writeEnding();
+		//$this->pdf->AddPage("P");
+		//$this->writeEnding();
 		//$this->writeSlogan();
-		$this->writeSigniture();
-		$this->writeSignitureImg();
-		$this->writeSk();
+		//$this->writeSigniture();
+		//$this->writeSignitureImg();
+		//$this->writeSk();
 		
-		$this->pdf->AddPage("P");
-		$this->writeTask();
+		//$this->pdf->AddPage("P");
+		//$this->writeTask();
 
 		//$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
