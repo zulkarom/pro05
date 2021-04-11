@@ -91,6 +91,7 @@ class OfferLetter
 		$this->pdf->SetMargins(20, 10, 20);
 		
 		$this->pdf->SetFont('arial', '', $this->fontSize);
+		echo $html;
 		$tbl = <<<EOD
 		$html
 EOD;
