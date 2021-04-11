@@ -36,7 +36,7 @@ class OfferLetter
 		
 		$this->pdf->AddPage("P");
 		$this->writeEnding();
-		$this->writeSlogan();
+		///$this->writeSlogan();
 		$this->writeSigniture();
 		$this->writeSignitureImg();
 		$this->writeSk();
