@@ -95,6 +95,7 @@ class OfferLetterController extends Controller
 		$pdf = new OfferLetter;
 		$pdf->model = $model;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionRelease(){
