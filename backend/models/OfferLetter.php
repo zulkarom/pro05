@@ -96,7 +96,15 @@ class OfferLetter
 EOD; */
 		
 		//$this->pdf->writeHTML($tbl, true, false, false, false, '');
-		$this->pdf->MultiCell(55, 5, '[LEFT] ', 1, 'L', 1, 0, '', '', true);
+		// set some text to print
+$txt = <<<EOD
+TCPDF Example 002
+
+Default page header and footer are disabled using setPrintHeader() and setPrintFooter() methods.
+EOD;
+
+// print a block of text using Write()
+$this->pdf->Write(0, $txt, '', 0, 'C', true, 0, false, false, 0);
 	}
 	
 	public function getSemester(){
