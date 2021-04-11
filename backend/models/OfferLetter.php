@@ -54,7 +54,7 @@ class OfferLetter
 		$this->pdf->footer_html ='<img src="images/letterfoot.jpg" />';
 	}
 	public function writeRef(){
-		$status = $this->model->getWfStatus();
+		/* $status = $this->model->getWfStatus();
 		if($status == 'release' or $status == 'accept'){
 			$release = $this->model->released_at;
 			$date = strtoupper(Common::date_malay($release));
@@ -93,9 +93,10 @@ class OfferLetter
 		//echo $html;
 		$tbl = <<<EOD
 		$html
-EOD;
+EOD; */
 		
-		$this->pdf->writeHTML($tbl, true, false, false, false, '');
+		//$this->pdf->writeHTML($tbl, true, false, false, false, '');
+		$this->pdf->MultiCell(55, 5, '[LEFT] ', 1, 'L', 1, 0, '', '', true);
 	}
 	
 	public function getSemester(){
