@@ -14,7 +14,7 @@ use backend\models\OfferLetter;
 use backend\models\OfferLetterSearch;
 use common\models\Application;
 use raoul2000\workflow\validation\WorkflowScenario;
-use TCPDF;
+
 
 /**
  * ApplicationController implements the CRUD actions for Application model.
@@ -92,31 +92,10 @@ class OfferLetterController extends Controller
     }
 	
 	public function actionPdf($id){
-		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
-
-
-
-//set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-
-$pdf->AddPage();
-
-// Set some content to print
-$html = <<<EOD
-<h1>ok now</h1>
-EOD;
-
-// Print text using writeHTMLCell()
-$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-
-$pdf->Output('example_001.pdf', 'I');
-		/* $model = $this->findModel($id);
+		$model = $this->findModel($id);
 		$pdf = new OfferLetter;
 		$pdf->model = $model;
-		$pdf->generatePdf(); */
+		$pdf->generatePdf();
 		exit();
 	}
 	

@@ -6,7 +6,7 @@ use Yii;
 use common\models\Common;
 use frontend\models\LoginAsset;
 use yii\helpers\Url;
-use TCPDF;
+
 
 
 class OfferLetter
@@ -20,44 +20,18 @@ class OfferLetter
 	
 	public function generatePdf(){
 		
-/* 		$this->template = $this->model->semester->offerTemplate;
+		$this->template = $this->model->semester->offerTemplate;
 		
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		$this->pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false); */
+		$this->pdf = new PdfStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
-// create new PDF document
-$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
-
-
-
-$pdf->setPrintHeader(false);
-$pdf->setPrintFooter(false);
-
-
-
-//set auto page breaks
-$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
-
-
-$pdf->AddPage();
-
-// Set some content to print
-$html = <<<EOD
-<h1>content works</h1>
-EOD;
-
-// Print text using writeHTMLCell()
-$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-
-$pdf->Output('example_001.pdf', 'I');
+		$this->writeHeaderFooter();
+		$this->startPage();
 		
-		//$this->writeHeaderFooter();
-		//$this->startPage();
-		
-		//$this->writeRef();
-	 /*	$this->writeTitle();
+		$this->writeRef();
+	 	$this->writeTitle();
 		$this->writeTable();
 		
 		$this->pdf->AddPage("P");
@@ -67,9 +41,9 @@ $pdf->Output('example_001.pdf', 'I');
 		$this->writeSk();
 		
 		$this->pdf->AddPage("P");
-		$this->writeTask(); */
+		$this->writeTask(); 
 
-		//$this->pdf->Output('surat-tawaran.pdf', 'I');
+		$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
 	
 	public function writeHeaderFooter(){
@@ -117,8 +91,8 @@ $pdf->Output('example_001.pdf', 'I');
 		
 		$this->pdf->SetFont('arial', '', $this->fontSize);
 		//echo $html;
-$tbl = <<<EOD
-$html
+		$tbl = <<<EOD
+		$html
 EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
