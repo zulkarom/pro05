@@ -45,7 +45,7 @@ $pdf->AddPage();
 
 // Set some content to print
 $html = <<<EOD
-<h1>Anda jutawan</h1>
+<h1>content works</h1>
 EOD;
 
 // Print text using writeHTMLCell()
