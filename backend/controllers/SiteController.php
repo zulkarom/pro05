@@ -8,6 +8,7 @@ use yii\filters\AccessControl;
 use common\models\LoginForm;
 use backend\models\SemesterForm;
 use backend\models\Semester;
+use TCPDF;
 
 /**
  * Site controller
@@ -24,12 +25,12 @@ class SiteController extends Controller
                 'class' => AccessControl::className(),
                 'rules' => [
                     [
-                        'actions' => ['login', 'error'],
+                        'actions' => ['login', 'error', 'test-pdf'],
                         'allow' => true,
 						'roles' => ['?'],
                     ],
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'test-pdf'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -113,4 +114,33 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
+	
+	public function actionTestPdf(){
+		$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false);
+
+
+
+//set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+
+$pdf->AddPage();
+
+// Set some content to print
+$html = <<<EOD
+<h1>Berjaya!</h1>
+EOD;
+
+// Print text using writeHTMLCell()
+$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+$pdf->Output('example_001.pdf', 'I');
+		/* $model = $this->findModel($id);
+		$pdf = new OfferLetter;
+		$pdf->model = $model;
+		$pdf->generatePdf(); */
+		exit();
+	}
 }
