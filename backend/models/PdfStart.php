@@ -4,9 +4,9 @@ namespace backend\models;
 
 use TCPDF;
 
-class Tcpdf extends TCPDF {
+class PdfStart extends TCPDF {
 	
-	/* public $header_html;
+	public $header_html;
 	
 	public $header_first_page_only = false;
 	
@@ -100,5 +100,5 @@ class Tcpdf extends TCPDF {
         // Page number
         //$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		
-    } */
+    }
 }
