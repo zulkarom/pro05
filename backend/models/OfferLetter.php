@@ -27,8 +27,34 @@ class OfferLetter
 		
 		$this->pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
+// create new PDF document
+$pdf = new TCPDF(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+
+
+
+$pdf->setPrintHeader(false);
+$pdf->setPrintFooter(false);
+
+
+
+//set auto page breaks
+$pdf->SetAutoPageBreak(TRUE, PDF_MARGIN_BOTTOM);
+
+
+$pdf->AddPage();
+
+// Set some content to print
+$html = <<<EOD
+<h1>Anda jutawan</h1>
+EOD;
+
+// Print text using writeHTMLCell()
+$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+$pdf->Output('example_001.pdf', 'I');
+		
 		//$this->writeHeaderFooter();
-		$this->startPage();
+		//$this->startPage();
 		
 		//$this->writeRef();
 	 /*	$this->writeTitle();
@@ -42,25 +68,6 @@ class OfferLetter
 		
 		$this->pdf->AddPage("P");
 		$this->writeTask(); */
-
-// Set some content to print
-$html = <<<EOD
-<h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0000;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF</span>&nbsp;</a>!</h1>
-<i>This is the first example of TCPDF library.</i>
-<p>This text is printed using the <i>writeHTMLCell()</i> method but you can also use: <i>Multicell(), writeHTML(), Write(), Cell() and Text()</i>.</p>
-<p>Please check the source code documentation and other examples for further information.</p>
-<p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
-EOD;
-
-// Print text using writeHTMLCell()
-$this->pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
-
-$this->pdf->Write(5, 'some text', '');
-// ---------------------------------------------------------
-
-// Close and output PDF document
-// This method has several options, check the source code documentation for more information.
-$this->pdf->Output('example_001.pdf', 'I');
 
 		//$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
