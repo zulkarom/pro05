@@ -30,7 +30,7 @@ class OfferLetter
 		//$this->writeHeaderFooter();
 		$this->startPage();
 		
-		$this->writeRef();
+		//$this->writeRef();
 	 /*	$this->writeTitle();
 		$this->writeTable();
 		
@@ -42,9 +42,27 @@ class OfferLetter
 		
 		$this->pdf->AddPage("P");
 		$this->writeTask(); */
-$this->pdf->Cell(0, 0, 'TEST CELL STRETCH: no stretch', 1, 1, 'C', 0, '', 0);
 
-		$this->pdf->Output('surat-tawaran.pdf', 'I');
+// Set some content to print
+$html = <<<EOD
+<h1>Welcome to <a href="http://www.tcpdf.org" style="text-decoration:none;background-color:#CC0000;color:black;">&nbsp;<span style="color:black;">TC</span><span style="color:white;">PDF</span>&nbsp;</a>!</h1>
+<i>This is the first example of TCPDF library.</i>
+<p>This text is printed using the <i>writeHTMLCell()</i> method but you can also use: <i>Multicell(), writeHTML(), Write(), Cell() and Text()</i>.</p>
+<p>Please check the source code documentation and other examples for further information.</p>
+<p style="color:#CC0000;">TO IMPROVE AND EXPAND TCPDF I NEED YOUR SUPPORT, PLEASE <a href="http://sourceforge.net/donate/index.php?group_id=128076">MAKE A DONATION!</a></p>
+EOD;
+
+// Print text using writeHTMLCell()
+$this->pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+
+$this->pdf->Write(5, 'some text', '');
+// ---------------------------------------------------------
+
+// Close and output PDF document
+// This method has several options, check the source code documentation for more information.
+$this->pdf->Output('example_001.pdf', 'I');
+
+		//$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
 	
 	public function writeHeaderFooter(){
