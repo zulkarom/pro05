@@ -30,8 +30,8 @@ class OfferLetter
 		//$this->writeHeaderFooter();
 		$this->startPage();
 		
-	/*	$this->writeRef();
-	 	$this->writeTitle();
+		$this->writeRef();
+	 /*	$this->writeTitle();
 		$this->writeTable();
 		
 		$this->pdf->AddPage("P");
@@ -92,8 +92,8 @@ $this->pdf->Cell(0, 0, 'TEST CELL STRETCH: no stretch', 1, 1, 'C', 0, '', 0);
 		
 		$this->pdf->SetFont('arial', '', $this->fontSize);
 		//echo $html;
-		$tbl = <<<EOD
-		$html
+$tbl = <<<EOD
+$html
 EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
