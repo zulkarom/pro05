@@ -2,6 +2,7 @@
 
 namespace backend\models;
 
+use yii\base\ErrorException;
 use TCPDF;
 
 class PdfStart extends TCPDF {
@@ -22,7 +23,7 @@ class PdfStart extends TCPDF {
 	
 	public function error($msg)
     {
-        throw new Exception($msg);
+        throw new ErrorException($msg);
     }
     //Page header
     public function Header() {

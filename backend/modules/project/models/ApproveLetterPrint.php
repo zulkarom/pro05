@@ -166,7 +166,7 @@ EOD;
 		copy($file, $paste);
 		
 		$html = '
-		<img src="'.$f.'" />
+		<img src="images/temp/'.$f.'" />
 		';
 		$tbl = <<<EOD
 		$html
