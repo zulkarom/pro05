@@ -113,16 +113,23 @@ foreach($syll as $row){ ?>
 		$arr_syll .= $i == 1 ? $row->id : ", " . $row->id ;
 		$arr_all = json_decode($row->topics);
 		if($arr_all){
+		$n = 1;
+		echo '<ul style="padding-left:5px">';
 		foreach($arr_all as $rt){
-		echo "<strong>".$rt->top_bm ." / <i>". $rt->top_bi . "</i></strong>";
-		if($rt->sub_topic){
-		echo "<ul>";
-			foreach($rt->sub_topic as $rst){
-			echo "<li>".$rst->sub_bm . " / <i>" . $rst->sub_bi . "</i></li>";
+			//$break = $n == 1 ? '': '<br/>';
+			echo '<li>';
+			echo "<strong>".$rt->top_bm ." / <i>". $rt->top_bi . "</i></strong>";
+			if($rt->sub_topic){
+			echo "<ul>";
+				foreach($rt->sub_topic as $rst){
+				echo "<li>".$rst->sub_bm . " / <i>" . $rst->sub_bi . "</i></li>";
+				}
+			echo "</ul>";
+			echo '<li>';
 			}
-		echo "</ul>";
-		}
+			$n++;
 		} 
+		echo '</ul>';
 		} 
 		?>
 		
@@ -211,6 +218,9 @@ $i++;
 		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
 		FORMATIVE ASSESSMENT
 		</b></th>
+		<th rowspan="2" style="vertical-align:bottom"><b>
+		PERCENTAGE
+		</b></th>
 		<th width="40%" colspan="2" style="text-align:center"><b>FACE-TO-FACE(F2F)</b></th>
 		<th width="20%" style="text-align:center" rowspan="2"><b>NF2F <br />
 INDEPENDENT LEARNING FOR ASSESSMENT<br />
@@ -237,19 +247,21 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	
 	<?php 
 	
-	$assdirect = $model->assessmentFormative;
-	$assindirect= $model->assessmentSummative;
+
+	$assdirect = $model->courseAssessmentFormative;
+	$assindirect= $model->courseAssessmentSummative;
 	
 	$arrFormAss = "";
 	$i=1;
+	$total_per_fom = 0;
 	if($assdirect){
 		
 		foreach($assdirect as $rhead){
 			$id = $rhead->id;
-
+			$total_per_fom += $rhead->as_percentage;
 			$arrFormAss .= $i == 1 ? $id : "," . $id ;
 			echo "<tr><td>".$rhead->assess_name ." / <i>".$rhead->assess_name_bi ."</i></td>
-			
+			<td align='center'>" . $rhead->as_percentage . "%</td>
 			<td>
 			<input class='form-control tgcal' name='assess[".$id . "]' id='form-ass-".$id . "' value='" . $rhead->assess_f2f . "' style='text-align:center' /></td>
 			
@@ -272,8 +284,8 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 
 	
 	<tr>
-	<td> <strong>TOTAL FORMATIVE</strong>
-	</td>
+	<td> <strong>TOTAL FORMATIVE</strong></td>
+	<td style="text-align:center"><strong><?=$total_per_fom?>%</strong></td>
 		<td style="text-align:center"><strong id="form-total-ass">0</strong></td>
 		<td style="text-align:center"><strong id="form-total-ass-tech">0</strong></td>
 		<td style="text-align:center"><strong id="form-total-ass2">0</strong></td>
@@ -292,6 +304,9 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	<tr>
 		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
 		SUMMATIVE ASSESSMENT
+		</b></th>
+		<th rowspan="2" style="vertical-align:bottom"><b>
+		PERCENTAGE
 		</b></th>
 		<th width="40%" colspan="2" style="text-align:center"><b>FACE-TO-FACE (F2F)</b></th>
 		<th width="20%" style="text-align:center" rowspan="2"><b>NF2F <br />
@@ -312,12 +327,14 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 
 	<?php 
 	$arrSumAss = "";
-	
+	$total_per_sum = 0;
 	if($assindirect){
 		foreach($assindirect as $rhead){
 			$id = $rhead->id;
+			$total_per_sum += $rhead->as_percentage;
 			$arrSumAss .= $i == 1 ? $id : "," . $id ;
 			echo "<tr><td>".$rhead->assess_name_bi ." / <i>".$rhead->assess_name_bi ."</i></td>
+			<td align='center'>" . $rhead->as_percentage . "%</td>
 			<td><input class='form-control tgcal' name='assess[".$id . "]' id='sum-ass-".$id . "' value='".$rhead->assess_f2f ."' style='text-align:center' /></td>
 			
 			<td><input class='form-control tgcal' name='assess_tech[".$id . "]' id='sum-ass-tech-".$id . "' value='".$rhead->assess_f2f_tech ."' style='text-align:center' /></td>
@@ -335,6 +352,7 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	<tr>
 	<td> <strong>TOTAL SUMMATIVE</strong>
 	</td>
+	<td style="text-align:center"><strong><?=$total_per_sum?>%</strong></td>
 	
 		<td style="text-align:center"><strong id="sum-total-ass">0</strong></td>
 		<td style="text-align:center"><strong id="sum-total-ass-tech">0</strong></td>
@@ -345,12 +363,12 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	</tr>
 	
 	
-	<tr><td colspan="4" align="right"><strong>SLT FOR ASSESSMENT</strong>
+	<tr><td colspan="5" align="right"><strong>SLT FOR ASSESSMENT</strong>
 	</td>
 		<td style="text-align:center"><strong id="jum-assess">0</strong></td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>GRAND TOTAL FOR SLT</strong>
+	<tr><td colspan="5" align="right"><strong>GRAND TOTAL FOR SLT</strong>
 	</td>
 		<td style="text-align:center"><strong id="total-slt">0</strong></td>
 	</tr>
@@ -381,7 +399,7 @@ Practicum/ WBL using Effective Learning Time(ELT) of 50%
 	</td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>Generated Credit Hour by SLT</strong>
+	<tr><td colspan="5" align="right"><strong>Generated Credit Hour by SLT</strong>
 	<div id="slt-formula"></div>
 	<div style="color:red;font-size:11px" id="slt-alert">
 <span class="glyphicon glyphicon-alert"></span> Please make sure the generated Credit Hour equal to Credit Hour set for this course!
@@ -390,27 +408,27 @@ Practicum/ WBL using Effective Learning Time(ELT) of 50%
 		<td style="text-align:center"><strong><span id="hour-slt">?</span></strong></td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>Credit Hour set for this course</strong>
+	<tr><td colspan="5" align="right"><strong>Credit Hour set for this course</strong>
 	</td>
 		<td style="text-align:center"><strong><span id="hour-set"><?=$model->course->credit_hour?></span></strong></td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>% SLT for F2F Physical Component</strong>
+	<tr><td colspan="5" align="right"><strong>% SLT for F2F Physical Component</strong>
 	</td>
 		<td style="text-align:center"><strong><span id="per-physical">0</span>%</strong></td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>% SLT for Online & Independent Learning Component</strong>
+	<tr><td colspan="5" align="right"><strong>% SLT for Online & Independent Learning Component</strong>
 	</td>
 		<td style="text-align:center"><strong><span id="per-online">0</span>%</strong></td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>% SLT for All Practical Component</strong>
+	<tr><td colspan="5" align="right"><strong>% SLT for All Practical Component</strong>
 	</td>
 		<td style="text-align:center"><strong><span id="per-all-practical">0</span>%</strong></td>
 	</tr>
 	
-	<tr><td colspan="4" align="right"><strong>% SLT for F2F Physical Practical Component</strong>
+	<tr><td colspan="5" align="right"><strong>% SLT for F2F Physical Practical Component</strong>
 	</td>
 		<td style="text-align:center"><strong><span id="per-physical-practical">0</span>%</strong></td>
 	</tr>
@@ -418,7 +436,7 @@ Practicum/ WBL using Effective Learning Time(ELT) of 50%
 	
 	
 	
-	<tr><td colspan="4" align="right"><strong>% SLT for F2F Online Practical Component</strong>
+	<tr><td colspan="5" align="right"><strong>% SLT for F2F Online Practical Component</strong>
 	</td>
 		<td style="text-align:center"><strong><span id="per-tech-practical">0</span>%</strong></td>
 	</tr>
@@ -441,14 +459,13 @@ Practicum/ WBL using Effective Learning Time(ELT) of 50%
 	<?=$form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false)?>
 
 
-
 <?php 
 
 $check = $model->pgrs_slt == 2 ? 'checked' : '';
 ?>
 
 <div class="form-group"><label>
-<input type="checkbox" name="complete" value="1" <?=$check?> /> Mark as complete</label>
+<input type="checkbox" name="complete" id="markcomplete" value="1" <?=$check?> /> Mark as complete</label>
 </div>
 
 <button class="btn btn-primary"><span class="glyphicon glyphicon-floppy-disk"></span> SAVE STUDENT LEARNING TIMES</button>
@@ -460,7 +477,19 @@ $check = $model->pgrs_slt == 2 ? 'checked' : '';
 
 <?php JSRegister::begin(); ?>
 <script>
-	calcAll();
+	calcAll(true);
+	
+	$("#markcomplete").click(function(){
+		var gen = myparse($("#hour-slt").text());
+		var credit =  myparse($("#hour-set").text());
+		if(gen == credit){
+			return true;
+		}else{
+			alert('Make sure Generated Credit Hour by SLT equal to Credit Hour set for this course');
+			return false;
+		}
+	})
+	
 	
 	$("#is_practical").click(function(){
 		
@@ -476,7 +505,12 @@ $check = $model->pgrs_slt == 2 ? 'checked' : '';
 		calcAll();
 	});
 
-function calcAll(){
+function calcAll(load = false){
+	//alert('hai');
+	if(!load){
+		$("#markcomplete").prop('checked', false);
+	}
+	
 	calcTotalSlt();
 	cal_syll_col();
 	assFormVertical();
@@ -637,9 +671,9 @@ function calcTechPractical(){
 	return per;
 }
 
+
 function calcCreditHourSlt(){
 	var slt = getSlt();
-	//=IF(X102 ="√",INT(F14X94/80),INT(X94/40)) is_practical
 	var delimiter = 40;
 			if($("#is_practical").prop("checked") == true){
                delimiter = 80;
@@ -650,6 +684,7 @@ function calcCreditHourSlt(){
 	var credit = Math.floor(slt / delimiter);
 	$("#slt-formula").text('[ '+slt+' / '+delimiter+' ]');
 	$("#hour-slt").text(myfor(credit));
+	$("#input-hour-slt").text(myfor(credit));
 }
 
 function compareCredit(){

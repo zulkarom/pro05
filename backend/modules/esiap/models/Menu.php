@@ -4,6 +4,7 @@ namespace backend\modules\esiap\models;
 
 use Yii;
 
+
 class Menu
 {
 	
@@ -17,6 +18,7 @@ class Menu
 				case 'clo-assessment':case 'course-slt': case 'clo-plo':
 				case 'clo-taxonomy':case 'clo-softskill': case 'course-reference':
 				case 'clo-delivery':case 'report':case 'view-course':
+				
 				$course_id = Yii::$app->getRequest()->getQueryParam('course');
 				$course = Course::findOne($course_id);
 				$version = $course->developmentVersion;
@@ -32,13 +34,13 @@ class Menu
 					'url' => '#',
 					'items' => [
 					
-				['label' => 'Preview Course', 'visible' => $show, 'icon' => 'eye', 'url' => ['/esiap/course/view-course', 'course' => $course_id]],
+				['label' => 'Preview & Submission', 'visible' => $show, 'icon' => 'eye', 'url' => ['/esiap/course/view-course', 'course' => $course_id]],
 						
 				['label' => 'Course Profile', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id]],
 				
 				['label' => 'Assessment', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-assessment', 'course' => $course_id]],
 				
-				['label' => 'CLOs',  'icon' => 'pencil', 'url' => '#', 
+				['label' => 'CLOs',  'icon' => 'pencil', 'visible' => $show, 'url' => '#', 
 					'items' => [
 						['label' => 'CLO Text', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-clo', 'course' => $course_id]],
 				
@@ -69,7 +71,7 @@ class Menu
 				
 				['label' => 'References', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-reference', 'course' => $course_id]],
 				
-				['label' => 'Submission', 'icon' => 'send', 'url' => ['/esiap/course/report', 'course' => $course_id]],
+				//['label' => 'Submission', 'icon' => 'send', 'url' => ['/esiap/course/report', 'course' => $course_id]],
 
                  ]
                     ];
@@ -82,29 +84,34 @@ class Menu
 	
 	
 	public static function adminEsiap(){
+		$esiap_access = false;
+		if(Yii::$app->user->can('esiap-management') or Yii::$app->user->can('esiap-program-coor')){
+			$esiap_access = true;
+		}
 		$esiap_admin = [
-                        'label' => 'eSIAP Admin',
-                        'icon' => 'mortar-board',
-						'visible' => Yii::$app->user->can('esiap-management'),
+                        'label' => 'Course Mgt Admin',
+                        'icon' => 'cog',
+						'visible' => $esiap_access,
                         'url' => '#',
                         'items' => [
 				['label' => 'My Course(s)', 'icon' => 'user', 'url' => ['/esiap']],
 				
-				['label' => 'Summary', 'icon' => 'pie-chart', 'url' => ['/esiap/dashboard']],
+				['label' => 'Summary', 'visible' => Yii::$app->user->can('esiap-management'),  'icon' => 'pie-chart', 'url' => ['/esiap/dashboard']],
 				
-				['label' => 'Course List', 'icon' => 'book', 'url' => ['/esiap/course-admin']],
+				['label' => 'Active Courses', 'visible' => Yii::$app->user->can('esiap-management'),'icon' => 'book', 'url' => ['/esiap/course-admin']],
+				
+				['label' => 'Course Verification', 'visible' => Yii::$app->user->can('esiap-management'),'icon' => 'check', 'url' => ['/esiap/course-admin/verification']],
+				
+				['label' => 'Program Coordinator', 'visible' => Yii::$app->user->can('esiap-program-coor'),'icon' => 'user', 'url' => ['/esiap/course-admin/course-owner']],
 				
 				//['label' => 'Bulk Course Version', 'icon' => 'book', 'url' => ['/esiap/course-admin/bulk-version']],
 				
-				['label' => 'Program List', 'icon' => 'book', 'url' => ['/esiap/program-admin']],
+				//['label' => 'Program List', 'icon' => 'book', 'url' => ['/esiap/program-admin']],
 				
+				['label' => 'Inactive Courses', 'visible' => Yii::$app->user->can('esiap-management'),'icon' => 'remove', 'url' => ['/esiap/course-admin/inactive']],
 				
-				
-				['label' => 'Inactive Courses', 'icon' => 'remove', 'url' => ['/esiap/course-admin/inactive']],
-				
-
-                 ]
-                    ];	
+                ]
+                ];	
 		return $esiap_admin;
 	}
 

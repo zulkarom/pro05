@@ -6,11 +6,11 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use backend\modules\esiap\models\Course;
-
+use backend\modules\esiap\models\Program;
 /**
  * CourseSearch represents the model behind the search form of `backend\modules\esiap\models\Course`.
  */
-class CourseAdminSearch extends Course
+class CourseOwnerSearch extends Course
 {
 	public $search_course;
 	public $search_cat;
@@ -71,7 +71,13 @@ class CourseAdminSearch extends Course
 		if(Yii::$app->params['faculty_id']== 21){
 			$query->andFilterWhere(['like', 'component_id', $this->search_cat]);
 		}else{
-			$query->andFilterWhere(['=', 'program_id', $this->search_cat]);
+			//kena cari dia kp apa
+			$program = 0;
+			$kp = Program::findOne(['head_program' => Yii::$app->user->identity->staff->id]);
+			if($kp){
+				$program = $kp->id;
+			}
+			$query->andFilterWhere(['=', 'program_id', $program]);
 		}
 		
 		$query->andFilterWhere(['or', 

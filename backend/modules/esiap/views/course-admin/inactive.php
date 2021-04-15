@@ -56,7 +56,7 @@ $exportColumns = [
 
 <div class="col-md-6" align="right">
 
-<?=$this->render('_search', ['model' => $searchModel])?>
+<?=$this->render('_search', ['model' => $searchModel, 'element' => 'courseadminsearch-search_cat'])?>
 </div>
 
 </div>

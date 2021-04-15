@@ -143,9 +143,11 @@ class Fk3Start extends \TCPDF {
   
 		 
         // Set font
-        //$this->SetFont('helvetica', 'I', 8);
+        $this->SetFont('helvetica', 'I', 8);
         // Page number
-        //$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+        //$this->Cell(0, 10, 'FK03 | Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(). ' | Printed on ' . date('d M Y'), 0, false, 'C', 0, '', 0, false, 'T', 'M');
+		
+		$this->Cell(0, 10, 'Page '.$this->getAliasNumPage().'/'.$this->getAliasNbPages(), 0, false, 'C', 0, '', 0, false, 'T', 'M');
 		
     }
 }
