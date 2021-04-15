@@ -38,7 +38,7 @@ class TestController extends Controller
 $html = <<<EOD
 <h1>Berjaya!</h1>
 EOD;
-		$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=1, $fill=0, $reseth=true, $align='', $autopadding=true);
+		$pdf->writeHTMLCell($w=0, $h=0, $x='', $y='', $html, $border=0, $ln=2, $fill=0, $reseth=true, $align='', $autopadding=true);
 		$pdf->Output('example_001.pdf', 'I');
 		exit();
 	}
