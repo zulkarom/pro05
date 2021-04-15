@@ -35,6 +35,7 @@ class SiteController extends Controller
         return $this->render('index');
     }
 	
+	
 	public function actionCourse(){
 		$this->layout = 'website';
 		$searchModel = new CourseSearch();
