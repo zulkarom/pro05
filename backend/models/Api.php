@@ -207,8 +207,8 @@ class Api
 	
 	public function getContent(){
 		try {
-			//return $this->getContentCurl($this->url);
-			return file_get_contents($this->url);
+			return $this->getContentCurl($this->url);
+			//return file_get_contents($this->url);
 		}
 		catch (\Exception $e) {
 			return "[]";
