@@ -15,6 +15,7 @@ use backend\models\OfferLetterSearch;
 use common\models\Application;
 use raoul2000\workflow\validation\WorkflowScenario;
 
+
 /**
  * ApplicationController implements the CRUD actions for Application model.
  */
@@ -95,6 +96,7 @@ class OfferLetterController extends Controller
 		$pdf = new OfferLetter;
 		$pdf->model = $model;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionRelease(){

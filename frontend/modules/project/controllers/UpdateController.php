@@ -501,6 +501,7 @@ class UpdateController extends Controller
             if ($valid) {
                 $transaction = Yii::$app->db->beginTransaction();
                 try {
+					$model->updated_at = new Expression('NOW()');
                     if ($flag = $model->save(false)) {
 
                         if (! empty($deletedTimesIDs)) {

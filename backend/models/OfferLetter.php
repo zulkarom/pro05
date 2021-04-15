@@ -25,24 +25,23 @@ class OfferLetter
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		$this->pdf = new Tcpdf(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$this->pdf = new PdfStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
 		$this->writeHeaderFooter();
 		$this->startPage();
 		
 		$this->writeRef();
-		$this->writeTitle();
+	 	$this->writeTitle();
 		$this->writeTable();
 		
 		$this->pdf->AddPage("P");
 		$this->writeEnding();
-		//$this->writeSlogan();
 		$this->writeSigniture();
 		$this->writeSignitureImg();
 		$this->writeSk();
 		
 		$this->pdf->AddPage("P");
-		$this->writeTask();
+		$this->writeTask(); 
 
 		$this->pdf->Output('surat-tawaran.pdf', 'I');
 	}
@@ -91,6 +90,7 @@ class OfferLetter
 		$this->pdf->SetMargins(20, 10, 20);
 		
 		$this->pdf->SetFont('arial', '', $this->fontSize);
+		//echo $html;
 		$tbl = <<<EOD
 		$html
 EOD;
@@ -134,6 +134,7 @@ EOD;
 		2. &nbsp;&nbsp;&nbsp;Sukacita dimaklumkan bahawa Universiti Malaysia Kelantan bersetuju melantik '.$this->tuan .' sebagai '.ucwords($this->fasiType()).' Sambilan seperti butir-butir berikut:
 		<br /><br />
 		';
+		//echo $html;
 		$this->pdf->SetFont('arial', '', $this->fontSize);
 		$tbl = <<<EOD
 		$html
