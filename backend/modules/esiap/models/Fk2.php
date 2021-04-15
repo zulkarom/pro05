@@ -714,6 +714,9 @@ $this->pdf->lineFooterTable = false;
 	}
 	
 	public function signiture(){
+		if(Yii::$app->params['faculty_id'] != 1){
+			return false;
+		}
 		$sign = $this->model->preparedsign_file;
 
 		$file = Yii::getAlias('@upload/'. $sign);
@@ -790,6 +793,10 @@ EOD;
 	}
 	
 	public function signitureVerify(){
+		if(Yii::$app->params['faculty_id'] != 1){
+			return false;
+		}
+		
 		$sign = $this->model->verifiedsign_file;
 
 		$file = Yii::getAlias('@upload/'. $sign);

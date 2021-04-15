@@ -580,6 +580,9 @@ $this->verify_y = $this->pdf->getY();
 	
 	
 	public function signiturePrepare(){
+		if(Yii::$app->params['faculty_id'] != 1){
+			return false;
+		}
 		$sign = $this->model->preparedsign_file;
 
 		$file = Yii::getAlias('@upload/'. $sign);
@@ -655,6 +658,9 @@ EOD;
 	}
 	
 	public function signitureVerify(){
+		if(Yii::$app->params['faculty_id'] != 1){
+			return false;
+		}
 		$sign = $this->model->verifiedsign_file;
 
 		$file = Yii::getAlias('@upload/'. $sign);
