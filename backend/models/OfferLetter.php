@@ -255,9 +255,12 @@ EOD;
 		}
 
 		$file = Yii::getAlias('@upload/'. $sign);
+		$f = basename($file);
+		$paste = 'images/temp/'. $f;
+		copy($file, $paste);
 		
 		$html = '
-		<img src="'.$file.'" />
+		<img src="'.$f.'" />
 		';
 		$tbl = <<<EOD
 		$html
