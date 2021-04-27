@@ -5,12 +5,12 @@ namespace backend\modules\esiap\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\modules\esiap\models\Course;
+use backend\modules\esiap\models\CourseVersion;
 
 /**
  * CourseSearch represents the model behind the search form of `backend\modules\esiap\models\Course`.
  */
-class CourseAdminSearch extends Course
+class CourseVerificationSearch extends CourseVersion
 {
 	public $search_course;
 	public $search_cat;
@@ -44,15 +44,20 @@ class CourseAdminSearch extends Course
      */
     public function search($params)
     {
-        $query = Course::find()
-		->where(['is_active' => 1, 'is_dummy' => 0, 'faculty_id' => Yii::$app->params['faculty_id']]);
+        $query = CourseVersion::find()
+		->joinWith(['course'])
+		->where([
+		'status' => [10, 20]
+		])
+		->orderBy('status ASC, prepared_at DESC')
+		;
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
 			'pagination' => [
-                'pageSize' => 40,
+                'pageSize' => 100,
             ],
 
         ]);
@@ -69,15 +74,15 @@ class CourseAdminSearch extends Course
         
 		
 		if(Yii::$app->params['faculty_id']== 21){
-			$query->andFilterWhere(['like', 'component_id', $this->search_cat]);
+			$query->andFilterWhere(['like', 'sp_course.component_id', $this->search_cat]);
 		}else{
-			$query->andFilterWhere(['=', 'program_id', $this->search_cat]);
+			$query->andFilterWhere(['=', 'sp_course.program_id', $this->search_cat]);
 		}
 		
 		$query->andFilterWhere(['or', 
-            ['like', 'course_name', $this->search_course],
-            ['like', 'course_name_bi', $this->search_course],
-			['like', 'course_code', $this->search_course]
+            ['like', 'sp_course.course_name', $this->search_course],
+            ['like', 'sp_course.course_name_bi', $this->search_course],
+			['like', 'sp_course.course_code', $this->search_course]
         ]);
 
 

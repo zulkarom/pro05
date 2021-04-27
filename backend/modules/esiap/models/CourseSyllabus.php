@@ -3,6 +3,7 @@
 namespace backend\modules\esiap\models;
 
 use Yii;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "sp_course_syllabus".
@@ -79,7 +80,8 @@ class CourseSyllabus extends \yii\db\ActiveRecord
 			$week = new self();
 			$week->scenario = 'addweek';
 			$week->crs_version_id = $version;
-
+			$week->created_at = new Expression('NOW()');
+			$week->updated_at = new Expression('NOW()');
 			$week->topics = '[{"top_bm":"","top_bi":"","sub_topic":[]}]';
 			if(!$week->save()){
 				

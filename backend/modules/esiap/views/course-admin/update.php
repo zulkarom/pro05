@@ -29,7 +29,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
 <?php $form = ActiveForm::begin(['id' => 'update-course']); ?>
 
-
+<div class="form-group"><?= Html::a("<span class='glyphicon glyphicon-arrow-left'></span> BACK", ['course-admin/index'] ,['class' => 'btn btn-default']) ?></div>
 <div class="box box-primary">
 <div class="box-header">
 <div class="box-title">Main Setting</div>
@@ -117,7 +117,7 @@ echo $form->field($model, 'faculty_id')->dropDownList(
 
 <div class="form-group">
 
-<label class="control-label">Staff in charge for development</label>
+<label class="control-label">Course Owner</label>
 
 <?php 
 
@@ -136,7 +136,7 @@ echo Select2::widget([
 
 <div class="form-group">
 
-<label class="control-label">Staff can view</label>
+<label class="control-label">Course Viewer</label>
 
 <?php 
 
@@ -162,7 +162,7 @@ echo Select2::widget([
 
 
     <div class="form-group">
-	<?= Html::a("<span class='glyphicon glyphicon-arrow-left'></span> BACK", ['course-admin/index'] ,['class' => 'btn btn-default']) ?>
+	
         <?= Html::submitButton('<span class="glyphicon glyphicon-floppy-disk"></span> SAVE COURSE', ['class' => 'btn btn-success']) ?>
     </div>
 

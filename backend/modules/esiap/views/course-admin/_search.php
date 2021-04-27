@@ -13,7 +13,6 @@ use backend\modules\esiap\models\Program;
 
 <?php $form = ActiveForm::begin([
 	'id' => 'form-index-course',
-    'action' => ['index'],
     'method' => 'get',
 ]); ?>
     
@@ -28,7 +27,7 @@ if(Yii::$app->params['faculty_id'] == 21 ){
         ArrayHelper::map(Component::find()->all(),'id', 'name'), ['prompt' => 'Select Component' ]);
 }else{
 	echo $form->field($model, 'search_cat')->label(false)->dropDownList(
-        ArrayHelper::map(Program::find()->where(['faculty_id' => Yii::$app->params['faculty_id'], 'trash' => 0])->all(),'id', 'pro_name_short'), ['prompt' => 'Select Program' ]);
+        ArrayHelper::map(Program::find()->where(['faculty_id' => Yii::$app->params['faculty_id'], 'status' => 1, 'trash' => 0])->all(),'id', 'pro_name_short'), ['prompt' => 'Select Program' ]);
 }
 
  ?>
@@ -41,10 +40,8 @@ if(Yii::$app->params['faculty_id'] == 21 ){
 
 
 <?php 
-
 $this->registerJs('
-
-$("#courseadminsearch-search_cat").change(function(){
+$("#'.$element.'").change(function(){
 	$("#form-index-course").submit();
 });
 

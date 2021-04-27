@@ -7,6 +7,8 @@ use common\models\User;
 use backend\models\GeneralSetting;
 use yii\helpers\ArrayHelper;
 
+
+
 /**
  * This is the model class for table "sp_course_version".
  *
@@ -33,6 +35,10 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public $duplicate = 0;
 	public $dup_course;
 	public $dup_version;
+	public $preparedsign_instance;
+	public $verifiedsign_instance;
+	public $file_controller;
+
 	
 	
     /**
@@ -72,11 +78,23 @@ class CourseVersion extends \yii\db\ActiveRecord
 			[['pgrs_ref'], 'required', 'on' => 'pgrs_ref'],
 			
             [['course_id', 'created_by', 'is_developed', 'is_published', 'status', 'prepared_by', 'verified_by', 'dup_course', 'dup_version', 'version_type_id', 'duplicate'], 'integer'],
+			
             [['created_at', 'updated_at', 'senate_approve_at', 'faculty_approve_at', 'senate_approve_show', 'prepared_at', 'verified_at'], 'safe'],
 			
             [['version_name'], 'string', 'max' => 200],
 			
 			[['syllabus_break'], 'string'],
+			
+			[['prepared_adj_y', 'verified_adj_y', 'prepared_size', 'verified_size'], 'number'],
+			
+			[['preparedsign_file'], 'required', 'on' => 'preparedsign_upload'],
+            [['preparedsign_instance'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png', 'maxSize' => 1000000],
+            [['updated_at'], 'required', 'on' => 'preparedsign_delete'],
+			
+			[['verifiedsign_file'], 'required', 'on' => 'verifiedsign_upload'],
+            [['verifiedsign_instance'], 'file', 'skipOnEmpty' => true, 'extensions' => 'png', 'maxSize' => 1000000],
+            [['updated_at'], 'required', 'on' => 'verifiedsign_delete'],
+
 			
 			
         ];
@@ -97,6 +115,7 @@ class CourseVersion extends \yii\db\ActiveRecord
             'updated_at' => 'Updated At',
             'is_developed' => 'Under Development',
 			'is_published' => 'Published',
+			'preparedsign_file' => 'Signiture Upload',
         ];
     }
 	
@@ -176,7 +195,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public function getSltAssessmentFormative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_assessment.assess_f2f) + SUM(sp_course_assessment.assess_nf2f) + SUM(sp_course_assessment.assess_f2f_tech) AS as_hour')
+		->select('sp_assessment_cat.form_sum, SUM(sp_course_assessment.assess_f2f) + SUM(sp_course_assessment.assess_nf2f) + SUM(sp_course_assessment.assess_f2f_tech) AS as_hour')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')
 		->groupBy(['sp_assessment_cat.form_sum'])
@@ -189,7 +208,7 @@ class CourseVersion extends \yii\db\ActiveRecord
 	public function getSltAssessmentSummative()
     {
 		return self::find()
-		->select('sp_course_assessment.*, SUM(sp_course_assessment.assess_f2f) + SUM(sp_course_assessment.assess_nf2f)+ SUM(sp_course_assessment.assess_f2f_tech) AS as_hour')
+		->select('sp_assessment_cat.form_sum, SUM(sp_course_assessment.assess_f2f) + SUM(sp_course_assessment.assess_nf2f)+ SUM(sp_course_assessment.assess_f2f_tech) AS as_hour')
 		->innerJoin('sp_course_assessment', 'sp_course_assessment.crs_version_id = sp_course_version.id')
 		->innerJoin('sp_assessment_cat', 'sp_assessment_cat.id = sp_course_assessment.assess_cat')
 		->groupBy(['sp_assessment_cat.form_sum'])
@@ -407,6 +426,21 @@ class CourseVersion extends \yii\db\ActiveRecord
 		$per = $jum / 22 * 100;
 		return number_format($per,0);
 	}
+	
+	public function flashError(){
+        if($this->getErrors()){
+            foreach($this->getErrors() as $error){
+                if($error){
+                    foreach($error as $e){
+                        Yii::$app->session->addFlash('error', $e);
+                    }
+                }
+            }
+        }
+
+    }
+
+
 	
 
 }

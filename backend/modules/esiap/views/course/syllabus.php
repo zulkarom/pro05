@@ -428,7 +428,10 @@ for(i=1;i<=tw;i++){
 
 
 function splitLang(lStr){
-	if (lStr.indexOf('/') > -1){
+	if (lStr.indexOf('//') > -1){
+		var arr = lStr.split('//');
+		return [arr[0], arr[1]];
+	}else if(lStr.indexOf('/') > -1){
 		var arr = lStr.split('/');
 		return [arr[0], arr[1]];
 	}else{
@@ -441,16 +444,27 @@ function putQcode(week){
 	var str = '';
  	$("#topic-"+week+" .topic-text").each(function(i,obj){
 		var val = $(this).val();
+		//alert(val);
 		if(isEven(i)){
 			str += '#' + val ;
 		}else{
-			str += '/' +  val + "\n" ;
+			if (val.indexOf('/') > -1){
+				str += '//' +  val + "\n" ;
+			}else{
+				str += '/' +  val + "\n" ;
+			}
+			
 			$(this).parents('.topic-container').children('.consubtopic').children('.consubtopicinput').find('.subtopic-text').each(function(x){
 				var subval = $(this).val();
 				if(isEven(x)){
 					str +=  '*' + subval;
 				}else{
-					str +=  '/' +  subval + "\n";
+					if (subval.indexOf('/') > -1){
+						str +=  '//' +  subval + "\n";
+					}else{
+						str +=  '/' +  subval + "\n";
+					}
+					
 				}
 			});
 		}

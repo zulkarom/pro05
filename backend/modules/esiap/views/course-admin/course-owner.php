@@ -5,12 +5,13 @@ use yii\helpers\Url;
 use kartik\grid\GridView;
 use kartik\export\ExportMenu;
 use yii\widgets\ActiveForm;
+use backend\modules\esiap\models\Program;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\esiap\models\CourseSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'Active Courses';
+$this->title = 'Course Owners';
 $this->params['breadcrumbs'][] = $this->title;
 
 
@@ -27,35 +28,6 @@ $exportColumns = [
 				'label' => 'Program',
 			],
 			
-            [
-                'label' => 'Publish',
-                'format' => 'html',
-                'value' => function($model){
-					if($model->publishedVersion){
-						$lbl = 'YES';
-						$color = 'success';
-					}else{
-						$lbl =  'NO';
-						$color = 'danger';
-					}
-					
-					return '<span class="label label-'.$color.'">'.$lbl.'</span>';
-                    
-                }
-            ],
-			[
-                'label' => 'Development',
-                'format' => 'html',
-                
-                'value' => function($model){
-					if($model->developmentVersion){
-						return $model->developmentVersion->labelStatus;
-					}else{
-						return 'NONE';
-					}
-                    
-                }
-            ],
 			
 			[
 				'label' => 'Course Owner',
@@ -76,14 +48,23 @@ $exportColumns = [
 			]
 
 ];
+$program = '';
+$kp = Program::findOne(['head_program' => Yii::$app->user->identity->staff->id]);
+if($kp){
+	$program = $kp->pro_name_bi . ' ('.$kp->pro_name_short.')';
+}
 ?>
 <div class="course-index">
 
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 	
 	<div class="row">
-<div class="col-md-5">
-       <div class="form-group"> <?= Html::a('<span class="glyphicon glyphicon-plus"></span> New Course', ['create'], ['class' => 'btn btn-success']) ?>  
+<div class="col-md-9">
+
+<h4><?=$program?></h4>
+</div>
+<div class="col-md-3" align="right">
+       <div class="form-group"> 
 		
 		<?=ExportMenu::widget([
     'dataProvider' => $dataProvider,
@@ -103,16 +84,9 @@ $exportColumns = [
 		
  </div>
 
-<div class="col-md-7" align="right">
-
-<?=$this->render('_search', ['model' => $searchModel, 'element' => 'courseadminsearch-search_cat'])?>
-</div>
 
 </div>
 
-<?php $form = ActiveForm::begin([
-	'action' => Url::to(['/esiap/course-admin/table4'])
-]); ?>
 
     <div class="box box-primary">
 <div class="box-header"></div>
@@ -149,7 +123,6 @@ echo GridView::widget([
 		'export' => false,
        // 'filterModel' => $searchModel,
         'columns' => [
-			['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
 		
             
@@ -160,7 +133,7 @@ echo GridView::widget([
 				'label' => 'Course Code & Name',
 				'value' => function($model){
 					
-					return Html::a( $model->course_code . ' ' . strtoupper($model->course_name) . '<br /><i>' . strtoupper($model->course_name_bi) . '</i> <span class="glyphicon glyphicon-pencil"></span>',['/esiap/course-admin/update/', 'course' => $model->id]);
+					return Html::a( $model->course_code . ' ' . strtoupper($model->course_name) . '<br /><i>' . strtoupper($model->course_name_bi) . '</i> <span class="glyphicon glyphicon-pencil"></span>',['/esiap/course-admin/update-owner/', 'course' => $model->id]);
 					
 					
 				}
@@ -185,43 +158,7 @@ echo GridView::widget([
 				}
 				
 			],
-			
-			
-			
-           
-			[
-                'label' => 'Development',
-                'format' => 'html',
-                
-                'value' => function($model){
-					if($model->developmentVersion){
-						
-						return $model->developmentVersion->labelStatus . '<br />' . '<i>'.$model->developmentVersion->version_name.'</i>';
-					}else{
-						return 'NONE';
-					}
-                    
-                }
-            ],
-			 [
-                'label' => 'Publish',
-                'format' => 'html',
-                'value' => function($model){
-					if($model->publishedVersion){
-						$lbl = 'YES';
-						$color = 'success';
-						$version = '<br /><i>' . $model->publishedVersion->version_name . '</i>';
-					}else{
-						$lbl =  'NO';
-						$color = 'danger';
-						$version = '';
-					}
-					
-					return '<span class="label label-'.$color.'">'.$lbl.'</span>'.$version;
-                    
-                }
-            ],
-			
+
 			[
                 'label' => 'Report',
                 'format' => 'raw',
@@ -237,7 +174,7 @@ echo GridView::widget([
 				'format' => 'html',
 				'value' => function($model){
 					
-					return Html::a( '<span class="glyphicon glyphicon-pencil"></span> Update',['/esiap/course-admin/update/', 'course' => $model->id], ['class' => 'btn btn-primary btn-sm']);
+					return Html::a( '<span class="glyphicon glyphicon-pencil"></span> Update',['/esiap/course-admin/update-owner/', 'course' => $model->id], ['class' => 'btn btn-primary btn-sm']);
 					
 					
 				}
@@ -252,26 +189,6 @@ echo GridView::widget([
 </div>
 
 
-
-<div class="form-group">
-        
-<?= Html::submitButton('<span class="glyphicon glyphicon-download-alt"></span> Download Table 4 v2.0', ['class' => 'btn btn-success', 'name'=> 'actiontype', 'value' => 'generate']) ?>
-    </div>
-* Due to runtime limit, do consider to select only 5 courses max at a time.
-
-<?php ActiveForm::end(); ?>
-
-
-<?php 
-
-$js = '
-$("#checkAll").click(function(){
-    $(\'input:checkbox\').not(this).prop(\'checked\', this.checked);
-});
-
-';
-$this->registerJs($js);
-?>
 
 
 </div>

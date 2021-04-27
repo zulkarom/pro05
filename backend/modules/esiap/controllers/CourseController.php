@@ -23,6 +23,7 @@ use backend\modules\esiap\models\Fk1;
 use backend\modules\esiap\models\Fk2;
 use backend\modules\esiap\models\Fk3;
 use backend\modules\esiap\models\Tbl4;
+use backend\modules\esiap\models\Tbl4Pdf;
 use backend\modules\esiap\models\Tbl4Excel2;
 use backend\modules\esiap\models\Tbl4Excel;
 use yii\web\Controller;
@@ -32,6 +33,8 @@ use yii\db\Expression;
 use common\models\Model;
 use yii\helpers\ArrayHelper;
 use yii\filters\AccessControl;
+use common\models\UploadFile;
+use yii\helpers\Json;
 
 /**
  * CourseController implements the CRUD actions for Course model.
@@ -451,20 +454,44 @@ class CourseController extends Controller
 		}
 		
 		if(Yii::$app->request->post()){
+			$verify_clo = true;
+			$verify_content = true;
 			if(Yii::$app->request->validateCsrfToken()){
 				$i = 1;
+				$dur = 0;
 				foreach($syllabus as $syl){
 					if(Yii::$app->request->post('input-week-'.$i)){
 						$syl->scenario = 'saveall';
-						$syl->topics = Yii::$app->request->post('input-week-'.$i);
-						$syl->duration = Yii::$app->request->post('week-duration-'.$i);
+						$topic_json = Yii::$app->request->post('input-week-'.$i);
+						$syl->topics = $topic_json;
+						$topic = json_decode($topic_json);
+							if($topic){
+								if(array_key_exists(0, $topic)){
+									$con = $topic[0];
+									if(!empty($con->top_bm) && !empty($con->top_bi)){
+										$verify_content = $verify_content == false ? false : true;
+									}else{
+										$verify_content = false;
+									}
+								}else{
+									$verify_content = false;
+								}
+							}else{
+								$verify_content = false;
+							}
+						$duration = Yii::$app->request->post('week-duration-'.$i);
+						$syl->duration = $duration;
+						$dur += $duration;
+						$syl->updated_at = new Expression('NOW()');
 						$syl->week_num = '#1';
 						if(Yii::$app->request->post($i . '-clo')){
-							$clo = json_encode(Yii::$app->request->post($i . '-clo'));
+							$verify_clo = $verify_clo == false ? false : true;
+							$post_clo = Yii::$app->request->post($i . '-clo');
+							$clo = json_encode($post_clo);
 							$syl->clo = $clo;
+						}else{
+							$verify_clo = false;
 						}
-						
-						
 						if(!$syl->save()){
 							$syl->flashError();
 						}
@@ -472,10 +499,12 @@ class CourseController extends Controller
 				$i++;
 				}
 				
-				$model->syllabus_break = json_encode(Yii::$app->request->post('sem_break'));
+				if(Yii::$app->request->post('sem_break')){
+					$model->syllabus_break = json_encode(Yii::$app->request->post('sem_break'));
+				}else{
+					$model->syllabus_break = json_encode([7]);
+				}
 				
-				//$model->study_week = Yii::$app->request->post('study-week');
-				//$model->final_week = Yii::$app->request->post('final-week');
 				$model->save();
 				
 				//check additional action
@@ -495,7 +524,15 @@ class CourseController extends Controller
 				//update progress
 				$model->scenario = 'pgrs_syll';
 				if(Yii::$app->request->post('complete') == 1){
-					$model->pgrs_syll = 2;
+					//verify content smua ada
+					//verify clo smua at least 1 setiap week
+					if($this->verifySyllabus($verify_clo, $dur, $verify_content)){
+						$model->pgrs_syll = 2;
+					}else{
+						$model->pgrs_syll = 1;
+						
+					}
+					
 				}else{
 					$model->pgrs_syll = 1;
 				}
@@ -514,6 +551,23 @@ class CourseController extends Controller
 			'syllabus' => $syllabus,
 			'clos' => $clos
         ]);
+	}
+	
+	private function verifySyllabus($clo, $duration, $content){
+		$value = true;
+		if(!$clo){
+			$value = false;
+			Yii::$app->session->addFlash('error', "Cannot mark as complete, make sure at least one clo for each week");
+		}
+		if($duration < 14){
+			$value = false;
+			Yii::$app->session->addFlash('error', "Cannot mark as complete, make sure at least 14 weeks is added");
+		}
+		if(!$content){
+			$value = false;
+			Yii::$app->session->addFlash('error', "Cannot mark as complete, make sure at least one topic for each week in Bahasa and English is available.");
+		}
+		return $value;
 	}
 	
 	public function actionCourseSyllabusReorder($id){
@@ -799,6 +853,40 @@ class CourseController extends Controller
 	public function actionViewCourse($course){
 		$model = $this->findModel($course);
 		$version = $model->developmentVersion;
+		if(!$version){
+			die('There is no development version for this course.');
+		}
+		
+		if ($version->load(Yii::$app->request->post())) {
+			 
+			$action = Yii::$app->request->post('wfaction');
+			
+			if($action == 'btn-submit'){
+				if($version->progress == 100){
+					$version->prepared_at = new Expression('NOW()');
+					$version->updated_at = new Expression('NOW()');
+					$version->status = 10;
+					if($version->save()){
+						return $this->redirect(['course/view-course','course' => $course]);
+					}
+				}else{
+					Yii::$app->session->addFlash('error', "In order to submit, the progress should be 100%");
+				}
+			}else{
+				
+				if($version->save()){
+					//echo $action;die();
+					Yii::$app->session->addFlash('success', "Signiture updated");
+					return $this->redirect(['course/view-course','course' => $course]);
+				}else{
+					$version->flashError();
+				}
+			}
+			 
+			
+			
+            
+        }
 		
 		return $this->render('view-course', [
 				'model' => $model,
@@ -811,31 +899,61 @@ class CourseController extends Controller
 		$model = $this->findDevelopmentVersion($course);
 		$items = $model->assessments;
 		if($model->putOneCloAssessment()){
-			return $this->redirect(['course-assessment', 'course' => $course]);
+			return $this->redirect(['clo-assessment', 'course' => $course]);
 		}
 		
 		$clos = $model->clos;
+		$arr_valid = [];
+		$valid_one = true;
 		if ($model->load(Yii::$app->request->post())) {
+			$total = 0;
+			$one_clo = true;
 			if(Yii::$app->request->validateCsrfToken()){
 			$flag = true;
                 $cloAs = Yii::$app->request->post('CourseCloAssessment');
 				if($cloAs){
 					foreach($cloAs as $ca){
 						$row = CourseCloAssessment::findOne($ca['id']);
-						$row->assess_id = $ca['assess_id'];
+						$ass_id = $ca['assess_id'];
+						if(in_array($ass_id, $arr_valid)){
+							$valid_one = false;
+						}else{
+							$valid_one = $valid_one == false ? false : true;
+						}
+						$arr_valid[] = $ass_id;
+						$row->assess_id = $ass_id;
+						
+						$clo = $row->clo_id;
+						
 						$row->percentage = $ca['percentage'];
+						$total += $ca['percentage'];
 						if(!$row->save()){
 							$flag = false;
 						}
 					}
+					
 				}
+				
+				//print_r($clo127);die('anda jutawan');
 				
 				if($flag){
 					Yii::$app->session->addFlash('success', "Assessment percentage has been updated");
 					//update progress
 					$model->scenario = 'pgrs_assess_per';
 					if(Yii::$app->request->post('complete') == 1){
-						$model->pgrs_assess_per = 2;
+						if($total==100){
+							if($valid_one){
+								$model->pgrs_assess_per = 2;
+							}else{
+								$model->pgrs_assess_per = 1;
+								Yii::$app->session->addFlash('error', "Make sure an assessment is only mapped to one clo.");
+							}
+							
+						}else{
+							$model->pgrs_assess_per = 1;
+							Yii::$app->session->addFlash('error', "Cannot mark as complete as the percentage is not equal to 100");
+						}
+						
 					}else{
 						$model->pgrs_assess_per = 1;
 					}
@@ -884,6 +1002,7 @@ class CourseController extends Controller
 					$as = CourseAssessment::findOne($key);
 					$as->scenario = 'update_slt';
 					if($as){
+						$val = empty($val) ? 0 : $val;
 						$as->assess_f2f = $val;
 						if(!$as->save()){
 							$flag = false;
@@ -899,6 +1018,7 @@ class CourseController extends Controller
 					$as = CourseAssessment::findOne($key);
 					$as->scenario = 'update_slt2';
 					if($as){
+						$val = empty($val) ? 0 : $val;
 						$as->assess_nf2f = $val;
 						if(!$as->save()){
 							$flag = false;
@@ -916,6 +1036,7 @@ class CourseController extends Controller
 					$as = CourseAssessment::findOne($key);
 					$as->scenario = 'update_slt_tech';
 					if($as){
+						$val = empty($val) ? 0 : $val;
 						$as->assess_f2f_tech = $val;
 						if(!$as->save()){
 							$flag = false;
@@ -931,8 +1052,8 @@ class CourseController extends Controller
 					$syl = CourseSyllabus::findOne($key);
 					$syl->scenario = 'slt';
 					if($syl){
-						
 						foreach($val as $i => $v){
+							$v = empty($v) ? 0 : $v;
 							$syl->{$i} = $v;
 						}
 						if(!$syl->save()){
@@ -1223,6 +1344,12 @@ class CourseController extends Controller
 			$pdf->generatePdf();
 	}
 	
+	public function actionTbl4Pdf($course, $dev = false, $version = false){
+			$pdf = new Tbl4Pdf;
+			$pdf->model = $this->decideVersion($course, $dev, $version);
+			$pdf->generatePdf();
+	}
+	
 	public function actionTbl4Excel2($course, $dev = false, $version = false){
 			$pdf = new Tbl4Excel2;
 			$pdf->model = $this->decideVersion($course, $dev, $version);
@@ -1235,11 +1362,27 @@ class CourseController extends Controller
 			$pdf->generateExcel();
 	}
 	
-	public function actionFk3($course, $dev = false, $version = false){
+	public function actionFk3($course, $dev = false, $version = false, $offer = false, $cqi = false){
+			
 			$pdf = new Fk3;
 			$pdf->model = $this->decideVersion($course, $dev, $version);
+			if($offer){
+				$pdf->offer = $this->findCourseOffered($offer);
+				$pdf->cqi = $cqi;
+			}
 			$pdf->generatePdf();
 	}
+	
+	protected function findCourseOffered($id){
+		$default = \backend\modules\teachingLoad\models\CourseOffered::findOne($id);
+		if($default){
+			return $default;
+		}else{
+			throw new NotFoundHttpException('Page not found!');
+		}
+	}
+	
+	
 	
 	public function actionDuplicate(){
 		/* $clone = new CourseVersionClone;
@@ -1249,6 +1392,62 @@ class CourseController extends Controller
 			echo 'good';
 		} */
 		
+	}
+	
+	public function actionUploadFile($attr, $id){
+        $attr = $this->clean($attr);
+        $model = $this->findVersion($id);
+        $model->file_controller = 'course';
+		$path = 'course-mgt/signiture/' . Yii::$app->user->identity->staff->staff_no ;
+        return UploadFile::upload($model, $attr, 'updated_at', $path);
+
+    }
+
+	protected function clean($string){
+		$allowed = ['preparedsign', 'verifiedsign'];
+		if(in_array($string,$allowed)){
+			return $string;
+		}
+		throw new NotFoundHttpException('Invalid Attribute');
+	}
+
+	public function actionDeleteFile($attr, $id){
+		$attr = $this->clean($attr);
+		$model = $this->findVersion($id);
+		$attr_db = $attr . '_file';
+		
+		$file = Yii::getAlias('@upload/' . $model->{$attr_db});
+		
+		$model->scenario = $attr . '_delete';
+		$model->{$attr_db} = '';
+		$model->updated_at = new Expression('NOW()');
+		if($model->save()){
+			if (is_file($file)) {
+				unlink($file);
+				
+			}
+			
+			return Json::encode([
+						'good' => 1,
+					]);
+		}else{
+			return Json::encode([
+						'errors' => $model->getErrors(),
+					]);
+		}
+		
+
+
+	}
+
+	public function actionDownloadFile($attr, $id, $identity = true){
+		$attr = $this->clean($attr);
+		$model = $this->findVersion($id);
+		$filename = strtoupper($attr) . ' ' . Yii::$app->user->identity->fullname;
+		
+		
+		
+		UploadFile::download($model, $attr, $filename);
 	}
 	
 	

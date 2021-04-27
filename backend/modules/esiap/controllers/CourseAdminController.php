@@ -3,14 +3,26 @@
 namespace backend\modules\esiap\controllers;
 
 use Yii;
+use yii\helpers\ArrayHelper;
+use yii\helpers\Json;
+use yii\filters\AccessControl;
+use yii\web\Controller;
+use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use yii\db\Expression;
+use yii\helpers\FileHelper;
+
+use common\models\Model;
+use common\models\UploadFile;
 
 use backend\modules\esiap\models\Tbl4Excel;
 use backend\modules\esiap\models\Tbl4Excel2;
 use backend\modules\esiap\models\CourseAdminSearch;
+use backend\modules\esiap\models\CourseOwnerSearch;
+use backend\modules\esiap\models\CourseVerificationSearch;
 use backend\modules\esiap\models\CourseInactiveSearch;
 use backend\modules\esiap\models\Course;
 use backend\modules\esiap\models\CourseVersion;
-
 use backend\modules\esiap\models\CourseProfile;
 use backend\modules\esiap\models\CourseSyllabus;
 use backend\modules\esiap\models\CourseSlt;
@@ -19,23 +31,16 @@ use backend\modules\esiap\models\CourseReference;
 use backend\modules\esiap\models\CourseClo;
 use backend\modules\esiap\models\CourseCloAssessment;
 use backend\modules\esiap\models\CourseCloDelivery;
-
-
 use backend\modules\esiap\models\CourseVersionSearch;
 use backend\modules\esiap\models\CourseVersionClone;
-use yii\web\Controller;
-use yii\web\NotFoundHttpException;
-use yii\filters\VerbFilter;
-use yii\db\Expression;
-use common\models\Model;
-use yii\helpers\ArrayHelper;
-use yii\filters\AccessControl;
 use backend\modules\esiap\models\CoursePic;
 use backend\modules\esiap\models\CourseAccess;
 use backend\modules\esiap\models\CourseStaff;
 use backend\modules\esiap\models\CourseTransferable;
-use yii\helpers\Json;
-
+use backend\modules\esiap\models\Access;
+use backend\modules\staff\models\Staff;
+use backend\modules\staff\models\StaffMainPosition;
+use backend\models\Department;
 
 /**
  * CourseController implements the CRUD actions for Course model.
@@ -45,8 +50,7 @@ class CourseAdminController extends Controller
     /**
      * @inheritdoc
      */
-	public function behaviors()
-    {
+	public function behaviors(){
         return [
             'access' => [
                 'class' => AccessControl::className(),
@@ -75,6 +79,144 @@ class CourseAdminController extends Controller
             'dataProvider' => $dataProvider,
         ]);
     }
+	
+	public function actionCourseOwner(){
+		if(!Access::IAmProgramCoordinator()){
+			return $this->render('forbidden');
+		}
+		 $searchModel = new CourseOwnerSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('course-owner', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+	}
+	
+	public function actionVerification()
+    {
+		if(!Access::ICanVerify()){
+			return $this->render('forbidden');
+		}
+        $searchModel = new CourseVerificationSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+		$verify = $this->findVerifier();
+		$verify->scenario = 'verify_course';
+		
+		if ($verify->load(Yii::$app->request->post())) {
+			//echo '<pre>';print_r(Yii::$app->request->post());die();
+			$action = Yii::$app->request->post('actiontype');
+			if($action == 'save'){
+				$verify->save();
+				return $this->refresh();
+			}
+			
+			if(Yii::$app->request->post('selection')){
+				$courses = Yii::$app->request->post('selection');
+				
+				if($action != 'save'){
+					$action = $action == 'verify' ? 20 : 10;
+					if($action == 20){
+						$copy = Yii::getAlias('@upload/' . $verify->signiture_file);
+						$filepath = 'course-mgt/' . $verify->signiture_file;
+						$mirror = Yii::getAlias('@upload/' . $filepath);
+						if(empty($verify->signiture_file) and !is_file($copy )){
+								Yii::$app->session->addFlash('error', "Please put your signiture first!.");
+						}else{
+							
+							//ok kena check file ni dah ada ke belum
+							$verified_file = '';
+							if (is_file($mirror)) {
+								$verified_file = $filepath;
+							}else{
+								$dir = dirname($mirror);
+								if (!is_dir($dir)) {
+									FileHelper::createDirectory($dir);
+								}
+								if (is_file($copy)){
+									copy($copy, $mirror);
+									$verified_file = $filepath;
+								}else{
+									Yii::$app->session->addFlash('error', "Please put your signiture first!.");
+								}
+								
+							}
+							//klu ada record db shj
+							//klu xde copy dalam crs mgt
+							// nak kena cari position dia
+							$position = StaffMainPosition::findOne(['staff_id' => Yii::$app->user->identity->staff->id]);
+							$position_name = '';
+							if($position){
+								$position_name = $position->position_name;
+							}else{
+								$department = Department::findOne(['head_dep' => Yii::$app->user->identity->staff->id]);
+								if($department){
+									$position_name = $department->position_stamp;
+								}
+							}
+							$date = $verify->verified_at;
+							$result = CourseVersion::updateAll([
+											'verified_by' => Yii::$app->user->identity->id, 
+											'status' => $action, 
+											'verified_at' => $date,
+											'verifiedsign_file' => $verified_file,
+											'verified_adj_y' => $verify->tbl4_verify_y,
+											'verified_size' => $verify->tbl4_verify_size,
+											'verifier_position' => $position_name,
+											], 
+									['id' => $courses]);
+											
+							$verify->save();
+							if($result){
+								Yii::$app->session->addFlash('success', "Verification successful.");
+								return $this->refresh();
+							}
+									
+							
+							
+						}
+					}else{
+						$result = CourseVersion::updateAll([
+											'verified_by' => Yii::$app->user->identity->id, 
+											'status' => $action, 
+											'verified_at' => '0000-00-00',
+											'verifiedsign_file' => '',
+											'verified_adj_y' => 0,
+											'verified_size' => 0,
+											], 
+									['id' => $courses]);
+						$verify->save();
+						if($result){
+							Yii::$app->session->addFlash('success', "Unverification successful.");
+						}
+					}
+					
+				}
+				
+				
+			}else{
+				if($action != 'save'){
+					Yii::$app->session->addFlash('error', "Please select some courses first.");
+					//return $this->refresh();
+				}
+				
+			}
+			
+		}
+		
+        return $this->render('verification', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+			'verify' => $verify
+        ]);
+    }
+	
+
+
+	
+	protected function findVerifier(){
+		return Staff::findOne(Yii::$app->user->identity->staff->id);
+	}
 	
 	public function actionInactive()
     {
@@ -457,6 +599,123 @@ class CourseAdminController extends Controller
 
     }
 	
+	public function actionUpdateOwner($course)
+    {
+        $model = $this->findModel($course);
+        $pics = $model->coursePics;
+		$accesses = $model->courseAccesses;
+		
+        if ($model->load(Yii::$app->request->post())) {
+			$model->updated_at = new Expression('NOW()');    
+			if($model->save()){
+			$flag = true;
+            $staff_pic_arr = Yii::$app->request->post('staff_pic');
+			
+			if($staff_pic_arr){
+				
+				$kira_post = count($staff_pic_arr);
+				$kira_lama = count($model->coursePics);
+				if($kira_post > $kira_lama){
+					
+					$bil = $kira_post - $kira_lama;
+					for($i=1;$i<=$bil;$i++){
+						$insert = new CoursePic;
+						$insert->course_id = $model->id;
+						if(!$insert->save()){
+							$flag = false;
+						}
+					}
+				}else if($kira_post < $kira_lama){
+
+					$bil = $kira_lama - $kira_post;
+					$deleted = CoursePic::find()
+					  ->where(['course_id'=>$model->id])
+					  ->limit($bil)
+					  ->all();
+					if($deleted){
+						foreach($deleted as $del){
+							$del->delete();
+						}
+					}
+				}
+				
+				$update_pic = CoursePic::find()
+				->where(['course_id' => $model->id])
+				->all();
+				//echo count($staff_pic_arr);
+				//echo count($update_pic);die();
+
+				if($update_pic){
+					$i=0;
+					foreach($update_pic as $ut){
+						$ut->staff_id = $staff_pic_arr[$i];
+						$ut->save();
+						$i++;
+					}
+				}
+			}
+			
+			
+
+            $staff_access_arr = Yii::$app->request->post('staff_access');
+			if($staff_access_arr){
+				//echo 'hai';die();
+				$kira_post = count($staff_access_arr);
+				$kira_lama = count($model->courseAccesses);
+				if($kira_post > $kira_lama){
+					
+					$bil = $kira_post - $kira_lama;
+					for($i=1;$i<=$bil;$i++){
+						//print_r($staff_access_arr);die();
+						$insert = new CourseAccess;
+						$insert->course_id = $model->id;
+						if(!$insert->save()){
+							$insert->flashError();
+						}
+					}
+				}else if($kira_post < $kira_lama){
+
+					$bil = $kira_lama - $kira_post;
+					$deleted = CourseAccess::find()
+					  ->where(['course_id'=>$model->id])
+					  ->limit($bil)
+					  ->all();
+					if($deleted){
+						foreach($deleted as $del){
+							$del->delete();
+						}
+					}
+				}
+				
+				$update_access = CourseAccess::find()
+				->where(['course_id' => $model->id])
+				->all();
+				//echo count($staff_access_arr);
+				//echo count($update_access);die();
+
+				if($update_access){
+					$i=0;
+					foreach($update_access as $ut){
+						$ut->staff_id = $staff_access_arr[$i];
+						$ut->save();
+						$i++;
+					}
+				}
+			}
+			Yii::$app->session->addFlash('success', "Course Updated");
+			}else{
+				$model->flashError();
+			}
+			
+			return $this->redirect(['course-owner']);
+			}
+		
+		return $this->render('update-owner', [
+			'model' => $model
+        ]);
+
+    }
+	
 	public function actionProfile($course)
     {
         $model = $this->findProfile($course);
@@ -809,7 +1068,7 @@ class CourseAdminController extends Controller
 				$pdf->courses = Yii::$app->request->post('selection');
 				$pdf->generateExcel();
 			}else{
-				Yii::$app->session->addFlash('error', "Please select files first.");
+				Yii::$app->session->addFlash('error', "Please select some courses first.");
 				return $this->redirect('index');
 			}
 			
@@ -938,5 +1197,64 @@ class CourseAdminController extends Controller
 		}
 		exit();
 	}
+	
+	public function actionUploadFile($attr, $id){
+        $attr = $this->clean($attr);
+        $model = $this->findVerifier();
+        $model->file_controller = 'course-admin';
+		$path = 'signiture/' . Yii::$app->user->identity->staff->staff_no ;
+        return UploadFile::upload($model, $attr, 'updated_at', $path);
+
+    }
+
+	protected function clean($string){
+		$allowed = ['signiture'];
+        if(in_array($string,$allowed)){
+            return $string;
+        }
+        throw new NotFoundHttpException('Invalid Attribute');
+    }
+
+	public function actionDeleteFile($attr, $id)
+    {
+        $attr = $this->clean($attr);
+        $model = $this->findVerifier();
+        $attr_db = $attr . '_file';
+        
+        $file = Yii::getAlias('@upload/' . $model->{$attr_db});
+        
+        $model->scenario = $attr . '_delete';
+        $model->{$attr_db} = '';
+        $model->updated_at = new Expression('NOW()');
+        if($model->save()){
+            if (is_file($file)) {
+                unlink($file);
+                
+            }
+            
+            return Json::encode([
+                        'good' => 1,
+                    ]);
+        }else{
+            return Json::encode([
+                        'errors' => $model->getErrors(),
+                    ]);
+        }
+        
+
+
+    }
+
+	public function actionDownloadFile($attr, $id, $identity = true){
+        $attr = $this->clean($attr);
+        $model = $this->findVerifier();
+        $filename = strtoupper($attr) . ' ' . Yii::$app->user->identity->fullname;
+        
+        
+        
+        UploadFile::download($model, $attr, $filename);
+    }
+
+
 	
 }

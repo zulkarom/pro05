@@ -169,7 +169,7 @@ echo $form->field($model, 'version_type_id')->dropDownList($model->versionTypeLi
 
 <div class="col-md-6" align="right">
 
-<?= Html::a('<i class="fa fa-remove"></i> DELETE VERSION', ['course-version-delete', 'id' => $model->id], [
+<?= Html::a('<i class="fa fa-remove"></i>', ['course-version-delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
                 'confirm' => 'Are you sure you want to delete this version? This action can not be undone!',

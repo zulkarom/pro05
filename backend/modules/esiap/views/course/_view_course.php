@@ -316,6 +316,8 @@ use yii\helpers\Url;
 		</td>
       </tr>
 	  
+	
+	  
     </tbody>
   </table>
 </div>
@@ -326,7 +328,7 @@ use yii\helpers\Url;
     <thead>
       <tr>
 	  <th>#</th>
-        <th>COURSE LEARNING OUTDOME</th>
+        <th>COURSE LEARNING OUTCOMES</th>
         <th>PLO</th>
         <th>TAXONOMY</th>
 		<th>TEACHING METHODS</th>
@@ -778,6 +780,7 @@ if($version->references){
 		
 		</td>
       </tr>
+	    
 </tbody>
 </table>
 </div>
