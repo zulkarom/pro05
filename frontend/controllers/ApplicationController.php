@@ -331,7 +331,13 @@ class ApplicationController extends Controller
 			$fasi->scenario = "signup";
 			$fasi->user_id = $user->id;
 			$fasi->nric = $user->username;
-			$fasi->save(); 
+			if($fasi->save()){
+				$profile = $fasi;
+			}else{
+				return false;
+				//
+			}
+			
 			
 		}
 		if(!$sem){
