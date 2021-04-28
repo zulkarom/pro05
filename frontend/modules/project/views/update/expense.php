@@ -147,6 +147,11 @@ var fixHelperSortable = function(e, ui) {
     return ui;
 };
 
+jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+    var first = $(item).find('input')[0];
+    first.setAttribute("value", "");
+});
+
 $(".container-items").sortable({
     items: "tr",
     cursor: "move",

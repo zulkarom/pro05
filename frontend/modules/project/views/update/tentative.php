@@ -132,6 +132,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
 $js = <<<'EOD'
 
 jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+	
+	var first = $(item).find('input')[0];
+    first.setAttribute("value", "");
+	
     $( ".krajee-datepicker" ).each(function() {
        $(this).removeData().kvDatepicker('destroy');
         $(this).kvDatepicker(eval($(this).attr('data-krajee-kvdatepicker')));
@@ -139,6 +143,9 @@ jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
 });
 
 jQuery(".dynamicform_inner").on("afterInsert", function(e, item) {
+	
+	var first = $(item).find('input')[0];
+    first.setAttribute("value", "");
 
     $( ".krajee-timepicker" ).each(function() {
        $(this).removeData().timepicker('destroy');

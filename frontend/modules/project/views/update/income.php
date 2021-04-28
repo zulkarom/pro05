@@ -157,6 +157,10 @@ use wbraganca\dynamicform\DynamicFormWidget;
 $this->registerJs('
 
 $(".dynamicform_wrapper").on("afterInsert", function (e, item) {
+
+var first = $(item).find("input")[0];
+    first.setAttribute("value", "");
+
   var input = item.getElementsByTagName("td")[1].children[0];
   var str_id = input.getAttribute("id");
   var arr_id = str_id.split("-");
