@@ -324,8 +324,22 @@ class ApplicationController extends Controller
 	protected function validateCreate(){
 		//semester condition open sem
 		$sem = Semester::getOpenSemester();
-		$id = Yii::$app->user->identity->id;
-		$profile = Fasi::findOne(['user_id' => $id]);
+		$user = Yii::$app->user->identity;
+		$profile = Fasi::findOne(['user_id' => $user->id]);
+		if(!$profile){
+			$fasi = new Fasi;
+			$fasi->scenario = "signup";
+			$fasi->user_id = $user->id;
+			$fasi->nric = $user->username;
+			if($fasi->save()){
+				$profile = $fasi;
+			}else{
+				return false;
+				//
+			}
+			
+			
+		}
 		if(!$sem){
 			Yii::$app->session->addFlash('info', "Tiada sesi semester dibuka untuk pendaftaran.");
 			return false;
