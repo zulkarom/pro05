@@ -136,6 +136,11 @@ jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
     first.setAttribute("value", "");
 });
 
+jQuery(".dynamicform_inner").on("afterInsert", function(e, item) {
+    var first = $(item).find('input')[0];
+    first.setAttribute("value", "");
+});
+
 
 EOD;
 
