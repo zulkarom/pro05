@@ -3,6 +3,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use wbraganca\dynamicform\DynamicFormWidget;
+use backend\modules\project\models\CommitteeMember;
 
 
 /* @var $this yii\web\View */
