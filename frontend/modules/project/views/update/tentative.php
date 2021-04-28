@@ -4,6 +4,7 @@ use yii\widgets\ActiveForm;
 use yii\helpers\Url;
 use kartik\date\DatePicker;
 use wbraganca\dynamicform\DynamicFormWidget;
+use backend\modules\project\models\TentativeTime;
 
 
 /* @var $this yii\web\View */
@@ -84,11 +85,11 @@ use wbraganca\dynamicform\DynamicFormWidget;
 				</div>
 					
 					<?php 
-					print_r($times[$indexDay]);die();
+					//print_r($times[$indexDay]);die();
 					echo  $this->render('_form-times', [
                         'form' => $form,
                         'indexDay' => $indexDay,
-                        'times' => $times[$indexDay],
+                        'times' => empty($times[$indexDay]) ? [new TentativeTime], $times[$indexDay],
                     ]) ?>
 					
                 </td>
