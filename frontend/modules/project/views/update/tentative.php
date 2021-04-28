@@ -81,13 +81,11 @@ use wbraganca\dynamicform\DynamicFormWidget;
 					
 					<button style="font-size:15px" type="button" class="remove-day btn btn-default btn-sm"><span class="icon icon-remove"></span> Buang Hari</button></div>
 
-</div>
-					 
-
+				</div>
 					
-					
-					
-					<?= $this->render('_form-times', [
+					<?php 
+					print_r($times[$indexDay]);die();
+					echo  $this->render('_form-times', [
                         'form' => $form,
                         'indexDay' => $indexDay,
                         'times' => $times[$indexDay],

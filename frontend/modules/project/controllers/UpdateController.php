@@ -444,7 +444,7 @@ class UpdateController extends Controller
 		
 		if($model->status > 0){
 				return $this->redirect(['/project/update/preview', 'token' => $token]);
-			}
+		}
 		
         $modelsDay = $model->tentativeDays;
         $modelsTime = [];
