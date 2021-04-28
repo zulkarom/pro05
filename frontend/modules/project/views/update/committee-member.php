@@ -87,7 +87,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 					echo  $this->render('_form-members', [
                         'form' => $form,
                         'indexPosition' => $indexPosition,
-                        'modelsMember' => $modelsMember[$indexPosition],
+                        'modelsMember' => empty($modelsMember[$indexPosition]) ? [new CommitteeMember] : $modelsMember[$indexPosition],
 						'model' => $model
 						
                     ])?>
