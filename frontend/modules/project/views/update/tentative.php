@@ -89,7 +89,7 @@ use backend\modules\project\models\TentativeTime;
 					echo  $this->render('_form-times', [
                         'form' => $form,
                         'indexDay' => $indexDay,
-                        'times' => empty($times[$indexDay]) ? [new TentativeTime], $times[$indexDay],
+                        'times' => empty($times[$indexDay]) ? [new TentativeTime] : $times[$indexDay],
                     ]) ?>
 					
                 </td>
