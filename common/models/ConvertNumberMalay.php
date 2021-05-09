@@ -79,7 +79,7 @@ class ConvertNumberMalay
 				$output .= " perpuluhan";
 				for ($i = 0; $i < strlen($fraction); $i++)
 				{
-					$output .= " " . self::convertDigit($fraction{$i});
+					$output .= " " . self::convertDigit($fraction[$i]);
 				}
 			}
 			
