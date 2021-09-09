@@ -7,6 +7,7 @@ use common\models\Application;
 use common\models\ApplicationCourse;
 use backend\models\Course;
 use backend\models\ApplicationSearch;
+use backend\models\ApplicationCourseSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -133,6 +134,28 @@ class ApplicationController extends Controller
 		return $this->render('analysis', [
 			'semester' => $semester
         ]);
+	}
+	
+	public function actionApplicationCourse(){
+	    $semester = new SemesterForm;
+	    $semester->action = ['application/application-course'];
+	    
+	    if(Yii::$app->getRequest()->getQueryParam('SemesterForm')){
+	        $sem = Yii::$app->getRequest()->getQueryParam('SemesterForm');
+	        $semester->semester_id = $sem['semester_id'];
+	    }else{
+	        $semester->semester_id = Semester::getCurrentSemester()->id;
+	    }
+	    
+	    $searchModel = new ApplicationCourseSearch();
+	    $searchModel->selected_sem = $semester->semester_id;
+	    $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+	    
+	    return $this->render('application-course', [
+	        'searchModel' => $searchModel,
+	        'dataProvider' => $dataProvider,
+	        'semester' => $semester
+	    ]);
 	}
 	
 	private function approveApplication($model){

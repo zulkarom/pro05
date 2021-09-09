@@ -59,6 +59,10 @@ class ApplicationCourse extends \yii\db\ActiveRecord
 		return $this->hasOne(Course::className(), ['id' => 'course_id']);
 	}
 	
+	public function getApplication(){
+	    return $this->hasOne(Application::className(), ['id' => 'application_id']);
+	}
+	
 	public function getEsiapCourse(){
 		return $this->hasOne(EsiapCourse::className(), ['id' => 'course_id']);
 	}
