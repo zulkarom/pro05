@@ -43,6 +43,8 @@
 							['label' => 'Senarai Permohonan', 'icon' => 'list-alt', 'url' => ['/application/index']],
 							
 							['label' => 'Analisis Permohonan', 'icon' => 'pie-chart', 'url' => ['/application/analysis']],
+                            
+                            ['label' => 'Permohonan (Kursus)', 'icon' => 'list-alt', 'url' => ['/application/application-course']],
 
 							['label' => 'Rujukan Surat Tawaran', 'icon' => 'file', 'url' => ['/offer-letter/index'],],
 						
