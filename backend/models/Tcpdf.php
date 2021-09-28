@@ -2,9 +2,9 @@
 
 namespace backend\models;
 
-use TCPDF;
+use TCPDF as MyTcpdf;
 
-class Tcpdfx extends TCPDF {
+class Tcpdf extends MyTcpdf{
 	
 	/* public $header_html;
 	
