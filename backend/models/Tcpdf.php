@@ -2,10 +2,12 @@
 
 namespace backend\models;
 
-use TCPDF;
+use TCPDF as MyTcpdf;
 
-class Tcpdf extends TCPDF {
-	
+class Tcpdf extends MyTcpdf{
+
+	public function Header() {
+}
 	/* public $header_html;
 	
 	public $header_first_page_only = false;
