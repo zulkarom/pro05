@@ -192,19 +192,24 @@ class ApplicationController extends Controller
 				$model->selected_course = Yii::$app->request->post('Application')['selected_course'];
 				if($model->selected_course){
 					$course = ApplicationCourse::findOne(['application_id' => $model->id, 'course_id'=> $model->selected_course] );
-					$course->is_accepted = 1;
-					$course->scenario = 'verify';
-					if($course->save()){
-						$model->sendToStatus('c-verified');
-						if($model->save()){
-							Yii::$app->session->addFlash('success', "Permohonan telah berjaya disokong");
-							return $this->redirect(['application/index']);
-						}else{
-							$model->flashError();
-						}
+					if($course){
+					    $course->is_accepted = 1;
+					    $course->scenario = 'verify';
+					    if($course->save()){
+					        $model->sendToStatus('c-verified');
+					        if($model->save()){
+					            Yii::$app->session->addFlash('success', "Permohonan telah berjaya disokong");
+					            return $this->redirect(['application/index']);
+					        }else{
+					            $model->flashError();
+					        }
+					    }else{
+					        $course->flashError();
+					    }
 					}else{
-						$course->flashError();
+					    Yii::$app->session->addFlash('error', "No selected course!");
 					}
+					
 				}else{
 					Yii::$app->session->addFlash('error', "No selected course!");
 				}
