@@ -51,7 +51,7 @@ class CourseAssessment extends \yii\db\ActiveRecord
 			[['assess_f2f', 'assess_nf2f', 'assess_f2f_tech'], 'number'],
 			
             [['created_at', 'updated_at'], 'safe'],
-            [['assess_name', 'assess_name_bi'], 'string', 'max' => 50],
+            [['assess_name', 'assess_name_bi'], 'string', 'max' => 100],
         ];
     }
 
