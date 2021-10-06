@@ -15,8 +15,7 @@ backend\assets\KnobAsset::register($this);
 /* @var $model backend\modules\esiap\models\Course */
 
 $this->title = 'View Course Information';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = $model->course_code;
 ?>
 <div class="course-update">
 
@@ -28,28 +27,8 @@ $this->params['breadcrumbs'][] = 'Update';
 ])?>
 
 
+  <a href="<?=Url::to(['/esiap/course/manage-version', 'course' => $model->id])?>" class="btn btn-default"><i class="fa fa-cog"></i> Course Info Version</a>
 
-
-<div class="dropdown">
-
-
-  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown" aria-expanded="false">View Other Version
-  <span class="caret"></span></button>
-  <ul class="dropdown-menu">
-		<?php 
-		$versions = $model->versions;
-		if($versions){
-			foreach($versions as $v){
-				echo '<li><a href="'.Url::to(['course/html-view', 'course' => $model->id, 'version' => $v->id]).'" target="_blank">'.$v->version_name .'</a></li>';
-			}
-		}
-		
-		?>
-  
-    
-    
-	
-  </ul>
 
 <?php echo $model->reportList('View Doc Report', $version->id); ?>
 <?php 
@@ -58,8 +37,14 @@ if(array_key_exists('course-files',Yii::$app->modules)){
         }
  ?> 
 
-</div>  <br />
+ <br /> <br />
+<?php 
+//$version = $model->developmentVersion;
 
+if(in_array($version->status, [0,13])){
+	
+
+?>
 <div class="box box-solid">
 <div class="box-header">
 <i class="fa fa-bar-chart-o"></i>
@@ -69,7 +54,7 @@ if(array_key_exists('course-files',Yii::$app->modules)){
 <div class="box-body">
 <?php 
 $per = $model->developmentVersion->progress;
-$version = $model->developmentVersion;
+
 $profile = percent($version->pgrs_info);
 $clo = percent($version->pgrs_clo);
 $plo = percent($version->pgrs_plo);
@@ -86,12 +71,12 @@ $ref = percent($version->pgrs_ref);
 
 <div class="row">
 
-<?=show_knob($per, 'Overall Progress', ['view-course', 'course' => $model->id])?>
-<?=show_knob($profile, 'Course Profile', ['update', 'course' => $model->id])?>
-<?=show_knob($assess, 'Assessment', ['course-assessment', 'course' => $model->id])?>
-<?=show_knob($clo, 'Course Learning Outcomes', ['course-clo', 'course' => $model->id])?>
-<?=show_knob($plo, 'CLO PLO', ['clo-plo', 'course' => $model->id])?>
-<?=show_knob($tax, 'CLO Taxonomy', ['clo-taxonomy', 'course' => $model->id])?>
+<?=show_knob($per, 'Overall Progress', [])?>
+<?=show_knob($profile, 'Course Profile', ['update', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($assess, 'Assessment', ['course-assessment', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($clo, 'Course Learning Outcomes', ['course-clo', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($plo, 'CLO PLO', ['clo-plo', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($tax, 'CLO Taxonomy', ['clo-taxonomy', 'course' => $model->id, 'version' => $version->id])?>
 </div>
 
 </div>
@@ -105,16 +90,38 @@ $ref = percent($version->pgrs_ref);
 </div>
 <div class="box-body">
 <div class="row">
-<?=show_knob($delivery, 'CLO Methods', ['clo-delivery', 'course' => $model->id])?>
-<?=show_knob($assess_per, 'CLO Assessment', ['clo-assessment', 'course' => $model->id])?>
-<?=show_knob($soft, 'CLO Softskill', ['clo-softskill', 'course' => $model->id])?>
-<?=show_knob($syll, 'Syllabus', ['course-syllabus', 'course' => $model->id])?>
-<?=show_knob($syll, 'Student Learning Time', ['course-slt', 'course' => $model->id])?>
-<?=show_knob($ref, 'Reference', ['course-reference', 'course' => $model->id])?>
+<?=show_knob($delivery, 'CLO Methods', ['clo-delivery', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($assess_per, 'CLO Assessment', ['clo-assessment', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($soft, 'CLO Softskill', ['clo-softskill', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($syll, 'Syllabus', ['course-syllabus', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($slt, 'Student Learning Time', ['course-slt', 'course' => $model->id, 'version' => $version->id])?>
+<?=show_knob($ref, 'Reference', ['course-reference', 'course' => $model->id, 'version' => $version->id])?>
 </div>
 
 </div>
 </div>
+
+<?php } 
+
+if($version->status == 13){
+	?>
+	
+	<div class="box">
+<div class="box-header">
+<h3 class="box-title" style="color:red"><i class="fa fa-comments"></i> Correction Remark</h3>
+</div>
+<div class="box-body">
+<?php echo nl2br(Html::encode($version->verified_note));?>
+
+</div>
+</div>
+	
+	
+	<?php
+}
+?>
+
+
 
 
 <?=$this->render('_view_course', [
@@ -130,7 +137,7 @@ $ref = percent($version->pgrs_ref);
 
 
 <?php 
-if($version->status == 0 and $model->IAmCoursePic()){
+if(in_array($version->status, [0, 13]) and $model->IAmCoursePic()){
 $form = ActiveForm::begin(); 
 
 if($version->prepared_by == 0){
@@ -189,8 +196,13 @@ echo UploadFile::fileInput($version, 'preparedsign', true)?>
     </div>
 
 </div>
-
-
+<i>
+* For the signature, use png format image with transparent background. You can click <a href="https://www.remove.bg/" target="_blank">Remove.bg</a> to easily remove background.<br />
+* Approximate size pixel 200 x 100.<br />
+* Increase Image Adj Size to make the image bigger and vice versa.<br />
+* Increase Image Adj Y Size to move the image upwards and vice versa. <br />
+* Is strongly recommended to save signature first and preview your signature in <a href="<?=Url::to(['fk2', 'course' => $model->id, 'version' => $version->id])?>" target="_blank">FK2</a>, <a href="<?=Url::to(['fk3', 'course' => $model->id, 'version' => $version->id])?>" target="_blank">FK3</a> and <a href="<?=Url::to(['tbl4-pdf', 'course' => $model->id, 'version' => $version->id])?>" target="_blank">Table 4</a> before submitting.
+</i>
 </div>
 </div>
 
@@ -244,10 +256,19 @@ function show_knob($percentage, $title, $url){
 		}else if($percentage >= 100){
 			$color = '#00a65a';
 		}
-	return '<div class="col-xs-6 col-md-2 text-center">
+	$html = '<div class="col-xs-6 col-md-2 text-center">
 <input type="text" class="knob" value="' . $percentage . '" data-skin="tron" data-thickness="0.2" data-width="100" data-readonly="true" data-height="100" data-fgColor="'.$color.'">
-<div class="knob-label"><a href="'.Url::to($url).'"> '.$title.'</a></div>
+<div class="knob-label">';
+if($url){
+	$html .= '<a href="'.Url::to($url).'"> '.$title.'</a>';
+}else{
+	$html .= $title;
+}
+
+
+$html .= '</div>
 </div>';
+	return $html;
 }
 
 $this->registerJs('

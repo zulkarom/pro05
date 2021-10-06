@@ -1,6 +1,7 @@
 <?php
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 use yii\widgets\ActiveForm;
 use kartik\date\DatePicker;
 use backend\modules\staff\models\Staff;
@@ -25,6 +26,26 @@ use backend\modules\staff\models\Staff;
 
 <div class="col-md-3">
 <?= $form->field($model, 'is_published')->dropDownList( [1 => 'YES' , 0 => 'NO'] ) ?>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label>Update</label>
+<div class="dropdown">
+  <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Choose Item
+  <span class="caret"></span></button>
+  <ul class="dropdown-menu">
+    <li><a href="<?=Url::to(['update-signature', 'version' => $model->id])?>" target="_blank">Signature</a></li>
+    <li><a href="#">Course Profile</a></li>
+    <li><a href="#">Assessment</a></li>
+	<li><a href="#">CLO Text</a></li>
+	<li><a href="#">Syllabus</a></li>
+	<li><a href="#">Reference</a></li>
+  </ul>
+</div>
+
+
+</div>
+
 </div>
 
 </div>

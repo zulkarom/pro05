@@ -61,6 +61,7 @@ class Tbl4Excel2
 	public $startTransferable;
 	public $credit_row;
 	public $slt;
+	public $team = array();
 	
 	public function generateExcel(){
 		$this->start();
@@ -1163,13 +1164,18 @@ class Tbl4Excel2
 			;
 		
 		$arr_cluster = $this->clusterList();
+		$mqf = $this->mqfMapping();
+		$mqf1 = $mqf[0];
+		$mqf2 = $mqf[1];
+		$mqf3 = $mqf[2];
 		
 		//plo tick
-		for($i=1;$i<=11;$i++){
-			$index = $i - 1;
-			$col = $i + 5;
+		for($i=0;$i<11;$i++){ 
+			$col = $i + 6;
 			$col = $this->abc($col);
-			$this->sheet->setCellValue($col . $row , $arr_cluster[$index]);
+			$this->sheet->setCellValue($col . $row , $mqf1[$i]);
+			$this->sheet->setCellValue($col . $row2 , $mqf2[$i]);
+			$this->sheet->setCellValue($col . $last , $mqf3[$i]);
 			
 			$validation = $this->sheet->getCell($col. $row)
 			->getDataValidation();
@@ -1184,6 +1190,45 @@ class Tbl4Excel2
 			
 		}
 		$this->row = $last;
+	}
+	
+	public function mqfMapping(){
+	    
+	    
+	    $arr = ['C1','C2', 'C3A', 'C3B', 'C3C', 'C3D', 'C3E', 'C3F', 'C4A', 'C4B', 'C5'];
+	    $mgf = [];
+	    for($m=1;$m<=3;$m++){
+	        $t = [];
+	        for($f=1;$f<=12;$f++){
+	            $t[] = null;
+	        }
+	        $mqf[] = $t;
+	    }
+	    
+	    $clos = $this->model->clos;
+	    if($clos){
+	        foreach($clos as $i => $clo){
+	            for($e=0;$e<12;$e++){
+	                $x = $e + 1;
+	                $plo_str = 'PLO'.$x;
+	                if($clo){
+	                    if($clo->{$plo_str} == 1){
+	                        if(is_null($mqf[0][$e])){
+	                            $mqf[0][$e] = $arr[$e];
+	                        }else if(is_null($mqf[1][$e])){
+	                            $mqf[1][$e] = $arr[$e];
+	                        }else if(is_null($mqf[2][$e])){
+	                            $mqf[2][$e] = $arr[$e];
+	                        }
+	                        
+	                        
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    
+	    return $mqf;
 	}
 	
 	public function item8PloFooter(){
@@ -1740,7 +1785,7 @@ Independent Learning
 
 
 		$this->sheet
-			->setCellValue('D' . $line1, "Continous Assessement")
+			->setCellValue('D' . $line1, "Continuous Assessement")
 			->setCellValue('K' . $line1 , '%')
 			->setCellValue('M' . $line1 , 'Face-to-Face (F2F)')
 			->setCellValue('U' . $line1 , 'NF2F

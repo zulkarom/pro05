@@ -18,8 +18,8 @@ use kartik\select2\Select2;
 /* @var $model backend\modules\esiap\models\Course */
 
 $this->title = 'Course Information';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Update';
+$this->params['breadcrumbs'][] = ['label' => 'Preview', 'url' => ['course/view-course', 'course' => $model->id, 'version' => $version->id]];
+$this->params['breadcrumbs'][] = 'Course Profile';
 ?>
 <div class="course-update">
 
@@ -174,10 +174,16 @@ $this->params['breadcrumbs'][] = 'Update';
 	
 	
 	
+<?php 
+echo $form->field($profile, 'prerequisite')->widget(Select2::classname(), [
+    'data' => $profile->course->activeCoursesArray(),
+    'options' => ['multiple' => false,'placeholder' => 'Select ...'],
+    'pluginOptions' => [
+        'allowClear' => true
+    ],
+])->label('Prerequisite/co-requisite:     (if any) ');
 
-
-
-<?= $form->field($profile, 'prerequisite')->dropDownList($profile->course->allCoursesArray()) ?>
+?>
     
 <div class="row">
 <div class="col-md-2"><?= $form->field($profile, 'offer_sem')->dropDownList([1=>1,2=>2,3=>3], ['prompt' => 'Please Select' ]) ?></div>
@@ -197,17 +203,20 @@ $this->params['breadcrumbs'][] = 'Update';
 </div>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($profile, 'rational')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'rational')->textarea(['rows' => '6'])->label('Rationale (BM)')  ?></div>
 
-<div class="col-md-6"><?= $form->field($profile, 'rational_bi')->textarea(['rows' => '6']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'rational_bi')->textarea(['rows' => '6'])->label('Rationale (EN)') ?></div>
 
 
 </div>
 
 <div class="row">
-<div class="col-md-6"><?= $form->field($profile, 'feedback')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'feedback',['template' => '{label}<br /><i style="font-weight:normal">cth Sistem Atas Talian, Sistem Penasihatan Akademik</i>{input}{error}
+            '])->textarea(['rows' => '4'])->label('Method for Feedback on Performance (BM)') ?></div>
 
-<div class="col-md-6"><?= $form->field($profile, 'feedback_bi')->textarea(['rows' => '4']) ?></div>
+<div class="col-md-6"><?= $form->field($profile, 'feedback_bi',['template' => '{label}<br /><i style="font-weight:normal">e.g. Online System, Advisory Academic System</i>{input}{error}
+            ']
+)->textarea(['rows' => '4'])->label('Method for Feedback on Performance (EN)') ?></div>
 </div>
 
 

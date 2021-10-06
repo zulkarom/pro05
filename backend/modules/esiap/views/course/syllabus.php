@@ -15,12 +15,13 @@ use kartik\select2\Select2;
 
 
 $this->title = 'Course Syllabus';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Syllabus';
+$this->params['breadcrumbs'][] = ['label' => 'Preview', 'url' => ['course/view-course', 'course' => $model->course_id, 'version' => $model->id]];
+$this->params['breadcrumbs'][] = 'Course Syllabus';
 ?>
 
 <?=$this->render('_header',[
-'course' => $model->course
+'course' => $model->course, 
+    'version' => $model
 ])?>
 
 <?php $form = ActiveForm::begin(['id' => 'formsyll']); ?>
@@ -51,7 +52,7 @@ $week_num = 1;
 $arr_week = array();
 $array_week_sorting = array();
 $list_weeks = ['1' => '1 Week'];
-for($ii=2;$ii<=20;$ii++){
+for($ii=2;$ii<=5;$ii++){
 	$list_weeks[$ii] = $ii.' Weeks';
 }
 foreach($syllabus as $row){ ?>
@@ -248,7 +249,7 @@ Modal::begin([
     'toggleButton' => ['label' => '<i class="glyphicon glyphicon-move"></i> Re-order Weeks', 'class' => 'btn btn-warning btn-sm'],
 	'size' => 'modal-md',
     'footer' => '<div class="form-group">
-                            <a id="btn-reorder" href="'.Url::to(['course/course-syllabus-reorder', 'id' => $model->course->id]) .'" class="btn btn-success">Re-order</a> 
+                            <a id="btn-reorder" href="'.Url::to(['course/course-syllabus-reorder', 'id' => $model->course->id, 'version' => $model->id]) .'" class="btn btn-success">Re-order</a> 
                          </div>'
 ]);
 

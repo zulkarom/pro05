@@ -63,6 +63,8 @@ $this->params['breadcrumbs'][] = 'Update';
 
 </div>
 
+
+
 <?php 
 
 if(Yii::$app->params['faculty_id'] == 21){
@@ -73,9 +75,18 @@ if(Yii::$app->params['faculty_id'] == 21){
 
 ?>
 	
-<?= $form->field($model, 'program_id')->dropDownList(
-        ArrayHelper::map(Program::find()->where(['faculty_id' => Yii::$app->params['faculty_id'], 'trash' => 0])->all(),'id', 'pro_name'), ['prompt' => 'Please Select' ]
+
+<div class="row">
+	<div class="col-md-8">
+	<?= $form->field($model, 'program_id')->dropDownList(
+        ArrayHelper::map(Program::find()->where(['faculty_id' => Yii::$app->params['faculty_id'], 'trash' => 0])->orderBy('pro_level ASC, id ASC')->all(),'id', 'pro_name'), ['prompt' => 'Please Select' ]
     ) ?>
+	</div>
+		<div class="col-md-4">
+<?= $form->field($model, 'study_level')->dropDownList($model->getStudyLevelList(), ['prompt' => 'Please Select' ]) ?>
+</div>
+</div>
+
 
 
 

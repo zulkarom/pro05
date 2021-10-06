@@ -4,8 +4,8 @@ namespace backend\modules\esiap\models;
 
 use Yii;
 use common\models\User;
-use backend\models\GeneralSetting;
 use yii\helpers\ArrayHelper;
+use backend\modules\teachingLoad\models\CourseOffered;
 
 
 
@@ -56,10 +56,18 @@ class CourseVersion extends \yii\db\ActiveRecord
     {
         return [
             [['course_id', 'version_name', 'version_type_id', 'created_by', 'created_at', 'is_developed'], 'required', 'on' => 'create'],
+            
+            [['course_id', 'version_name', 'version_type_id', 'created_by', 'created_at', 'is_developed', 'justification', 'what_change', 'duplicated_from'], 'required', 'on' => 'create_coor'],
 			
 			[['course_id', 'version_name', 'updated_at', 'is_developed', 'is_published'], 'required', 'on' => 'update'],
 			
 			[['status', 'verified_by', 'verified_at'], 'required', 'on' => 'verify'],
+			
+			[['status', 'verified_note'], 'required', 'on' => 'verify_reject'],
+			
+			[['status', 'verified_at', 'verified_by', 'verifiedsign_file'], 'required', 'on' => 'verify_approve'],
+            // 'faculty_approve_at', 'senate_approve_at',
+			//verify_reject
 			
 			[['status'], 'required', 'on' => 'status'],
 			
@@ -77,13 +85,13 @@ class CourseVersion extends \yii\db\ActiveRecord
 			[['pgrs_assess_per'], 'required', 'on' => 'pgrs_assess_per'],
 			[['pgrs_ref'], 'required', 'on' => 'pgrs_ref'],
 			
-            [['course_id', 'created_by', 'is_developed', 'is_published', 'status', 'prepared_by', 'verified_by', 'dup_course', 'dup_version', 'version_type_id', 'duplicate'], 'integer'],
+            [['course_id', 'created_by', 'is_developed', 'is_published', 'status', 'prepared_by', 'verified_by', 'dup_course', 'dup_version', 'version_type_id', 'duplicate', 'duplicated_from'], 'integer'],
 			
             [['created_at', 'updated_at', 'senate_approve_at', 'faculty_approve_at', 'senate_approve_show', 'prepared_at', 'verified_at'], 'safe'],
 			
             [['version_name'], 'string', 'max' => 200],
 			
-			[['syllabus_break'], 'string'],
+			[['syllabus_break', 'verified_note', 'justification', 'what_change'], 'string'],
 			
 			[['prepared_adj_y', 'verified_adj_y', 'prepared_size', 'verified_size'], 'number'],
 			
@@ -113,10 +121,54 @@ class CourseVersion extends \yii\db\ActiveRecord
             'created_at' => 'Created At',
 			'version_type_id' => 'Version Type',
             'updated_at' => 'Updated At',
-            'is_developed' => 'Under Development',
-			'is_published' => 'Published',
-			'preparedsign_file' => 'Signiture Upload',
+            'is_developed' => 'Default Development',
+			'is_published' => 'Default Published',
+			'preparedsign_file' => 'Signature Upload',
+			'signiture_file' => 'Signature Upload',
+            'preparedBy.fullname' => 'Prepared By',
+            'verifiedBy.fullname' => 'Verified By',
+            'labelStatus' => 'Status',
+            'isDeveloped' => 'Default Development',
+            'isPublished' => 'Default Published',
         ];
+    }
+    
+    public function getStatusArray(){
+        return [0=>'DRAFT', 10=>'SUBMIT', 13 => 'REUPDATE', 17 => 'RESUBMIT', 20 => 'VERIFIED', 80 => 'ARCHIVED'];
+    }
+    
+    public function checkProgressCourseFile(){
+        if(array_key_exists('course-files',Yii::$app->modules)){
+            if(!in_array($this->status, [0, 13])){ //draft & reupdate
+                //kena update course file kepada 100%
+                if($this->courseFiles){
+                    foreach($this->courseFiles as $file){
+                        //check status course version
+                        if($file->prg_crs_ver < 1){
+                            $file->prg_crs_ver = 1;
+                            $file->save();
+                        }
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+    public function getIsDeveloped(){
+        return $this->yesNoLabel($this->is_developed);
+    }
+    
+    public function getIsPublished(){
+        return $this->yesNoLabel($this->is_published);
+    }
+    
+    
+    
+    public function getVersionNameAndStatus(){
+        $status = $this->statusArray;
+        $name = $status[$this->status];
+        return '['.$name.'] ' . $this->version_name;
     }
 	
 	public function getVersionType(){
@@ -273,6 +325,11 @@ class CourseVersion extends \yii\db\ActiveRecord
     {
         return $this->hasMany(CourseReference::className(), ['crs_version_id' => 'id'])->orderBy('id ASC');
     }
+    
+    public function getCourseFiles()
+    {
+        return $this->hasMany(CourseOffered::className(), ['course_version' => 'id']);
+    }
 
 	
 	public function getMainReferences()
@@ -329,21 +386,29 @@ class CourseVersion extends \yii\db\ActiveRecord
 			break;
 			
 			case 10:
-			$status = 'SUBMITTED';
+			$status = $arr[10];
+			$color = 'info';
+			break;
+			
+			case 13:
+			$status = $arr[13];
+			$color = 'warning';
+			break;
+			
+			case 17:
+			$status = $arr[17];
 			$color = 'info';
 			break;
 			
 			case 20:
-			$status = 'VERIFIED';
+			$status = $arr[20];
 			$color = 'success';
 			break;
 		}
 		return '<span class="label label-'.$color.'">' . $status . '</span>';
 	}
 	
-	public function getStatusArray(){
-		return [0=>'DRAFT', 10=>'SUBMITTED', 20 => 'VERIFIED'];
-	}
+	
 	
 	public function getLabelActive(){
 		return $this->yesNoLabel($this->is_developed);
@@ -363,14 +428,14 @@ class CourseVersion extends \yii\db\ActiveRecord
 			
 			case 0:
 			$status = 'NO';
-			$color = 'danger';
+			$color = 'warning';
 			break;
 		}
 		return '<span class="label label-'.$color.'">' . $status . '</span>';
 	}
 	
 	public function niceDate($date){
-		if($date == '0000-00-00'){
+		if($date == null or $date == '0000-00-00'){
 			return '';
 		}else{
 			return date('d/m/Y',strtotime($date));

@@ -22,7 +22,8 @@ $this->params['breadcrumbs'][] = $this->title;
                 
                 'value' => function($model){
 					$course = $model->course;
-					$version = $course->developmentVersion;
+					if($course){
+						$version = $course->developmentVersion;
 					
 					
 						if($version){
@@ -31,6 +32,8 @@ $this->params['breadcrumbs'][] = $this->title;
 							return $course->course_code . ' ' . strtoupper($course->course_name) . '<br /><i>' . strtoupper($course->course_name_bi) . '</i>';
 						}
 						
+					}
+					
 					
 					
                     
@@ -40,7 +43,10 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'label' => 'Credit',
 				'value' => function($model){
-					return $model->course->credit_hour;
+					if($model->course){
+						return $model->course->credit_hour;
+					}
+					
 				}
 				
 			],
@@ -48,11 +54,14 @@ $this->params['breadcrumbs'][] = $this->title;
 			[
 				'label' => 'Version',
 				'value' => function($model){
-					if($model->course->developmentVersion){
+					if($model->course){
+						if($model->course->developmentVersion){
 						return $model->course->developmentVersion->version_name;
 					}else{
 						return 'NONE';
 					}
+					}
+					
 					
 				}
 				
@@ -63,12 +72,15 @@ $this->params['breadcrumbs'][] = $this->title;
                 'format' => 'html',
                 
                 'value' => function($model){
-					if($model->course->developmentVersion){
+					if($model->course){
+						if($model->course->developmentVersion){
 						
 						return $model->course->developmentVersion->labelStatus;
 					}else{
 						return 'NONE';
 					}
+					}
+					
                     
                 }
             ],
@@ -77,11 +89,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Report',
                 'format' => 'raw',
                 'value' => function($model){
-					if($model->course->developmentVersion){
+					if($model->course){
+						if($model->course->developmentVersion){
 						return $model->course->reportList('View Doc Report', $model->course->developmentVersion->id);
 					}else{
 						return 'NONE';
 					}
+					}
+					
 					
                     
                 }
@@ -92,13 +107,17 @@ $this->params['breadcrumbs'][] = $this->title;
 			//	'contentOptions' => ['style' => 'width: 45%'],
 				'format' => 'html',
 				'value' => function($model){
-					$course = $model->course;
+					if($model->course){
+						$course = $model->course;
+					
 					$version = $course->developmentVersion;
 					
 					
 						if($version){
 							return Html::a( '<span class="fa fa-pencil"></span> Update',['/esiap/course/view-course/', 'course' => $course->id], ['class' => 'btn btn-primary btn-sm']);
 						}
+					}
+					
 					
 					
 				}
@@ -129,7 +148,10 @@ $this->params['breadcrumbs'][] = $this->title;
 				'label' => 'Course Owner',
 				'format' => 'html',
 				'value' => function($model){
-					return $model->course->picStr;
+					if($model->course){
+						return $model->course->picStr;
+					}
+					
 				}
 				
 			],
@@ -138,7 +160,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'label' => 'Report',
                 'format' => 'raw',
                 'value' => function($model){
-					return $model->course->reportList('View Doc Report');
+					if($model->course){
+						return $model->course->reportList('View Doc Report');
+					}
+					
                     
                 }
             ]

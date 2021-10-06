@@ -27,6 +27,8 @@ class Tbl4Pdf
 	public $font_blue = 'color:#0070c0';
 	public $font_brown = 'color:#c65911';
 	
+	public $offer;
+	
 	/* $bgcolor = 'E7E6E6';
 	$bgcolor_green = '548235';
 	$bgcolor_dark = 'AEAAAA';
@@ -193,19 +195,34 @@ class Tbl4Pdf
 	}
 	
 	public function academicStaff(){
-		$staff = $this->model->profile->academicStaff;
+		
 		$col_num_staff = 28;
 		$col_name = $this->col_content - $col_num_staff;
+		
 		$arr_staff = array();
-		if($staff){foreach($staff as $st){
-			$arr_staff[] = $st->staff->niceName;
-		}}
+		if($this->offer){
+		    $arr_staff = $this->offer->staffInvolved;
+		}else{
+		    $staff = $this->model->profile->academicStaff;
+		    if($staff){
+		        foreach($staff as $st){
+		            $arr_staff[] = $st->staff->niceName;
+		        }
+		    }
+		}
+		
 		$total = count($arr_staff) > 3 ? count($arr_staff) : 3;
 		$rowspan =  $total;
 		$html = '<tr>
 		<td width="'.$this->colnum.'" align="center" '.$this->border.' rowspan="'. $rowspan .'" >3</td>
 
-		<td width="'.$this->col_label.'" colspan="3" '.$this->border.' rowspan="'. $rowspan .'" >Name(s) of academic staff:</td>';
+		<td width="'.$this->col_label.'" colspan="3" '.$this->border.' rowspan="'. $rowspan .'" >Name(s) of academic staff:';
+		
+		if($this->offer){
+		    $html .= '<br /><i>(' . $this->offer->semester->longFormatEn() . ')</i>';
+		}
+
+        $html .= '</td>';
 		
 		for($i = 0;$i< $total;$i++){
 			$num = $i + 1;
@@ -412,7 +429,7 @@ class Tbl4Pdf
 			$this->clo_plo_html .='<td align="center" '.$border.'>';
 			if($clo){
 				if($clo->{$plo_str} == 1){
-					$this->clo_plo_html .= '<span style="font-size:14px;"><span>√</span></span>';
+					$this->clo_plo_html .= '<span style="font-size:14px;"><span>√</span></span>'; //ticking here
 				}
 			}
 			
@@ -508,28 +525,28 @@ $html .= '<td width="'.$col_last.'" '.$this->border_right_left.'></td>
 </tr>';
 
 //MQF
-$html .= $this->clo_plo_html;
+$html .= $this->clo_plo_html; //actual mapping
 
-for($q=1;$q<=3;$q++){
+
+$mqf = $this->mqfMapping();
+
+for($q=0;$q<3;$q++){
 	$rowspan='';
 	
 	$html .= '<tr nobr="true">';
 	$html .= '	<td align="center" '.$this->border_right_left.' ></td>';
 	$others = '';
-	if($q == 1){
+	if($q == 0){
 		$html .= '<td align="center" '.$this->shade_light.' rowspan="3">
 		 Mapping with MQF Cluster of Learning Outcomes </td>';
 		$others = '<td align="center" '.$this->shade_light.' rowspan="3"></td>
 		<td align="center" '.$this->shade_light.' rowspan="3"></td>';
 	}
-	$arr = ['C1','C2', 'C3A', 'C3B', 'C3C', 'C3D', 'C3E', 'C3F', 'C4A', 'C4B', 'C5'];
 
-	for($e=1;$e<=12;$e++){
+
+	for($e=0;$e<12;$e++){
 		$html .='<td align="center" style="'.$this->sborder.';line-height:90%">';
-		$idx = $e - 1;
-		if($idx < 11 and $q == 1){
-			$html .= $arr[$idx];
-		}
+		$html.= $mqf[$q][$e];
 		
 		$html .= '</td>';
 	}
@@ -554,6 +571,45 @@ Indicate the primary causal link between the CLO and PLO by ticking  \'√\' in 
 </tr>';
 	$this->html .= $html;
 
+	}
+	
+	public function mqfMapping(){
+	    
+	    
+	    $arr = ['C1','C2', 'C3A', 'C3B', 'C3C', 'C3D', 'C3E', 'C3F', 'C4A', 'C4B', 'C5'];
+	    $mgf = [];
+	    for($m=1;$m<=3;$m++){
+	        $t = [];
+	        for($f=1;$f<=12;$f++){
+	            $t[] = null;
+	        }
+	        $mqf[] = $t;
+	    }
+	    
+	    $clos = $this->model->clos;
+	    if($clos){
+	        foreach($clos as $i => $clo){
+	            for($e=0;$e<12;$e++){
+	                $x = $e + 1;
+	                $plo_str = 'PLO'.$x;
+	                if($clo){
+	                    if($clo->{$plo_str} == 1){
+	                        if(is_null($mqf[0][$e])){
+	                            $mqf[0][$e] = $arr[$e];
+	                        }else if(is_null($mqf[1][$e])){
+	                            $mqf[1][$e] = $arr[$e];
+	                        }else if(is_null($mqf[2][$e])){
+	                            $mqf[2][$e] = $arr[$e];
+	                        }
+	                        
+	                        
+	                    }
+	                }
+	            }
+	        }
+	    }
+	    
+	    return $mqf;
 	}
 	
 	public function transferable(){
@@ -880,7 +936,7 @@ $this->html .= $html;
 		$html = '<tr align="center">
 	
 	
-		<td width="'.$this->col_topic.'" '.$style_head .' colspan="7" rowspan="2">Continous Assessement</td>
+		<td width="'.$this->col_topic.'" '.$style_head .' colspan="7" rowspan="2">Continuous Assessement</td>
 		<td width="'.$this->col_clo.'" '.$style_head.' colspan="2" rowspan="2">%</td>
 
 		<td width="'.$this->col_f2f.'" '.$this->shade_light.' colspan="8">Face-to-Face (F2F)</td>
@@ -1237,8 +1293,8 @@ $this->html .= $html;
 		}
 		$col_sign = ($this->wall /2 ) - $this->colnum;
 		
-		if($this->model->status >= 10){
-			$html = '<table >
+		if($this->model->status >= 0){
+			$html = '<table nobr="true">
 		<tr>
 		<td width="'.$this->colnum.'"></td>
 		
@@ -1286,15 +1342,24 @@ EOD;
 	}
 	
 	public function signiture(){
+		
 		if(Yii::$app->params['faculty_id'] == 1){
-					if($this->model->status > 9){
+			//echo $this->model->status; die();
+			if($this->model->status >= 0){
+			
 			$sign = $this->model->preparedsign_file;
 
 			$file = Yii::getAlias('@upload/'. $sign);
 			$f = basename($file);
 			$paste = 'images/temp/'. $f;
 			
-			copy($file, $paste);
+			if($sign){
+			    if(is_file($file)){
+			        copy($file, $paste);
+			    }
+				
+			}
+			
 
 			$y = $this->pdf->getY();
 			$this->verify_y = $this->pdf->getY();
@@ -1314,8 +1379,6 @@ EOD;
 			$col1 = $this->colnum + 10;
 			$col_sign = $this->wall /2 ;
 			$html = '<table>
-
-			
 			<tr>
 			<td width="'. $col1 .'"></td>
 			
@@ -1359,8 +1422,10 @@ EOD;
 		$file = Yii::getAlias('@upload/'. $sign);
 		$f = basename($file);
 		$paste = 'images/temp/'. $f;
+		if(is_file($file)){
+		    copy($file, $paste);
+		}
 		
-		copy($file, $paste);
 		
 		
 		

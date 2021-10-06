@@ -56,7 +56,13 @@ class CourseReference extends \yii\db\ActiveRecord
 	
 	public function getFormatedReference(){
 		$str = $this->ref_full;
+		$kira = substr_count($str,"*");
+		
+		
+		
+		
 		$str_arr = explode("*", $str);
+		
 		$return = '';
 		$i = 0;
 		$x = 1;
@@ -65,15 +71,21 @@ class CourseReference extends \yii\db\ActiveRecord
 				$tag = '';
 			}else{
 				$tag = $i == 0 ? '</i>' : '<i>';
+
 			}
 			
-			$return .= $tag.$s;
+			if ($kira % 2 == 0) {
+			    $return .= $tag.$s;
+			}else{
+			    $return .= $s;
+			}
+			
 			
 			$i = $i == 0 ? 1 : 0;
 			$x++;
 		}
 		
-		return $return;
+		return $return ;
 	}
 	
 	public function flashError(){

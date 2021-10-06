@@ -20,11 +20,12 @@ class Menu
 				case 'clo-delivery':case 'report':case 'view-course':
 				
 				$course_id = Yii::$app->getRequest()->getQueryParam('course');
+				$version_id = Yii::$app->getRequest()->getQueryParam('version');
 				$course = Course::findOne($course_id);
 				$version = $course->developmentVersion;
 				$status = $version->status;
 				$show = false;
-				if($status == 0 and $course->IAmCoursePic()){
+				if(in_array($status, [0,13]) and $course->IAmCoursePic()){
 					$show = true;
 				}
 				$course_focus  = [
@@ -34,25 +35,25 @@ class Menu
 					'url' => '#',
 					'items' => [
 					
-				['label' => 'Preview & Submission', 'visible' => $show, 'icon' => 'eye', 'url' => ['/esiap/course/view-course', 'course' => $course_id]],
+				['label' => 'Preview & Submission', 'visible' => $show, 'icon' => 'eye', 'url' => ['/esiap/course/view-course', 'course' => $course_id, 'version' => $version_id]],
 						
-				['label' => 'Course Profile', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id]],
+				['label' => 'Course Profile', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/update', 'course' => $course_id, 'version' => $version_id]],
 				
-				['label' => 'Assessment', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-assessment', 'course' => $course_id]],
+				['label' => 'Assessment', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-assessment', 'course' => $course_id, 'version' => $version_id]],
 				
 				['label' => 'CLOs',  'icon' => 'pencil', 'visible' => $show, 'url' => '#', 
 					'items' => [
-						['label' => 'CLO Text', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-clo', 'course' => $course_id]],
+						['label' => 'CLO Text', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-clo', 'course' => $course_id, 'version' => $version_id]],
 				
-						['label' => 'PLO', 'icon' => 'pencil', 'visible' => $show, 'url' => ['/esiap/course/clo-plo', 'course' => $course_id]],
+						['label' => 'PLO', 'icon' => 'pencil', 'visible' => $show, 'url' => ['/esiap/course/clo-plo', 'course' => $course_id, 'version' => $version_id]],
 						
-						['label' => 'Taxonomy', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-taxonomy', 'course' => $course_id]],
+						['label' => 'Taxonomy', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-taxonomy', 'course' => $course_id, 'version' => $version_id]],
 						
-						['label' => 'Teaching Methods', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-delivery', 'course' => $course_id]],
+						['label' => 'Teaching Methods', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-delivery', 'course' => $course_id, 'version' => $version_id]],
 						
-						['label' => 'Assessment', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-assessment', 'course' => $course_id]],
+						['label' => 'Assessment', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-assessment', 'course' => $course_id, 'version' => $version_id]],
 						
-						['label' => 'Softskills', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-softskill', 'course' => $course_id]],
+						['label' => 'Softskills', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/clo-softskill', 'course' => $course_id, 'version' => $version_id]],
 					]
 				],
 				
@@ -60,16 +61,16 @@ class Menu
 				
 				
 				
-				['label' => 'Course Syllabus', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-syllabus', 'course' => $course_id]],
+				['label' => 'Course Syllabus', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-syllabus', 'course' => $course_id, 'version' => $version_id]],
 				
 				
 				
 				
 				
-				['label' => 'Student Learning Time', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-slt', 'course' => $course_id]],
+				['label' => 'Student Learning Time', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-slt', 'course' => $course_id, 'version' => $version_id]],
 				
 				
-				['label' => 'References', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-reference', 'course' => $course_id]],
+				['label' => 'References', 'visible' => $show, 'icon' => 'pencil', 'url' => ['/esiap/course/course-reference', 'course' => $course_id, 'version' => $version_id]],
 				
 				//['label' => 'Submission', 'icon' => 'send', 'url' => ['/esiap/course/report', 'course' => $course_id]],
 

@@ -11,14 +11,15 @@ use yii\helpers\Url;
 
 
 $this->title = 'CLO Assessment';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Assessment';
+$this->params['breadcrumbs'][] = ['label' => 'Preview', 'url' => ['course/view-course', 'course' => $model->course_id, 'version' => $model->id]];
+$this->params['breadcrumbs'][] = 'CLO Assessment';
 
 $form = ActiveForm::begin(['id' => 'form-clo-assessment']);
 ?>
 
 <?=$this->render('_header',[
-'course' => $model->course
+'course' => $model->course, 
+    'version' => $model
 ])?>
 
 <div class="box">

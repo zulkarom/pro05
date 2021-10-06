@@ -30,7 +30,6 @@ $this->params['breadcrumbs'][] = $this->title;
 </div>
 
 <?php $form = ActiveForm::begin(); ?>
-
     <div class="box box-primary">
 <div class="box-header"></div>
 <div class="box-body">
@@ -65,9 +64,8 @@ echo GridView::widget([
 		'options' => [ 'style' => 'table-layout:fixed;' ],
        // 'filterModel' => $searchModel,
         'columns' => [
-			['class' => 'yii\grid\CheckboxColumn'],
             ['class' => 'yii\grid\SerialColumn'],
-		
+            ['class' => 'yii\grid\CheckboxColumn'],
             
 			[
 				'attribute' => 'course_name',
@@ -115,7 +113,7 @@ echo GridView::widget([
             ],
 			
 			[
-                'label' => 'Verification By',
+                'label' => 'Verification',
                 'format' => 'html',
                 'value' => function($model){
 					if($model->status == 20 and $model->verifiedBy){
@@ -138,6 +136,17 @@ echo GridView::widget([
 					return $model->course->reportList('View', $model->id);
                     
                 }
+            ],
+			
+			['class' => 'yii\grid\ActionColumn',
+                 'contentOptions' => ['style' => 'width: 10%'],
+                'template' => '{update}',
+                //'visible' => false,
+                'buttons'=>[
+                    'update'=>function ($url, $model) {
+                        return Html::a('<span class="fa fa-pencil"></span> View',['verification-page', 'id' => $model->id],['class'=>'btn btn-warning btn-sm']);
+                    },
+                ],
             ],
 			
 
@@ -165,11 +174,46 @@ $verify->verified_at = date('Y-m-d');
         'autoclose'=>true,
         'format' => 'yyyy-mm-dd',
         'todayHighlight' => true,
+
+    ],
+
+
+]);
+?>
+
+</div>
+
+<div class="col-md-3">
+
+
+ <?=$form->field($verify, 'date1')->widget(DatePicker::classname(), [
+    'removeButton' => false,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        'todayHighlight' => true,
         
     ],
     
     
 ]);
+?>
+
+</div>
+<div class="col-md-3">
+
+
+ <?=$form->field($verify, 'date2')->widget(DatePicker::classname(), [
+    'removeButton' => false,
+    'pluginOptions' => [
+        'autoclose'=>true,
+        'format' => 'yyyy-mm-dd',
+        'todayHighlight' => true,
+        
+    ],
+    
+    
+])->label("Senate’s Approval At");
 ?>
 
 </div>
@@ -187,56 +231,46 @@ echo UploadFile::fileInput($verify, 'signiture', true)?>
 
 
 <div class="row">
-<div class="col-md-2">
+<div class="col-md-1">
     <?= $form->field($verify, 'tbl4_verify_size')->textInput(['maxlength' => true, 'type' => 'number'
-                            ])?>
+    ])->label('Image Size Adj')?>
     </div>
 <div class="col-md-1">
     <?= $form->field($verify, 'tbl4_verify_y')->textInput(['maxlength' => true, 'type' => 'number'
-                            ]) ?>
+    ])->label('Vert.Position Adj') ?>
     </div>
 
 </div>
 
-<?php /* =Html::submitButton('<span class="fa fa-save"></span> SAVE SIGNITURE', 
-    ['class' => 'btn btn-default btn-sm', 'name' => 'actiontype', 'value' => 'save',
-    ]) */?> 
-	
+<i>
+* 
+* For the signature, use png format image with transparent background. You can click <a href="https://www.remove.bg/" target="_blank">Remove.bg</a> to easily remove background.<br />
+* Approximate size pixel 200 x 100.<br />
+* Increase Image Size Adj to make the image bigger and vice versa.<br />
+* Increase Vertical Position Adj to move the image upwards and vice versa. <br />
+* Is strongly recommended to approve one course first to preview your signature before proceeding to other courses.
+</i>
+
 </div>
 </div>
 
 
 
 <div class="form-group">
-        
-		
-	
-	<?= Html::submitButton('<span class="fa fa-check"></span> Verify Selected', ['class' => 'btn btn-success', 'name'=> 'actiontype', 'value' => 'verify']) ?> 
-
-<?= Html::submitButton('<span class="fa fa-remove"></span> Unverify Selected', ['class' => 'btn btn-warning', 'name'=> 'actiontype', 'value' => 'unverify']) ?>
-
-    </div>
 
 
 
-<div class="form-group">
-        
+	<?= Html::submitButton('<span class="fa fa-check"></span> Verify All Selected', ['class' => 'btn btn-success', 'name'=> 'actiontype', 'value' => 'verify']) ?> 
+
+<?= Html::submitButton('<span class="fa fa-arrow-left"></span> Change to Submit Status', ['class' => 'btn btn-info', 'name'=> 'actiontype', 'value' => 'back']) ?>
 
     </div>
 
-<?php ActiveForm::end(); ?>
+
+    <?php ActiveForm::end(); ?>
 
 
-<?php 
 
-$js = '
-$("#checkAll").click(function(){
-    $(\'input:checkbox\').not(this).prop(\'checked\', this.checked);
-});
-
-';
-$this->registerJs($js);
-?>
 
 
 </div>

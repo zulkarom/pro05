@@ -35,6 +35,7 @@ class Tbl4Excel
 	public $sltTotalContentRow;
 	public $sltTotalAssessConRow;
 	public $sltTotalAssessSumRow;
+	public $team = array();
 	
 	public function generateExcel(){
 		$this->start();

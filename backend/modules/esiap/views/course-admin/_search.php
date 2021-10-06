@@ -17,9 +17,20 @@ use backend\modules\esiap\models\Program;
 ]); ?>
     
 <div class="row">
-<div class="col-md-7"><?= $form->field($model, 'search_course', ['addon' => ['prepend' => ['content'=>'<span class="glyphicon glyphicon-search"></span>']]])->label(false)->textInput(['placeholder' => "search course..."]) ?></div>
+<div class="col-md-6"><?= $form->field($model, 'search_course', ['addon' => ['prepend' => ['content'=>'<span class="glyphicon glyphicon-search"></span>']]])->label(false)->textInput(['placeholder' => "search course..."]) ?>
+</div>
 
-<div class="col-md-5">
+<div class="col-md-3">
+
+<?php 
+
+echo $form->field($model, 'study_level')->label(false)->dropDownList($model->getStudyLevelList(), ['prompt' => 'Select Level' ]);
+
+ ?>
+
+</div>
+
+<div class="col-md-3">
 
 <?php 
 if(Yii::$app->params['faculty_id'] == 21 ){
@@ -34,6 +45,8 @@ if(Yii::$app->params['faculty_id'] == 21 ){
 
 </div>
 
+
+
 </div>
 
 <?php ActiveForm::end(); ?>
@@ -42,6 +55,11 @@ if(Yii::$app->params['faculty_id'] == 21 ){
 <?php 
 $this->registerJs('
 $("#'.$element.'").change(function(){
+	$("#form-index-course").submit();
+});
+
+
+$("#courseadminsearch-study_level").change(function(){
 	$("#form-index-course").submit();
 });
 

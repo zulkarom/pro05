@@ -12,14 +12,15 @@ use richardfan\widget\JSRegister;
 
 
 $this->title = 'Student Learning Time';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Preview', 'url' => ['course/view-course', 'course' => $model->course_id, 'version' => $model->id]];
 $this->params['breadcrumbs'][] = 'SLT';
 
 $form = ActiveForm::begin(['id' => 'form-clo-assessment']); 
 ?>
 
 <?=$this->render('_header',[
-'course' => $model->course
+'course' => $model->course, 
+    'version' => $model
 ])?>
 <style>
 .online{
@@ -134,40 +135,41 @@ foreach($syll as $row){ ?>
 		?>
 		
 	</td>
+
 	<td style="vertical-align:middle"><!-- LECTURE -->
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_lecture]" id="pnp_lecture_<?php echo $row->id;?>" value="<?php echo $row->pnp_lecture ; ?>" />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_lecture]" id="pnp_lecture_<?php echo $row->id;?>" value="<?php echo is_null($row->pnp_lecture) ? 0 : $row->pnp_lecture  ; ?>" />
 	</td>
 	<td style="vertical-align:middle"><!-- TUT -->
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_tutorial]" id="pnp_tutorial_<?php echo $row->id;?>" value="<?php echo $row->pnp_tutorial ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_tutorial]" id="pnp_tutorial_<?php echo $row->id;?>" value="<?php echo is_null($row->pnp_tutorial) ? 0 : $row->pnp_tutorial ; ?>"  />
 	</td>
 	<td style="vertical-align:middle"><!-- PRACTICAL -->
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_practical]" id="pnp_practical_<?php echo $row->id;?>" value="<?php echo $row->pnp_practical ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_practical]" id="pnp_practical_<?php echo $row->id;?>" value="<?php echo is_null($row->pnp_practical) ? 0 : $row->pnp_practical ; ?>"  />
 	</td>
 	
 	<td style="vertical-align:middle">
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_others]" id="pnp_others_<?php echo $row->id;?>" value="<?php echo $row->pnp_others ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][pnp_others]" id="pnp_others_<?php echo $row->id;?>" value="<?php echo is_null($row->pnp_others) ? 0 : $row->pnp_others ; ?>"  />
 	</td>
 	
 
 	
 	<td style="vertical-align:middle;background-color:#f5f5f5">
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_lecture]" id="tech_lecture_<?php echo $row->id;?>" value="<?php echo $row->tech_lecture ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_lecture]" id="tech_lecture_<?php echo $row->id;?>" value="<?php echo is_null($row->tech_lecture) ? 0 : $row->tech_lecture ; ?>"  />
 	</td>
 	
 	<td style="vertical-align:middle;background-color:#f5f5f5">
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_tutorial]" id="tech_tutorial_<?php echo $row->id;?>" value="<?php echo $row->tech_tutorial ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_tutorial]" id="tech_tutorial_<?php echo $row->id;?>" value="<?php echo is_null($row->tech_tutorial) ? 0 : $row->tech_tutorial ; ?>"  />
 	</td>
 	<td style="vertical-align:middle;background-color:#f5f5f5">
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_practical]" id="tech_practical_<?php echo $row->id;?>" value="<?php echo $row->tech_practical ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_practical]" id="tech_practical_<?php echo $row->id;?>" value="<?php echo is_null($row->tech_practical) ? 0 : $row->tech_practical ; ?>"  />
 	</td>
 	<td style="vertical-align:middle;background-color:#f5f5f5">
-	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_others]" id="tech_others_<?php echo $row->id;?>" value="<?php echo $row->tech_others ; ?>"  />
+	<input type="text" style="text-align:center" class="form-control tgsyl" name="syll[<?php echo $row->id;?>][tech_others]" id="tech_others_<?php echo $row->id;?>" value="<?php echo is_null($row->tech_others) ? 0 : $row->tech_others ; ?>"  />
 	</td>
 	
 	
 	
 	<td style="vertical-align:middle">
-	<input type="text" style="text-align:center" value="<?php echo $row->independent ; ?>" name="syll[<?php echo $row->id;?>][independent]" id="independent_<?php echo $row->id;?>" class="form-control tgsyl" />
+	<input type="text" style="text-align:center" value="<?php echo is_null($row->independent) ? 0 : $row->independent ; ?>" name="syll[<?php echo $row->id;?>][independent]" id="independent_<?php echo $row->id;?>" class="form-control tgsyl" />
 	</td>
 	<td style="vertical-align:middle;text-align:center">
 	<strong id="subsyll_<?php echo $row->id;?>">0</strong>

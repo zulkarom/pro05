@@ -51,7 +51,7 @@ class CourseAssessment extends \yii\db\ActiveRecord
 			[['assess_f2f', 'assess_nf2f', 'assess_f2f_tech'], 'number'],
 			
             [['created_at', 'updated_at'], 'safe'],
-            [['assess_name', 'assess_name_bi'], 'string', 'max' => 100],
+            [['assess_name', 'assess_name_bi'], 'string', 'max' => 50],
         ];
     }
 
@@ -106,11 +106,14 @@ class CourseAssessment extends \yii\db\ActiveRecord
         
 		if($this->cloId){
 			$clo = $this->cloId;
+			//echo '='. $clo->clo_id. '=/';
 			if(array_key_exists($clo->clo_id, $list)){
+			    
 			   return $list[$clo->clo_id]; 
 			}
 		}
-		
+		//echo '<br /><br /><br /><br />';
+		//print_r($list);die();
 		return 0;
         
     }

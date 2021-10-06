@@ -19,6 +19,8 @@ class Tbl4
 	
 	public $wtab;
 	
+	public $team = array();
+	
 	public function generatePdf(){
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');

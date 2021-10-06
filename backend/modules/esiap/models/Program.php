@@ -2,6 +2,7 @@
 
 namespace backend\modules\esiap\models;
 
+use backend\models\Department;
 use Yii;
 
 /**
@@ -170,6 +171,10 @@ class Program extends \yii\db\ActiveRecord
 	
 	public function getProgramLevel(){
         return $this->hasOne(ProgramLevel::className(), ['id' => 'pro_level']);
+    }
+    
+    public function getDepartment(){
+        return $this->hasOne(Department::className(), ['id' => 'department_id']);
     }
 	
 	public function getPublishedVersion(){

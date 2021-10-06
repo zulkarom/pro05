@@ -9,6 +9,7 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\db\Exception;
 use yii\db\Expression;
 use yii\helpers\FileHelper;
 
@@ -38,6 +39,7 @@ use backend\modules\esiap\models\CourseAccess;
 use backend\modules\esiap\models\CourseStaff;
 use backend\modules\esiap\models\CourseTransferable;
 use backend\modules\esiap\models\Access;
+use backend\modules\esiap\models\VerifyRejectForm;
 use backend\modules\staff\models\Staff;
 use backend\modules\staff\models\StaffMainPosition;
 use backend\models\Department;
@@ -112,16 +114,20 @@ class CourseAdminController extends Controller
 			}
 			
 			if(Yii::$app->request->post('selection')){
+			   
 				$courses = Yii::$app->request->post('selection');
 				
 				if($action != 'save'){
+				   
 					$action = $action == 'verify' ? 20 : 10;
+					//die($action);
 					if($action == 20){
 						$copy = Yii::getAlias('@upload/' . $verify->signiture_file);
 						$filepath = 'course-mgt/' . $verify->signiture_file;
 						$mirror = Yii::getAlias('@upload/' . $filepath);
+						
 						if(empty($verify->signiture_file) and !is_file($copy )){
-								Yii::$app->session->addFlash('error', "Please put your signiture first!.");
+								Yii::$app->session->addFlash('error', "Please put your signature first!.");
 						}else{
 							
 							//ok kena check file ni dah ada ke belum
@@ -137,10 +143,11 @@ class CourseAdminController extends Controller
 									copy($copy, $mirror);
 									$verified_file = $filepath;
 								}else{
-									Yii::$app->session->addFlash('error', "Please put your signiture first!.");
+									Yii::$app->session->addFlash('error', "Please put your signature first!.");
 								}
 								
 							}
+							
 							//klu ada record db shj
 							//klu xde copy dalam crs mgt
 							// nak kena cari position dia
@@ -154,11 +161,16 @@ class CourseAdminController extends Controller
 									$position_name = $department->position_stamp;
 								}
 							}
+							
 							$date = $verify->verified_at;
+							$date_faculty = $verify->date1;
+							$date_senate = $verify->date2;
 							$result = CourseVersion::updateAll([
 											'verified_by' => Yii::$app->user->identity->id, 
 											'status' => $action, 
 											'verified_at' => $date,
+							                'faculty_approve_at' => $date_faculty,
+							                 'senate_approve_at' => $date_senate,
 											'verifiedsign_file' => $verified_file,
 											'verified_adj_y' => $verify->tbl4_verify_y,
 											'verified_size' => $verify->tbl4_verify_size,
@@ -166,7 +178,9 @@ class CourseAdminController extends Controller
 											], 
 									['id' => $courses]);
 											
-							$verify->save();
+							if(!$verify->save()){
+							    Yii::$app->session->addFlash('error', "Verification failed!");
+							}
 							if($result){
 								Yii::$app->session->addFlash('success', "Verification successful.");
 								return $this->refresh();
@@ -179,7 +193,6 @@ class CourseAdminController extends Controller
 						$result = CourseVersion::updateAll([
 											'verified_by' => Yii::$app->user->identity->id, 
 											'status' => $action, 
-											'verified_at' => '0000-00-00',
 											'verifiedsign_file' => '',
 											'verified_adj_y' => 0,
 											'verified_size' => 0,
@@ -211,7 +224,84 @@ class CourseAdminController extends Controller
         ]);
     }
 	
+	public function actionVerificationPage($id){
+		if(!Access::ICanVerify()){
+			return $this->render('forbidden');
+		}
 
+		$verify = $this->findVerifier();
+		$verify->scenario = 'verify_course';
+		
+		$reject_form = VerifyRejectForm::findOne($id);
+		$reject_form->scenario = 'verify_reject';
+		
+		$version = $this->findVersion($id);
+		$version->scenario = 'verify_approve';
+		
+		if ($version->load(Yii::$app->request->post())) {
+			
+				$courses = $version->id;
+				
+				$copy = Yii::getAlias('@upload/' . $verify->signiture_file);
+				$filepath = 'course-mgt/' . $verify->signiture_file;
+				$mirror = Yii::getAlias('@upload/' . $filepath);
+				if(empty($verify->signiture_file) and !is_file($copy )){
+						Yii::$app->session->addFlash('error', "Please put your signiture first!.");
+				}else{
+					
+					//ok kena check file ni dah ada ke belum
+					$verified_file = '';
+					if (is_file($mirror)) {
+						$verified_file = $filepath;
+					}else{
+						$dir = dirname($mirror);
+						if (!is_dir($dir)) {
+							FileHelper::createDirectory($dir);
+						}
+						if (is_file($copy)){
+							copy($copy, $mirror);
+							$verified_file = $filepath;
+						}else{
+							Yii::$app->session->addFlash('error', "Please put your signiture first!.");
+						}
+						
+					}
+					$position = StaffMainPosition::findOne(['staff_id' => Yii::$app->user->identity->staff->id]);
+					$position_name = '';
+					if($position){
+						$position_name = $position->position_name;
+					}else{
+						$department = Department::findOne(['head_dep' => Yii::$app->user->identity->staff->id]);
+						if($department){
+							$position_name = $department->position_stamp;
+						}
+					}
+					$date = $verify->verified_at;
+					$version->verified_by = Yii::$app->user->identity->id;
+					$version->status = 20; //verified
+					$version->verifiedsign_file =  $verified_file;
+					$version->verifier_position = $position_name;
+					if($version->save()){
+						Yii::$app->session->addFlash('success', "Verification successful.");
+						return $this->redirect(['verification']);
+					}
+				}
+		}
+		
+		if ($reject_form->load(Yii::$app->request->post())) {
+			$reject_form->status = 13;
+			if($reject_form->save()){
+				Yii::$app->session->addFlash('success', "Back to update successful");
+				return $this->redirect(['verification']);
+			}
+		}
+		
+		return $this->render('verification-page', [
+            'version' => $version,
+			'verify' => $verify,
+			'reject_form' => $reject_form
+        ]);
+	}
 
 	
 	protected function findVerifier(){
@@ -599,6 +689,19 @@ class CourseAdminController extends Controller
 
     }
 	
+	public function actionUpdateSignature($version){
+		$model = $this->findVersion($version);
+		
+		if ($model->load(Yii::$app->request->post())){
+			$model->updated_at = new Expression('NOW()');
+			$model->save();
+		}
+		
+		return $this->render('update-signature', [
+			'model' => $model
+        ]);
+	}
+	
 	public function actionUpdateOwner($course)
     {
         $model = $this->findModel($course);
@@ -797,6 +900,15 @@ class CourseAdminController extends Controller
 			return $default;
 		}else{
 			throw new NotFoundHttpException('Please create default active version for this course!');
+		}
+	}
+	
+	protected function findVersion($id){
+		$default = CourseVersion::findOne($id);
+		if($default){
+			return $default;
+		}else{
+			throw new NotFoundHttpException('Page not found!');
 		}
 	}
 	

@@ -560,7 +560,7 @@ $i++;
 <thead>
 	<tr>
 		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
-		FORMATIVE ASSESSMENT
+		CONTINUOUS ASSESSMENT
 		</b></th>
 		<th rowspan="2" style="vertical-align:bottom"><b>
 		PERCENTAGE
@@ -631,7 +631,7 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 
 	
 	<tr>
-	<td> <strong>TOTAL FORMATIVE</strong>
+	<td> <strong>TOTAL CONTINUOUS</strong>
 	</td>
 		<td style="text-align:center" colspan="4"><strong id="form-total-ass"></strong></td>
 		<td style="text-align:center"><strong id="form-total"><?=$fom?></strong></td>
@@ -648,7 +648,7 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	<thead>
 	<tr>
 		<th rowspan="2" width="30%" style="vertical-align:bottom"><b>
-		SUMMATIVE ASSESSMENT
+		FINAL ASSESSMENT
 		</b></th>
 		<th rowspan="2" style="vertical-align:bottom"><b>
 		PERCENTAGE
@@ -703,7 +703,7 @@ INDEPENDENT LEARNING FOR ASSESSMENT<br />
 	
 	?>
 	<tr>
-	<td> <strong>TOTAL SUMMATIVE</strong>
+	<td> <strong>TOTAL FINAL</strong>
 	</td>
 	
 		<td style="text-align:center" colspan="4"><strong id="sum-total-ass"></strong></td>

@@ -47,7 +47,7 @@ class CourseVerificationSearch extends CourseVersion
         $query = CourseVersion::find()
 		->joinWith(['course'])
 		->where([
-		'status' => [10, 20]
+		'status' => [10, 20, 17]
 		])
 		->orderBy('status ASC, prepared_at DESC')
 		;

@@ -100,6 +100,8 @@ class CourseClo extends \yii\db\ActiveRecord
         return [
             [['clo_text', 'clo_text_bi'], 'required', 'on' => 'clo'],
 			
+			//[['clo_text', 'clo_text_bi'], 'match', 'pattern' => '/^[a-zA-Z0-9,. ]+$/', 'message'=>'{attribute} should not contain any special character including taxonomy/plo mapping in bracket'],
+			
             [['crs_version_id', 'PLO1', 'PLO2', 'PLO3', 'PLO4', 'PLO5', 'PLO6', 'PLO7', 'PLO8', 'PLO9', 'PLO10', 'PLO11', 'PLO12', 'C1', 'C2', 'C3', 'C4', 'C5', 'C6', 'A1', 'A2', 'A3', 'A4', 'A5', 'P1', 'P2', 'P3', 'P4', 'P5', 'P6', 'P7', 'CS1', 'CS2', 'CS3', 'CS4', 'CS5', 'CS6', 'CS7', 'CS8', 'CT1', 'CT2', 'CT3', 'CT4', 'CT5', 'CT6', 'CT7', 'TS1', 'TS2', 'TS3', 'TS4', 'TS5', 'LL1', 'LL2', 'LL3', 'ES1', 'ES2', 'ES3', 'ES4', 'EM1', 'EM2', 'EM3', 'LS1', 'LS2', 'LS3', 'LS4', 'trash', 'created_by'], 'integer'],
 			
             [['clo_text', 'clo_text_bi'], 'string'],

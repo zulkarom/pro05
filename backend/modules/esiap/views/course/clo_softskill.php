@@ -11,15 +11,16 @@ use yii\helpers\Url;
 
 
 $this->title = 'Softskills';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'Softskill';
+$this->params['breadcrumbs'][] = ['label' => 'Preview', 'url' => ['course/view-course', 'course' => $model->course_id, 'version' => $model->id]];
+$this->params['breadcrumbs'][] = 'CLO Softskill';
 $plo_num = $model->ploNumber;
 $form = ActiveForm::begin(['id' => 'form-clo-softskill']);
 echo $form->field($model, 'updated_at')->hiddenInput(['value' => time()])->label(false);
 ?>
 
 <?=$this->render('_header',[
-'course' => $model->course
+'course' => $model->course, 
+    'version' => $model
 ])?>
 
 <div class="box">

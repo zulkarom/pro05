@@ -22,6 +22,7 @@ $exportColumns = [
             'course_name',
 			'course_name_bi',
 			'credit_hour',
+            'study_level',
 			[
 				'attribute' => 'program.pro_name_short',
 				'label' => 'Program',
@@ -82,7 +83,7 @@ $exportColumns = [
     <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 	
 	<div class="row">
-<div class="col-md-5">
+<div class="col-md-3">
        <div class="form-group"> <?= Html::a('<span class="glyphicon glyphicon-plus"></span> New Course', ['create'], ['class' => 'btn btn-success']) ?>  
 		
 		<?=ExportMenu::widget([
@@ -103,7 +104,7 @@ $exportColumns = [
 		
  </div>
 
-<div class="col-md-7" align="right">
+<div class="col-md-9" align="right">
 
 <?=$this->render('_search', ['model' => $searchModel, 'element' => 'courseadminsearch-search_cat'])?>
 </div>
@@ -174,6 +175,7 @@ echo GridView::widget([
 				}
 				
 			],
+			'study_level',
 			
 			$cat ,
 			
@@ -190,20 +192,20 @@ echo GridView::widget([
 			
            
 			[
-                'label' => 'Development',
+                'label' => 'Status',
                 'format' => 'html',
                 
                 'value' => function($model){
-					if($model->developmentVersion){
+					if($model->defaultVersion){
 						
-						return $model->developmentVersion->labelStatus . '<br />' . '<i>'.$model->developmentVersion->version_name.'</i>';
+					    return $model->defaultVersion->labelStatus;
 					}else{
 						return 'NONE';
 					}
                     
                 }
             ],
-			 [
+/* 			 [
                 'label' => 'Publish',
                 'format' => 'html',
                 'value' => function($model){
@@ -220,7 +222,7 @@ echo GridView::widget([
 					return '<span class="label label-'.$color.'">'.$lbl.'</span>'.$version;
                     
                 }
-            ],
+            ], */
 			
 			[
                 'label' => 'Report',

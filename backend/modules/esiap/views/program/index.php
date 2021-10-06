@@ -42,6 +42,8 @@ $this->params['breadcrumbs'][] = $this->title;
 				
 			],
 			
+			'department.dep_name',
+			
 			[
 				'attribute' => 'status',
 				'format' => 'html',

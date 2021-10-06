@@ -9,12 +9,13 @@ use yii\widgets\ActiveForm;
 /* @var $model backend\modules\esiap\models\Course */
 
 $this->title = 'Course Learning Outcome';
-$this->params['breadcrumbs'][] = ['label' => 'Courses', 'url' => ['index']];
-$this->params['breadcrumbs'][] = 'CLO';
+$this->params['breadcrumbs'][] = ['label' => 'Preview', 'url' => ['course/view-course', 'course' => $model->course_id, 'version' => $model->id]];
+$this->params['breadcrumbs'][] = 'CLO Text';
 ?>
 
 <?=$this->render('_header',[
-'course' => $model->course
+'course' => $model->course,
+'version' => $model,
 ])?>
 
 <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>

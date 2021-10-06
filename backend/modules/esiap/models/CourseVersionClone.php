@@ -12,7 +12,7 @@ class CourseVersionClone
 	public $copy_version;
 	
 	public function cloneVersion(){
-		$components = ['profile', 'assessment', 'clo', 'syllabus', 'slt', 'reference', 'transferable', 'staff'];
+		$components = ['version', 'profile', 'assessment', 'clo', 'syllabus', 'slt', 'reference', 'transferable', 'staff'];
 		$flag = true;
 		foreach($components as $component){
 			if ($flag === false) {
@@ -24,6 +24,28 @@ class CourseVersionClone
 		}
 		
 		return $flag;
+	}
+	
+	public function version(){
+	    $original = CourseVersion::findOne(
+	        ['id' => $this->ori_version]);
+	    if($original){
+	        $copy = CourseVersion::findOne($this->copy_version);
+	        $fields = ['faculty_approve_at', 'senate_approve_at', 'pgrs_info','pgrs_clo','pgrs_plo','pgrs_tax','pgrs_soft','pgrs_delivery','pgrs_syll','pgrs_slt', 'pgrs_assess','pgrs_assess_per','pgrs_ref'];
+	        foreach($fields as $field){
+	            $copy->$field = $original->$field;
+	        }
+	        if($copy->save()){
+	            return true;
+	        }else{
+	            $copy->flashError();
+	            return false;
+	        }
+	    }else{
+	        return false;
+	    }
+	    
+	    
 	}
 	
 	public function profile(){
