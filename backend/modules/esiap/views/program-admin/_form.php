@@ -24,7 +24,7 @@ use backend\models\Department;
     <?= $form->field($model, 'pro_name_bi')->textInput(['maxlength' => true]) ?>
 	
 	<div class="row">
-<div class="col-md-3"> <?= $form->field($model, 'pro_name_short')->textInput(['maxlength' => true]) ?></div>
+<div class="col-md-3"> <?= $form->field($model, 'program_code')->textInput(['maxlength' => true]) ?></div>
 
 <div class="col-md-3"> 
 

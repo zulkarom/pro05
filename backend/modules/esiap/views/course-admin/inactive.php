@@ -20,7 +20,7 @@ $exportColumns = [
 			'course_name_bi',
 			'credit_hour',
 			[
-				'attribute' => 'program.pro_name_short',
+				'attribute' => 'program.program_code',
 				'label' => 'Program',
 			],
 			

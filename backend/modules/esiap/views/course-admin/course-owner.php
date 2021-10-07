@@ -24,7 +24,7 @@ $exportColumns = [
 			'course_name_bi',
 			'credit_hour',
 			[
-				'attribute' => 'program.pro_name_short',
+				'attribute' => 'program.program_code',
 				'label' => 'Program',
 			],
 			
@@ -51,7 +51,7 @@ $exportColumns = [
 $program = '';
 $kp = Program::findOne(['head_program' => Yii::$app->user->identity->staff->id]);
 if($kp){
-	$program = $kp->pro_name_bi . ' ('.$kp->pro_name_short.')';
+	$program = $kp->pro_name_bi . ' ('.$kp->program_code.')';
 }
 ?>
 <div class="course-index">
@@ -109,7 +109,7 @@ if(Yii::$app->params['faculty_id'] == 21 ){
 				'label' => 'Program',
 				'value' => function($model){
 					if($model->program){
-						return $model->program->pro_name_short;
+						return $model->program->program_code;
 					}
 					
 				}

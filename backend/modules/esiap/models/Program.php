@@ -11,7 +11,7 @@ use Yii;
  * @property int $id
  * @property string $pro_name
  * @property string $pro_name_bi
- * @property string $pro_name_short
+ * @property string $program_code
  * @property int $pro_level 4=diploma,6=sarjana muda, 7=sarjana,8=phd
  * @property int $faculty_id
  * @property int $department_id
@@ -76,7 +76,7 @@ class Program extends \yii\db\ActiveRecord
         return [
             [['pro_name', 'pro_name_bi'], 'required'],
 			
-			[['pro_name', 'pro_name_bi', 'department_id', 'pro_cat', 'grad_credit', 'pro_name_short', 'pro_level', 'study_mode'], 'required', 'on' => 'update'],
+			[['pro_name', 'pro_name_bi', 'department_id', 'pro_cat', 'grad_credit', 'program_code', 'pro_level', 'study_mode'], 'required', 'on' => 'update'],
 			
 			
 			
@@ -85,7 +85,7 @@ class Program extends \yii\db\ActiveRecord
             [['pro_sustain', 'synopsis', 'synopsis_bi', 'objective', 'just_stat', 'just_industry', 'just_employ', 'just_tech', 'just_others', 'nec_perjawatan', 'nec_fizikal', 'nec_kewangan', 'kos_yuran', 'kos_beven', 'pro_tindih_pub', 'pro_tindih_pri', 'jumud', 'admission_req', 'admission_req_bi', 'career', 'career_bi'], 'string'],
             [['full_time_year', 'full_max_year', 'part_max_year', 'part_time_year'], 'number'],
             [['pro_name', 'pro_name_bi', 'prof_body', 'coll_inst', 'sesi_start'], 'string', 'max' => 250],
-            [['pro_name_short'], 'string', 'max' => 50],
+            [['program_code'], 'string', 'max' => 50],
         ];
     }
 
@@ -98,7 +98,7 @@ class Program extends \yii\db\ActiveRecord
             'id' => 'ID',
             'pro_name' => 'Program Name (BM)',
             'pro_name_bi' => 'Program Name (EN)',
-            'pro_name_short' => 'Program Name Short Form',
+            'program_code' => 'Program Name Short Form',
             'pro_level' => 'Level',
             'faculty_id' => 'Faculty',
             'department_id' => 'Department',
@@ -159,6 +159,10 @@ class Program extends \yii\db\ActiveRecord
 			}
 		}
 		return false;
+	}
+	
+	public function getProgramNameCode(){
+	    return $this->pro_name . ' ('. $this->program_code .')';
 	}
 	
 	public function getProgramPics(){

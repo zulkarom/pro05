@@ -24,7 +24,7 @@ $exportColumns = [
 			'credit_hour',
             'study_level',
 			[
-				'attribute' => 'program.pro_name_short',
+				'attribute' => 'program.program_code',
 				'label' => 'Program',
 			],
 			
@@ -136,7 +136,7 @@ if(Yii::$app->params['faculty_id'] == 21 ){
 				'label' => 'Program',
 				'value' => function($model){
 					if($model->program){
-						return $model->program->pro_name_short;
+						return $model->program->program_code;
 					}
 					
 				}
