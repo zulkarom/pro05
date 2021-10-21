@@ -138,6 +138,7 @@ jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
 });
 
 jQuery(".dynamicform_inner").on("afterInsert", function(e, item) {
+	//alert(123);
     var first = $(item).find('input')[0];
     first.setAttribute("value", "");
 });

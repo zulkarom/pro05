@@ -14,7 +14,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
     'widgetItem' => '.member-item',
     'limit' => 50,
     'min' => 1,
-    'insertButton' => '.add-member-' . $indexPosition,
+    'insertButton' => '.add-member',
     'deleteButton' => '.remove-member',
     'model' => $modelsMember[0],
     'formId' => 'dynamic-form',
@@ -45,7 +45,7 @@ use wbraganca\dynamicform\DynamicFormWidget;
 	<tfoot>
             <tr>
                 <td colspan="2">
-                <button style="font-size:15px" type="button" class="add-member-<?=$indexPosition?> btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Pelajar</button>
+                <button style="font-size:15px" type="button" class="add-member btn btn-default btn-sm"><span class="icon icon-plus"></span> Tambah Pelajar</button>
                 
                 </td>
              
@@ -53,4 +53,5 @@ use wbraganca\dynamicform\DynamicFormWidget;
         </tfoot>
 </table>
 <?php DynamicFormWidget::end(); ?>
+
 
