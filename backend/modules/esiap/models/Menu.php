@@ -20,9 +20,18 @@ class Menu
 				case 'clo-delivery':case 'report':case 'view-course':
 				
 				$course_id = Yii::$app->getRequest()->getQueryParam('course');
-				$version_id = Yii::$app->getRequest()->getQueryParam('version');
 				$course = Course::findOne($course_id);
-				$version = $course->developmentVersion;
+				
+				if(Yii::$app->getRequest()->getQueryParam('version')){
+				    $version_id = Yii::$app->getRequest()->getQueryParam('version');
+				    $version = CourseVersion::findOne($version_id);
+				}else{
+				    $version = $course->defaultVersion;
+				    $version_id = $version->id;
+				}
+				
+				
+				
 				$status = $version->status;
 				$show = false;
 				if(in_array($status, [0,13]) and $course->IAmCoursePic()){

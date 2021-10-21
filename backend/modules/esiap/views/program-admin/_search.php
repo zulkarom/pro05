@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'pro_name_bi') ?>
 
-    <?= $form->field($model, 'pro_name_short') ?>
+    <?= $form->field($model, 'program_code') ?>
 
     <?= $form->field($model, 'pro_level') ?>
 

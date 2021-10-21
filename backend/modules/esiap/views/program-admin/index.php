@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
 			],
             'pro_name',
 			[
-				'attribute' => 'pro_name_short',
+				'attribute' => 'program_code',
 				'label' => 'Abbr.',
 				
 			],

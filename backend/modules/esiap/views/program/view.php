@@ -31,7 +31,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'id',
             'pro_name',
             'pro_name_bi',
-            'pro_name_short',
+            'program_code',
             'pro_level',
             'faculty',
             'department',

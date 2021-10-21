@@ -21,7 +21,7 @@ class ProgramSearch extends Program
             [['id', 'pro_level', 'faculty_id', 'department_id', 'status', 'pro_cat', 'pro_field', 'grad_credit', 'study_mode', 'full_week_long', 'full_week_short', 'full_sem_long', 'full_sem_short', 'part_week_long', 'part_week_short', 'part_sem_long', 'part_sem_short', 'trash'], 'integer'],
 			
 			
-            [['pro_name', 'pro_name_bi', 'pro_name_short', 'prof_body', 'coll_inst', 'sesi_start', 'pro_sustain', 'synopsis', 'synopsis_bi', 'objective', 'just_stat', 'just_industry', 'just_employ', 'just_tech', 'just_others', 'nec_perjawatan', 'nec_fizikal', 'nec_kewangan', 'kos_yuran', 'kos_beven', 'pro_tindih_pub', 'pro_tindih_pri', 'jumud', 'admission_req', 'admission_req_bi', 'career', 'career_bi'], 'safe'],
+            [['pro_name', 'pro_name_bi', 'program_code', 'prof_body', 'coll_inst', 'sesi_start', 'pro_sustain', 'synopsis', 'synopsis_bi', 'objective', 'just_stat', 'just_industry', 'just_employ', 'just_tech', 'just_others', 'nec_perjawatan', 'nec_fizikal', 'nec_kewangan', 'kos_yuran', 'kos_beven', 'pro_tindih_pub', 'pro_tindih_pri', 'jumud', 'admission_req', 'admission_req_bi', 'career', 'career_bi'], 'safe'],
             [['full_time_year', 'full_max_year', 'part_max_year', 'part_time_year'], 'number'],
         ];
     }
@@ -88,7 +88,7 @@ class ProgramSearch extends Program
 
         $query->andFilterWhere(['like', 'pro_name', $this->pro_name])
             ->andFilterWhere(['like', 'pro_name_bi', $this->pro_name_bi])
-            ->andFilterWhere(['like', 'pro_name_short', $this->pro_name_short])
+            ->andFilterWhere(['like', 'program_code', $this->program_code])
             ->andFilterWhere(['like', 'prof_body', $this->prof_body])
             ->andFilterWhere(['like', 'coll_inst', $this->coll_inst])
             ->andFilterWhere(['like', 'sesi_start', $this->sesi_start])
