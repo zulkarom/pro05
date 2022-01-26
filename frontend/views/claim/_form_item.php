@@ -274,6 +274,9 @@ $js = <<<'EOD'
 
 
 jQuery(".dynamicform_wrapper").on("afterInsert", function(e, item) {
+     var first = $(item).find('input')[0];
+    first.setAttribute("value", "");
+
 	$( ".krajee-datepicker" ).each(function() {
 	   $(this).removeData().kvDatepicker('destroy');
 		$(this).kvDatepicker(eval($(this).attr('data-krajee-kvdatepicker')));
