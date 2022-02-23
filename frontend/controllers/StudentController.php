@@ -95,6 +95,7 @@ class StudentController extends Controller
 		$pdf->duration = $obj->duration;
 		$pdf->response = $response;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionAttendanceSummaryPdf($a){
@@ -117,6 +118,7 @@ class StudentController extends Controller
 		$pdf->group = $model->applicationGroup->group_name;
 		$pdf->response = $response;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionAttendanceSummaryAdminPdf($course, $semester, $group){
@@ -133,6 +135,7 @@ class StudentController extends Controller
 		$pdf->group = $group;
 		$pdf->response = $response;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionAttendanceSheetPdf($a){
@@ -149,6 +152,7 @@ class StudentController extends Controller
 		$pdf->group = $model->applicationGroup->group_name;
 		$pdf->response = $response;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionAttendanceSheetAdminPdf($course, $semester, $group){
@@ -164,6 +168,7 @@ class StudentController extends Controller
 		$pdf->group = $group;
 		$pdf->response = $response;
 		$pdf->generatePdf();
+		exit();
 	}
 	
 	public function actionMarkTemplateExcel($a){
@@ -184,6 +189,7 @@ class StudentController extends Controller
 		$xls->semester = $model->semester;
 		$xls->response = $response;
 		$xls->generateExcel();
+		exit();
 	}
 	
 	public function actionMarkTemplateAdminExcel($course, $semester, $group){
@@ -208,6 +214,7 @@ class StudentController extends Controller
 		$xls->semester = Semester::findOne($semester);
 		$xls->response = $response;
 		$xls->generateExcel();
+		exit();
 	}
 	
 	protected function findApplication($id)
