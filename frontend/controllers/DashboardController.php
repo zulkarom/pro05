@@ -44,9 +44,12 @@ class DashboardController extends Controller
     {
 		$semester = Semester::getCurrentSemester();
 		$application = Application::getMyAcceptApplication();
+		$prv_application = Application::getMyAcceptPrvApplication();
+		
         return $this->render('index', [
 			'semester' => $semester,
-			'application' => $application
+			'application' => $application,
+            'prv_application' => $prv_application
 		]);
     }
 	

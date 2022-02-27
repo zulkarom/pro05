@@ -259,11 +259,52 @@ $token = $application->project->pro_token;
 
 
 
-<?php 
-//previous semester
+<?php if($prv_application){
+    $application = $prv_application;
+	$course = $application->acceptedCourse->course;
+	$esiapCourse = $application->acceptedCourse->esiapCourse;
+	  ?>
+    <h3>SEMESTER LEPAS: <?=strtoupper($prv_application->semester->niceFormat())?></h3>
+    
+    
+    <div class="box box-solid">
+<div class="box-body">
 
 
-?>
+<div class="table-responsive">
+  <table class="table table-striped table-hover">
+    <tbody>
+      <tr>
+        <td><?='<b>'.$course->course_code .'</b> '. strtoupper($course->course_name) . ' ('.$application->applicationGroup->group_name.')'?></td>
+      </tr>
+      <tr>
+        <td><a target="_blank" href="<?=Url::to(['application/offer-letter', 'id' => $application->id])?>"><span class="glyphicon glyphicon-download-alt"></span> SURAT TAWARAN PERLANTIKAN</a></td>
+
+      </tr>
+
+        <td>
+		<a href="<?=Url::to(['student/index', 'a' => $application->id])?>"><span class="fa fa-users"></span> Senarai Pelajar</a>
+		
+		</td>
+
+      </tr>
+	  <tr>
+        <td>
+		<a href="<?=Url::to(['student/attendance-sheet-pdf', 'a' => $application->id])?>" target="_blank"><span class="fa fa-file-pdf-o"></span> Helaian Kehadiran</a>
+		
+		</td>
+
+      </tr>
+	  
+    </tbody>
+  </table>
+</div>
+
+</div>
+</div>
+
+
+<?php } ?>
 
 
 <?php 

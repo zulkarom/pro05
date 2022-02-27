@@ -183,6 +183,17 @@ class Application extends \yii\db\ActiveRecord
 		;
 	}
 	
+	public static function getMyAcceptPrvApplication(){
+	    return Application::find()
+	    ->innerJoin('fasi', 'fasi.id = application.fasi_id')
+	    ->innerJoin('semester', 'semester.id = application.semester_id')
+	    ->where(['application.status' => 'ApplicationWorkflow/f-accept', 'fasi.user_id' => Yii::$app->user->identity->id])
+	    ->andWhere(['<>', 'semester.is_current', 1])
+	    ->orderBy('semester.id DESC')
+	    ->one()
+	    ;
+	}
+	
 	public function listAppliedCourses(){
 		$array = array();
 		foreach($this->applicationCourses as $c){

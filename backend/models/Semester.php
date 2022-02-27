@@ -153,12 +153,19 @@ class Semester extends \yii\db\ActiveRecord
 	}
 	
 	public static function getCurrentSemester(){
-		
+	    $sem =  self::findOne(['is_current' => 1]);
+	    if($sem){
+	        return $sem;
+	    }else{
+	        return false;
+	    }
 	}
 	
 	public function getPreviousSemester(){
 	    $sem =  self::find()
-	    ->where(['is_current' => 1]);
+	    ->where(['<>', 'is_current', 1])
+	    ->orderBy('id DESC')
+	    ->one();
 	    
 	    if($sem){
 	        return $sem;
