@@ -42,7 +42,8 @@
 		"2amigos/yii2-chartjs-widget": "~2.0",
 		"richardfan1126/yii2-js-register": "*",
 		"yiisoft/yii2-bootstrap4": "^2.0",
-		"djabiev/yii2-autosize-textarea": "dev-master"
+		"djabiev/yii2-autosize-textarea": "dev-master",
+		"yiisoft/yii2-symfonymailer": "^2.0"
 		
 	},
 	"require-dev" : {

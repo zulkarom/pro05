@@ -95,16 +95,17 @@ if($sem = Semester::getOpenDateSemester()){
         </div>
         <!-- ./col -->
       </div>
-  <h3>SEMESTER <?=strtoupper($semester->niceFormat())?></h3>
+
 
 	  
 <?php if($application){
+    
 	$course = $application->acceptedCourse->course;
 	$esiapCourse = $application->acceptedCourse->esiapCourse;
 	?>  
 	
 	  
-  
+    <h3>SEMESTER <?=strtoupper($semester->niceFormat())?></h3>
 	  <div class="row">
 <div class="col-md-4">
 
@@ -255,6 +256,14 @@ $token = $application->project->pro_token;
 </div>
         
 <?php } ?>
+
+
+
+<?php 
+//previous semester
+
+
+?>
 
 
 <?php 

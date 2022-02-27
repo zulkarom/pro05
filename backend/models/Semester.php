@@ -153,12 +153,18 @@ class Semester extends \yii\db\ActiveRecord
 	}
 	
 	public static function getCurrentSemester(){
-		$sem =  self::findOne(['is_current' => 1]);
-		if($sem){
-			return $sem;
-		}else{
-			return false;
-		}
+		
+	}
+	
+	public function getPreviousSemester(){
+	    $sem =  self::find()
+	    ->where(['is_current' => 1]);
+	    
+	    if($sem){
+	        return $sem;
+	    }else{
+	        return false;
+	    }
 	}
 	
 	
@@ -273,6 +279,8 @@ class Semester extends \yii\db\ActiveRecord
 	public function getProjectTemplate(){
          return $this->hasOne(TmplApproveProject::className(), ['id' => 'template_project_id']);
     }
+    
+    
 
 
 }
