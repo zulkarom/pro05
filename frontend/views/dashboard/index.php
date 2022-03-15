@@ -98,10 +98,11 @@ if($sem = Semester::getOpenDateSemester()){
 
 
 	  
-<?php if($application){
+<?php if($application && $application->acceptedCourse){
     
 	$course = $application->acceptedCourse->course;
 	$esiapCourse = $application->acceptedCourse->esiapCourse;
+	
 	?>  
 	
 	  
@@ -255,14 +256,15 @@ $token = $application->project->pro_token;
 
 </div>
         
-<?php } ?>
+<?php }else{
+	echo 'Something went wrong';
+}	?>
 
 
 
 <?php if($prv_application){
     $application = $prv_application;
 	$course = $application->acceptedCourse->course;
-	$esiapCourse = $application->acceptedCourse->esiapCourse;
 	  ?>
     <h3>SEMESTER LEPAS: <?=strtoupper($prv_application->semester->niceFormat())?></h3>
     
