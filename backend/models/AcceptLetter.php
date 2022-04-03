@@ -49,8 +49,7 @@ class AcceptLetter
 			Universiti Malaysia Kelantan<br />
 			Karung Berkunci 36<br />
 			16100 Pengkalan Chepa<br />
-			Kelantan<br /><br />
-			<b>(u:p: Pn. Siti Norhidayah Binti Mat Hussin)</b>
+			Kelantan<br />
 			
 			</td>
 		</tr>
