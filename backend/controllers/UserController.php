@@ -120,6 +120,28 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function actionActivate($id){
+        $model = $this->findModel($id);
+        $model->confirmed_at = time();
+        if($model->save()){
+            Yii::$app->session->addFlash('success', "The email has been manually confirmed");
+        }else{
+            Yii::$app->session->addFlash('error', "error");
+        }
+        return $this->redirect(['update', 'id' => $id]);
+    }
+
+    public function actionDeactivate($id){
+        $model = $this->findModel($id);
+        $model->confirmed_at = null;
+        if($model->save()){
+            Yii::$app->session->addFlash('success', "The email has been manually unconfirmed");
+        }else{
+            Yii::$app->session->addFlash('error', "error");
+        }
+        return $this->redirect(['update', 'id' => $id]);
+    }
 	
 	public function actionUpdateProfile()
     {
