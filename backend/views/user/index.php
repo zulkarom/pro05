@@ -18,7 +18,8 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body"><div class="users-index">
 
 
-	
+	<div class="table-responsive">
+
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
 		'filterModel' => $searchModel,
@@ -70,6 +71,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
         ],
     ]); ?>
+
+    </div>
+    
 	
 	
 	
