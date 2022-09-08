@@ -110,7 +110,10 @@ class UserController extends Controller
 			if($model->save()){
 				Yii::$app->session->addFlash('success', "Data Updated");
 				return $this->redirect(['view', 'id' => $model->id]);
-			}
+			}else{
+                $model->flashError();
+				return $this->redirect(['view', 'id' => $model->id]);
+            }
 			
             
 			
