@@ -1,0 +1,1 @@
+ALTER TABLE `tmpl_offer_fasi` ADD `background_file` INT NULL DEFAULT NULL AFTER `updated_at`;

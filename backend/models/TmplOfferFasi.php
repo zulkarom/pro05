@@ -44,7 +44,7 @@ class TmplOfferFasi extends \yii\db\ActiveRecord
             [['template_name', 'yg_benar'], 'string', 'max' => 200],
             [['pengarah', 'tema'], 'string', 'max' => 300],
 			
-            [['is_active'], 'integer'],
+            [['is_active', 'background_file'], 'integer'],
 			
 			[['adj_x'], 'number'],
 			[['adj_y'], 'number'],
@@ -74,6 +74,8 @@ class TmplOfferFasi extends \yii\db\ActiveRecord
             'is_active' => 'Default',
             'created_at' => 'Created At',
             'updated_at' => 'Updated At',
+            'background_file' => 'Letterhead',
+            'signiture' => 'Signature',
         ];
     }
 }
