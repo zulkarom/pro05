@@ -20,6 +20,10 @@ class PdfStart extends TCPDF {
 	public $font_header = 'times';
 	
 	public $font_header_size = 10;
+
+	public $image_background = null;
+
+	public $margin_top = 0;
 	
 	public function error($msg)
     {
@@ -46,10 +50,18 @@ class PdfStart extends TCPDF {
 		
         $this->SetFont('times', '', 10);
 		$html = $this->header_html;
-		if($html and $proceed){
-			$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
+		if($proceed){
+
+			if($this->image_background){
+				$img_file = 'images/'.$this->image_background;
+				$this->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
+			}
+
+
+			//$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
 			
-			$this->SetTopMargin($this->GetY() + $this->top_margin_first_page);
+			//$this->SetTopMargin($this->GetY() + $this->top_margin_first_page);
+			$this->SetTopMargin($this->margin_top);
 			
 			
 			
