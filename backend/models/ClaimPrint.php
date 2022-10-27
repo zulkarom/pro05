@@ -22,13 +22,13 @@ class ClaimPrint
 	public $total_tut = 0;
 	public $total_prac = 0;
 	public $total_hour = 0;
-	public $diff = 36.5;
+	public $diff = 0;
 	
 	public function generatePdf(){
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		$this->pdf = new PdfStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$this->pdf = new ClaimPrintStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
 		$this->writeHeaderFooter();
 		$this->startPage();
