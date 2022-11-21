@@ -42,7 +42,7 @@ class TmplApproveProject extends \yii\db\ActiveRecord
             [['per3', 'per4', 'per5'], 'string'],
             [['created_at', 'updated_at'], 'safe'],
             [['template_name', 'yg_benar'], 'string', 'max' => 200],
-            [['pengarah', 'tema', 'ppendaftar'], 'string', 'max' => 100],
+            [['pengarah', 'tema', 'ppendaftar'], 'string', 'max' => 200],
 			
             [['is_active'], 'integer'],
 			
