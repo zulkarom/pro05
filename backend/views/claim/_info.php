@@ -91,7 +91,15 @@ $fasi = $apply->fasi;
 			]
 			,
 			'applicationGroup.group_name',
-			'rate_amount:currency',
+			[
+                'attribute' => 'rate_amount',
+                'value' => function($model){
+                    return 'RM' . $model->rate_amount;
+                    
+                }
+                
+            ],
+			
 			[
 				'label' => 'Tempoh Kuatkuasa',
 				'value' => function($model){

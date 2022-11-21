@@ -5,7 +5,7 @@ namespace backend\models;
 use yii\base\ErrorException;
 use TCPDF;
 
-class PdfStart extends TCPDF {
+class ClaimPrintStart extends TCPDF {
 	
 	public $header_html;
 	
@@ -52,16 +52,11 @@ class PdfStart extends TCPDF {
 		$html = $this->header_html;
 		if($proceed){
 
-			if($this->image_background){
-				$img_file = 'images/'.$this->image_background;
-				$this->Image($img_file, 0, 0, 210, 297, '', '', '', false, 300, '', false, false, 0);
-			}
 
-
-			//$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
+			$this->writeHTMLCell($w = 0, $h = 0, $x = '', $y = '', $html, $border = 0, $ln = 1, $fill = 0, $reseth = true, $align = 'top', $autopadding = true);
 			
-			//$this->SetTopMargin($this->GetY() + $this->top_margin_first_page);
-			$this->SetTopMargin($this->margin_top);
+			$this->SetTopMargin($this->GetY() + $this->top_margin_first_page);
+			//$this->SetTopMargin($this->margin_top);
 			
 			
 			

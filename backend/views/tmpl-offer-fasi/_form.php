@@ -37,8 +37,17 @@ use common\models\Upload;
 
     <?= $form->field($model, 'per4')->textarea(['rows' => 6]) ?>
 	
-	<?= $form->field($model, 'is_active')->dropDownList([1 => 'Yes', 0 => 'No'])?>
 	
+
+    <div class="row">
+    <div class="col-md-6">
+
+    <?= $form->field($model, 'is_active')->dropDownList([1 => 'Yes', 0 => 'No'])?>
+
+    </div>
+    <div class="col-md-6"><?= $form->field($model, 'background_file')->dropDownList([1 => '<=2021', 2 => '2022'])?></div>
+</div>
+	<br />
 	
 	<div class="row">
 	<div class="col-md-9">
@@ -46,12 +55,16 @@ use common\models\Upload;
 	* png file with transparent background. Suggested dimension (131 x 122)
 	<br /><br />
 	</div>
-<div class="col-md-3">
-<?= $form->field($model, 'adj_y')->textInput(['maxlength' => true]) ?>
-</div>
+
 
 
 </div>
+
+<div class="row">
+    <div class="col-md-4">
+    <?= $form->field($model, 'adj_y')->textInput(['maxlength' => true]) ?>
+    </div></div>
+
 	
 	
 	{FASILITATOR} = fasilitator/pembantu fasilitator<br /><br />

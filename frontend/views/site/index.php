@@ -1,12 +1,12 @@
 <?php 
 use yii\helpers\Html;
-$directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/webasset');
+$directoryAsset = Yii::getAlias('@web');
 
 $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn btn-secondary px-4 py-3 mt-3']);
 
 ?>
 <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/sukipt.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/1.jpg);">
       	<div class="overlay"></div>
         <div class="container">
           <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
@@ -18,7 +18,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
         </div>
       </div>
 
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/merdeka.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/2.jpg);">
       	<div class="overlay"></div>
         <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
@@ -29,7 +29,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
         </div>
         </div>
       </div>
-	  <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/larian.jpg);">
+	  <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/3.jpg);">
       	<div class="overlay"></div>
         <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">

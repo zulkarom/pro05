@@ -22,12 +22,13 @@ class ClaimPrint
 	public $total_tut = 0;
 	public $total_prac = 0;
 	public $total_hour = 0;
+	public $diff = 0;
 	
 	public function generatePdf(){
 
 		$this->directoryAsset = Yii::$app->assetManager->getPublishedUrl('@frontend/views/myasset');
 		
-		$this->pdf = new PdfStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
+		$this->pdf = new ClaimPrintStart(PDF_PAGE_ORIENTATION, PDF_UNIT, PDF_PAGE_FORMAT, true, 'UTF-8', false);
 		
 		$this->writeHeaderFooter();
 		$this->startPage();
@@ -103,8 +104,9 @@ class ClaimPrint
 EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
-
-		$this->pdf->setY(87.5);
+		//51 
+		//old = 87.5
+		$this->pdf->setY(87.5 - $this->diff);
 		
 		$html = '<table border="0" style="padding:7px">
 		<tr>
@@ -131,7 +133,7 @@ EOD;
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
 		//$y = $this->pdf->getY();
-		$this->pdf->setY(96);
+		$this->pdf->setY(96 - $this->diff);
 		
 		$html = '<table border="0" style="padding:7px">
 		<tr>
@@ -151,7 +153,7 @@ EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
-		$this->pdf->setY(104.5);
+		$this->pdf->setY(104.5 - $this->diff);
 		
 		$html = '<table border="0" style="padding:7px">
 		<tr>
@@ -171,7 +173,7 @@ EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
-		$this->pdf->setY(112.8);
+		$this->pdf->setY(112.8 - $this->diff);
 		
 		$html = '<table border="0" style="padding:7px">
 		<tr>
@@ -193,7 +195,7 @@ EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
-		$this->pdf->setY(121.3);
+		$this->pdf->setY(121.3 - $this->diff);
 		
 		$html = '<table border="0" style="padding:7px">
 		<tr>
@@ -215,7 +217,7 @@ EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
-		$this->pdf->setY(129.8);
+		$this->pdf->setY(129.8 - $this->diff);
 		
 		$html = '<table border="0" cellpadding="8">
 		<tr>
@@ -237,7 +239,7 @@ EOD;
 		
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 		
-		$this->pdf->setY(146.1);
+		$this->pdf->setY(146.1 - $this->diff);
 		
 		$html = '<table border="0" cellpadding="8">
 		<tr>
@@ -263,7 +265,7 @@ EOD;
 		$tbl = <<<EOD
 		$html
 EOD;
-		$this->pdf->setY(91.8);
+		$this->pdf->setY(91.8 - $this->diff);
 		$this->pdf->setX(124);
 		$this->pdf->writeHTML($tbl, true, false, false, false, '');
 	}

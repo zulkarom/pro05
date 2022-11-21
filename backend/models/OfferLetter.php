@@ -17,6 +17,10 @@ class OfferLetter
 	public $directoryAsset;
 	public $template;
 	public $fontSize = 9.5;
+	public $ref_w;
+	public $ref_h;
+	public $margin_left;
+	
 	
 	public function generatePdf(){
 		
@@ -48,10 +52,25 @@ class OfferLetter
 	
 	public function writeHeaderFooter(){
 		$this->pdf->header_first_page_only = true;
-		$this->pdf->header_html ='<img src="images/letterhead.jpg" />';
+		//$this->pdf->header_html ='<img src="images/letterhead.jpg" />';
 		
 		$this->pdf->footer_first_page_only = true;
-		$this->pdf->footer_html ='<img src="images/letterfoot.jpg" />';
+		//$this->pdf->footer_html ='<img src="images/letterfoot.jpg" />';
+
+		if($this->template->background_file == 1){
+		    $this->pdf->image_background = 'letterhead-lama.jpg';
+		    $this->pdf->margin_top = 25;
+			$this->ref_w = 205;
+			$this->ref_w = 223;
+			$this->ref_h = 43;
+		}else if($this->template->background_file == 2){
+		    $this->pdf->image_background = 'letterhead-2022.jpg';
+		    $this->pdf->margin_top = 37;
+		    $this->margin_left = 21;
+		    $this->ref_left = 490;
+			$this->ref_w = 292;
+			$this->ref_h = 68;
+		}
 	}
 	public function writeRef(){
 		$status = $this->model->getWfStatus();
@@ -62,18 +81,24 @@ class OfferLetter
 			$date = 'TO BE DETERMINED';
 		}
 		
-		
-		$html = '<br /><br /><br />
-		<table cellpadding="1">
+
+
+		$html = '
+		<table cellpadding="1" border="0">
 		<tr>
-			<td width="280"></td>
-			<td width="120"></td>
-			<td width="300" align="right">'.$this->model->ref_letter . '</td>
+			<td width="280" height="'. $this->ref_h .'"></td>
+			<td width="'. $this->ref_w .'"></td>
+			<td width="300" align="right"></td>
 		</tr>
 		<tr>
 			<td></td>
 			<td></td>
-			<td align="right">'. $date .'</td>
+			<td>'.$this->model->ref_letter . '</td>
+		</tr>
+		<tr>
+			<td></td>
+			<td></td>
+			<td>'. $date .'</td>
 		</tr>
 		</table>
 		<br /><br /><br /><br />
