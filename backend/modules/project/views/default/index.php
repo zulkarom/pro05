@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				'attribute' => 'pro_name',
 				'format' => 'raw',
 				'value' => function($model){
-					return '<a href="'.Url::to(['../../project/' . $model->pro_token]).'" target="_blank">' . strtoupper($model->pro_name) . '</a><br/>(' . $model->projectDate . ')';
+					return '<a href="'.Url::to(['../../project/' . $model->pro_token]).'" target="_blank">' . strtoupper($model->pro_name) . '</a><br/>Tarikh Program: ' . $model->projectDate . '<br /><i>Dihantar pada :'.date('d M Y', strtotime($model->submitted_at)).'</i>';
 				}
 				
 			],

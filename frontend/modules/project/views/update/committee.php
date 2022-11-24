@@ -49,7 +49,7 @@ use yii\jui\JuiAsset;
     ]); ?>
 
 <h4>JAWATANKUASA UTAMA</h4>
-    
+    <i>*perlu lebih dari 3 jawatankuasa</i>
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
