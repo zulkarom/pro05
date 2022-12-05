@@ -447,12 +447,12 @@ class ClaimController extends Controller
     }
 	
 	public function actionUpload($attr, $id){
-		echo 'before clean';
-		die();
+		
 		$attr = $this->clean($attr);
 		
         $model = $this->findClaimFile($id);
-		
+		echo 'after find';
+		die();
 		$model->file_controller = 'claim';
 		
 		return Upload::upload($model, $attr, 'updated_at');
