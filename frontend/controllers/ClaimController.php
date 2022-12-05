@@ -438,12 +438,12 @@ class ClaimController extends Controller
 	
 	protected function findClaimFile($id)
     {
-		echo 'in find';
-		die();
+		
         if (($model = ClaimFile::findOne($id)) !== null) {
             return $model;
         }
-
+		echo 'af find';
+		die();
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 	
