@@ -444,6 +444,11 @@ class ClaimController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+	public function actionJuara(){
+		echo 'hai';
+		die();
+	}
 	
 	public function actionUpload(){
 		echo 'hai';
