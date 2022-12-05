@@ -22,6 +22,7 @@ use common\models\UploadFile;
 use raoul2000\workflow\validation\WorkflowScenario;
 
 use yii\helpers\Json;
+use yii\web\UploadedFile;
 
 /**
  * ClaimController implements the CRUD actions for Claim model.
@@ -458,8 +459,43 @@ class ClaimController extends Controller
         if (($model = ClaimFile::findOne($id)) !== null) {
             return $model;
         }
+
+
         throw new NotFoundHttpException('The requested page does not exist.');
     }
+
+	public function actionTest(){
+		$model = $this->findClaimFile(20);
+
+		if (Yii::$app->request->post()) {
+			//setup path & filname
+			$year = date('Y') + 0 ;
+			$path =  $year ;
+			$directory = Yii::getAlias('@upload/' . $path . '/');
+
+			$instance = UploadedFile::getInstance($model, 'claim_instance');
+			$model->claim_instance = $instance;
+			//random filename
+			$ext = $instance->extension;
+			$fileName =  'test.' . $ext;
+			$filePath = $directory . $fileName;
+
+			if ($instance) {
+				if ($instance->saveAs($filePath)) {
+					Yii::$app->session->addFlash('success', "Data Updated");
+					return $this->refresh();
+				}
+			}
+
+
+		}
+
+
+
+		return $this->render('test', [
+			'model' => $model,
+		]);
+	}
 	
 	public function actionUpload($attr, $id){
 		$attr = $this->clean($attr);

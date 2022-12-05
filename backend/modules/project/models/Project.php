@@ -417,7 +417,7 @@ class Project extends \yii\db\ActiveRecord
 			
 			if($i == 'Peruntukan daripada Pusat Kokurikulum'){
 				$res->rs_core = 1;
-				$res->rs_amount = 500;
+				$res->rs_amount = 300;
 			}else{
 				$res->rs_amount = 0;
 			}
