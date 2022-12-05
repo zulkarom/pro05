@@ -175,6 +175,12 @@ class ClaimController extends Controller
 		}
     }
 
+	public function actionUpdate($id)
+    {
+		echo 'this page under maintainance';
+		die();
+	}
+
     /**
      * Updates an existing Claim model.
      * If update is successful, the browser will be redirected to the 'view' page.
@@ -182,10 +188,9 @@ class ClaimController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdate($id)
+    public function actionUpdatex($id)
     {
-		echo 'this page under maintainance';
-		die();
+		
 		
 		
         $model = $this->findModel($id);
