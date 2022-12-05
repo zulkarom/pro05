@@ -123,8 +123,6 @@ class ClaimController extends Controller
      */
     public function actionCreate()
     {
-		echo 'this page under maintainance';
-		die();
         $model = new Claim();
 		$apply = $model->getAcceptApplication();
 		if($apply){
@@ -185,11 +183,7 @@ class ClaimController extends Controller
 		}
     }
 
-	public function actionUpdate($id)
-    {
-		echo 'this page under maintainance';
-		die();
-	}
+
 
     /**
      * Updates an existing Claim model.
@@ -198,11 +192,8 @@ class ClaimController extends Controller
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
      */
-    public function actionUpdatex($id)
+    public function actionUpdate($id)
     {
-		
-		
-		
         $model = $this->findModel($id);
 //print_r($model->getListPortalAttendanceRecorded($model->application_id));die();
 
