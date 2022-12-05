@@ -441,8 +441,9 @@ class ClaimController extends Controller
 	
 	protected function findClaimFile($id)
     {
-		
+		echo 'in find function';
         if (($model = ClaimFile::findOne($id)) !== null) {
+			echo 'before return';
             return $model;
         }else{
 			echo 'tak jumpa file';
