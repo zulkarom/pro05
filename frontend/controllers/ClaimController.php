@@ -446,7 +446,7 @@ class ClaimController extends Controller
     }
 	
 	public function actionUpload($attr, $id){
-		
+		die(444);
 		$attr = $this->clean($attr);
         $model = $this->findClaimFile($id);
 		$model->file_controller = 'claim';
