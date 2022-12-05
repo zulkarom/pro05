@@ -447,10 +447,10 @@ class ClaimController extends Controller
     }
 	
 	public function actionUpload($attr, $id){
-		
-		$attr = $this->clean($attr);
-		echo 'findcliamfile';
+		echo 'before clean';
 		die();
+		$attr = $this->clean($attr);
+		
         $model = $this->findClaimFile($id);
 		
 		$model->file_controller = 'claim';
