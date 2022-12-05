@@ -441,7 +441,10 @@ class ClaimController extends Controller
 		
         if (($model = ClaimFile::findOne($id)) !== null) {
             return $model;
-        }
+        }else{
+			echo 'tak jumpa file';
+			die();
+		}
 		echo 'af find';
 		die();
         throw new NotFoundHttpException('The requested page does not exist.');
