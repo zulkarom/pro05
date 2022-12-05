@@ -46,6 +46,15 @@ class ClaimController extends Controller
         ];
     }
 
+	public function beforeAction($action)
+	{            
+		if ($action->id == 'upload') {
+			$this->enableCsrfValidation = false;
+		}
+
+		return parent::beforeAction($action);
+	}
+
 
     /**
      * Lists all Claim models.
