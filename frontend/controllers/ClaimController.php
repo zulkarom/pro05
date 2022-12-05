@@ -462,14 +462,15 @@ class ClaimController extends Controller
     }
 	
 	public function actionUpload($attr, $id){
+		return Json::encode([
+			'errors' => 'cannot save dah',
+		]); 
 		$attr = $this->clean($attr);
         $model = $this->findClaimFile($id);
 		
 		$model->file_controller = 'claim';
 
-		return Json::encode([
-			'errors' => 'cannot save dah',
-		]); 
+		
 		
 		return Upload::upload($model, $attr, 'updated_at');
 
