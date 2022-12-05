@@ -444,21 +444,15 @@ class ClaimController extends Controller
 
         throw new NotFoundHttpException('The requested page does not exist.');
     }
-
-	public function actionJuara(){
-		echo 'hai';
-		die();
-	}
 	
-	public function actionUpload(){
-		echo 'hai';
-		die();
-		/* ;
+	public function actionUpload($attr, $id){
+		
 		$attr = $this->clean($attr);
         $model = $this->findClaimFile($id);
+		die(444);
 		$model->file_controller = 'claim';
 		
-		return Upload::upload($model, $attr, 'updated_at'); */
+		return Upload::upload($model, $attr, 'updated_at');
 
 	}
 	
