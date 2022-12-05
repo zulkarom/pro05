@@ -18,7 +18,7 @@ use backend\models\ClaimAttend;
 use common\models\Model;
 use common\models\Upload;
 use common\models\Application;
-
+use common\models\UploadFile;
 use raoul2000\workflow\validation\WorkflowScenario;
 
 use yii\helpers\Json;
@@ -462,9 +462,6 @@ class ClaimController extends Controller
     }
 	
 	public function actionUpload($attr, $id){
-		return Json::encode([
-			'errors' => 'cannot save dah',
-		]); 
 		$attr = $this->clean($attr);
         $model = $this->findClaimFile($id);
 		
@@ -472,7 +469,7 @@ class ClaimController extends Controller
 
 		
 		
-		return Upload::upload($model, $attr, 'updated_at');
+		return UploadFile::upload($model, $attr, 'updated_at');
 
 	}
 	
