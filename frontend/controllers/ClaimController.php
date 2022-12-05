@@ -441,23 +441,14 @@ class ClaimController extends Controller
 	
 	protected function findClaimFile($id)
     {
-		echo 'in find function';
         if (($model = ClaimFile::findOne($id)) !== null) {
-			echo 'before return';
             return $model;
-        }else{
-			echo 'tak jumpa file';
-			die();
-		}
-		echo 'af find';
-		die();
+        }
         throw new NotFoundHttpException('The requested page does not exist.');
     }
 	
 	public function actionUpload($attr, $id){
-		echo 'again';
 		$attr = $this->clean($attr);
-		echo 'after clean';
         $model = $this->findClaimFile($id);
 		
 		$model->file_controller = 'claim';
