@@ -124,7 +124,7 @@ $this->registerJs($js);
 			]
 			,
 			'applicationGroup.group_name',
-			'rate_amount:currency',
+			'rate_amount',
 			[
 				'label' => 'Tempoh Kuatkuasa',
 				'value' => function($model){
