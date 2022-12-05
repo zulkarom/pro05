@@ -113,6 +113,8 @@ class ClaimController extends Controller
      */
     public function actionCreate()
     {
+		echo 'this page under maintainance';
+		die();
         $model = new Claim();
 		$apply = $model->getAcceptApplication();
 		if($apply){
@@ -182,7 +184,8 @@ class ClaimController extends Controller
      */
     public function actionUpdate($id)
     {
-		
+		echo 'this page under maintainance';
+		die();
 		
 		
         $model = $this->findModel($id);
