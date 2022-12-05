@@ -438,8 +438,7 @@ class ClaimController extends Controller
 	
 	protected function findClaimFile($id)
     {
-		echo 'findcliamfile';
-		die();
+		
         if (($model = ClaimFile::findOne($id)) !== null) {
             return $model;
         }
@@ -450,6 +449,8 @@ class ClaimController extends Controller
 	public function actionUpload($attr, $id){
 		
 		$attr = $this->clean($attr);
+		echo 'findcliamfile';
+		die();
         $model = $this->findClaimFile($id);
 		
 		$model->file_controller = 'claim';
