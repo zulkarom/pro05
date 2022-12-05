@@ -466,6 +466,10 @@ class ClaimController extends Controller
         $model = $this->findClaimFile($id);
 		
 		$model->file_controller = 'claim';
+
+		return Json::encode([
+			'errors' => 'cannot save dah',
+		]); 
 		
 		return Upload::upload($model, $attr, 'updated_at');
 
@@ -476,9 +480,7 @@ class ClaimController extends Controller
         $model = $this->findClaimFile($id);
 		$filename = strtoupper($attr) . ' ' . Yii::$app->user->identity->fullname;
 		
-		return Json::encode([
-			'errors' => 'cannot save dah',
-		]); 
+		
 		
 		
 		Upload::download($model, $attr, $filename);
