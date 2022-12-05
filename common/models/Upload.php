@@ -140,6 +140,7 @@ class Upload
 	
 	
 	public static function upload($model, $attr, $ts = false){
+		echo 'uploding..';
 		$model->scenario = $attr . '_upload';
 
 		$instance = $attr . '_instance';
