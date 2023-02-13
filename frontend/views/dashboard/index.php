@@ -121,7 +121,7 @@ if($sem = Semester::getOpenDateSemester()){
   <table class="table table-striped table-hover">
     <tbody>
       <tr>
-        <td><?='<b>'.$course->course_code .'</b> '. strtoupper($course->course_name) . ' ('.$application->applicationGroup->group_name.')'?></td>
+        <td><?='<b>'.$course->course_code .'</b> '. strtoupper($course->course_name) . ' - '.$application->groupName?></td>
       </tr>
       <tr>
         <td><a target="_blank" href="<?=Url::to(['application/offer-letter', 'id' => $application->id])?>"><span class="glyphicon glyphicon-download-alt"></span> SURAT TAWARAN PERLANTIKAN</a></td>
@@ -277,7 +277,7 @@ $token = $application->project->pro_token;
   <table class="table table-striped table-hover">
     <tbody>
       <tr>
-        <td><?='<b>'.$course->course_code .'</b> '. strtoupper($course->course_name) . ' ('.$application->applicationGroup->group_name.')'?></td>
+        <td><?='<b>'.$course->course_code .'</b> '. strtoupper($course->course_name) . ' - '.$application->groupName.''?></td>
       </tr>
       <tr>
         <td><a target="_blank" href="<?=Url::to(['application/offer-letter', 'id' => $application->id])?>"><span class="glyphicon glyphicon-download-alt"></span> SURAT TAWARAN PERLANTIKAN</a></td>

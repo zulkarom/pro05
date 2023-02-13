@@ -42,7 +42,7 @@ class AttendancePortalStart extends \TCPDF {
 		
 		<table border="0" cellpadding="2" >
 		<tr>
-		<td width="75%" height="'.$height.'" style="line-height:'.$line_height.'%">&nbsp;&nbsp;<b>'.$this->model->acceptedCourse->course->course_code.' ('.$this->model->applicationGroup->group_name.') - '.strtoupper($this->model->acceptedCourse->course->course_name).'</b>
+		<td width="75%" height="'.$height.'" style="line-height:'.$line_height.'%">&nbsp;&nbsp;<b>'.$this->model->acceptedCourse->course->course_code.' - '.$this->model->groupName.' - '.strtoupper($this->model->acceptedCourse->course->course_name).'</b>
 		</td>
 		<td width="25%"  style="line-height:'.$line_height.'%">&nbsp;&nbsp;
 		</td>

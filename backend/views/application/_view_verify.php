@@ -27,8 +27,16 @@ use common\models\ApplicationCourse;
 				
 			]
 			,
-			'applicationGroup.group_name',
-			'rate_amount:currency',
+			'groupName',
+			[
+                'attribute' => 'rate_amount',
+                'value' => function($model){
+                    return 'RM'. $model->rate_amount;
+                    
+                }
+                
+            ],
+			
 			[
 			 'attribute' => 'verifier.fullname',
 			 'label' => 'Disokong oleh'

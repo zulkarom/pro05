@@ -88,7 +88,7 @@ class ApplicationController extends Controller
 		$model = $this->findModel($id);
 		$status = $model->getWfStatus();
 		
-		switch($status ){
+		switch($status){
 			case 'submit':
 				$model->scenario = 'save-verify';
 			break;

@@ -29,7 +29,7 @@ if($response){
 echo strtoupper('<h4>Semester ' . $model->semester->niceFormat());echo '<br />';
 echo $model->acceptedCourse->course->course_code;echo '<br />';
 echo $model->acceptedCourse->course->course_name;
-echo ' (' .$model->applicationGroup->group_name . ')</h4>';
+echo ' - ' .$model->groupName . '</h4>';
 echo '<br />';
 ?></div>
 

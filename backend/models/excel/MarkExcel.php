@@ -196,7 +196,7 @@ class MarkExcel
 			->setCellValue('B2', 'SEMESTER:')
 			->setCellValue('C2', strtoupper($this->semester->niceFormat()))
 			->setCellValue('B3', 'SUBJEK:')
-			->setCellValue('C3', strtoupper($this->courseCode . '('.$this->group .') - ' . $this->courseName))
+			->setCellValue('C3', strtoupper($this->courseCode . ' - '.$this->group .' - ' . $this->courseName))
 			->setCellValue('B4', 'FASILITATOR:')
 			->setCellValue('C4', strtoupper($this->fasi))
 			//$model->semester->id

@@ -117,7 +117,7 @@ EOD;
 
 			<td>Kod dan Nama Kursus</td>
 			<td>:</td>
-			<td><b>'.$course->course_code .' '.$course->course_name .' ('. $this->model->applicationGroup->group_name .')</b></td>
+			<td><b>'.$course->course_code .' '.$course->course_name .' - '. $this->model->groupName .'</b></td>
 		</tr>
 		
 		</table>

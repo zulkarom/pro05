@@ -41,6 +41,11 @@ echo $this->render('_view_profile', [
 				'attribute' => 'campus.campus_name',
 				//'label' => 'Lokas'
 			]
+            , 
+			[
+				'attribute' => 'groupName',
+				//'label' => 'Lokas'
+			]
             ,
 			[
 				'attribute' => 'applicationCourses',

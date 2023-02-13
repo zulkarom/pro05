@@ -52,7 +52,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->student();
 		
 	
@@ -69,7 +69,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$api->test(); */
 		
 	
@@ -81,7 +81,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$api->id = $id;
 		$response = $api->attend();
 		
@@ -103,7 +103,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->summary();
 		
 		/* echo '<pre>';
@@ -115,7 +115,7 @@ class StudentController extends Controller
 		$pdf->model = $model;
 		$pdf->course = $model->acceptedCourse->course;
 		$pdf->semester = $model->semester;
-		$pdf->group = $model->applicationGroup->group_name;
+		$pdf->group = $model->groupName;
 		$pdf->response = $response;
 		$pdf->generatePdf();
 		exit();
@@ -143,13 +143,13 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->student();
 		
 		$pdf = new Attendance;
 		$pdf->course = $model->acceptedCourse->course;
 		$pdf->semester = $model->semester;
-		$pdf->group = $model->applicationGroup->group_name;
+		$pdf->group = $model->groupName;
 		$pdf->response = $response;
 		$pdf->generatePdf();
 		exit();
@@ -177,14 +177,14 @@ class StudentController extends Controller
 		$api->semester = $model->semester->id;
 		$code = $model->acceptedCourse->course->course_code;
 		$api->subject = $code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->student();
 		
 		$xls = new MarkExcel;
 		$xls->model = $model;
 		$xls->courseName = $model->acceptedCourse->course->course_name;
 		$xls->courseCode = $model->acceptedCourse->course->course_code;
-		$xls->group = $model->applicationGroup->group_name;
+		$xls->group = $model->groupName;
 		$xls->fasi = $model->fasi->user->fullname;
 		$xls->semester = $model->semester;
 		$xls->response = $response;

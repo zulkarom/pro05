@@ -48,7 +48,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->student();
 		
 	
@@ -63,7 +63,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$api->id = $id;
 		$response = $api->attend();
 		
@@ -84,7 +84,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->summary();
 		
 		/* echo '<pre>';
@@ -102,7 +102,7 @@ class StudentController extends Controller
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->student();
 		
 		$pdf = new Attendance;

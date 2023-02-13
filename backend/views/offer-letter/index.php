@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 					$course = '??';
 				}
 				 return strtoupper($model->fasi->user->fullname) . 
-				 '<br />' . $course . ' ('.$model->applicationGroup->group_name .')';
+				 '<br />' . $course . ' - '.$model->groupName .'';
 			 }
 			],
 			

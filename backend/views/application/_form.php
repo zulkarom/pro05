@@ -122,12 +122,9 @@ use backend\models\Rate;
 	
 	
 	<div class="row">
-<div class="col-md-4"><?= $form->field($model, 'group_id')->dropDownList(
-        ArrayHelper::map($model->getListGroupAll(),'id', 'group_name'), ['prompt' => 'Please Select' ]
-    ) 
-; ?></div>
-
-<div class="col-md-4"><?= $form->field($model, 'rate_amount', [
+    <div class="col-md-3"><?= $form->field($model, 'verify_note')->textarea(['rows' => '4'])  ?>
+</div>
+<div class="col-md-3"><?= $form->field($model, 'rate_amount', [
     'addon' => ['prepend' => ['content'=>'RM']]
 ]
 )->dropDownList(
@@ -135,9 +132,19 @@ use backend\models\Rate;
     ) ->label('Kadar Bayaran (per jam)')
 ; ?>
 </div>
+<div class="col-md-3"><?= $form->field($model, 'group_id')->dropDownList(
+        ArrayHelper::map($model->getListGroupAll(),'id', 'group_name'), ['prompt' => 'Please Select' ]
+    ) 
+; ?></div>
 
-<div class="col-md-4"><?= $form->field($model, 'verify_note')->textarea(['rows' => '4'])  ?>
-</div>
+<div class="col-md-3"><?= $form->field($model, 'ambilan_id')->dropDownList(
+        ArrayHelper::map($model->getListAmbilan(),'id', 'ambilan_name'), ['prompt' => 'Select if any' ]
+    ) 
+; ?></div>
+
+
+
+
 
 </div>
 	

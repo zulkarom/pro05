@@ -119,7 +119,7 @@ class Claim extends \yii\db\ActiveRecord
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->attendList();
 		
 		$portal = 
@@ -316,7 +316,7 @@ class Claim extends \yii\db\ActiveRecord
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->attendList();
 		$array = [];
 		if($response){
@@ -338,7 +338,7 @@ class Claim extends \yii\db\ActiveRecord
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->attendList();
 		$array = [];
 		if($response){
@@ -366,7 +366,7 @@ class Claim extends \yii\db\ActiveRecord
 		$api = new Api;
 		$api->semester = $model->semester->id;
 		$api->subject = $model->acceptedCourse->course->course_code;
-		$api->group = $model->applicationGroup->group_name;
+		$api->group = $model->groupName;
 		$response = $api->attendList();
 		$array = [];
 		if($response){

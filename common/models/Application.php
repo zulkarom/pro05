@@ -85,7 +85,7 @@ class Application extends \yii\db\ActiveRecord
 			
 			[['release_email'], 'required', 'on' => 'release_email'],
 			
-            [['fasi_id', 'group_id', 'semester_id', 'location_id', 'verified_by', 'returned_by'], 'integer'],
+            [['fasi_id', 'group_id', 'semester_id', 'location_id', 'verified_by', 'returned_by', 'ambilan_id'], 'integer'],
 			
 			
 			[['rate_amount'], 'number'],
@@ -126,6 +126,7 @@ class Application extends \yii\db\ActiveRecord
             'approve_note' => 'Ulasan Kelulusan',
             'reject_note' => 'Reject Note',
 			'group_id' => 'Kumpulan',
+			'ambilan_id' => 'Ambilan(optional)',
 			'rate_amount' => 'Kadar Bayaran',
 			'verify_note' => 'Ulasan Sokongan',
 			'applicationCourses' => 'Kursus'
@@ -225,6 +226,10 @@ class Application extends \yii\db\ActiveRecord
 	public function getSession(){
 		return $this->hasOne(SessionTime::className(), ['id' => 'session_id']);
 	}
+
+	public function getAmbilan(){
+		return $this->hasOne(ApplicationAmbilan::className(), ['id' => 'ambilan_id']);
+	}
 	
 	public function getSemester(){
 		return $this->hasOne(Semester::className(), ['id' => 'semester_id']);
@@ -239,8 +244,19 @@ class Application extends \yii\db\ActiveRecord
 	}
 	
 	public function getGroupName(){
-		return $this->applicationGroup->group_name;
+		$a = '';
+		$ambilan = $this->ambilan;
+		if($ambilan){
+			$a = '('.$ambilan->ambilan_name.')';
+		}
+		$g = '';
+		$group = $this->applicationGroup;
+		if($group){
+			$g = $this->applicationGroup->group_name;
+		}
+		return  $g . $a;
 	}
+
 	
 	public function getAllStatusesArray(){
 		$cl = new ApplicationWorkflow;
@@ -334,6 +350,10 @@ class Application extends \yii\db\ActiveRecord
 	
 	public function getListGroupAll(){
 		return ApplicationGroup::find()->all();
+	}
+
+	public function getListAmbilan(){
+		return ApplicationAmbilan::find()->all();
 	}
 	
 	public function getHourMonth($month_str){

@@ -18,6 +18,7 @@ class Api
 	
 	
 	public function student(){
+		//https://portal.umk.edu.my/api/timetable/student?semester=201920202&subject=UKU10702&group=LJ1
 		$this->url = $this->portal . 'student?' . $this->getParams();
 		$json = $this->getContent();
 		return json_decode($json);

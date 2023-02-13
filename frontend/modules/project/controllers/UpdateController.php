@@ -49,7 +49,7 @@ class UpdateController extends Controller
 		$api = new Api;
 		$api->semester = $app->semester->id;
 		$api->subject = $app->acceptedCourse->course->course_code;
-		$api->group = $app->applicationGroup->group_name;
+		$api->group = $app->groupName;
 		$response = $api->student();
 		
 		$this->addStudents($model->id, $response);

@@ -11,6 +11,9 @@ class AttendanceSummary
 	public $model;
 	
 	public $response;
+	public $course;
+	public $semester;
+	public $group;
 	public $pdf;
 	public $directoryAsset;
 	

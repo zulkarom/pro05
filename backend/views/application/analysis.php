@@ -60,7 +60,7 @@ if($campus ){
 						if($f->applicationCourses){
 							foreach($f->applicationCourses as $k){
 								if($k->course_id == $c->id && $k->is_accepted == 1){
-									$group = $f->applicationGroup->group_name;
+									$group = $f->groupName;
 									$status = $f->getWfLabel();
 								}
 							}

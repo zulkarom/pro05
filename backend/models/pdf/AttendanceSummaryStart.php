@@ -53,7 +53,7 @@ class AttendanceSummaryStart extends \TCPDF {
 		</tr>
 		
 		<tr height="'.$height.'" style="line-height:'.$line_height.'%">
-		<td>&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->course->course_code.' ('.$this->group.') - '.strtoupper($this->course->course_name).'
+		<td>&nbsp;&nbsp;<b>SUBJECT: </b>'.$this->course->course_code.' - '.$this->group.' - '.strtoupper($this->course->course_name).'
 		</td>
 		<td>&nbsp;&nbsp;'.$time.'</td>
 		</tr>

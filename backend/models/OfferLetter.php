@@ -190,7 +190,7 @@ EOD;
 			<td>b)</td>
 			<td>Kod dan Nama Kursus</td>
 			<td>:</td>
-			<td>'.$course->course_code .' '.$course->course_name .' ('. $this->model->applicationGroup->group_name .')</td>
+			<td>'.$course->course_code .' '.$course->course_name .' - '. $this->model->groupName .'</td>
 		</tr>
 		<tr>
 			<td></td>

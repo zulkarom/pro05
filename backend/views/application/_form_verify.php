@@ -43,15 +43,7 @@ $form = ActiveForm::begin(['id' =>'form-verify']); ?>
 
 
 </div>
-<div class="col-md-3">
 
-<?= $form->field($model, 'group_id')->dropDownList(
-        ArrayHelper::map($model->getListGroup(),'id', 'group_name'), ['prompt' => 'Please Select' ]
-    ) 
-; ?>
-
-
-</div>
 
 <div class="col-md-3">
 
@@ -67,6 +59,28 @@ $form = ActiveForm::begin(['id' =>'form-verify']); ?>
 </div>
 
 
+
+</div>
+
+
+<div class="row">
+<div class="col-md-3">
+
+<?= $form->field($model, 'group_id')->dropDownList(
+        ArrayHelper::map($model->getListGroup(),'id', 'group_name'), ['prompt' => 'Please Select' ]
+    ) 
+; ?>
+
+
+</div>
+  <div class="col-md-3">
+
+  <?= $form->field($model, 'ambilan_id')->dropDownList(
+        ArrayHelper::map($model->getListAmbilan(),'id', 'ambilan_name'), ['prompt' => 'Select if any' ]
+    ) 
+; ?>
+
+</div>
 
 </div>
 	
