@@ -309,6 +309,21 @@ class Application extends \yii\db\ActiveRecord
 		}
 		
 	}
+
+	public function showingProcess(){
+		
+		switch($this->getWfStatus()){
+			case "submit":
+			case "verified":
+			case "approved":
+			return true;
+			break;
+			
+			default:
+			return false;
+		}
+		
+	}
 	
 	public function showingApproved(){
 		switch($this->getWfStatus()){
