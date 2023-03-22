@@ -212,6 +212,9 @@ class Application extends \yii\db\ActiveRecord
 			$br = $i == 1 ? '' : $break;
 			if($c->course){
 				$string .= $br.$c->course->course_code . ' ' . $c->course->course_name;
+				if($c->is_accepted == 1){
+					$string .= ' <i class="fa fa-check"></i>';
+				}
 			}
 		$i++;
 		}
