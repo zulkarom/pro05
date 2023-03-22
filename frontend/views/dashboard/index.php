@@ -18,10 +18,11 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed201
 $m = null;
 
 
-echo '..'.$application->getWfStatus();
-if($application){
-  if($application->getWfStatus() == 'release'){
+if($app){
+  if($app->getWfStatus() == 'release'){
     echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  Tahniah, permohonan anda telah diterima, sila ke <a href="'.Url::to(['application/view', 'id' => $application->id]).'">halaman permohonan </a> untuk terima tawaran.</div></p>';
+  }else if($app->getWfStatus() == 'submit'){
+    echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  Permohonan anda sedang diproses.</div></p>';
   }
 }else{
   if($sem = Semester::getOpenDateSemester()){

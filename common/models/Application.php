@@ -183,6 +183,15 @@ class Application extends \yii\db\ActiveRecord
 		->one()
 		;
 	}
+
+	public static function getMyApplication(){
+		return Application::find()
+		->innerJoin('fasi', 'fasi.id = application.fasi_id')
+		->innerJoin('semester', 'semester.id = application.semester_id')
+		->where(['fasi.user_id' => Yii::$app->user->identity->id, 'semester.is_current' => 1])
+		->one()
+		;
+	}
 	
 	public static function getMyAcceptPrvApplication(){
 	    return Application::find()
