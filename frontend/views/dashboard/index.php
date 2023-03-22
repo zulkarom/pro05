@@ -19,7 +19,7 @@ $m = null;
 
 
 
-if($application && $application->acceptedCourse){
+if($application){
   if($application->getWfStatus() == 'release'){
     echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  Tahniah, permohonan anda telah diterima, sila ke <a href="'.Url::to(['application/view', 'id' => $application->id]).'">halaman permohonan </a> untuk terima tawaran.</div></p>';
   }
