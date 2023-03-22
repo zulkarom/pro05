@@ -257,7 +257,7 @@ $token = $application->project->pro_token;
 </div>
         
 <?php }else{
-	echo 'Something went wrong';
+	//echo 'Something went wrong';
 }	?>
 
 
