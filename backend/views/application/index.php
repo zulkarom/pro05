@@ -124,7 +124,7 @@ $this->params['breadcrumbs'][] = $this->title;
 				$html = strtoupper($model->fasi->user->fullname) . '<br />' . $model->listAppliedCoursesString();
 				if($model->showingVerified()){
 					if(!$model->acceptedCourse){
-						$html .= '<br /><span style="color:red;font-size:12px"><i class="fa fa-warning"></i> Kursus ini tidak mempunyai kursus yang diluluskan semasa sokongan.</span>';
+						$html .= '<br /><span style="color:red;font-size:12px"><i class="fa fa-warning"></i> Kursus ini tidak mempunyai kursus yang diluluskan semasa sokongan. Go to View -> Maklumat Permohonan klik Edit, Lulus = Yes</span>';
 					}
 				}
 				return $html;
