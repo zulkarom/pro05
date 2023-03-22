@@ -190,7 +190,7 @@ class ApplicationController extends Controller
 				
 				ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
 				$model->selected_course = Yii::$app->request->post('Application')['selected_course'];
-				if($model->selected_course){
+				if($model->selected_course || $model->selected_course > 0){
 					$course = ApplicationCourse::findOne(['application_id' => $model->id, 'course_id'=> $model->selected_course] );
 					if($course){
 					    $course->is_accepted = 1;
