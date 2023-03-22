@@ -161,13 +161,24 @@ class ApplicationController extends Controller
 	private function approveApplication($model){
 		
 		if(Todo::can('approve-application')){
-			$model->approved_at = date('Y-m-d H:i:s');
-			$model->approved_by = Yii::$app->user->id;
-			$model->sendToStatus('d-approved');
-			if($model->save()){
-				Yii::$app->session->addFlash('success', "Permohonan telah berjaya diluluskan");
-				return $this->redirect(['application/index']);
+			
+
+			$acc = ApplicationCourse::findOne(['application_id' => $model->id, 'is_accepted' => 1]);
+
+			if($acc){
+				$model->approved_at = date('Y-m-d H:i:s');
+				$model->approved_by = Yii::$app->user->id;
+				$model->sendToStatus('d-approved');
+				if($model->save()){
+					Yii::$app->session->addFlash('success', "Permohonan telah berjaya diluluskan");
+					return $this->redirect(['application/index']);
+				}
+			}else{
+				Yii::$app->session->addFlash('error', "Tiada kursus yang disokong!");
 			}
+
+
+			
 		}else{
 			Yii::$app->session->addFlash('error', "Permission Denied!");
 		}

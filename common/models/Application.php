@@ -206,16 +206,16 @@ class Application extends \yii\db\ActiveRecord
 	public function listAppliedCoursesString($break = "<br />"){
 		$string = '';
 		$i = 1;
+		//$status = 
+		//$s = $this->showingVerified();
 		foreach($this->applicationCourses as $c){
 			$br = $i == 1 ? '' : $break;
 			if($c->course){
 				$string .= $br.$c->course->course_code . ' ' . $c->course->course_name;
 			}
-			
 		$i++;
 		}
 		return $string;
-		
 	}
 
 	public function getDayName(){

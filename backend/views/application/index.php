@@ -121,7 +121,13 @@ $this->params['breadcrumbs'][] = $this->title;
 			 'format' => 'html',
 			 'filter' => Html::activeInput('text', $searchModel, 'fasi_name', ['class' => 'form-control', 'placeholder' => 'Cari Fasilitator...']),
 			 'value' => function($model){
-				return strtoupper($model->fasi->user->fullname) . '<br />' . $model->listAppliedCoursesString();
+				$html = strtoupper($model->fasi->user->fullname) . '<br />' . $model->listAppliedCoursesString();
+				if($model->showingVerified()){
+					if(!$model->acceptedCourse){
+						$html .= '<br /><span style="color:red;font-size:12px"><i class="fa fa-warning"></i> Kursus ini tidak mempunyai kursus yang diluluskan semasa sokongan.</span>';
+					}
+				}
+				return $html;
 			 }
 			],
 			[
