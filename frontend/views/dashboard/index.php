@@ -17,9 +17,18 @@ $directoryAsset = Yii::$app->assetManager->getPublishedUrl('@vendor/almasaeed201
 	<?php 
 $m = null;
 
-if($sem = Semester::getOpenDateSemester()){
-	$m = "Tempoh pendaftaran bagi semester " . $sem->niceFormat() . " adalah dari " . date('d M Y', strtotime($sem->open_at)) . " hingga " . date('d M Y', strtotime($sem->close_at)) . ".";
-	echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  '.$m.'</div></p>';
+
+if($app){
+  if($app->getWfStatus() == 'release'){
+    echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  Tahniah, permohonan anda telah diterima, sila ke <a href="'.Url::to(['application/view', 'id' => $app->id]).'">halaman permohonan </a> untuk terima tawaran.</div></p>';
+  }else if($app->showingProcess()){
+    echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  Permohonan anda sedang diproses.</div></p>';
+  }
+}else{
+  if($sem = Semester::getOpenDateSemester()){
+    $m = "Tempoh pendaftaran bagi semester " . $sem->niceFormat() . " adalah dari " . date('d M Y', strtotime($sem->open_at)) . " hingga " . date('d M Y', strtotime($sem->close_at)) . ".";
+    echo '<p><div class="alert alert-info"><span class="fa fa-info-circle"></span>  '.$m.'</div></p>';
+  }
 }
 
 ?>
@@ -257,7 +266,7 @@ $token = $application->project->pro_token;
 </div>
         
 <?php }else{
-	echo 'Something went wrong';
+	//echo 'Something went wrong';
 }	?>
 
 

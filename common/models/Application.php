@@ -183,6 +183,15 @@ class Application extends \yii\db\ActiveRecord
 		->one()
 		;
 	}
+
+	public static function getMyApplication(){
+		return Application::find()
+		->innerJoin('fasi', 'fasi.id = application.fasi_id')
+		->innerJoin('semester', 'semester.id = application.semester_id')
+		->where(['fasi.user_id' => Yii::$app->user->identity->id, 'semester.is_current' => 1])
+		->one()
+		;
+	}
 	
 	public static function getMyAcceptPrvApplication(){
 	    return Application::find()
@@ -206,16 +215,19 @@ class Application extends \yii\db\ActiveRecord
 	public function listAppliedCoursesString($break = "<br />"){
 		$string = '';
 		$i = 1;
+		//$status = 
+		//$s = $this->showingVerified();
 		foreach($this->applicationCourses as $c){
 			$br = $i == 1 ? '' : $break;
 			if($c->course){
 				$string .= $br.$c->course->course_code . ' ' . $c->course->course_name;
+				if($c->is_accepted == 1){
+					$string .= ' <i class="fa fa-check"></i>';
+				}
 			}
-			
 		$i++;
 		}
 		return $string;
-		
 	}
 
 	public function getDayName(){
@@ -289,6 +301,21 @@ class Application extends \yii\db\ActiveRecord
 			case "approved":
 			case "release":
 			case "accept":
+			return true;
+			break;
+			
+			default:
+			return false;
+		}
+		
+	}
+
+	public function showingProcess(){
+		
+		switch($this->getWfStatus()){
+			case "submit":
+			case "verified":
+			case "approved":
 			return true;
 			break;
 			
