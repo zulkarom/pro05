@@ -63,8 +63,5 @@ class SupplierProvide extends \yii\db\ActiveRecord
 		return $this->hasOne(User::className(), ['id' => 'supplier_id']);
 	}
 	
-	//TODO: how to get data from supplier table using user id
-	/* public function getSupplier(){
-		return $this->hasOne(Supplier::className(), ['id' => 'supplier_id']);
-	} */
+
 }

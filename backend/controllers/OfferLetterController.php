@@ -100,6 +100,7 @@ class OfferLetterController extends Controller
 	}
 	
 	public function actionRelease(){
+		//TODO: verify dah ada nombor rujukan dulu
 		$sem = Semester::getCurrentSemester()->id;
 		$query = Application::find();
 		$dataProvider = new ActiveDataProvider([
