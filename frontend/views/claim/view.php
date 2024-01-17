@@ -41,8 +41,14 @@ table.detail-view th {
 					return $m->getWfLabel();
 				}
 			],
-			
-			'rate_amount:currency',
+			[
+				'label' => 'Kadar',
+				'format' => 'html',
+				'value' => function($m){
+					return 'RM' . $m->rate_amount;
+				}
+			],
+			//'rate_amount:currency',
 			
 			[
 				'label' => 'Senarai Kelas',
@@ -61,9 +67,9 @@ table.detail-view th {
 			'total_hour',
 			[
 				'label' => 'Jumlah Tuntutan',
-				'format' => 'currency',
+				//'format' => 'currency',
 				'value' => function($m){
-					return $m->total_hour * $m->rate_amount;
+					return 'RM' . $m->total_hour * $m->rate_amount;
 				}
 			],
 			[
