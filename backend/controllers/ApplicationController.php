@@ -199,11 +199,13 @@ class ApplicationController extends Controller
 				
 				
 				
-				ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
+				
 				$model->selected_course = Yii::$app->request->post('Application')['selected_course'];
 				if($model->selected_course || $model->selected_course > 0){
 					$course = ApplicationCourse::findOne(['application_id' => $model->id, 'course_id'=> $model->selected_course] );
+					
 					if($course){
+						ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
 					    $course->is_accepted = 1;
 					    $course->scenario = 'verify';
 					    if($course->save()){
@@ -243,11 +245,12 @@ class ApplicationController extends Controller
 			if ($model->load(Yii::$app->request->post())) {
 				if($model->save()){
 					
-					ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
+					
 					
 					$model->selected_course = Yii::$app->request->post('Application')['selected_course'];
 					
 					if($model->selected_course){
+						ApplicationCourse::updateAll(['is_accepted' => 0], ['application_id' => $model->id]);
 						$course = ApplicationCourse::findOne(['application_id' => $model->id, 'course_id'=> $model->selected_course] );
 						$course->is_accepted = 1;
 						$course->scenario = 'verify';
