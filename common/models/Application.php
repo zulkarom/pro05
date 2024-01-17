@@ -370,6 +370,13 @@ class Application extends \yii\db\ActiveRecord
 		 ->where(['fasi_id'=> $fasi, 'semester.is_current' => 1])
 		->one();
 	}
+
+	public static function applicationOpenSemester($fasi){
+		return self::find()
+		->innerJoin('semester', 'semester.id = application.semester_id')
+		 ->where(['fasi_id'=> $fasi, 'semester.is_open' => 1])
+		->one();
+	}
 	
 	public function getListGroup(){
 		return ApplicationGroup::find()->where(['campus_id'=> $this->campus_id] )->all();

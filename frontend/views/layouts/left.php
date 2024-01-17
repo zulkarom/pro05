@@ -1,4 +1,6 @@
-<?php 
+<?php
+
+use backend\models\Semester;
 use yii\helpers\Url;
 use backend\modules\esiap\models\CoursePic;
 use backend\modules\esiap\models\Course;
@@ -36,7 +38,7 @@ use backend\modules\esiap\models\Menu as EsiapMenu;
 		<?php 
 		
 		$course_focus = EsiapMenu::courseFocus();
-		
+		$open_not_current = Semester::isOpenNotCurr();
 		
 		$penyelaras = [];
 		
@@ -103,6 +105,8 @@ use backend\modules\esiap\models\Menu as EsiapMenu;
                     ],
 					
 					['label' => 'Permohonan Fasilitator', 'icon' => 'mouse-pointer', 'url' => ['/application/index']],
+
+                    ['label' => 'Permohonan Baru', 'visible' => $open_not_current, 'icon' => 'plus', 'url' => ['/application/create-open']],
 					
 					['label' => 'Senarai Tuntutan', 'icon' => 'usd', 'url' => ['/claim/index']],
 					

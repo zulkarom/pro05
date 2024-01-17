@@ -173,8 +173,17 @@ class Semester extends \yii\db\ActiveRecord
 	        return false;
 	    }
 	}
-	
-	
+
+	public static function isOpenNotCurr(){
+		$open = self::findOne(['is_open' => 1]);
+		if($open){
+			//malas nk check == 0 ada ke tak
+			if($open->is_current != 1){
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public static function getOpenSemester(){
 		$sem = self::findOne(['is_open' => 1]);	

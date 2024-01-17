@@ -78,7 +78,7 @@ class ApplicationController extends Controller
 		}else{
 			//go to create
 			if($this->validateCreate()){
-				$this->redirect(['create']);
+				$this->redirect(['create-curr']);
 			}
 		}
 		return $this->render('index');
@@ -115,15 +115,84 @@ class ApplicationController extends Controller
         ]);
     }
 
+	public function actionViewOpen($id)
+    {
+		//die();
+		$model = $this->findModel($id);
+		$status = $model->getWfStatus();
+		if($status == 'return'){
+			return $this->redirect(['application/update', 'id' => $model->id]);
+		}else{
+			$model->scenario = WorkflowScenario::enterStatus('f-accept');
+			if ($model->load(Yii::$app->request->post())) {
+				$model->accept_at = new Expression('NOW()');
+				$model->sendToStatus('f-accept');
+				if($model->save()){
+					return $this->redirect(['application/index']);
+				}
+			}
+		
+		}
+		
+		
+        return $this->render('view', [
+            'model' => $model,
+        ]);
+    }
+
     /**
      * Creates a new Application model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
+    public function actionCreateOpen()
     {
+		
+		if($this->validateCreate()){
+			
 		$fasi = Fasi::findOne(['user_id' => Yii::$app->user->identity->id])->id;
-		$app = Application::applicationCurrentSemester($fasi);
+		$app = Application::applicationOpenSemester($fasi);
+		if($app){
+			
+			$status = $app->getWfStatus();
+			
+			if($status == 'draft'){
+				if(Semester::getOpenDateSemester()){
+					$this->redirect(['update', 'id' => $app->id]);
+				}else{
+					$sem = Semester::getOpenSemester();
+					Yii::$app->session->addFlash('info', "Tempoh pendaftaran bagi semester " . $sem->niceFormat() . " adalah dari " . date('d M Y', strtotime($sem->open_at)) . " hingga " . date('d M Y', strtotime($sem->close_at)) . ".");
+				}
+				
+			}else if($status == 'returned'){
+				$this->redirect(['update', 'id' => $app->id]);
+			}else{
+				
+				$this->redirect(['view-open', 'id' => $app->id]);
+			}
+
+
+
+			//$this->redirect(['update', 'id' => $app->id]);
+		}else{
+			if($this->validateCreate()){
+				$this->createEmptyApplication();
+			}else{
+				$this->redirect(['index']);
+			}
+
+			
+		}
+	}
+
+	return $this->render('index');
+
+    }
+
+	public function actionCreate()
+    {			
+		$fasi = Fasi::findOne(['user_id' => Yii::$app->user->identity->id])->id;
+		$app = Application::applicationOpenSemester($fasi);
 		if($app){
 			$this->redirect(['update', 'id' => $app->id]);
 		}else{
@@ -135,7 +204,6 @@ class ApplicationController extends Controller
 
 			
 		}
-
     }
 	
 	protected function createEmptyApplication(){
@@ -322,8 +390,10 @@ class ApplicationController extends Controller
     }
 	
 	protected function validateCreate(){
+		
 		//semester condition open sem
 		$sem = Semester::getOpenSemester();
+		//print_r($sem);die();
 		$user = Yii::$app->user->identity;
 		$profile = Fasi::findOne(['user_id' => $user->id]);
 		if(!$profile){
@@ -344,9 +414,11 @@ class ApplicationController extends Controller
 			Yii::$app->session->addFlash('info', "Tiada sesi semester dibuka untuk pendaftaran.");
 			return false;
 		}else if(!Semester::getOpenDateSemester()){
+			
 			Yii::$app->session->addFlash('info', "Tempoh pendaftaran bagi semester " . $sem->niceFormat() . " adalah dari " . date('d M Y', strtotime($sem->open_at)) . " hingga " . date('d M Y', strtotime($sem->close_at)) . ".");
 			return false;
 		}else if(!$profile->checkUpdated()){
+			//die();
 			Yii::$app->session->addFlash('info', "Maklumat Fasilitator tidak lengkap / atau tidak dikemaskini. Sila pergi ke <a href='".Url::to(['profile/preview']) ."'>Preview Profile</a> untuk kemaskini.");
 			return false;
 		}else{
