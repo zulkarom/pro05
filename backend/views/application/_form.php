@@ -22,7 +22,7 @@ use backend\models\Rate;
 
  <?php $form = ActiveForm::begin(['id' => 'dynamic-form']); ?>
 
-  
+<?= $form->field($model, 'fasi_type_id')->radioList(array(1 =>'Fasilitator',2=>'Pembantu Fasilitator')); ?>
 
     <?= $form->field($model, 'campus_id')->dropDownList(
 		ArrayHelper::map(Campus::find()->all(),'id', 'campus_name')

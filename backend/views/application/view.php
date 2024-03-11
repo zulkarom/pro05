@@ -30,6 +30,12 @@ echo $this->render('_view_profile', [
             
 			'fasi.user.fullname',
 			[
+                'label' =>'Jenis',
+                'value' => function($model){
+                    return $model->fasiType->type_name;
+                }
+            ],
+			[
 			'attribute' => 'semester_id' ,
 			'value' => function($model){
 				return $model->semester->niceFormat();
