@@ -30,7 +30,7 @@ echo $this->render('_view_profile', [
             
 			'fasi.user.fullname',
 			[
-                'label' =>'Jenis',
+                'label' =>'Jenis Permohonan',
                 'value' => function($model){
                     return $model->fasiType->type_name;
                 }
