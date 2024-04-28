@@ -45,6 +45,8 @@ class Project extends \yii\db\ActiveRecord
 {
 	public $batch;
 	public $jum;
+	public $peruntukan;
+
     /**
      * @inheritdoc
      */
@@ -81,7 +83,7 @@ class Project extends \yii\db\ActiveRecord
 			
             [['application_id', 'prepared_by', 'supported_by', 'approved_by'], 'integer'],
 			
-			[['eft_account', 'eft_ic'], 'number'],
+			[['eft_account', 'eft_ic', 'peruntukan'], 'number'],
 			
 			['pro_name', 'validateAllCaps'],
 
@@ -140,7 +142,8 @@ class Project extends \yii\db\ActiveRecord
 			'eft_account' => 'No. Akaun',
 			'eft_bank' => 'Nama Bank',
 			'eft_email' => 'Alamat Email',
-			'letter_ref' => 'Rujukan'
+			'letter_ref' => 'Rujukan',
+			'peruntukan' => 'Peruntukan Pusatko'
         ];
     }
 	

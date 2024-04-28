@@ -1,8 +1,7 @@
 <?php 
 use yii\helpers\Html;
-use yii\helpers\Url;
-use yii\grid\GridView;
-use yii\widgets\ActiveForm;
+use kartik\date\DatePicker;
+use kartik\form\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\modules\project\models\ProjectSearch */
@@ -10,7 +9,7 @@ use yii\widgets\ActiveForm;
 
 $this->title = 'KEMASKINI KERTAS KERJA';
 $this->params['breadcrumbs'][] = $this->title;
-use kartik\date\DatePicker;
+
 ?>
 
 <?php $form = ActiveForm::begin(); ?>
@@ -71,6 +70,15 @@ if($kira == 1){
 <?= $form->field($model, 'purpose')->textarea(['rows' => 2]) ?>
 
 <?= $form->field($model, 'background')->textarea(['rows' => 2]) ?>
+
+<div class="row">
+<div class="col-md-4">
+<?= $form->field($model, 'peruntukan', [
+    'addon' => ['prepend' => ['content'=> 'RM']]
+
+]); ?>
+</div></div>
+
 
 <h3>EFT</h3>
 <hr />

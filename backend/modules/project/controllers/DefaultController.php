@@ -23,7 +23,7 @@ use backend\modules\project\models\ProjectLetterSearch;
 use backend\modules\project\models\ProjectPrint;
 use backend\modules\project\models\BatchPrint;
 use backend\models\SemesterForm;
-
+use backend\modules\project\models\Resource;
 
 /**
  * DefaultController implements the CRUD actions for Project model.
@@ -52,11 +52,20 @@ class DefaultController extends Controller
 	
 	public function actionUpdate($id){
 		$model = $this->findModel($id);
+		$peruntukan = Resource::findOne(['pro_id' => $id, 'rs_core' => 1]);
+		if($peruntukan){
+			$model->peruntukan = $peruntukan->rs_amount;
+		}
 		$model->scenario = 'project-admin-edit';
 		$days = $model->tentativeDays;
 		
 		if ($model->load(Yii::$app->request->post())) {
 			$model->updated_at = new Expression('NOW()');    
+			if($model->peruntukan){
+				$peruntukan->rs_amount = $model->peruntukan;
+				$peruntukan->save();
+			}
+			$model->pro_fund = $model->totalResources;
 			Model::loadMultiple($days, Yii::$app->request->post());
 			
 			if($flag = $model->save()){
