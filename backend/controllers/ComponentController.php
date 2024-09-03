@@ -64,6 +64,7 @@ class ComponentController extends Controller
      */
     public function actionCreate()
     {
+        die();
         $model = new Component();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -84,6 +85,7 @@ class ComponentController extends Controller
      */
     public function actionUpdate($id)
     {
+        die();
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -104,6 +106,7 @@ class ComponentController extends Controller
      */
     public function actionDelete($id)
     {
+        die();
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
