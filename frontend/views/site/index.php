@@ -8,7 +8,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
 <section class="home-slider owl-carousel">
       
 
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2024_1.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2025_1.jpg);">
       	<div class="overlay"></div>
         <div class="container">
           <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
@@ -20,7 +20,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
         </div>
       </div>
 
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2024_2.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2025_2.jpg);">
       	<div class="overlay"></div>
         <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
@@ -32,7 +32,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
         </div>
       </div>
 
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2024_3.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2025_3.jpg);">
       	<div class="overlay"></div>
         <div class="container">
           <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
@@ -44,7 +44,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
         </div>
       </div>
 
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2024_4.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2025_4.jpg);">
       	<div class="overlay"></div>
         <div class="container">
         <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
@@ -56,7 +56,7 @@ $btn_kursus = Html::a('Lihat Senarai Kursus', ['site/course'], ['class' => 'btn 
         </div>
       </div>
 
-      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2024_5.jpg);">
+      <div class="slider-item" style="background-image:url(<?=$directoryAsset?>/images/slide/2025_5.jpg);">
       	<div class="overlay"></div>
         <div class="container">
           <div class="row no-gutters slider-text align-items-center justify-content-center" data-scrollax-parent="true">
