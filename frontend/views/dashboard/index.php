@@ -250,9 +250,18 @@ $token = $application->project->pro_token;
       <tr>
         <td>
 		
-		<a href="<?=Url::to(['project/fasi/index'])?>" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span> Lihat</a>
+		<a href="<?=Url::to(['project/fasi/index'])?>" class="btn btn-default btn-sm"><span class="glyphicon glyphicon-search"></span> Lihat</a> 
+
+    <a href="<?=Url::to(['project/update/index', 'token' => $token])?>" class="btn btn-default btn-sm" target="_blank">Kemaskini</a>
 		
-		<a href="<?=Url::to(['project/update/index', 'token' => $token])?>" class="btn btn-default btn-sm" target="_blank">Kemaskini</a> <a href="<?=Url::to(['project/fasi/change-key'])?>" class="btn btn-default btn-sm">Tukar Kata Kunci</a></td>
+		<?php if($application->project->status == 30){?>
+			<a href="<?=Url::to(['project/fasi/surat-kelulusan-projek'])?>" class="btn btn-default btn-sm" target="_blank">Surat Kelulusan</a>
+		<?php }else{?>
+			<a href="<?=Url::to(['project/fasi/change-key'])?>" class="btn btn-default btn-sm">Tukar Kata Kunci</a>
+		<?php }?>
+  
+  
+  </td>
       </tr>
     </tbody>
   </table>

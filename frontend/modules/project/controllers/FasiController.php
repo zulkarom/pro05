@@ -14,6 +14,7 @@ use backend\modules\project\models\Project;
 use yii\filters\AccessControl;
 use common\models\Application;
 use backend\models\Semester;
+use backend\modules\project\models\ApproveLetterPrint;
 
 /**
  * FasiController implements the CRUD actions for Project model.
@@ -185,6 +186,19 @@ class FasiController extends Controller
 	
 	public function actionPage(){
 		return $this->render('page');
+	}
+
+	public function actionSuratKelulusanProjek(){
+		$application = Application::getMyAcceptApplication();
+		$model = $application->project;
+		if($model->status == 30){
+			$pdf = new ApproveLetterPrint;
+		$pdf->model = $model;
+		$pdf->generatePdf();
+		}else{
+			echo 'not yet approved';
+		}
+		
 	}
 
    
