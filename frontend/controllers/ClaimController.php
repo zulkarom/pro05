@@ -70,20 +70,21 @@ class ClaimController extends Controller
             'query' => $query,
         ]);
 		
-		$app = Application::getMyAcceptApplication();
+		$application = Application::getMyAcceptApplication();
 		
-		if($app){
-			$app = $app->id;
+		if($application){
+			$app_id = $application->id;
 		}else{
-			$app = 0;
+			$app_id = 0;
 		}
 		
         $query->andFilterWhere([
-            'application_id' => $app,
+            'application_id' => $app_id,
         ]);
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
+			'application' => $application,
         ]);
     }
 
@@ -360,7 +361,7 @@ class ClaimController extends Controller
                     } else {
                         $transaction->rollBack();
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $transaction->rollBack();
 					
                 }
@@ -443,6 +444,35 @@ class ClaimController extends Controller
 		if($model->delete()){
 			$this->redirect(['claim/update', 'id' => $model->claim_id]);
 		}
+	}
+
+	
+	public function actionDeleteClaim($id){
+		$model = $this->findModel($id);
+		if($model->wfStatus == 'draft' or $model->wfStatus == 'returned'){
+			$transaction = Yii::$app->db->beginTransaction();
+			try {
+				$model->deleteClaimFiles();
+				$model->deleteClaimItems();
+				$model->deleteClaimAttend();
+				if($model->delete()){
+					$transaction->commit();
+					Yii::$app->session->addFlash('success', "Tuntutan telah berjaya dipadam.");
+					$this->redirect(['claim/index']);
+					return;
+				} else {
+					$transaction->rollBack();
+				}
+			} catch (\Exception $e) {
+				$transaction->rollBack();
+				Yii::$app->session->addFlash('error', "Ralat semasa memadam tuntutan: " . $e->getMessage());
+			}
+		}else{
+			Yii::$app->session->addFlash('error', "Tuntutan tidak boleh dipadam kerana statusnya bukan 'draft' atau 'returned'.");
+			$this->redirect(['claim/view', 'id' => $id]);
+			return;
+		}
+		
 	}
 	
 	protected function findClaimFile($id)
