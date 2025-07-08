@@ -25,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 	foreach ($dataProvider->getModels() as $model) {
 		$totalHour += $model->total_hour;
 	}
+	
 	?>
 	<?= GridView::widget([
 		'dataProvider' => $dataProvider,

@@ -218,6 +218,7 @@ $claims = $application->submittedClaims;
       
     </tbody>
   </table>
+  <a href="<?=Url::to(['claim/index'])?>" class="btn btn-default btn-sm">Lihat Senarai Tuntutan</a>
 </div>
 
 
