@@ -147,7 +147,7 @@ class ApplicationController extends Controller
      */
     public function actionCreateOpen()
     {
-		
+		//TODO: #5 what diff create vs create-open??
 		if($this->validateCreate()){
 			
 		$fasi = Fasi::findOne(['user_id' => Yii::$app->user->identity->id])->id;
@@ -189,11 +189,20 @@ class ApplicationController extends Controller
 
     }
 
+/**
+ * Create a new application or redirect to existing one if it exists.
+ * If current user has existing application that is in draft status, redirect to update action.
+ * If current user has existing application that is in returned status, redirect to update action.
+ * If current user does not have existing application, create a new one using createEmptyApplication.
+ * Redirect to index action if validation fails.
+ * TODO: what if applicant has submitted an application that is not in draft or returned status
+ */
 	public function actionCreate()
     {			
 		$fasi = Fasi::findOne(['user_id' => Yii::$app->user->identity->id])->id;
 		$app = Application::applicationOpenSemester($fasi);
 		if($app){
+			//TODO:sampai status mana dibenarkan update
 			$this->redirect(['update', 'id' => $app->id]);
 		}else{
 			if($this->validateCreate()){
@@ -259,12 +268,14 @@ class ApplicationController extends Controller
 		$status = $model->getWfStatus();
 		if(Semester::getOpenDateSemester() == false){
 			if($status == 'draft'){
-				$this->redirect(['index']);
+				return $this->redirect(['index']);
 			}else{
-				$this->redirect(['view', 'id' => $id]);
+				return $this->redirect(['view', 'id' => $id]);
 			}
 			
 		}
+
+		//TODO: modifying should only allowed if status is draft or returned
         
 		
 		$courses = $model->applicationCourses;
@@ -323,7 +334,7 @@ class ApplicationController extends Controller
                     } else {
                         $transaction->rollBack();
                     }
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     $transaction->rollBack();
 					
                 }

@@ -54,9 +54,9 @@ class Course extends \yii\db\ActiveRecord
     {
         return [
 			
-			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'is_dummy', 'faculty_id', 'course_type', 'study_level'], 'required', 'on' => 'create'],
+			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'is_dummy', 'faculty_id', 'course_type', 'study_level', 'component_id'], 'required', 'on' => 'create'],
 			
-			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'is_dummy'], 'required', 'on' => 'update'],
+			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'is_dummy', 'component_id'], 'required', 'on' => 'update'],
 			
 			[['course_name', 'course_name_bi', 'course_code', 'credit_hour', 'course_class'], 'required', 'on' => 'update2'],
 			
@@ -88,7 +88,8 @@ class Course extends \yii\db\ActiveRecord
 			'faculty_id' => 'Faculty',
             'study_level' => 'Level',
 			'department_id' => 'Department',
-			'course_class' => 'Course Classification'
+			'course_class' => 'Course Classification',
+			'component_id' => 'Component'
         ];
     }
     
