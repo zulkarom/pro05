@@ -34,11 +34,6 @@ phpunit.phar
 # vagrant runtime
 /.vagrant
 
-# config
-/frontend/config
-/backend/config
-/common/config
-
 # web
 /backend/web
 /frontend/web
