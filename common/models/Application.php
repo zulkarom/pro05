@@ -413,12 +413,15 @@ class Application extends \yii\db\ActiveRecord
 	}
 	
 	public function getHourTotal(){
-		return Claim::find()->where(['application_id' => $this->id, 'status' => 'ClaimWorkflow/bb-submit'])->sum('total_hour');
+		$sum = Claim::find()->where(['application_id' => $this->id, 'status' => 'ClaimWorkflow/bb-submit'])->sum('total_hour');
+		return $sum ? $sum : 0;
+
 
 	}
 	
 	public function getAmountTotal(){
-		return Claim::find()->where(['application_id' => $this->id, 'status' => 'ClaimWorkflow/bb-submit'])->sum('total_hour * rate_amount');
+		$sum = Claim::find()->where(['application_id' => $this->id, 'status' => 'ClaimWorkflow/bb-submit'])->sum('total_hour * rate_amount');
+		return $sum ? $sum : 0;
 
 	}
 	

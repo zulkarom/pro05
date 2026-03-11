@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="box-body"><div class="component-index">
 
     <p>
-        <?= Html::a('Create Component', ['create'], ['class' => 'btn btn-success']) ?>
+        <?php /* Html::a('Create Component', ['create'], ['class' => 'btn btn-success']) */ ?>
     </p>
 
     <?= GridView::widget([
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'name',
             'description:ntext',
 
-            ['class' => 'yii\grid\ActionColumn'],
+            //['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>

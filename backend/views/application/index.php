@@ -45,7 +45,12 @@ $exportColumns = [
 			[
 			 'label' => 'Kursus',
 			 'value' => function($model){
-				return $model->listAppliedCoursesString("\n");
+				$course = $model->acceptedCourse;
+				if($course == null){
+					return 'Tiada kursus diluluskan';
+				}else{
+					return $course->course->course_code . ' - ' . $course->course->course_name;
+				}
 			 }
 			],
 			[

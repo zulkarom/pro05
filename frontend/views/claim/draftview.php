@@ -44,7 +44,14 @@ table.detail-view th {
 				}
 			],
 			
-			'rate_amount:currency',
+			//'rate_amount:currency',
+			[
+				'attribute' => 'rate_amount',
+				//'format' => 'currency',
+				'value' => function($m){
+					return 'RM' . $m->rate_amount;
+				}
+			],
 			
 			[
 				'label' => 'Senarai Kelas',
@@ -63,9 +70,9 @@ table.detail-view th {
 			'total_hour',
 			[
 				'label' => 'Jumlah Tuntutan',
-				'format' => 'currency',
+				//'format' => 'currency',
 				'value' => function($m){
-					return $m->total_hour * $m->rate_amount;
+					return 'RM' . $m->total_hour * $m->rate_amount;
 				}
 			],
 			[

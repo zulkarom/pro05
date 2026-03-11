@@ -143,6 +143,7 @@
 
                         ],
                     ],
+					['label' => 'Web Sliders', 'icon' => 'picture-o', 'url' => ['/slider/index'],],
 					
 					[
                         'label' => 'Setting',

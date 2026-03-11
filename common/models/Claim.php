@@ -412,5 +412,15 @@ class Claim extends \yii\db\ActiveRecord
 		
 		return $array;
 	}
+
+	public function deleteClaimFiles(){
+		ClaimFile::deleteAll(['claim_id' => $this->id]);
+	}
+	public function deleteClaimItems(){
+		ClaimItem::deleteAll(['claim_id' => $this->id]);
+	}
+	public function deleteClaimAttend(){
+		ClaimAttend::deleteAll(['claim_id' => $this->id]);
+	}
 	
 }

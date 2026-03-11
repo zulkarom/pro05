@@ -24,7 +24,14 @@ $this->params['breadcrumbs'][] = 'Update';
 			'attribute' => 'semester_id' ,
 			'value' => function($model){
 				return $model->semester->niceFormat();
-			}]
+			}],
+            [
+				'attribute' => 'status',
+				'format' => 'html',
+				'value' => function($model){
+					return $model->getWfLabel();
+				}
+			],
 	
 			
 			

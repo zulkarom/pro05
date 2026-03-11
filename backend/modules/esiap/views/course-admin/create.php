@@ -38,7 +38,15 @@ $this->params['breadcrumbs'][] = $this->title;
 	
 	
 	<div class="row">
-
+<div class="col-md-3">
+    <?php 
+    if(Yii::$app->params['faculty_id'] == 21){
+	echo $form->field($model, 'component_id')->dropDownList(
+        ArrayHelper::map( \backend\models\Component::find()->all(), 'id', 'description'), ['prompt' => 'Please Select' ]
+    )->label('Component');
+}
+?>
+</div>
 
 <div class="col-md-3"><?= $form->field($model, 'credit_hour')->textInput(['maxlength' => true]) ?></div>
 
