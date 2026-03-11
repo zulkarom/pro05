@@ -152,7 +152,9 @@
 							['label' => 'General Setting', 'icon' => 'cog', 'url' => ['/general-setting/update', 'id' => 1],],
 							
 							['label' => 'Claim Setting', 'icon' => 'cog', 'url' => ['/claim-setting/update', 'id' => 1],],
-						
+							
+							['label' => 'Application Group', 'icon' => 'users', 'url' => ['/application-group/index'],],
+					
                             ['label' => 'Komponen', 'icon' => 'th-large', 'url' => ['/component/index'],],
                         ],
                     ],

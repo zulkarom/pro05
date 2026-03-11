@@ -36,7 +36,8 @@ phpunit.phar
 
 # config
 /frontend/config
-/backend/config
+/backend/config/*
+!/backend/config/main.php
 /common/config
 
 # web
