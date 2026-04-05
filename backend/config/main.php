@@ -96,6 +96,7 @@ return [
 			'session-time/*',
 			'gii/*',
 			'test/*',
+            'application-group/*',
 			//'application/*',
             'some-controller/some-action',
             // The actions listed here will be allowed to everyone including guests.
