@@ -222,13 +222,17 @@ EOD;
 		</tr>';
 		
 		$elaun_note = $this->template->nota_elaun;
+		$rateAmount = (float)$this->model->rate_amount;
+		$elaunDisplay = $rateAmount == 0.0
+			? 'Tanpa Bayaran'
+			: 'RM'.$this->model->rate_amount.' Sejam<br/>('.$elaun_note.')';
 		
 		$html .= '<tr>
 			<td></td>
 			<td>g)</td>
 			<td>Kadar Elaun</td>
 			<td>:</td>
-			<td>RM'.$this->model->rate_amount .' Sejam<br/>('.$elaun_note.')</td>
+			<td>'.$elaunDisplay.'</td>
 		</tr>
 		</table>
 		';

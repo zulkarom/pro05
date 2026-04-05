@@ -28,6 +28,10 @@ use backend\models\Rate;
 		ArrayHelper::map(Campus::find()->all(),'id', 'campus_name')
 	) ?>
 	
+	<?= $form->field($model, 'status')->dropDownList(
+		$model->getAllStatusesArray(), ['prompt' => 'Please Select']
+	) ?>
+	
 	
 	<?php DynamicFormWidget::begin([
         'widgetContainer' => 'dynamicform_wrapper',
@@ -128,7 +132,7 @@ use backend\models\Rate;
     'addon' => ['prepend' => ['content'=>'RM']]
 ]
 )->dropDownList(
-        ArrayHelper::map(Rate::find()->all(),'rate_amount', 'rate_amount'), ['prompt' => 'Please Select' ]
+		(['0.00' => 'Tanpa Bayaran'] + ArrayHelper::map(Rate::find()->all(),'rate_amount', 'rate_amount')), ['prompt' => 'Please Select' ]
     ) ->label('Kadar Bayaran (per jam)')
 ; ?>
 </div>
@@ -246,7 +250,12 @@ $(".container-items").sortable({
     handle: ".sortable-handle",
     helper: fixHelperSortable,
     update: function(ev){
-        $(".dynamicform_wrapper").yiiDynamicForm("updateContainer");
+        var $wrapper = $(".dynamicform_wrapper");
+        try {
+            if ($wrapper.length && $.isFunction($wrapper.yiiDynamicForm)) {
+                $wrapper.yiiDynamicForm("updateContainer");
+            }
+        } catch (e) {}
     }
 }).disableSelection();
 

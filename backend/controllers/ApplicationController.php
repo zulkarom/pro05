@@ -296,11 +296,16 @@ class ApplicationController extends Controller
         $model = $this->findModel($id);
 
         $courses = $model->applicationCourses;
+		$oldStatus = $model->status;
 
 		$model->scenario = 'editadmin';
 		
 
         if ($model->load(Yii::$app->request->post())) {
+			$postedStatus = Yii::$app->request->post('Application')['status'] ?? null;
+			if($postedStatus && $postedStatus != $oldStatus){
+				$model->status = $postedStatus;
+			}
 			$model->draft_at = new Expression('NOW()');
 	
             $oldCourseIDs = ArrayHelper::map($courses, 'id', 'id');

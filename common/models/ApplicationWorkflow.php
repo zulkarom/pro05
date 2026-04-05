@@ -44,7 +44,7 @@ class ApplicationWorkflow implements \raoul2000\workflow\source\file\IWorkflowDe
 				
 				'e-release' => [
 					'label' => 'Surat Tawaran',
-					'transition' => ['f-accept'],
+					'transition' => ['f-accept', 'b-submit'],
 					'metadata' => [
 						'color' => 'info',
 						//'icon' => 'fa fa-bell'
@@ -53,6 +53,7 @@ class ApplicationWorkflow implements \raoul2000\workflow\source\file\IWorkflowDe
 				
 				'f-accept' => [
 					'label' => 'Aktif',
+					'transition' => ['b-submit'],
 					'metadata' => [
 						'color' => 'primary',
 						//'icon' => 'fa fa-bell'

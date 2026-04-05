@@ -40,9 +40,7 @@ $this->params['breadcrumbs'][] = 'Update';
     ]) ?></div>
 </div>
 
-	
-	
-	
+
 <div class="application-update">
 
 
